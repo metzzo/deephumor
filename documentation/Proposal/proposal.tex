@@ -1,4 +1,6 @@
 \documentclass[11pt]{article}
+\usepackage[backend=bibtex8]{biblatex}
+\bibliography{citations}{}
 \title{\textbf{Master Thesis Proposal} \\
 Deep Learning of Humor from Gary Larson's Cartoons}
 \author{
@@ -25,7 +27,7 @@ Another goal is to evaluate the resulting neural networks. Hidden inside them, t
 \section{Expected Results}
 The main outcome of this thesis is a machine learning pipeline which is able to classify a cartoon by funniness. This pipeline consists of a pre-processing phase, training phase and testing phase. In the pre-processing phase the available cartoons are pre-processed in such a way that the deep learning networks can be properly trained. Additionally the ground truth has to be annotated by humans. In the training phase, a model is generated using a subset of the ground truth, which also generalizes to previously unseen cartoons. Therefore several neural network configurations will be evaluated and the goal is to find the best for the given ground truth. In the test phase the results are evaluated using measures like F-Score and accuracy. \\
 
-Additionally one finds answers to the following questions: 
+Additionally the thesis tries to answers the following questions:
 \begin{itemize}
 \item Are convolutional neural networks able to detect certain types of animals in Gary Larson's cartoons?
 \item Will the final neural network reveal insights of human humor?
@@ -35,7 +37,7 @@ Additionally one finds answers to the following questions:
 \pagebreak
 \section{Methodology and Approach}
 \subsection {Pre-Processing}
-First the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be preprocessed in such a way that a neural network can be trained on this data set: The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary: How funny a cartoon is, as well as what animals are visible have to be annotated. \\
+First the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be pre processed in such a way that a neural network can be trained on this data set: The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary: The funniness of a cartoon, as well as which animals are visible need to be annotated. \\
 
 \subsection {Humor Classification}
 Given this data set, based on previous classifications, the goal is to predict how funny a previously unseen cartoon is. This is done by training multiple machine learning classifiers. Important to note is the fact, that humor is subjective. So the generated model might only be applicable for individuals. \\
@@ -49,18 +51,40 @@ Finally both neural networks are merged together using another, possibly more tr
 \pagebreak
 \subsection {Animal Classification}
 
-A similar approach will be implemented for animal classification of Gary Larson's cartoons. The question remains how to handle comics properly using deep neural networks, additionally some data augmenting techniques might be implemented to avoid overfitting of the CNN.
+A similar approach will be implemented for animal classification of Gary Larson's cartoons. The question remains how to handle comics properly using deep neural networks, additionally data augmenting techniques might be implemented to avoid overfitting of the CNN.
 
 \subsection {Deep Neural Network Evaluation}
 
-The final neural networks will be evaluated. Since convolutional neural networks are based on ideas of how the human brain works, there might be 
+The final neural networks will be evaluated. Since convolutional neural networks are losely based on principles of the human brain, there might be some interesting details hidden inside the network. 
+
+\begin{itemize}
+\item Determine whether there are neurons that fire when an image contains certain objects/animals.
+\item Evaluate if layers specialize to solve certain tasks. E.g.: Usually the first layers of CNNs detect edges, while the last layers detect more complicated structures like faces.
+\item Visualization of some example cartoon through each layer.
+\end{itemize}
+
 
 \pagebreak
 \section{State of the Art}
-TODO
+
+At the time of writing this proposal there has been little research in the area of computational humor using deep learning. Deep Learning of Audio and Language Features for Humor Prediction is the only notable paper in this area, which uses deep learning for punchline detection based on dialogue and audio of a US sitcom. This approach ignores the visual component entirely. \\
+
+For image classification various types of convolutional neural networks are state-of-the-art. Recurrent Long Short-Term Memory networks are being used very successfully for various natural language processing tasks.
+
+Previous approaches of computational humor include sarcasm and joke detection \cite{Yang2015HumorRA}, . All of these works treated humor on isolated chunks of text. This thesis tries to solve this by applying deep learning.
 
 \pagebreak
-\section{Relation to Master Study	}
-TODO
+\section{Relation to Master Study}
+The master study Artificial Intelligence and Game Engineering has several courses that cover the topic of machine- and deep learning:
 
+\begin{itemize}
+\item Deep  Learning  for  Visual  Computing
+\item Machine Learning
+\item Similarity Modeling 1
+\item Similarity Modeling 2
+\item Advanced Information Retrieval
+\item Informationsvisualisierung
+\end{itemize}
+
+\printbibliography
 \end{document}

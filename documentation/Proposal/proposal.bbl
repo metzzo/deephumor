@@ -1,0 +1,58 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\sortlist[entry]{nty/global/}
+  \entry{Yang2015HumorRA}{inproceedings}{}
+    \name{author}{4}{}{%
+      {{hash=YD}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Diyi},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lavie},
+         familyi={L\bibinitperiod},
+         given={Alon},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=DC}{%
+         family={Dyer},
+         familyi={D\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=HEH}{%
+         family={Hovy},
+         familyi={H\bibinitperiod},
+         given={Eduard\bibnamedelima H.},
+         giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YD+1}
+    \strng{fullhash}{YDLADCHEH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{booktitle}{EMNLP}
+    \field{title}{Humor Recognition and Humor Anchor Extraction}
+    \field{year}{2015}
+  \endentry
+\endsortlist
+\endinput
