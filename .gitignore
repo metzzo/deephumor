@@ -1,4 +1,5 @@
 /.project
 *.log
 *.pdf
-*.syntex.gz
+*.synctex.gz
+*.aux
