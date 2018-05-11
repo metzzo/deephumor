@@ -27,7 +27,7 @@ Another goal is to evaluate the resulting neural networks. Hidden inside them, t
 
 \pagebreak
 \section{Expected Results}
-The main outcome of this thesis is a machine learning pipeline which is able to classify a cartoon by funniness. This pipeline consists of a pre-processing phase, training phase and testing phase. A similar pipeline for the cartoon classification task will also be developed. \\
+The main outcome of this thesis is a machine learning pipeline which is able to classify a cartoon by funniness. This pipeline consists of a pre-processing phase, training phase and testing phase. A similar pipeline for the animal classification task will also be developed. \\
 
 Finally, the model will be evaluated rigorously and the hope is to find some new insights into the human humor. For example, if this thesis shows the existence of a neuron which fires if and only if a cow is visible, this could mean, that the human brain also has neurons that function similarly \cite{Cichy2016}. The existence of layers that serve certain functions might also be worth investigating. \\
 
@@ -39,7 +39,7 @@ If the network performs well in the test phase, then this is a very strong indic
 First the available literature will be researched. The goal is to have a broad understanding and knowledge of state-of-the-art in machine learning, deep neural network architectures, human humor and human perception. \\
 
 \subsection {Pre-Processing}
-In this step the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be pre-processed in such a way that a neural network can be trained on this data set: The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary: For the humor classification the funniness of a cartoon has to be annotated with a numerical value and for the cartoon classification task a binary n-tuple that describes which type of cartoon is illustrated. \\
+In this step the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be pre-rocessed in such a way that a neural network can be trained on this data set: The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary: For the humor classification the funniness of a cartoon has to be annotated with a numerical value and for the animal classification task a binary n-tuple that describes which animals are illustrated. \\
 
 \subsection {Cartoon Classification}
 
