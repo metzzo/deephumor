@@ -3,3 +3,6 @@
 *.pdf
 *.synctex.gz
 *.aux
+/env/
+/venv/
+/.idea/
