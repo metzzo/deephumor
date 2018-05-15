@@ -1,0 +1,232 @@
+% Copyright (C) 2014-2017 by Thomas Auzinger <thomas@auzinger.name>
+
+\documentclass[draft,final]{vutinfth} % Remove option 'final' to obtain debug information.
+
+% Load packages to allow in- and output of non-ASCII characters.
+\usepackage{lmodern}        % Use an extension of the original Computer Modern font to minimize the use of bitmapped letters.
+\usepackage[T1]{fontenc}    % Determines font encoding of the output. Font packages have to be included before this line.
+\usepackage[utf8]{inputenc} % Determines encoding of the input. All input files have to use UTF8 encoding.
+
+% Extended LaTeX functionality is enables by including packages with \usepackage{...}.
+\usepackage{amsmath}    % Extended typesetting of mathematical expression.
+\usepackage{amssymb}    % Provides a multitude of mathematical symbols.
+\usepackage{mathtools}  % Further extensions of mathematical typesetting.
+\usepackage{microtype}  % Small-scale typographic enhancements.
+\usepackage[inline]{enumitem} % User control over the layout of lists (itemize, enumerate, description).
+\usepackage{multirow}   % Allows table elements to span several rows.
+\usepackage{booktabs}   % Improves the typesettings of tables.
+\usepackage{subcaption} % Allows the use of subfigures and enables their referencing.
+\usepackage[ruled,linesnumbered,algochapter]{algorithm2e} % Enables the writing of pseudo code.
+\usepackage[usenames,dvipsnames,table]{xcolor} % Allows the definition and use of colors. This package has to be included before tikz.
+\usepackage{nag}       % Issues warnings when best practices in writing LaTeX documents are violated.
+\usepackage{todonotes} % Provides tooltip-like todo notes.
+\usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
+\usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
+
+% Define convenience functions to use the author name and the thesis title in the PDF document properties.
+\newcommand{\authorname}{Robert Fischer} % The author name without titles.
+\newcommand{\thesistitle}{Deep Learning of Humor from Gary Larson's Cartoons} % The title of the thesis. The English version should be used, if it exists.
+
+% Set PDF document properties
+\hypersetup{
+    pdfpagelayout   = TwoPageRight,           % How the document is shown in PDF viewers (optional).
+    linkbordercolor = {Melon},                % The color of the borders of boxes around crosslinks (optional).
+    pdfauthor       = {\authorname},          % The author's name in the document properties (optional).
+    pdftitle        = {\thesistitle},         % The document's title in the document properties (optional).
+    pdfsubject      = {Subject},              % The document's subject in the document properties (optional).
+    pdfkeywords     = {a, list, of, keywords} % The document's keywords in the document properties (optional).
+}
+
+\setpnumwidth{2.5em}        % Avoid overfull hboxes in the table of contents (see memoir manual).
+\setsecnumdepth{subsection} % Enumerate subsections.
+
+\nonzeroparskip             % Create space between paragraphs (optional).
+\setlength{\parindent}{0pt} % Remove paragraph identation (optional).
+
+\makeindex      % Use an optional index.
+\makeglossaries % Use an optional glossary.
+%\glstocfalse   % Remove the glossaries from the table of contents.
+
+% Set persons with 4 arguments:
+%  {title before name}{name}{title after name}{gender}
+%  where both titles are optional (i.e. can be given as empty brackets {}).
+\setauthor{}{\authorname}{BSc.}{male}
+\setadvisor{Dr.}{Horst Eidenberger}{Assoc. Prof.}{male}
+
+% For bachelor and master theses:
+%\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+
+% For dissertations:
+%\setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
+
+% For dissertations at the PhD School and optionally for dissertations:
+%\setsecondadvisor{Pretitle}{Forename Surname}{Posttitle}{male} % Comment to remove.
+
+% Required data.
+\setaddress{Stauraczgasse 8/13 \\ 1050 Wien \\ Österreich}
+\setregnumber{01425684}
+\setdate{14}{05}{2018} % Set date with 3 arguments: {day}{month}{year}.
+\settitle{\thesistitle}{Deep Learning of Humor from Gary Larson's Cartoons} % Sets English and German version of the title (both can be English or German). If your title contains commas, enclose it with additional curvy brackets (i.e., {{your title}}) or define it as a macro as done with \thesistitle.
+\setsubtitle{}{} % Sets English and German version of the subtitle (both can be English or German).
+
+% Select the thesis type: bachelor / master / doctor / phd-school.
+% Bachelor:
+%\setthesis{bachelor}
+%
+% Master:
+\setthesis{master}
+\setmasterdegree{dipl.} % dipl. / rer.nat. / rer.soc.oec. / master
+%
+% Doctor:
+%\setthesis{doctor}
+%\setdoctordegree{rer.soc.oec.}% rer.nat. / techn. / rer.soc.oec.
+%
+% Doctor at the PhD School
+%\setthesis{phd-school} % Deactivate non-English title pages (see below)
+
+% For bachelor and master:
+\setcurriculum{Artificial Intelligence and Game Engineering}{Artificial Intelligence and Game Engineering} % Sets the English and German name of the curriculum.
+
+% For dissertations at the PhD School:
+\setfirstreviewerdata{Affiliation, Country}
+\setsecondreviewerdata{Affiliation, Country}
+
+
+\begin{document}
+
+\frontmatter % Switches to roman numbering.
+% The structure of the thesis has to conform to
+%  http://www.informatik.tuwien.ac.at/dekanat
+
+\addtitlepage{naustrian} % German title page (not for dissertations at the PhD School).
+\addtitlepage{english} % English title page.
+\addstatementpage
+
+%\begin{danksagung*}
+%\todo{Ihr Text hier.}
+%\end{danksagung*}
+
+%\begin{acknowledgements*}
+%\todo{Enter your text here.}
+%\end{acknowledgements*}
+
+%\begin{kurzfassung}
+%\todo{Ihr Text hier.}
+%\end{kurzfassung}
+
+%\begin{abstract}
+%\todo{Enter your text here.}
+%\end{abstract}
+
+% Select the language of the thesis, e.g., english or naustrian.
+\selectlanguage{english}
+
+% Add a table of contents (toc).
+\tableofcontents % Starred version, i.e., \tableofcontents*, removes the self-entry.
+
+% Switch to arabic numbering and start the enumeration of chapters in the table of content.
+\mainmatter
+
+\chapter{Problem Definition}
+
+The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons. This is done by applying several Deep Learning techniques. \\
+
+Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}, research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years\cite{Druzhkov2016}, images may now be taken into consideration as well and similarly recurrent neural networks have been improving the state-of-the-art in several natural language processing disciplines \cite{reviewRNN}. \\
+
+\textbf {Cartoon Classification:} \quad Convolutional neural networks are mostly applied to real world pictures, because most problems are in this domain. The question remains whether they are also capable of analyzing cartoons and if there are ways on how to improve CNNs for this type of images. An experiment of regular image classification will be adapted for Gary Larson's cartoons. The traditional image classification task using the CIFAR-10 data set, where categorizing images into ten classes (cat, dog, airplane, etc.) will be adapted for his cartoons. Classification should range from animal cartoons, culture dish cartoons to harder categories, such as cartoons where "god" appears. The original task is already solved with convolutional neural networks \cite{dogsvscats}, the question remains if the same is true for Gary Larson's cartoons. \\
+
+\textbf {Humor Classification:} \quad Cartoons by Gary Larson also contain a punchline. This has to be also considered when trying to understand the humor. For this part recurrent neural networks, especially Long Short-Term Memory networks, will be used. The main problem of these networks, is that they have the tendency to overfit to the training data \cite[page 4]{reviewRNN}, which is a major challenge to be overcome. \\
+
+Another goal is to evaluate the resulting neural networks. Hidden inside them, there might be some interesting insights about human humor, especially since deep neural networks are inspired by the human brain and function similarly \cite{Cichy2016}. Maybe some neural network layers will have their own dedicated function, or there will be a cow-detection neuron inside the network? 
+
+\chapter{Expected Results}
+
+The main outcome of this thesis is a machine learning pipeline which is able to classify a cartoon by funniness. This pipeline consists of a pre-processing phase, training phase and testing phase. A similar pipeline for the cartoon classification task will also be developed. \\
+
+Finally, the model will be evaluated rigorously and the hope is to find some new insights into the human humor. For example, if this thesis shows the existence of a neuron which fires if and only if a cow is visible, this could mean, that the human brain also has neurons that function similarly \cite{Cichy2016}. The existence of layers that serve certain functions might also be worth investigating. \\
+
+If the network performs well in the test phase, then this is a very strong indicator, that the deep neural networks are actually able to learn the human humor. This would open many new research possibilities. \\
+
+\chapter{Methodology and Approach}
+\subsection {Literature Research}
+First the available literature will be researched. The goal is to have a broad understanding and knowledge of state-of-the-art in machine learning, deep neural network architectures, human humor and human perception. \\
+
+\subsection {Pre-Processing}
+In this step the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be pre-processed in such a way that a neural network can be trained on this data set: The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary: For the humor classification the funniness of a cartoon has to be annotated with a numerical value and for the cartoon classification task a binary n-tuple that describes which type of cartoon is illustrated. \\
+
+\subsection {Cartoon Classification}
+
+Similar to the humor classification approach, a deep neural network that classifies cartoons by different categories will be trained. The question remains how to handle cartoons properly using deep neural networks, additionally data augmenting techniques might be implemented to avoid overfitting. \\
+
+Gary Larson has many reoccurring themes. This makes training a deep neural network which is able to classify these categories an interesting task. Theses classes include different animal types (cats, dogs, etc.), culture dish cartoons and even cartoons where "god" appears. \\
+
+\subsection {Humor Classification}
+Given this data set, based on previous classifications, the goal is to predict how funny a previously unseen cartoon is. This is done by training multiple machine learning classifiers. Important to note is the fact, that humor is subjective, so the generated model might only be applicable for individuals. \\
+
+For the visual component of a cartoon, a convolutional neural network will be trained, as they have been applied very successfully in various image classification tasks \cite{dogsvscats}. If and how deep neural networks have to be adapted to work with cartoons will be researched during the thesis.\\
+
+A punchline analysis will be implemented using recurrent neural networks and other natural language processing techniques. Prime candidate are Long Short-Term Memory networks, but other techniques will be considered as well. One key problem of recurrent neural networks is that, they tend to overfit to the training data very easily \cite[page 4]{reviewRNN}. \\
+
+Finally both neural networks are merged together using another, possibly more traditional, machine learning classifier. \\
+ 
+\subsection {Evaluation}
+
+During the evaluation, the trained models are applied to the test set (a set of previously unknown data). The humor classification task has one out of many choices per cartoon, hence it is considered a multiclass classification task, on the other hand the cartoon classification task has many out of many choices per cartoon (since a cartoon can contain a cat and a dog), hence it is considered a multilabel multiclass classification task. \\
+
+Evaluation will be mostly based on a confusion matrix in order to calculate an average F-score \cite{Powers2008EvaluationFP}. If the classes are not evenly distributed special considerations are necessary. Additionally ROC curves may be also used for evaluation \cite{Hand2001}. 
+
+\chapter{State of the Art}
+
+At the time of writing this proposal there has been little research in the area of computational humor using deep learning. Deep Learning of Audio and Language Features for Humor Prediction \cite{Bertero2016DeepLO} is the only notable paper in this area, which uses deep learning for punchline detection based on dialogue and audio of a US sitcom. This approach ignores the visual component entirely and also does not use Long Short-Term Memory networks. \\
+
+For image classification various types of convolutional neural networks are state-of-the-art \cite{dogsvscats}. Recurrent Long Short-Term Memory networks are being used very successfully for various natural language processing tasks as well \cite[page 4]{reviewRNN}. \\
+\pagebreak
+
+Previous approaches of computational humor include sarcasm\cite{Bamman2015ContextualizedSD}, joke detection\cite{Yang2015HumorRA} or rule-based humor\cite{HumoristBot}. All of these attempts treated humor as isolated chunks of text, while also ignoring the visual component entirely.
+
+\chapter{Relation to Master Study}
+The master study Artificial Intelligence and Game Engineering has several courses that cover the topic of machine- and deep learning:
+
+\begin{itemize}
+\item 183.663, VU, Deep  Learning  for  Visual  Computing
+\item 184.702, VU, Machine Learning
+\item 188.501, VU, Similarity Modeling 1
+\item 188.498, VU, Similarity Modeling 2
+\item 188.980, VU, Advanced Information Retrieval
+\item 186.143, UE, Informationsvisualisierung 
+\item 186.141, VO, Informationsvisualisierung 
+\end{itemize}
+
+%\chapter{Introduction}
+%\todo{Enter your text here.}
+
+%\chapter{Additional Chapter}
+%\todo{Enter your text here.}
+
+\backmatter
+
+% Use an optional list of figures.
+% \listoffigures % Starred version, i.e., \listoffigures*, removes the toc entry.
+
+% Use an optional list of tables.
+% \cleardoublepage % Start list of tables on the next empty right hand page.
+% \listoftables % Starred version, i.e., \listoftables*, removes the toc entry.
+
+% Use an optional list of alogrithms.
+% \listofalgorithms
+% \addcontentsline{toc}{chapter}{List of Algorithms}
+
+% Add an index.
+% \printindex
+
+% Add a glossary.
+% \printglossaries
+
+% Add a bibliography.
+\bibliographystyle{alpha}
+\bibliography{citations.bib}
+
+\end{document}

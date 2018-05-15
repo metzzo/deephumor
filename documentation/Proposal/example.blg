@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: example.aux
+The style file: alpha.bst
+Database file #1: citations.bib.bib
+Warning--empty booktitle in Powers2008EvaluationFP
+You've used 10 entries,
+            2543 wiz_defined-function locations,
+            625 strings with 6264 characters,
+and the built_in function-call counts, 4276 in all, are:
+= -- 411
+> -- 214
+< -- 4
++ -- 77
+- -- 74
+* -- 299
+:= -- 695
+add.period$ -- 31
+call.type$ -- 10
+change.case$ -- 66
+chr.to.int$ -- 10
+cite$ -- 11
+duplicate$ -- 178
+empty$ -- 323
+format.name$ -- 85
+if$ -- 884
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 10
+newline$ -- 55
+num.names$ -- 30
+pop$ -- 72
+preamble$ -- 1
+purify$ -- 76
+quote$ -- 0
+skip$ -- 150
+stack$ -- 0
+substring$ -- 208
+swap$ -- 35
+text.length$ -- 4
+text.prefix$ -- 2
+top$ -- 0
+type$ -- 80
+warning$ -- 1
+while$ -- 37
+width$ -- 12
+write$ -- 130
+(There was 1 warning)
