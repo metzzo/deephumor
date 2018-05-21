@@ -1,3 +1,4 @@
+
 % Copyright (C) 2014-2017 by Thomas Auzinger <thomas@auzinger.name>
 
 \documentclass[draft,final]{vutinfth} % Remove option 'final' to obtain debug information.
@@ -134,13 +135,13 @@
 
 The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons. This is done by applying several Deep Learning techniques. \\
 
-Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}, research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years\cite{Druzhkov2016}, images may now be taken into consideration as well and similarly recurrent neural networks have been improving the state-of-the-art in several natural language processing disciplines \cite{reviewRNN}. \\
+Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}, research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well and similarly recurrent neural networks have been improving the state-of-the-art in several natural language processing disciplines \cite{reviewRNN}. \\
 
-\textbf {Cartoon Classification:} \quad Convolutional neural networks are mostly applied to real world pictures, because most problems are in this domain. The question remains whether they are also capable of analyzing cartoons and if there are ways on how to improve CNNs for this type of images. An experiment of regular image classification will be adapted for Gary Larson's cartoons. The traditional image classification task using the CIFAR-10 data set, where categorizing images into ten classes (cat, dog, airplane, etc.) will be adapted for his cartoons. Classification should range from animal cartoons, culture dish cartoons to harder categories, such as cartoons where "god" appears. The original task is already solved with convolutional neural networks \cite{dogsvscats}, the question remains if the same is true for Gary Larson's cartoons. \\
+\textbf {Cartoon Classification:} \quad Convolutional neural networks are mostly applied to real world pictures, because most problems of computer vision are in this domain. The question remains whether they are also capable of analyzing cartoons and if there are ways on how to improve CNNs for this type of images. An experiment of regular image classification will be adapted for Gary Larson's cartoons. The traditional image classification task using the CIFAR-10 data set, where categorizing images into ten classes (cat, dog, airplane, etc.) will be adapted for his cartoons. Classification should range from animal cartoons, culture dish cartoons to harder categories, such as cartoons where "god" appears. The original task is already solved with convolutional neural networks \cite{dogsvscats}, the question remains if the same is true for Gary Larson's cartoons. \\
 
-\textbf {Humor Classification:} \quad Cartoons by Gary Larson also contain a punchline. This has to be also considered when trying to understand the humor. For this part recurrent neural networks, especially Long Short-Term Memory networks, will be used. The main problem of these networks, is that they have the tendency to overfit to the training data \cite[page 4]{reviewRNN}, which is a major challenge to be overcome. \\
+\textbf {Humor Classification:} \quad Often cartoons by Gary Larson also contain a punchline, which will be extracted using existing optical image recognition solutions. The punchline has to be considered when trying to understand humor. For this part recurrent neural networks, especially Long Short-Term Memory networks, will be applied (TODO: REF). The main problem of these networks, is that they have the tendency to overfit to the training data \cite[page 4]{reviewRNN}, which is a major challenge to be overcome. \\
 
-Another goal is to evaluate the resulting neural networks. Hidden inside them, there might be some interesting insights about human humor, especially since deep neural networks are inspired by the human brain and function similarly \cite{Cichy2016}. Maybe some neural network layers will have their own dedicated function, or there will be a cow-detection neuron inside the network? 
+Another goal is to evaluate the resulting neural networks. Hidden inside them, there might be some interesting insights about human humor, especially since deep neural networks are inspired by the human brain and function similarly \cite{Cichy2016}. Maybe some neural network layers will have their own dedicated function, or there will be a cow-detection neuron inside the network? These and related questions will be investigated in the present thesis.
 
 \chapter{Expected Results}
 
@@ -226,7 +227,7 @@ The master study Artificial Intelligence and Game Engineering has several course
 % \printglossaries
 
 % Add a bibliography.
-\bibliographystyle{alpha}
+\bibliographystyle{abbrv}
 \bibliography{citations.bib}
 
 \end{document}

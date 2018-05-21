@@ -1,48 +1,48 @@
 This is BibTeX, Version 0.99d (TeX Live 2016)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: example.aux
-The style file: alpha.bst
+The style file: abbrv.bst
 Database file #1: citations.bib.bib
 Warning--empty booktitle in Powers2008EvaluationFP
 You've used 10 entries,
-            2543 wiz_defined-function locations,
-            625 strings with 6264 characters,
-and the built_in function-call counts, 4276 in all, are:
-= -- 411
-> -- 214
-< -- 4
-+ -- 77
-- -- 74
-* -- 299
-:= -- 695
+            2118 wiz_defined-function locations,
+            565 strings with 5539 characters,
+and the built_in function-call counts, 3451 in all, are:
+= -- 322
+> -- 158
+< -- 2
++ -- 65
+- -- 52
+* -- 226
+:= -- 561
 add.period$ -- 31
 call.type$ -- 10
-change.case$ -- 66
-chr.to.int$ -- 10
+change.case$ -- 56
+chr.to.int$ -- 0
 cite$ -- 11
-duplicate$ -- 178
-empty$ -- 323
-format.name$ -- 85
-if$ -- 884
-int.to.chr$ -- 1
-int.to.str$ -- 0
+duplicate$ -- 146
+empty$ -- 293
+format.name$ -- 52
+if$ -- 736
+int.to.chr$ -- 0
+int.to.str$ -- 10
 missing$ -- 10
-newline$ -- 55
-num.names$ -- 30
-pop$ -- 72
+newline$ -- 54
+num.names$ -- 20
+pop$ -- 70
 preamble$ -- 1
-purify$ -- 76
+purify$ -- 46
 quote$ -- 0
-skip$ -- 150
+skip$ -- 103
 stack$ -- 0
-substring$ -- 208
+substring$ -- 188
 swap$ -- 35
-text.length$ -- 4
-text.prefix$ -- 2
+text.length$ -- 2
+text.prefix$ -- 0
 top$ -- 0
-type$ -- 80
+type$ -- 40
 warning$ -- 1
-while$ -- 37
+while$ -- 29
 width$ -- 12
-write$ -- 130
+write$ -- 109
 (There was 1 warning)

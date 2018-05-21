@@ -1,62 +1,60 @@
-\newcommand{\etalchar}[1]{$^{#1}$}
-\begin{thebibliography}{CKP{\etalchar{+}}16}
+\begin{thebibliography}{10}
 
-\bibitem[ASGP08]{HumoristBot}
+\bibitem{HumoristBot}
 A.~Augello, G.~Saccone, S.~Gaglio, and G.~Pilato.
 \newblock Humorist bot: Bringing computational humour in a chat-bot system.
 \newblock In {\em 2008 International Conference on Complex, Intelligent and
   Software Intensive Systems}, pages 703--708, March 2008.
 
-\bibitem[BF16]{Bertero2016DeepLO}
-Dario Bertero and Pascale Fung.
-\newblock Deep learning of audio and language features for humor prediction.
-\newblock In {\em LREC}, 2016.
-
-\bibitem[BS15]{Bamman2015ContextualizedSD}
-David Bamman and Noah~A. Smith.
+\bibitem{Bamman2015ContextualizedSD}
+D.~Bamman and N.~A. Smith.
 \newblock Contextualized sarcasm detection on twitter.
 \newblock In {\em ICWSM}, 2015.
 
-\bibitem[CKP{\etalchar{+}}16]{Cichy2016}
-Radoslaw~Martin Cichy, Aditya Khosla, Dimitrios Pantazis, Antonio Torralba, and
-  Aude Oliva.
+\bibitem{Bertero2016DeepLO}
+D.~Bertero and P.~Fung.
+\newblock Deep learning of audio and language features for humor prediction.
+\newblock In {\em LREC}, 2016.
+
+\bibitem{Cichy2016}
+R.~M. Cichy, A.~Khosla, D.~Pantazis, A.~Torralba, and A.~Oliva.
 \newblock Comparison of deep neural networks to spatio-temporal cortical
   dynamics of human visual object recognition reveals hierarchical
   correspondence.
 \newblock {\em Scientific Reports}, 6:27755 EP --, Jun 2016.
 \newblock Article.
 
-\bibitem[CMS12]{dogsvscats}
+\bibitem{dogsvscats}
 D.~Ciregan, U.~Meier, and J.~Schmidhuber.
 \newblock Multi-column deep neural networks for image classification.
 \newblock In {\em 2012 IEEE Conference on Computer Vision and Pattern
   Recognition}, pages 3642--3649, June 2012.
 
-\bibitem[DK16]{Druzhkov2016}
+\bibitem{Druzhkov2016}
 P.~N. Druzhkov and V.~D. Kustikova.
 \newblock A survey of deep learning methods and software tools for image
   classification and object detection.
 \newblock {\em Pattern Recognition and Image Analysis}, 26(1):9--15, Jan 2016.
 
-\bibitem[HT01]{Hand2001}
-David~J. Hand and Robert~J. Till.
+\bibitem{Hand2001}
+D.~J. Hand and R.~J. Till.
 \newblock A simple generalisation of the area under the roc curve for multiple
   class classification problems.
 \newblock {\em Machine Learning}, 45(2):171--186, Nov 2001.
 
-\bibitem[Lip15]{reviewRNN}
-Zachary~Chase Lipton.
+\bibitem{reviewRNN}
+Z.~C. Lipton.
 \newblock A critical review of recurrent neural networks for sequence learning.
 \newblock {\em CoRR}, abs/1506.00019, 2015.
 
-\bibitem[Pow08]{Powers2008EvaluationFP}
-David M.~W. Powers.
+\bibitem{Powers2008EvaluationFP}
+D.~M.~W. Powers.
 \newblock Evaluation: From precision, recall and f-factor to roc, informedness,
   markedness and correlation.
 \newblock 2008.
 
-\bibitem[YLDH15]{Yang2015HumorRA}
-Diyi Yang, Alon Lavie, Chris Dyer, and Eduard~H. Hovy.
+\bibitem{Yang2015HumorRA}
+D.~Yang, A.~Lavie, C.~Dyer, and E.~H. Hovy.
 \newblock Humor recognition and humor anchor extraction.
 \newblock In {\em EMNLP}, 2015.
 
