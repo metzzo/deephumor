@@ -124,3 +124,30 @@ url="https://doi.org/10.1023/A:1010920819831"
   author={David M. W. Powers},
   year={2008}
 }
+
+@misc{cnnimg,
+  author = {Ingo Lütkebohle},
+  title = {{BWorld Robot Control Software}},
+  howpublished = "\url{https://medium.com/@Aj.Cheng/convolutional-neural-network-d9f69e473feb}",
+  year = {2008}, 
+  note = "[Online; accessed 19-July-2008]"
+}
+
+@article{gan,
+  author    = {Tim Salimans and
+               Ian J. Goodfellow and
+               Wojciech Zaremba and
+               Vicki Cheung and
+               Alec Radford and
+               Xi Chen},
+  title     = {Improved Techniques for Training GANs},
+  journal   = {CoRR},
+  volume    = {abs/1606.03498},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1606.03498},
+  archivePrefix = {arXiv},
+  eprint    = {1606.03498},
+  timestamp = {Wed, 07 Jun 2017 14:40:52 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/SalimansGZCRC16},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}

@@ -53,6 +53,11 @@ D.~M.~W. Powers.
   markedness and correlation.
 \newblock 2008.
 
+\bibitem{gan}
+T.~Salimans, I.~J. Goodfellow, W.~Zaremba, V.~Cheung, A.~Radford, and X.~Chen.
+\newblock Improved techniques for training gans.
+\newblock {\em CoRR}, abs/1606.03498, 2016.
+
 \bibitem{Yang2015HumorRA}
 D.~Yang, A.~Lavie, C.~Dyer, and E.~H. Hovy.
 \newblock Humor recognition and humor anchor extraction.

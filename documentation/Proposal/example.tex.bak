@@ -207,11 +207,22 @@ For image classification various types of convolutional neural networks are stat
 Previous approaches of computational humor include sarcasm \cite{Bamman2015ContextualizedSD}, joke detection \cite{Yang2015HumorRA} or rule-based humor \cite{HumoristBot}. All of these attempts treated humor as isolated chunks of text, while also ignoring the visual component entirely.
 
 \section{Neural Network Topologies}
+The power of neural networks, especially deep neural networks stems from their flexibility. They can adapt to lots of different domains.
+
+Below is an illustration of a simple fully connected feed forward neural network. 
+
 
 \begin{figure}[ht]
 	\centering
-	\scalebox{.5}{
-	\begin{pspicture}(0,-4.227907)(12.08,4.227907)
+  \includegraphics[width=0.5\textwidth,natwidth=957,natheight=1246]{graphics/example_cartoon.jpg}
+	\caption{Cartoon by Gary Larson}
+	\label{fig1}
+\end{figure}
+
+\begin{center}
+\psscalebox{0.5 0.5}
+{
+\begin{pspicture}(0,-4.227907)(12.08,4.227907)
 \definecolor{colour0}{rgb}{0.70980394,0.70980394,0.70980394}
 \definecolor{colour1}{rgb}{0.8627451,0.5686275,0.2784314}
 \definecolor{colour2}{rgb}{0.5137255,0.78039217,0.5411765}
@@ -293,13 +304,10 @@ Previous approaches of computational humor include sarcasm \cite{Bamman2015Conte
 \psellipse[linecolor=black, linewidth=0.04, fillstyle=solid,fillcolor=colour0, dimen=outer](3.5255814,-0.4232558)(0.6511628,0.6511628)
 \psellipse[linecolor=black, linewidth=0.04, fillstyle=solid,fillcolor=colour0, dimen=outer](3.5255814,-2.4232557)(0.6511628,0.6511628)
 \end{pspicture}
-}
-	\caption{Fully Connected Feed Forward Neural Network}
-\end{figure}
-
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to lots of different domains.
-
-Illustrated above is a simple fully connected feed forward neural network. Each connection has a
+} 
+\\
+\textbf{Fully connected Feed forward neural network}
+\end{center}
 
 \chapter{Relation to Master Study}
 The master study Artificial Intelligence and Game Engineering has several courses that cover the topic of machine- and deep learning:
