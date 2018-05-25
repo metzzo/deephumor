@@ -4,45 +4,45 @@ The top-level auxiliary file: example.aux
 The style file: abbrv.bst
 Database file #1: citations.bib.bib
 Warning--empty booktitle in Powers2008EvaluationFP
-You've used 11 entries,
+You've used 16 entries,
             2118 wiz_defined-function locations,
-            569 strings with 5694 characters,
-and the built_in function-call counts, 3819 in all, are:
-= -- 354
-> -- 191
+            601 strings with 6381 characters,
+and the built_in function-call counts, 5238 in all, are:
+= -- 496
+> -- 254
 < -- 2
-+ -- 78
-- -- 64
-* -- 256
-:= -- 631
-add.period$ -- 34
-call.type$ -- 11
-change.case$ -- 65
++ -- 103
+- -- 84
+* -- 349
+:= -- 881
+add.period$ -- 50
+call.type$ -- 16
+change.case$ -- 89
 chr.to.int$ -- 0
-cite$ -- 12
-duplicate$ -- 156
-empty$ -- 310
-format.name$ -- 64
-if$ -- 805
+cite$ -- 17
+duplicate$ -- 210
+empty$ -- 421
+format.name$ -- 84
+if$ -- 1093
 int.to.chr$ -- 0
-int.to.str$ -- 11
-missing$ -- 11
-newline$ -- 59
-num.names$ -- 22
-pop$ -- 77
+int.to.str$ -- 16
+missing$ -- 17
+newline$ -- 85
+num.names$ -- 32
+pop$ -- 98
 preamble$ -- 1
-purify$ -- 54
+purify$ -- 74
 quote$ -- 0
-skip$ -- 111
+skip$ -- 147
 stack$ -- 0
-substring$ -- 193
-swap$ -- 36
+substring$ -- 274
+swap$ -- 41
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 44
+type$ -- 62
 warning$ -- 1
-while$ -- 31
-width$ -- 13
-write$ -- 120
+while$ -- 45
+width$ -- 18
+write$ -- 176
 (There was 1 warning)

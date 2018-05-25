@@ -13,6 +13,8 @@
 \contentsline {section}{\numberline {3.4}Cartoon Classification}{5}{section.3.4}
 \contentsline {section}{\numberline {3.5}Evaluation}{5}{section.3.5}
 \contentsline {chapter}{\chapternumberline {4}State of the Art}{6}{chapter.4}
-\contentsline {section}{\numberline {4.1}Neural Network Topologies}{6}{section.4.1}
-\contentsline {chapter}{\chapternumberline {5}Relation to Master Study}{8}{chapter.5}
-\contentsline {chapter}{Bibliography}{9}{section*.6}
+\contentsline {section}{\numberline {4.1}Neural Networks}{6}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Convolutional Neural Networks}{8}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Recurrent Neural Networks}{8}{subsection.4.1.2}
+\contentsline {chapter}{\chapternumberline {5}Relation to Master Study}{10}{chapter.5}
+\contentsline {chapter}{Bibliography}{11}{section*.6}

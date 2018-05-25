@@ -144,7 +144,7 @@
 
 \begin{figure}[ht]
 	\centering
-  \includegraphics[width=0.5\textwidth,natwidth=957,natheight=1246]{graphics/example_cartoon.jpg}
+  	\includegraphics[width=0.5\textwidth,natwidth=957,natheight=1246]{./graphics/example_cartoon.png}
 	\caption{Cartoon by Gary Larson}
 	\label{fig1}
 \end{figure}
@@ -190,7 +190,7 @@ Finally both neural networks are merged together using another, possibly more tr
 
 Similar to the humor classification approach, a deep neural network that classifies cartoons by different categories will be trained. The question remains how to handle cartoons properly using deep neural networks, additionally data augmenting techniques might be implemented to avoid overfitting. \\
 
-Gary Larson has many reoccurring themes, such as different settings (culture dish, stone age, outer space, etc.), reoccurring animals (dogs, cats, horses, etc.) or other phenomena (god appearing, marriage conflict, etc.). This makes training a deep neural network which is able to classify these categories an interesting task. On the quest to best classifier, first different convolutional neural networks will be applied and secondly Generative Adversarial Networks will also be implemented. (TODO REF)
+Gary Larson has many reoccurring themes, such as different settings (culture dish, stone age, outer space, etc.), reoccurring animals (dogs, cats, horses, etc.) or other phenomena (god appearing, marriage conflict, etc.). This makes training a deep neural network which is able to classify these categories an interesting task. On the quest to the best classifier, first different convolutional neural networks will be applied, possibly a generative adversarial approach may also be implemented. (TODO REF)
 
 \section {Evaluation}
 
@@ -206,7 +206,7 @@ For image classification various types of convolutional neural networks are stat
 
 Previous approaches of computational humor include sarcasm \cite{Bamman2015ContextualizedSD}, joke detection \cite{Yang2015HumorRA} or rule-based humor \cite{HumoristBot}. All of these attempts treated humor as isolated chunks of text, while also ignoring the visual component entirely.
 
-\section{Neural Network Topologies}
+\section{Neural Networks}
 
 \begin{figure}[ht]
 	\centering
@@ -295,11 +295,54 @@ Previous approaches of computational humor include sarcasm \cite{Bamman2015Conte
 \end{pspicture}
 }
 	\caption{Fully Connected Feed Forward Neural Network}
+	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to lots of different domains.
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to lots of different domains very easily. Illustrated at figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
 
-Illustrated above is a simple fully connected feed forward neural network. Each connection has a
+The following neural network introduction is cited from Pattern Recognition and Machine Learning by Christopher M. Bishop \cite{bishop}. \\ 
+
+A neural network can be seen as a series of functional transformations. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
+\begin{equation}
+a_j = \sum_{i=1}^{D} w_{ji}^{(1)} + w_{j0}^{(1)}
+\end{equation}
+
+where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$:
+\begin{equation}
+z_j = h(a_j)
+\end{equation}
+where depending on the problem different activation functions are applied, for example $h(x) = tanh(x)$ or $h(x) = \sigma(x)$ where
+\begin{equation}
+\sigma(x) = \dfrac {1} {1 + e^{-x}}
+\end{equation}
+for the first hidden layer the following values are linearly combined:
+\begin{equation}
+a_k = \sum_{i=1}^{M} w_{kj}^{(2)} + w_{k0}^{(2)}
+\end{equation}
+
+where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for all hidden layers. The final result for the output layer is usually obtained by applying a softmax activation function. \\
+
+The neural network is then trained by applying a gradient descent optimization. For more information regarding this algorithm Machine Learning by Christopher M. Bishop \cite{bishop} is recommended. 
+
+\subsection{Convolutional Neural Networks}
+The following is summarizing several papers (TODO).
+
+Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network is a deep neural network, since it consists of multiple hidden layers, which are configured differently compared to traditional neural networks. Additionally to fully connected hidden layers pooling and convolutional layers are added. \\
+
+Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (e.g.: edges). Also in contrast to fully connected layers: The kernel is shared among the neurons (Parameter Sharing), since the recognized features should not depend on their position in the input image. \\
+
+Pooling layers are applied after convolutional layers. Their goal is to reduce the complexity of CNNs. Pooling neurons are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is Max Pooling, where the result is the maximum value of all incoming connections. \\
+
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. \\
+
+\subsection{Recurrent Neural Networks}
+Recurrent Neural Networks (RNN) allow neural networks to be applied on sequences, by allowing cycles in the topology of the network. Usually a RNN consists of multiple units, such as Long Short-Term Memory networks (LSTM), Gates recurrent unit, etc. The focus of this thesis will primarily be on LSTM networks. \\
+
+Each architecture has different benefits and applicable domains. Even among LSTM networks there is lots of variation. In fact recurrent neural networks are so powerful they are even turing complete \cite{seigelmann:computation}. The success of today's speech recognition is driven by RNN networks \cite{googlespeech}. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, which avoids the vanishing gradient problem \cite {vanishinggradient}.\\
+
+The most simple LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection exist but are kept in check by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}.
+
+
 
 \chapter{Relation to Master Study}
 The master study Artificial Intelligence and Game Engineering has several courses that cover the topic of machine- and deep learning:
