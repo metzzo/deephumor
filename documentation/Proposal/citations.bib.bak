@@ -221,3 +221,92 @@ journal	= {ArXiv e-prints}
  publisher = {MIT Press},
  address = {Cambridge, MA, USA},
 }
+
+@article{wordembedding,
+  author    = {Tomas Mikolov and
+               Kai Chen and
+               Greg Corrado and
+               Jeffrey Dean},
+  title     = {Efficient Estimation of Word Representations in Vector Space},
+  journal   = {CoRR},
+  volume    = {abs/1301.3781},
+  year      = {2013},
+  url       = {http://arxiv.org/abs/1301.3781},
+  archivePrefix = {arXiv},
+  eprint    = {1301.3781},
+  timestamp = {Wed, 07 Jun 2017 14:42:25 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1301-3781},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{pennington2014glove,
+  author = {Jeffrey Pennington and Richard Socher and Christopher D. Manning},
+  booktitle = {Empirical Methods in Natural Language Processing (EMNLP)},
+  title = {GloVe: Global Vectors for Word Representation},
+  year = {2014},
+  pages = {1532--1543},
+  url = {http://www.aclweb.org/anthology/D14-1162},
+}
+
+@article{lstmvariants,
+  author    = {Klaus Greff and
+               Rupesh Kumar Srivastava and
+               Jan Koutn{\'{\i}}k and
+               Bas R. Steunebrink and
+               J{\"{u}}rgen Schmidhuber},
+  title     = {{LSTM:} {A} Search Space Odyssey},
+  journal   = {CoRR},
+  volume    = {abs/1503.04069},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1503.04069},
+  archivePrefix = {arXiv},
+  eprint    = {1503.04069},
+  timestamp = {Wed, 07 Jun 2017 14:42:57 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/GreffSKSS15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{gru,
+  author    = {Rahul Dey and
+               Fathi M. Salem},
+  title     = {Gate-Variants of Gated Recurrent Unit {(GRU)} Neural Networks},
+  journal   = {CoRR},
+  volume    = {abs/1701.05923},
+  year      = {2017},
+  url       = {http://arxiv.org/abs/1701.05923},
+  archivePrefix = {arXiv},
+  eprint    = {1701.05923},
+  timestamp = {Wed, 07 Jun 2017 14:42:56 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/DeyS17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{gan2,
+ author = {Goodfellow, Ian J. and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+ title = {Generative Adversarial Nets},
+ booktitle = {Proceedings of the 27th International Conference on Neural Information Processing Systems - Volume 2},
+ series = {NIPS'14},
+ year = {2014},
+ location = {Montreal, Canada},
+ pages = {2672--2680},
+ numpages = {9},
+ url = {http://dl.acm.org/citation.cfm?id=2969033.2969125},
+ acmid = {2969125},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+} 
+
+@article{cnnnontech,
+  author    = {Felix Altenberger and
+               Claus Lenz},
+  title     = {A Non-Technical Survey on Deep Convolutional Neural Network Architectures},
+  journal   = {CoRR},
+  volume    = {abs/1803.02129},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1803.02129},
+  archivePrefix = {arXiv},
+  eprint    = {1803.02129},
+  timestamp = {Tue, 10 Apr 2018 20:50:05 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1803-02129},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}

@@ -1,12 +1,12 @@
 This is BibTeX, Version 0.99d (TeX Live 2016)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: example.aux
+The top-level auxiliary file: build/example.aux
 The style file: abbrv.bst
 Database file #1: citations.bib.bib
 Warning--empty booktitle in Powers2008EvaluationFP
 You've used 16 entries,
             2118 wiz_defined-function locations,
-            601 strings with 6381 characters,
+            601 strings with 6393 characters,
 and the built_in function-call counts, 5238 in all, are:
 = -- 496
 > -- 254
