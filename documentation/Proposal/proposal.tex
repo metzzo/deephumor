@@ -80,7 +80,7 @@
 %
 % Master:
 \setthesis{master}
-\setmasterdegree{dipl.} % dipl. / rer.nat. / rer.soc.oec. / master
+\setmasterdegree{diplprop} % dipl. / rer.nat. / rer.soc.oec. / master
 %
 % Doctor:
 %\setthesis{doctor}
@@ -141,7 +141,7 @@
 	\label{fig:fig1}
 \end{figure}
 
-The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see figure \ref{fig:fig1}). This is done by applying several Deep Learning techniques. \\
+The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see Figure \ref{fig:fig1}). This is done by applying several Deep Learning techniques. \\
 
 
 Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}, research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well and similarly recurrent neural networks have been improving the state-of-the-art in several natural language processing disciplines \cite{reviewRNN}. \\
@@ -192,6 +192,7 @@ Evaluation will be mostly based on a confusion matrix in order to calculate an a
 
 \chapter{State of the Art}
 
+\section{Related Work}
 At the time of writing this proposal there has been little research in the area of computational humor using deep learning. Deep Learning of Audio and Language Features for Humor Prediction \cite{Bertero2016DeepLO} is the only notable paper in this area, which uses deep learning for punchline detection based on dialogue and audio of a US sitcom. This approach ignores the visual component entirely and also does not use Long Short-Term Memory networks.
 
 For image classification various types of convolutional neural networks are state-of-the-art \cite{dogsvscats}. Recurrent Long Short-Term Memory networks are being used very successfully for many natural language processing tasks and other domains, such as speech recognition \cite{reviewRNN}\cite{googlespeech}. In fact recurrent neural networks are so powerful they are even turing complete \cite{seigelmann:computation}.
@@ -206,7 +207,7 @@ Previous approaches of computational humor include sarcasm \cite{Bamman2015Conte
 	\label{fig:feedforward}
 \end{figure}
 
-A neural network generally consists of multiple neurons, layers and connections. Illustrated at figure \ref{fig:feedforward} is a fully connected feedforward neural network, with one input layer, one output layer and three hidden layers. Training the neural network is usually achieved by applying the gradient descent algorithm \cite{bishop}.
+A neural network generally consists of multiple neurons, layers and connections. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network, with one input layer, one output layer and three hidden layers. Training the neural network is usually achieved by applying the gradient descent algorithm \cite{bishop}.
 
 \pagebreak
 \section{Convolutional Neural Networks}
@@ -234,7 +235,7 @@ Recurrent Neural Networks allow neural networks to be applied on sequences, by c
 	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
 
 The following neural network introduction is based on Pattern Recognition and Machine Learning by Christopher M. Bishop \cite{bishop}. \\ 
 
