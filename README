@@ -1,0 +1,8 @@
+# DeepHumor
+
+## Preprocessor
+Install the requirements using pip install -r requirements.txt
+
+Make sure to have Tesseract installed for OCR.
+
+Using Python 3.6

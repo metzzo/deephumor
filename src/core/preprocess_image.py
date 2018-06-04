@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+import pytesseract
+from PIL import Image
 
 from core.utility import show_img_and_wait
 
@@ -13,6 +15,7 @@ def preprocess_image(path):
     :return: (cartoon, punchline)
     """
     original_img = cv2.imread(path, 0)
+    original_img_height, original_img_width = original_img.shape
 
     # Find Rectangle containing the cartoon
     # do this by finding the biggest contour which is the most rectangle like
@@ -25,7 +28,6 @@ def preprocess_image(path):
     for c in contours:
         area = cv2.contourArea(c)
         x, y, w, h = cv2.boundingRect(c)
-        print(area)
         if area > max_area and abs(w*h - area) < area * 0.1:
             max_area = area
             max_contour = c
@@ -43,5 +45,31 @@ def preprocess_image(path):
     (bottomx, bottomy) = (np.max(x) - 1, np.max(y) - 1)
     out = out[topx:bottomx + 1, topy:bottomy + 1]
 
-    show_img_and_wait(img=out)
-    pass
+    # extract text => below cartoon
+    x, y, w, h = cv2.boundingRect(max_contour)
+    punchline = original_img[y + h:y + h + (original_img_height - (y + h)), 0:original_img_width]
+    blurred = cv2.GaussianBlur(punchline, (3, 3), 0)
+    edges = cv2.Canny(blurred, 100, 200, 3)
+    im2, contours, _ = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    text_height, text_width = edges.shape
+    min_x, min_y = text_width, text_height
+    max_x = max_y = 0
+    for contour in contours:
+        (x, y, w, h) = cv2.boundingRect(contour)
+        min_x, max_x = min(x, min_x), max(x + w, max_x)
+        min_y, max_y = min(y, min_y), max(y + h, max_y)
+
+    assert max_x - min_x > 0 and max_y - min_y > 0
+
+    cv2.rectangle(edges, (min_x, min_y), (max_x, max_y), (255, 0, 0), 1)
+
+    punchline = punchline[min_y:max_y, min_x:max_x]
+    punchline = cv2.resize(punchline, None, fx=4, fy=4)
+    punchline = cv2.GaussianBlur(punchline, (1, 1), 0)
+    _, punchline = cv2.threshold(punchline, 0, 255, cv2.THRESH_OTSU)
+    punchline_text = pytesseract.image_to_string(Image.fromarray(punchline), lang='eng')
+    print("Extracted Punchline: " + punchline_text)
+
+    show_img_and_wait(img=punchline)
+
+    return out
