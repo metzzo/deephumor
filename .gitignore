@@ -7,3 +7,4 @@
 /venv/
 /.idea/
 sample_comic.jpg
+.pytest_cache

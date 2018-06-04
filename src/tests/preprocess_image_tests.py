@@ -3,7 +3,7 @@ from hamcrest import *
 from core.preprocess_image import preprocess_image
 
 
-def test_sampleimage(path):
+def test_sampleimage():
     # arrange
     path = './resources/sample_comic.jpg'
 
