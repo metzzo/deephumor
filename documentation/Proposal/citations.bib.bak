@@ -124,3 +124,189 @@ url="https://doi.org/10.1023/A:1010920819831"
   author={David M. W. Powers},
   year={2008}
 }
+
+@misc{cnnimg,
+  author = {Ingo Lütkebohle},
+  title = {{BWorld Robot Control Software}},
+  howpublished = "\url{https://medium.com/@Aj.Cheng/convolutional-neural-network-d9f69e473feb}",
+  year = {2008}, 
+  note = "[Online; accessed 19-July-2008]"
+}
+
+@article{gan,
+  author    = {Tim Salimans and
+               Ian J. Goodfellow and
+               Wojciech Zaremba and
+               Vicki Cheung and
+               Alec Radford and
+               Xi Chen},
+  title     = {Improved Techniques for Training GANs},
+  journal   = {CoRR},
+  volume    = {abs/1606.03498},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1606.03498},
+  archivePrefix = {arXiv},
+  eprint    = {1606.03498},
+  timestamp = {Wed, 07 Jun 2017 14:40:52 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/SalimansGZCRC16},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@book{bishop,
+ author = {Bishop, Christopher M.},
+ title = {Pattern Recognition and Machine Learning (Information Science and Statistics)},
+ year = {2006},
+ isbn = {0387310738},
+ publisher = {Springer-Verlag},
+ address = {Berlin, Heidelberg}
+} 
+
+@article{seigelmann:computation,
+  added-at = {2008-03-11T14:52:34.000+0100},
+  annote = {discussed in NN Meeting 5/12/95},
+  author = {Siegelmann, Hava},
+  biburl = {https://www.bibsonomy.org/bibtex/28a51ecfb019f55bdff8a00958f755fe6/idsia},
+  citeulike-article-id = {2379039},
+  interhash = {6ba904b76cbecc153f9bf9018488d0c7},
+  intrahash = {8a51ecfb019f55bdff8a00958f755fe6},
+  journal = {Science},
+  keywords = {nn},
+  pages = {545--548},
+  priority = {2},
+  timestamp = {2008-03-11T14:59:18.000+0100},
+  title = {Computation Beyond the {T}uring Limit},
+  volume = 268,
+  year = 1995
+}
+
+
+@article{googlespeech,
+title	= {Neural Speech Recognizer: Acoustic-to-Word LSTM Model for Large Vocabulary Speech Recognition},
+author	= {Hagen Soltau and Hank Liao and Hasim Sak},
+year	= {2016},
+note	= {https://arxiv.org/abs/1610.09975},
+journal	= {ArXiv e-prints}
+}
+
+@article{vanishinggradient,
+  author    = {Razvan Pascanu and
+               Tomas Mikolov and
+               Yoshua Bengio},
+  title     = {Understanding the exploding gradient problem},
+  journal   = {CoRR},
+  volume    = {abs/1211.5063},
+  year      = {2012},
+  url       = {http://arxiv.org/abs/1211.5063},
+  archivePrefix = {arXiv},
+  eprint    = {1211.5063},
+  timestamp = {Wed, 07 Jun 2017 14:40:40 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1211-5063},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{hochreiter,
+ author = {Hochreiter, Sepp and Schmidhuber, J\"{u}rgen},
+ title = {Long Short-Term Memory},
+ journal = {Neural Comput.},
+ issue_date = {November 15, 1997},
+ volume = {9},
+ number = {8},
+ month = nov,
+ year = {1997},
+ issn = {0899-7667},
+ pages = {1735--1780},
+ numpages = {46},
+ url = {http://dx.doi.org/10.1162/neco.1997.9.8.1735},
+ doi = {10.1162/neco.1997.9.8.1735},
+ acmid = {1246450},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+}
+
+@article{wordembedding,
+  author    = {Tomas Mikolov and
+               Kai Chen and
+               Greg Corrado and
+               Jeffrey Dean},
+  title     = {Efficient Estimation of Word Representations in Vector Space},
+  journal   = {CoRR},
+  volume    = {abs/1301.3781},
+  year      = {2013},
+  url       = {http://arxiv.org/abs/1301.3781},
+  archivePrefix = {arXiv},
+  eprint    = {1301.3781},
+  timestamp = {Wed, 07 Jun 2017 14:42:25 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1301-3781},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{pennington2014glove,
+  author = {Jeffrey Pennington and Richard Socher and Christopher D. Manning},
+  booktitle = {Empirical Methods in Natural Language Processing (EMNLP)},
+  title = {GloVe: Global Vectors for Word Representation},
+  year = {2014},
+  pages = {1532--1543},
+  url = {http://www.aclweb.org/anthology/D14-1162},
+}
+
+@article{lstmvariants,
+  author    = {Klaus Greff and
+               Rupesh Kumar Srivastava and
+               Jan Koutn{\'{\i}}k and
+               Bas R. Steunebrink and
+               J{\"{u}}rgen Schmidhuber},
+  title     = {{LSTM:} {A} Search Space Odyssey},
+  journal   = {CoRR},
+  volume    = {abs/1503.04069},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1503.04069},
+  archivePrefix = {arXiv},
+  eprint    = {1503.04069},
+  timestamp = {Wed, 07 Jun 2017 14:42:57 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/GreffSKSS15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{gru,
+  author    = {Rahul Dey and
+               Fathi M. Salem},
+  title     = {Gate-Variants of Gated Recurrent Unit {(GRU)} Neural Networks},
+  journal   = {CoRR},
+  volume    = {abs/1701.05923},
+  year      = {2017},
+  url       = {http://arxiv.org/abs/1701.05923},
+  archivePrefix = {arXiv},
+  eprint    = {1701.05923},
+  timestamp = {Wed, 07 Jun 2017 14:42:56 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/DeyS17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{gan2,
+ author = {Goodfellow, Ian J. and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+ title = {Generative Adversarial Nets},
+ booktitle = {Proceedings of the 27th International Conference on Neural Information Processing Systems - Volume 2},
+ series = {NIPS'14},
+ year = {2014},
+ location = {Montreal, Canada},
+ pages = {2672--2680},
+ numpages = {9},
+ url = {http://dl.acm.org/citation.cfm?id=2969033.2969125},
+ acmid = {2969125},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+} 
+
+@article{cnnnontech,
+  author    = {Felix Altenberger and
+               Claus Lenz},
+  title     = {A Non-Technical Survey on Deep Convolutional Neural Network Architectures},
+  journal   = {CoRR},
+  volume    = {abs/1803.02129},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1803.02129},
+  archivePrefix = {arXiv},
+  eprint    = {1803.02129},
+  timestamp = {Tue, 10 Apr 2018 20:50:05 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1803-02129},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}

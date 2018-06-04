@@ -1,0 +1,20 @@
+\select@language {naustrian}
+\select@language {naustrian}
+\select@language {english}
+\select@language {naustrian}
+\select@language {english}
+\contentsline {chapter}{Contents}{iv}{section*.2}
+\contentsline {chapter}{\chapternumberline {1}Problem Definition}{1}{chapter.1}
+\contentsline {chapter}{\chapternumberline {2}Expected Results}{3}{chapter.2}
+\contentsline {chapter}{\chapternumberline {3}Methodology and Approach}{4}{chapter.3}
+\contentsline {section}{\numberline {3.1}Literature Research}{4}{section.3.1}
+\contentsline {section}{\numberline {3.2}Pre-Processing}{4}{section.3.2}
+\contentsline {section}{\numberline {3.3}Humor Classification}{4}{section.3.3}
+\contentsline {section}{\numberline {3.4}Cartoon Classification}{5}{section.3.4}
+\contentsline {section}{\numberline {3.5}Evaluation}{5}{section.3.5}
+\contentsline {chapter}{\chapternumberline {4}State of the Art}{6}{chapter.4}
+\contentsline {section}{\numberline {4.1}Neural Networks}{6}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Convolutional Neural Networks}{7}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Recurrent Neural Networks}{8}{subsection.4.1.2}
+\contentsline {chapter}{\chapternumberline {5}Relation to Master Study}{9}{chapter.5}
+\contentsline {chapter}{Bibliography}{10}{section*.6}
