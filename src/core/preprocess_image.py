@@ -6,13 +6,17 @@ from PIL import Image
 from core.utility import show_img_and_wait
 
 
-def preprocess_image(path):
+def preprocess_image(path, show_img=False):
     """
 
     Preprocesses the image given by path. Extracts the cartoon and a OCR version of the punchline
 
     :param path:
     :return: (cartoon, punchline)
+
+    cartoon ... OpenCV image containing the cartoon
+    punchline ... Punchline of the cartoon
+
     """
     original_img = cv2.imread(path, 0)
     original_img_height, original_img_width = original_img.shape
@@ -63,13 +67,23 @@ def preprocess_image(path):
 
     cv2.rectangle(edges, (min_x, min_y), (max_x, max_y), (255, 0, 0), 1)
 
+    # apply tesseract
     punchline = punchline[min_y:max_y, min_x:max_x]
-    punchline = cv2.resize(punchline, None, fx=4, fy=4)
-    punchline = cv2.GaussianBlur(punchline, (1, 1), 0)
-    _, punchline = cv2.threshold(punchline, 0, 255, cv2.THRESH_OTSU)
+    #punchline = cv2.GaussianBlur(punchline, (1, 1), 0)
+    punchline = cv2.resize(punchline, None, fx=8, fy=8)
+    punchline = 255 - punchline  # invert color, so we can use the threshold function
+    _, punchline = cv2.threshold(punchline, 45, 255, cv2.THRESH_TOZERO)  # remove background noise
+    punchline = cv2.equalizeHist(punchline)  # normalize brightness
+    _, punchline = cv2.threshold(punchline, 140, 255, cv2.THRESH_TOZERO)  # now make text "thinner"
+    punchline = 255 - punchline  # back to normal
+    #punchline = cv2.medianBlur(punchline, 3)
+    #punchline = cv2.adaptiveThreshold(punchline, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    #_, punchline = cv2.threshold(punchline, 0, 255, cv2.THRESH_OTSU)
     punchline_text = pytesseract.image_to_string(Image.fromarray(punchline), lang='eng')
     print("Extracted Punchline: " + punchline_text)
 
-    show_img_and_wait(img=punchline)
+    if show_img:
+        show_img_and_wait(out)
+        show_img_and_wait(punchline)
 
-    return out
+    return out, punchline_text
