@@ -1,19 +1,21 @@
+.EXPORT_ALL_VARIABLES:
+
+PYTHONPATH = ./src
+
+
 clean-pyc:
-    find . -name '*.pyc' -exec rm --force {} +
-    find . -name '*.pyo' -exec rm --force {} +
-   name '*~' -exec rm --force  {}
+	find . -name "*.pyc" -exec rm -f {} \;
 
 clean-build:
-    rm --force --recursive build/
-    rm --force --recursive dist/
-    rm --force --recursive *.egg-info
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *.egg-info
 
-# isort:
-#    sh -c "isort --skip-glob=.tox --recursive . "
+install:
+	- pip install -r requirements.txt
 
-
-test: clean-pyc
-    py.test --verbose --color=yes $(TEST_PATH)
+test: clean-pyc clean-build
+	py.test --verbose --color=yes src/tests
 
 run:
-    python manage.py runserver
+	python manage.py runserver

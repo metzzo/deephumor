@@ -1,8 +1,10 @@
 # DeepHumor
 
 ## Preprocessor
-Install the requirements using pip install -r requirements.txt
+Install the requirements using make install
+
+Run tests using make test
 
 Make sure to have Tesseract installed for OCR.
 
-Using Python 3.6
+Using Python 3.6 (recommended virtualenv)
