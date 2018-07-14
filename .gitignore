@@ -10,3 +10,6 @@ sample_comic.jpg
 sample_comic2.jpg
 .pytest_cache
 **/*.pyc
+annotator/media/photos
+dump.rdb
+annotator/db.sqlite3

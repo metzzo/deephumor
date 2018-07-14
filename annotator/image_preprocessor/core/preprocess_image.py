@@ -3,7 +3,7 @@ import cv2
 import pytesseract
 from PIL import Image
 
-from core.utility import show_img_and_wait
+from image_preprocessor.core.utility import show_img_and_wait
 
 
 def preprocess_image(path):
@@ -19,6 +19,7 @@ def preprocess_image(path):
 
     """
     original_img = cv2.imread(path, 0)
+    real_original_img = original_img
     original_img_height, original_img_width = original_img.shape
 
     # Find Rectangle containing the cartoon
@@ -43,7 +44,8 @@ def preprocess_image(path):
         if area > max_area and abs(w*h - area) < area * 0.1:
             max_area = area
             max_contour = c
-    assert max_contour is not None
+    if max_contour is None:
+        return original_img, 'unknown', real_original_img
 
     # cartoon should be on top => rotate if not
     x, y, w, h = cv2.boundingRect(max_contour)
@@ -92,7 +94,8 @@ def preprocess_image(path):
         if area > max_area and abs(w * h - area) < area * 0.1:
             max_area = area
             max_contour = c
-    assert max_contour is not None
+    if max_contour is None:
+        return original_img, 'unknown', real_original_img
 
     # cut out cartoon
     mask = np.zeros_like(blurred)  # create empty mask
@@ -120,19 +123,20 @@ def preprocess_image(path):
         min_x, max_x = min(x, min_x), max(x + w, max_x)
         min_y, max_y = min(y, min_y), max(y + h, max_y)
 
-    assert max_x - min_x > 0 and max_y - min_y > 0
+    if max_x - min_x > 0 and max_y - min_y > 0:
+        cv2.rectangle(edges, (min_x, min_y), (max_x, max_y), (255, 0, 0), 1)
 
-    cv2.rectangle(edges, (min_x, min_y), (max_x, max_y), (255, 0, 0), 1)
+        # apply tesseract
+        punchline = punchline[min_y:max_y, min_x:max_x]
+        punchline = cv2.resize(punchline, None, fx=8, fy=8)
+        punchline = 255 - punchline  # invert color, so we can use the threshold function
+        _, punchline = cv2.threshold(punchline, 45, 255, cv2.THRESH_TOZERO)  # remove background noise
+        punchline = cv2.equalizeHist(punchline)  # normalize brightness
+        _, punchline = cv2.threshold(punchline, 140, 255, cv2.THRESH_TOZERO)  # now make text "thinner"
+        punchline = 255 - punchline  # back to normal
+        _, punchline = cv2.threshold(punchline, 0, 255, cv2.THRESH_OTSU)
+        punchline_text = pytesseract.image_to_string(Image.fromarray(punchline), lang='eng')
+    else:
+        punchline_text = 'unknown'
 
-    # apply tesseract
-    punchline = punchline[min_y:max_y, min_x:max_x]
-    punchline = cv2.resize(punchline, None, fx=8, fy=8)
-    punchline = 255 - punchline  # invert color, so we can use the threshold function
-    _, punchline = cv2.threshold(punchline, 45, 255, cv2.THRESH_TOZERO)  # remove background noise
-    punchline = cv2.equalizeHist(punchline)  # normalize brightness
-    _, punchline = cv2.threshold(punchline, 140, 255, cv2.THRESH_TOZERO)  # now make text "thinner"
-    punchline = 255 - punchline  # back to normal
-    _, punchline = cv2.threshold(punchline, 0, 255, cv2.THRESH_OTSU)
-    punchline_text = pytesseract.image_to_string(Image.fromarray(punchline), lang='eng')
-
-    return out, punchline_text
+    return out, punchline_text, real_original_img
