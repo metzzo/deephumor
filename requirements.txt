@@ -7,3 +7,6 @@ pytesseract>=0.2.2
 django>=2.0.7
 celery>=4.2.0
 redis>=2.10.6
+djangorestframework>=3.8.2
+markdown>=2.6.11
+django-filter>=2.0.0
