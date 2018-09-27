@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 import os
-import random
 
-from django.db.models import ImageField, TextField
+from django.db.models import ImageField, TextField, BooleanField
 
 
 def get_image_path(instance, filename):
@@ -15,10 +14,7 @@ class Cartoon(models.Model):
     img = ImageField(upload_to=get_image_path, blank=True, null=True)
     original_img = ImageField(upload_to=get_image_path, blank=True, null=True)
     name = TextField(default='')
-
-
-def get_funniness_annotation_cartoon():
-    return random.sample(list(Cartoon.objects.all()), k=1)[0]
+    relevant = BooleanField(default=True)
 
 
 class FunninessAnnotation(models.Model):
@@ -29,7 +25,7 @@ class FunninessAnnotation(models.Model):
         (4, '4 ... funny'),
         (5, '5 ... more than funny'),
         (6, '6 ... hilarious'),
-        (7, '7 ... absolutely hilarious')
+        (7, '7 ... more than hilarious')
 
     )
 
@@ -49,5 +45,4 @@ class FunninessAnnotation(models.Model):
     cartoon = models.ForeignKey(
         Cartoon,
         on_delete=models.CASCADE,
-        default=get_funniness_annotation_cartoon
     )

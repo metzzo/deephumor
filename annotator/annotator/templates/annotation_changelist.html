@@ -1,12 +1,13 @@
 {% extends 'admin/change_list.html' %}
 
+
 {% block object-tools %}
-    <form action="create_annotation/" method="POST" id="createannotation">
-        {% csrf_token %}
-        <ul class="object-tools">
-            <a onclick="document.getElementById('createannotation').submit()" class="addlink">Create Annotation</a>
-        </ul>
-    </form>
+    <div>
+        <form action="annotate_next_funniness/" method="POST">
+            {% csrf_token %}
+                <button type="submit">Annotate Next</button>
+        </form>
+    </div>
     <br />
     {{ block.super }}
 {% endblock %}
