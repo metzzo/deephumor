@@ -3,6 +3,7 @@ from django.db import models
 import os
 
 from django.db.models import ImageField, TextField, BooleanField
+from image_cropping import ImageRatioField, ImageCropField
 
 
 def get_image_path(instance, filename):
@@ -15,6 +16,25 @@ class Cartoon(models.Model):
     original_img = ImageField(upload_to=get_image_path, blank=True, null=True)
     name = TextField(default='')
     relevant = BooleanField(default=True)
+    annotated = BooleanField(default=False)
+
+
+class ImageAnnotation(models.Model):
+    annotated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    cartoon = models.ForeignKey(
+        Cartoon,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+
+    # size is "width x height" so a minimum size of 200px x 100px would look like this:
+    min_free_cropping = ImageRatioField('cartoon__img', '100x100', free_crop=True)
 
 
 class FunninessAnnotation(models.Model):

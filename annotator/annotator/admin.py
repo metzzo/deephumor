@@ -4,13 +4,26 @@ import random
 
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
+from image_cropping import ImageCroppingMixin
 
-from .models import Cartoon, FunninessAnnotation
+from annotator import models
+from .models import Cartoon, FunninessAnnotation, ImageAnnotation
 
 from django.utils.html import format_html
 
+class ImageAnnotationTest(ImageCroppingMixin, admin.ModelAdmin):
+    pass
+admin.site.register(ImageAnnotation, ImageAnnotationTest)
+
+
+class ImageAnnotationAdmin(ImageCroppingMixin, admin.StackedInline):
+    model = ImageAnnotation
+    extra = 0
+
 
 class CartoonAdmin(admin.ModelAdmin):
+    change_list_template = "cartoon_changelist.html"
+
     def cartoon_image(self, obj):
         return format_html('<img src="{}" />'.format(obj.img.url))
 
@@ -21,31 +34,37 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image.short_description = 'Original Image'
 
-    fields = ['cartoon_image', 'original_cartoon_image', 'punchline' ]
-    readonly_fields = ['cartoon_image', 'original_cartoon_image' ]
+    fields = ['cartoon_image', 'original_cartoon_image', 'punchline', 'relevant', 'annotated']
+    readonly_fields = ['cartoon_image', 'original_cartoon_image',]
+    inlines = [ImageAnnotationAdmin]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('process_next/', self.process_next),
+        ]
+        return my_urls + urls
+
+    def process_next(self, request):
+        # check if there is some annotation without proper funniness
+        cartoon = Cartoon.objects.all().filter().exclude(annotated=True).first()
+        if cartoon is None:
+            return HttpResponseRedirect("../")
+        else:
+            return HttpResponseRedirect(
+                reverse('admin:%s_%s_change' % (cartoon._meta.app_label, cartoon._meta.model_name),
+                        args=[cartoon.pk])
+            )
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(Cartoon, CartoonAdmin)
 
 
-def get_funniness_annotation_cartoon():
-    cartoons = Cartoon.objects.all()
-    return random.sample(list(cartoons), k=1)[0]
-
-
-class CartoonImageForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(CartoonImageForm, self).__init__(*args, **kwargs)
-        form.base_fields['cartoon'].initial = get_funniness_annotation_cartoon()
-        self.fields['cartoon'] = forms.CharField()
-
-    class Meta:
-        model = FunninessAnnotation
-        fields = ['funniness', 'cartoon',]
-
-
 class FunninessAnnotationAdmin(admin.ModelAdmin):
-    change_list_template = "annotation_changelist.html"
+    change_list_template = "funniness_annotation_changelist.html"
 
     def original_cartoon_image(self, obj):
         return format_html('<img src="{}" />'.format(obj.cartoon.original_img.url))
