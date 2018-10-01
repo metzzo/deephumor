@@ -3,11 +3,28 @@ from django.db import models
 import os
 
 from django.db.models import ImageField, TextField, BooleanField
-from image_cropping import ImageRatioField, ImageCropField
+from django.forms import forms, Widget, TextInput
+from django.utils.safestring import mark_safe
 
 
 def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
+
+class CropWidget(TextInput):
+    def render(self, name, value, attrs=None, renderer=None):
+        super().render(name, value, attrs)
+        html = 'Hello World'
+        return mark_safe(html)
+
+from django.forms import CharField
+class CropField(CharField):
+    widget = CropWidget()
+
+class CropModelField(models.TextField):
+    def formfield(self, **kwargs):
+        defaults = {'form_class': CropField}
+        defaults.update(kwargs)
+        return super(CropModelField, self).formfield(**defaults)
 
 
 class Cartoon(models.Model):
@@ -32,9 +49,8 @@ class ImageAnnotation(models.Model):
         blank=True,
         null=True
     )
+    crop = CropModelField(default='')
 
-    # size is "width x height" so a minimum size of 200px x 100px would look like this:
-    min_free_cropping = ImageRatioField('cartoon__img', '100x100', free_crop=True)
 
 
 class FunninessAnnotation(models.Model):

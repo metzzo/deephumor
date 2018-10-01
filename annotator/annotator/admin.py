@@ -2,23 +2,22 @@ from django.contrib import admin
 from django import forms
 import random
 
+from django.forms import models
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
+from django.utils.safestring import mark_safe
 from image_cropping import ImageCroppingMixin
 
-from annotator import models
-from .models import Cartoon, FunninessAnnotation, ImageAnnotation
+from .models import Cartoon, FunninessAnnotation, ImageAnnotation, CropModelField, CropWidget
 
 from django.utils.html import format_html
 
-class ImageAnnotationTest(ImageCroppingMixin, admin.ModelAdmin):
-    pass
-admin.site.register(ImageAnnotation, ImageAnnotationTest)
-
-
-class ImageAnnotationAdmin(ImageCroppingMixin, admin.StackedInline):
+class ImageAnnotationAdmin(admin.StackedInline):
     model = ImageAnnotation
     extra = 0
+    formfield_overrides = {
+        CropModelField: {'widget': CropWidget}
+    }
 
 
 class CartoonAdmin(admin.ModelAdmin):

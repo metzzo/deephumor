@@ -10,5 +10,3 @@ redis>=2.10.6
 djangorestframework>=3.8.2
 markdown>=2.6.11
 django-filter>=2.0.0
-django-image-cropping>=1.2.0
-easy-thumbnails>=2.5
