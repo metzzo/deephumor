@@ -119,6 +119,15 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
 
 
 class CartoonAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            "/static/jquery.js",
+            "/static/cropper.js",
+            "/static/crop.js",
+        )
+        css = {
+            'all': ("/static/cropper.css",)
+        }
     change_list_template = "cartoon_changelist.html"
 
     def cartoon_image(self, obj):
@@ -127,7 +136,8 @@ class CartoonAdmin(admin.ModelAdmin):
     cartoon_image.short_description = 'Cartoon'
 
     def original_cartoon_image(self, obj):
-        return format_html('<img src="{}" />'.format(obj.original_img.url))
+        return format_html('<img src="{}" id="{}"'.format(obj.original_img.url, 'crop' + str(obj.pk)) +
+                           '/>\n<script>\ninitCrop("crop' + str(obj.pk) + '", true);\n</script>')
 
     original_cartoon_image.short_description = 'Original Image'
 
@@ -136,7 +146,7 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image_small.short_description = 'Original Image'
 
-    fields = ['cartoon_image', 'original_cartoon_image', 'punchline', 'relevant', 'annotated']
+    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated',]
     readonly_fields = ['cartoon_image', 'original_cartoon_image',]
     list_display = ['punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 

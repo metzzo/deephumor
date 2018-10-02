@@ -16,6 +16,7 @@ class Cartoon(models.Model):
     name = TextField(default='')
     relevant = BooleanField(default=True)
     annotated = BooleanField(default=False)
+    custom_dimensions = models.CharField(default='', max_length=100, blank=True)
 
 
 class ImageAnnotationCollection(models.Model):
