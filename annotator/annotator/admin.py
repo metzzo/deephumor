@@ -1,23 +1,121 @@
 from django.contrib import admin
-from django import forms
-import random
-
-from django.forms import models
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
-from django.utils.safestring import mark_safe
-from image_cropping import ImageCroppingMixin
 
-from .models import Cartoon, FunninessAnnotation, ImageAnnotation, CropModelField, CropWidget
+from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotationCollection, ImageAnnotationClass
 
 from django.utils.html import format_html
 
+
 class ImageAnnotationAdmin(admin.StackedInline):
+    class Media:
+        js = (
+            "/static/jquery.js",
+            "/static/cropper.js",
+            "/static/crop.js",
+        )
+        css = {
+            'all': ("/static/cropper.css",)
+        }
     model = ImageAnnotation
     extra = 0
-    formfield_overrides = {
-        CropModelField: {'widget': CropWidget}
-    }
+    readonly_fields = ['cartoon_image',]
+    fields = ['cartoon_image', 'dimensions',]
+
+    def cartoon_image(self, obj):
+        return format_html('<img src="{}" id="{}"'.format(obj.collection.cartoon.img.url, 'crop' + str(obj.pk)) +
+                           '/>\n<script>\ninitCrop("crop' + str(obj.pk) + '");\n</script>')
+
+    cartoon_image.short_description = 'Cartoon'
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
+    change_list_template = "image_annotation_changelist.html"
+    change_form_template = "image_annotation_changeform.html"
+
+    def original_cartoon_image(self, obj):
+        return format_html('<img src="{}" />'.format(obj.cartoon.original_img.url))
+    original_cartoon_image.short_description = 'Cartoon'
+
+    def punchline(self, obj):
+        return format_html('<b>{}</b>'.format(obj.cartoon.punchline))
+    punchline.short_description = 'Punchline'
+
+    fields = ['original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', 'annotated']
+    readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline', 'cartoon', 'annotated']
+    inlines = [ImageAnnotationAdmin]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('annotate_next_image/', self.annotate_next_image),
+        ]
+        return my_urls + urls
+
+    def add_annotation(self, obj, request):
+        annotation = ImageAnnotation()
+        annotation.collection = obj
+        annotation.save()
+        self.message_user(request, "New Annotation annotation")
+        return HttpResponseRedirect(".")
+
+    def annotate_next_image(self, request, obj=None):
+        if obj is not None:
+            obj.annotated = True
+            obj.save()
+
+        all_annotations = ImageAnnotationCollection.objects\
+            .all()\
+            .filter(annotated_by=request.user)
+        annotation = all_annotations.filter(annotated=False).first()
+
+        if annotation is None:
+            # get cartoon which does not have annotation yet
+            annotations = list(all_annotations)
+            annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
+            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False)
+            selected_cartoon = unannotated_cartoons.first()
+            if selected_cartoon is not None:
+                print("make funniness annotation")
+                annotation = ImageAnnotationCollection()
+                annotation.cartoon = selected_cartoon
+                annotation.annotated_by = request.user
+                annotation.save()
+            else:
+                print("No cartoon left to annotate")
+                return HttpResponseRedirect("../")
+
+        return HttpResponseRedirect(
+            reverse('admin:%s_%s_change' % (annotation._meta.app_label, annotation._meta.model_name),
+                    args=[annotation.pk])
+        )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if '_addanother' in request.POST:
+            return self.annotate_next_image(request, obj=obj)
+        else:
+            return super(ImageAnnotationCollectionAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj, post_url_continue=None):
+        if "_add-annotation" in request.POST:
+            return self.add_annotation(request=request, obj=obj)
+        elif '_addanother' in request.POST:
+            return self.annotate_next_image(request, obj=obj)
+        else:
+            return super(ImageAnnotationCollectionAdmin, self).response_change(request, obj)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ImageAnnotationCollectionAdmin, self).get_form(request, obj, **kwargs)
+        return form
+
+    def save_model(self, request, obj, form, change):
+        obj.annotated_by = request.user
+        super(ImageAnnotationCollectionAdmin, self).save_model(request, obj, form, change)
+
+
 
 
 class CartoonAdmin(admin.ModelAdmin):
@@ -33,9 +131,14 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image.short_description = 'Original Image'
 
+    def original_cartoon_image_small(self, obj):
+        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.original_img.url))
+
+    original_cartoon_image_small.short_description = 'Original Image'
+
     fields = ['cartoon_image', 'original_cartoon_image', 'punchline', 'relevant', 'annotated']
     readonly_fields = ['cartoon_image', 'original_cartoon_image',]
-    inlines = [ImageAnnotationAdmin]
+    list_display = ['punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 
     def get_urls(self):
         urls = super().get_urls()
@@ -55,8 +158,27 @@ class CartoonAdmin(admin.ModelAdmin):
                         args=[cartoon.pk])
             )
 
+    def response_add(self, request, obj, post_url_continue=None):
+        if '_addanother' in request.POST:
+            return self.process_next(request)
+        else:
+            return super(CartoonAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj, post_url_continue=None):
+        if '_addanother' in request.POST:
+            return self.process_next(request)
+        else:
+            return super(CartoonAdmin, self).response_change(request, obj)
+
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def save_model(self, request, obj, form, change):
+        obj.annotated = True
+        super(CartoonAdmin, self).save_model(request, obj, form, change)
 
 
 admin.site.register(Cartoon, CartoonAdmin)
@@ -118,7 +240,7 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
         if '_addanother' in request.POST:
             return self.annotate_next_funniness(request)
         else:
-            return super(FunninessAnnotationAdmin, self).response_change(request, obj, post_url_continue)
+            return super(FunninessAnnotationAdmin, self).response_change(request, obj)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(FunninessAnnotationAdmin, self).get_form(request, obj, **kwargs)
@@ -129,4 +251,10 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
         super(FunninessAnnotationAdmin, self).save_model(request, obj, form, change)
 
 
+class ImageAnnotationClassAdmin(admin.ModelAdmin):
+    list_display = ['name',]
+
+
 admin.site.register(FunninessAnnotation, FunninessAnnotationAdmin)
+admin.site.register(ImageAnnotationCollection, ImageAnnotationCollectionAdmin)
+admin.site.register(ImageAnnotationClass, ImageAnnotationClassAdmin)

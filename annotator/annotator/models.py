@@ -3,28 +3,10 @@ from django.db import models
 import os
 
 from django.db.models import ImageField, TextField, BooleanField
-from django.forms import forms, Widget, TextInput
-from django.utils.safestring import mark_safe
 
 
 def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
-
-class CropWidget(TextInput):
-    def render(self, name, value, attrs=None, renderer=None):
-        super().render(name, value, attrs)
-        html = 'Hello World'
-        return mark_safe(html)
-
-from django.forms import CharField
-class CropField(CharField):
-    widget = CropWidget()
-
-class CropModelField(models.TextField):
-    def formfield(self, **kwargs):
-        defaults = {'form_class': CropField}
-        defaults.update(kwargs)
-        return super(CropModelField, self).formfield(**defaults)
 
 
 class Cartoon(models.Model):
@@ -36,7 +18,7 @@ class Cartoon(models.Model):
     annotated = BooleanField(default=False)
 
 
-class ImageAnnotation(models.Model):
+class ImageAnnotationCollection(models.Model):
     annotated_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -49,8 +31,27 @@ class ImageAnnotation(models.Model):
         blank=True,
         null=True
     )
-    crop = CropModelField(default='')
+    annotated = BooleanField(default=False)
 
+
+class ImageAnnotationClass(models.Model):
+    name = models.CharField(default='', max_length=100)
+
+
+class ImageAnnotation(models.Model):
+    collection = models.ForeignKey(
+        ImageAnnotationCollection,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    annotation_class = models.ForeignKey(
+        ImageAnnotationClass,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
+    )
+    dimensions = models.CharField(default='', max_length=100)
 
 
 class FunninessAnnotation(models.Model):
