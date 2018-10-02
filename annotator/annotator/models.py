@@ -37,6 +37,9 @@ class ImageAnnotationCollection(models.Model):
 class ImageAnnotationClass(models.Model):
     name = models.CharField(default='', max_length=100)
 
+    def __str__(self):
+        return self.name
+
 
 class ImageAnnotation(models.Model):
     collection = models.ForeignKey(
