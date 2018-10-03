@@ -9,6 +9,13 @@ def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
 
 
+class CartoonThemeClass(models.Model):
+    name = models.CharField(default='', max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Cartoon(models.Model):
     punchline = TextField()
     img = ImageField(upload_to=get_image_path, blank=True, null=True)
@@ -17,6 +24,11 @@ class Cartoon(models.Model):
     relevant = BooleanField(default=True)
     annotated = BooleanField(default=False)
     custom_dimensions = models.CharField(default='', max_length=100, blank=True)
+    themes = models.ManyToManyField(
+        CartoonThemeClass,
+        blank=True,
+        null=True
+    )
 
 
 class ImageAnnotationCollection(models.Model):

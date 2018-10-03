@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
 
-from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotationCollection, ImageAnnotationClass
+from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotationCollection, ImageAnnotationClass, \
+    CartoonThemeClass
 
 from django.utils.html import format_html
 
@@ -40,12 +41,19 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" />'.format(obj.cartoon.original_img.url))
     original_cartoon_image.short_description = 'Cartoon'
 
+
+    def original_cartoon_image_small(self, obj):
+        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.cartoon.original_img.url))
+
+    original_cartoon_image_small.short_description = 'Original Image'
+
     def punchline(self, obj):
         return format_html('<b>{}</b>'.format(obj.cartoon.punchline))
     punchline.short_description = 'Punchline'
 
-    fields = ['original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', 'annotated']
+    fields = ['original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', 'annotated',]
     readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline', 'cartoon',]
+    list_display = ['original_cartoon_image_small', 'punchline',]
     inlines = [ImageAnnotationAdmin]
 
     def get_urls(self):
@@ -146,7 +154,7 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image_small.short_description = 'Original Image'
 
-    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated',]
+    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated','themes']
     readonly_fields = ['cartoon_image', 'original_cartoon_image',]
     list_display = ['punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 
@@ -191,9 +199,6 @@ class CartoonAdmin(admin.ModelAdmin):
         super(CartoonAdmin, self).save_model(request, obj, form, change)
 
 
-admin.site.register(Cartoon, CartoonAdmin)
-
-
 class FunninessAnnotationAdmin(admin.ModelAdmin):
     change_list_template = "funniness_annotation_changelist.html"
 
@@ -201,12 +206,19 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
         return format_html('<img src="{}" />'.format(obj.cartoon.original_img.url))
     original_cartoon_image.short_description = 'Cartoon'
 
+
+    def original_cartoon_image_small(self, obj):
+        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.cartoon.original_img.url))
+
+    original_cartoon_image_small.short_description = 'Original Image'
+
     def punchline(self, obj):
         return format_html('<b>{}</b>'.format(obj.cartoon.punchline))
     punchline.short_description = 'Punchline'
 
     fields = ['funniness', 'original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', ]
     readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline',]
+    list_display = ['punchline', 'original_cartoon_image_small', 'funniness',]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -260,11 +272,19 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
         obj.annotated_by = request.user
         super(FunninessAnnotationAdmin, self).save_model(request, obj, form, change)
 
+    def has_add_permission(self, request, obj=None):
+        return True
+
 
 class ImageAnnotationClassAdmin(admin.ModelAdmin):
     list_display = ['name',]
 
+class CartoonThemeClassAdmin(admin.ModelAdmin):
+    list_display = ['name',]
 
+
+admin.site.register(Cartoon, CartoonAdmin)
 admin.site.register(FunninessAnnotation, FunninessAnnotationAdmin)
 admin.site.register(ImageAnnotationCollection, ImageAnnotationCollectionAdmin)
 admin.site.register(ImageAnnotationClass, ImageAnnotationClassAdmin)
+admin.site.register(CartoonThemeClass, CartoonThemeClassAdmin)
