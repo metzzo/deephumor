@@ -125,8 +125,8 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
 
 
 
-
 class CartoonAdmin(admin.ModelAdmin):
+    change_form_template = "cartoon_changeform.html"
     class Media:
         js = (
             "/static/jquery.js",
@@ -176,14 +176,12 @@ class CartoonAdmin(admin.ModelAdmin):
                         args=[cartoon.pk])
             )
 
-    def response_add(self, request, obj, post_url_continue=None):
-        if '_addanother' in request.POST:
-            return self.process_next(request)
-        else:
-            return super(CartoonAdmin, self).response_add(request, obj, post_url_continue)
-
     def response_change(self, request, obj, post_url_continue=None):
-        if '_addanother' in request.POST:
+        if '_annotate_next' in request.POST:
+            obj.annotated = True
+            obj.save()
+            return self.process_next(request)
+        elif '_addanother' in request.POST:
             return self.process_next(request)
         else:
             return super(CartoonAdmin, self).response_change(request, obj)
@@ -193,10 +191,6 @@ class CartoonAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request, obj=None):
         return False
-
-    def save_model(self, request, obj, form, change):
-        obj.annotated = True
-        super(CartoonAdmin, self).save_model(request, obj, form, change)
 
 
 class FunninessAnnotationAdmin(admin.ModelAdmin):
