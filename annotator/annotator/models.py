@@ -17,18 +17,14 @@ class CartoonThemeClass(models.Model):
 
 
 class Cartoon(models.Model):
-    punchline = TextField()
+    punchline = TextField(blank=True)
     img = ImageField(upload_to=get_image_path, blank=True, null=True)
     original_img = ImageField(upload_to=get_image_path, blank=True, null=True)
     name = TextField(default='')
     relevant = BooleanField(default=True)
     annotated = BooleanField(default=False)
+    is_multiple = BooleanField(default=False)
     custom_dimensions = models.CharField(default='', max_length=100, blank=True)
-    themes = models.ManyToManyField(
-        CartoonThemeClass,
-        blank=True,
-        null=True
-    )
 
 
 class ImageAnnotationCollection(models.Model):

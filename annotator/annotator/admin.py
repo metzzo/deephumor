@@ -154,7 +154,7 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image_small.short_description = 'Original Image'
 
-    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated','themes']
+    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated','is_multiple',]
     readonly_fields = ['cartoon_image', 'original_cartoon_image',]
     list_display = ['punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 
