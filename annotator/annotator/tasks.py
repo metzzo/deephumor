@@ -19,8 +19,3 @@ def import_comic(file):
     cartoon.img.save('cartoon.jpg', ContentFile(to_jpeg(img)), save=True)
     cartoon.original_img.save('original_cartoon.jpg', ContentFile(to_jpeg(original_img)), save=True)
     cartoon.save()
-
-
-
-
-

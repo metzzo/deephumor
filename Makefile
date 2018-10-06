@@ -16,18 +16,19 @@ clean-build:
 
 install:
 	virtualenv .venv
-	$(SOURCE_VENV) && $(PIP) install -e PACKAGE
 	$(SOURCE_VENV) && $(PIP) install -r requirements.txt # other required packages
 
 test: clean-pyc clean-build
-	py.test --verbose --color=yes ./annotator
+	$(SOURCE_VENV) && py.test --verbose --color=yes ./annotator
 
 run:
-	python $(PYTHONPATH)/manage.py runserver
+	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py runserver
 
 celery:
-	celery -A annotator worker -l info --concurrency=4 --workdir $(PYTHONPATH)
+	$(SOURCE_VENV) && celery -A annotator worker -l info --concurrency=4 --workdir $(PYTHONPATH)
 
 migratedb:
-	python $(PYTHONPATH)/manage.py makemigrations && python $(PYTHONPATH)/manage.py migrate
+	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py makemigrations && python $(PYTHONPATH)/manage.py migrate
 
+filter_duplicates:
+	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py filter_duplicates

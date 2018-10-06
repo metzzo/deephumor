@@ -5,6 +5,7 @@
 *.aux
 /env/
 /venv/
+/.venv/
 /.idea/
 sample_comic.jpg
 sample_comic2.jpg
