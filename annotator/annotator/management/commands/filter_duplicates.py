@@ -26,8 +26,10 @@ class Command(BaseCommand):
                 except:
                     continue
 
-                cartoon.annotated = not is_first
-                cartoon.relevant = is_first
+                if not is_first:
+                    cartoon.annotated = True
+                    cartoon.relevant = False
+
                 if original.id != entry_id:
                     cartoon.duplicate_of = original
                 else:

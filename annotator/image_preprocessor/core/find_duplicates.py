@@ -9,7 +9,7 @@ def hash_image(image_path):
 
 
 def find_duplicates(directory):
-    pathlist = list(Path(directory).glob('**/original_cartoon.jpg'))
+    pathlist = list(Path(directory).glob('**/cartoon.jpg'))
     hashes = {}
     count = len(pathlist)
     current = 0
