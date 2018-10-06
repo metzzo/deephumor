@@ -23,8 +23,6 @@ def find_duplicates(directory):
             hashes[hash] += [path_in_str]
         else:
             hashes[hash] = [path_in_str]
-        if found_count > 2:
-            break
         current += 1
         print("Progress {0}/{1} Found: {2}".format(current, count, found_count))
     filtered = dict((key,value) for key, value in hashes.items() if len(value) > 1)

@@ -1,9 +1,9 @@
 .EXPORT_ALL_VARIABLES:
 
-PYTHONPATH = ./annotator
-PYTHON=./venv/bin/python
-PIP=./venv/bin/pip
-SOURCE_VENV=. ./venv/bin/activate
+PYTHONPATH=./annotator
+PYTHON=./venv/bin/python3.7
+PIP=./venv/bin/pip3.7
+SOURCE_VENV=./venv/bin/activate
 
 clean-pyc:
 	find . -name "*.pyc" -exec rm -f {} \;
@@ -15,20 +15,23 @@ clean-build:
 	rm -rf .pytest_cache
 
 install:
-	virtualenv .venv
-	$(SOURCE_VENV) && $(PIP) install -r requirements.txt # other required packages
+	source $(SOURCE_VENV); \
+	$(PIP) install -r requirements.txt
 
 test: clean-pyc clean-build
-	$(SOURCE_VENV) && py.test --verbose --color=yes ./annotator
+	source $(SOURCE_VENV) && py.test --verbose --color=yes ./annotator
 
 run:
-	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py runserver
+	source $(SOURCE_VENV) && $(PYTHON) $(PYTHONPATH)/manage.py runserver
 
 celery:
-	$(SOURCE_VENV) && celery -A annotator worker -l info --concurrency=4 --workdir $(PYTHONPATH)
+	source $(SOURCE_VENV) && celery -A annotator worker -l info --concurrency=4 --workdir $(PYTHONPATH)
 
 migratedb:
-	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py makemigrations && python $(PYTHONPATH)/manage.py migrate
+	source $(SOURCE_VENV); \
+	$(PYTHON) $(PYTHONPATH)/manage.py makemigrations; \
+	$(PYTHON) $(PYTHONPATH)/manage.py migrate; \
 
 filter_duplicates:
-	$(SOURCE_VENV) && cd $(PYTHONPATH) && python manage.py filter_duplicates
+	source $(SOURCE_VENV); \
+	$(PYTHON) $(PYTHONPATH)/manage.py filter_duplicates;

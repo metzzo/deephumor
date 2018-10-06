@@ -154,9 +154,19 @@ class CartoonAdmin(admin.ModelAdmin):
 
     original_cartoon_image_small.short_description = 'Original Image'
 
-    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated','is_multiple',]
-    readonly_fields = ['cartoon_image', 'original_cartoon_image',]
-    list_display = ['punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
+    def link_to_original(self, obj):
+        if obj.duplicate_of is not None:
+            url = reverse('admin:annotator_cartoon_change', args=[obj.duplicate_of.pk])
+            return format_html('<a href="{}">Original {}</a>', url, obj.duplicate_of.id)
+        else:
+            return ''
+
+    link_to_original.short_description = 'Original'
+
+    fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated',
+              'is_multiple', 'link_to_original']
+    readonly_fields = ['cartoon_image', 'original_cartoon_image','link_to_original']
+    list_display = ['id', 'punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 
     def get_urls(self):
         urls = super().get_urls()

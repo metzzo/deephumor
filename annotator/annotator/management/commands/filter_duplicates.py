@@ -11,17 +11,27 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        duplicates = find_duplicates('./media/photos/')
+        duplicates = find_duplicates('./annotator/media/photos/')
         for _, duplicates in duplicates.items():
             is_first = True
-            for entry in duplicates:
-                entry_id = int(entry.split('/')[-2])
-                cartoon = Cartoon.objects.get(id=entry_id)
-                if is_first:
-                    is_first = False
-                    cartoon.annotated = False
+            ids = map(lambda entry: int(entry.split('/')[-2]), duplicates)
+            ids = sorted(ids)
+            try:
+                original = Cartoon.objects.get(id=ids[0])
+            except:
+                continue
+            for entry_id in ids:
+                try:
+                    cartoon = Cartoon.objects.get(id=entry_id)
+                except:
+                    continue
+
+                cartoon.annotated = not is_first
+                cartoon.relevant = is_first
+                if original.id != entry_id:
+                    cartoon.duplicate_of = original
                 else:
-                    cartoon.annotated = True
-                    cartoon.relevant = False
+                    cartoon.duplicate_of = None
+                is_first = False
                 cartoon.save()
-            print(duplicates)
+            print(ids)
