@@ -32,6 +32,6 @@ migratedb:
 	$(PYTHON) $(PYTHONPATH)/manage.py makemigrations; \
 	$(PYTHON) $(PYTHONPATH)/manage.py migrate; \
 
-filter_duplicates:
+filter_duplicates_by_punchlines:
 	source $(SOURCE_VENV); \
-	$(PYTHON) $(PYTHONPATH)/manage.py filter_duplicates;
+	$(PYTHON) $(PYTHONPATH)/manage.py filter_duplicates_by_punchlines;

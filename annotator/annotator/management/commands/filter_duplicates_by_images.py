@@ -5,7 +5,7 @@ from image_preprocessor.core.find_duplicates import find_duplicates
 
 
 class Command(BaseCommand):
-    help = 'Filters duplicate cartoons'
+    help = 'Filters duplicate cartoons by images'
 
     def add_arguments(self, parser):
         pass
@@ -32,8 +32,6 @@ class Command(BaseCommand):
 
                 if original.id != entry_id:
                     cartoon.duplicate_of = original
-                else:
-                    cartoon.duplicate_of = None
                 is_first = False
                 cartoon.save()
             print(ids)
