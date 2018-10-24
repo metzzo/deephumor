@@ -32,6 +32,10 @@ class Cartoon(models.Model):
         null=True,
     )
 
+    @property
+    def has_punchline(self):
+        return len(self.punchline.strip()) > 0
+
 
 class ImageAnnotationCollection(models.Model):
     annotated_by = models.ForeignKey(

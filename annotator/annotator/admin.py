@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
-
+from django.db.models import Q
 from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotationCollection, ImageAnnotationClass, \
     CartoonThemeClass
 
@@ -124,9 +124,47 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
         super(ImageAnnotationCollectionAdmin, self).save_model(request, obj, form, change)
 
 
+class HasPunchline(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = 'Has Punchline'
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'has_punchline'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('YES', 'Has Punchline'),
+            ('NO', 'Has NO Punchline'),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'YES':
+            return queryset.filter(~Q(punchline=''))
+        else:
+            return queryset.filter(punchline='')
+
+
 
 class CartoonAdmin(admin.ModelAdmin):
     change_form_template = "cartoon_changeform.html"
+    search_fields = ('punchline', )
+    list_filter = ('relevant', 'is_multiple',HasPunchline)
+
     class Media:
         js = (
             "/static/jquery.js",
