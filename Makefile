@@ -35,3 +35,7 @@ migratedb:
 filter_duplicates_by_punchlines:
 	source $(SOURCE_VENV); \
 	$(PYTHON) $(PYTHONPATH)/manage.py filter_duplicates_by_punchlines;
+
+mark_duplicates_as_unannotated:
+	source $(SOURCE_VENV); \
+	$(PYTHON) $(PYTHONPATH)/manage.py mark_duplicates_as_unannotated;
