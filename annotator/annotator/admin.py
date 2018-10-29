@@ -155,7 +155,7 @@ class HasPunchline(admin.SimpleListFilter):
         # to decide how to filter the queryset.
         if self.value() == 'YES':
             return queryset.filter(~Q(punchline=''))
-        else:
+        elif self.value() == 'NO':
             return queryset.filter(punchline='')
 
 
