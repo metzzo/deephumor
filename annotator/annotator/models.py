@@ -93,6 +93,9 @@ class FunninessAnnotation(models.Model):
         blank=True,
         null=True
     )
+    i_understand = models.BooleanField(
+        default=True
+    )
 
     annotated_by = models.ForeignKey(
         User,

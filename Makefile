@@ -32,10 +32,6 @@ migratedb:
 	$(PYTHON) $(PYTHONPATH)/manage.py makemigrations; \
 	$(PYTHON) $(PYTHONPATH)/manage.py migrate; \
 
-filter_duplicates_by_punchlines:
+create_cartoon_images:
 	source $(SOURCE_VENV); \
-	$(PYTHON) $(PYTHONPATH)/manage.py filter_duplicates_by_punchlines;
-
-mark_duplicates_as_unannotated:
-	source $(SOURCE_VENV); \
-	$(PYTHON) $(PYTHONPATH)/manage.py mark_duplicates_as_unannotated;
+	$(PYTHON) $(PYTHONPATH)/manage.py create_cartoon_images;

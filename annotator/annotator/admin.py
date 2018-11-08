@@ -244,23 +244,40 @@ class CartoonAdmin(admin.ModelAdmin):
 class FunninessAnnotationAdmin(admin.ModelAdmin):
     change_list_template = "funniness_annotation_changelist.html"
 
-    def original_cartoon_image(self, obj):
-        return format_html('<img src="{}" />'.format(obj.cartoon.original_img.url))
-    original_cartoon_image.short_description = 'Cartoon'
+    def cartoon_image(self, obj):
+        return format_html('<img src="{}" />'.format(obj.cartoon.img.url))
+    cartoon_image.short_description = 'Cartoon'
 
 
-    def original_cartoon_image_small(self, obj):
-        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.cartoon.original_img.url))
+    def cartoon_image_small(self, obj):
+        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.cartoon.img.url))
+    cartoon_image_small.short_description = 'Cartoon'
 
-    original_cartoon_image_small.short_description = 'Original Image'
+    def funniness_buttons(selfs, obj):
+        html = ''
+        for index, text in FunninessAnnotation.FUNNINESS_CHOICES:
+            if obj.funniness is not None and index == obj.funniness:
+                b = '<b>'
+                endb = '</b>'
+            else:
+                b = ''
+                endb = ''
+            html += ('<button name="funniness" value="{0}"' \
+                    'style="margin-right: 8px; width: 100px; height: 40px; ' \
+                    'display: block; float: left;">' + b + '{1}' + endb + '</button> ').format(index, text)
+
+        return format_html(html)
+    funniness_buttons.short_description = 'Funniness'
+
 
     def punchline(self, obj):
         return format_html('<b>{}</b>'.format(obj.cartoon.punchline))
     punchline.short_description = 'Punchline'
 
-    fields = ['funniness', 'original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', ]
-    readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline',]
-    list_display = ['punchline', 'original_cartoon_image_small', 'funniness',]
+    fields = ['cartoon_image', 'punchline',  'i_understand','funniness_buttons', 'cartoon',]
+    readonly_fields = ['annotated_by', 'cartoon_image', 'punchline','funniness_buttons',]
+    list_display = ['punchline', 'cartoon_image_small', 'funniness',]
+    list_display_links = ['funniness',]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -277,7 +294,10 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False)
+            unannotated_cartoons = Cartoon.objects.all()\
+                .exclude(id__in=annotation_ids)\
+                .exclude(relevant=False) \
+                .exclude(is_multiple=False)
             selected_cartoon = unannotated_cartoons.first()
             if selected_cartoon is not None:
                 print("make funniness annotation")
@@ -301,7 +321,12 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             return super(FunninessAnnotationAdmin, self).response_add(request, obj, post_url_continue)
 
     def response_change(self, request, obj, post_url_continue=None):
-        if '_addanother' in request.POST:
+        if 'funniness' in request.POST:
+            obj.funniness = request.POST['funniness']
+            obj.save()
+            return self.annotate_next_funniness(request)
+
+        if 'addanother' in request.POST:
             return self.annotate_next_funniness(request)
         else:
             return super(FunninessAnnotationAdmin, self).response_change(request, obj)
