@@ -79,7 +79,7 @@ class ImageAnnotation(models.Model):
 class FunninessAnnotation(models.Model):
     FUNNINESS_CHOICES = (
         (1, '1 ... not funny at all'),
-        (2, '2 ... moderately funny'),
+        (2, '2 ... little smile'),
         (3, '3 ... less than funny'),
         (4, '4 ... funny'),
         (5, '5 ... more than funny'),
