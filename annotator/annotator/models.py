@@ -25,6 +25,7 @@ class Cartoon(models.Model):
     annotated = BooleanField(default=False)
     is_multiple = BooleanField(default=False)
     custom_dimensions = models.CharField(default='', max_length=100, blank=True)
+    #consistent = BooleanField(default=True)
     duplicate_of = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,

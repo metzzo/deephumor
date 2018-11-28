@@ -162,7 +162,7 @@ class HasPunchline(admin.SimpleListFilter):
 
 class CartoonAdmin(admin.ModelAdmin):
     change_form_template = "cartoon_changeform.html"
-    search_fields = ('punchline', )
+    search_fields = ('punchline', 'name',)
     list_filter = ('relevant', 'is_multiple',HasPunchline)
 
     class Media:
@@ -204,7 +204,7 @@ class CartoonAdmin(admin.ModelAdmin):
     fields = ['cartoon_image', 'original_cartoon_image', 'custom_dimensions', 'punchline', 'relevant', 'annotated',
               'is_multiple', 'link_to_original']
     readonly_fields = ['cartoon_image', 'original_cartoon_image','link_to_original']
-    list_display = ['id', 'punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
+    list_display = ['id', 'name', 'punchline', 'original_cartoon_image_small', 'relevant', 'annotated']
 
     def get_urls(self):
         urls = super().get_urls()
