@@ -81,9 +81,9 @@ class FunninessAnnotation(models.Model):
     FUNNINESS_CHOICES = (
         (1, '1 ... not funny at all'),
         (2, '2 ... little smile'),
-        (3, '3 ... less than funny'),
+        (3, '3 ... big smile'),
         (4, '4 ... funny'),
-        (5, '5 ... more than funny'),
+        (5, '5 ... very funny'),
         (6, '6 ... hilarious'),
         (7, '7 ... more than hilarious')
 
