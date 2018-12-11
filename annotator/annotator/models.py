@@ -85,7 +85,7 @@ class FunninessAnnotation(models.Model):
         (4, '4 ... funny'),
         (5, '5 ... very funny'),
         (6, '6 ... hilarious'),
-        (7, '7 ... more than hilarious')
+        (7, '7 ... very hilarious')
 
     )
 
