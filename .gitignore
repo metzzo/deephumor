@@ -14,6 +14,7 @@ sample_comic2.jpg
 annotator/media/photos
 dump.rdb
 annotator/db.sqlite3
+**/export
 
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore

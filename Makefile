@@ -35,3 +35,7 @@ migratedb:
 create_cartoon_images:
 	source $(SOURCE_VENV); \
 	$(PYTHON) $(PYTHONPATH)/manage.py create_cartoon_images;
+
+export_dataset:
+	source $(SOURCE_VENV); \
+	$(PYTHON) $(PYTHONPATH)/manage.py export_dataset;

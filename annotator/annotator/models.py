@@ -9,6 +9,13 @@ def get_image_path(instance, filename):
     return os.path.join('photos', str(instance.id), filename)
 
 
+def relevant_cartoon_queryset():
+    return Cartoon.objects.all() \
+                .exclude(relevant=False) \
+                .exclude(is_multiple=True) \
+                .exclude(punchline='')
+
+
 class CartoonThemeClass(models.Model):
     name = models.CharField(default='', max_length=100)
 

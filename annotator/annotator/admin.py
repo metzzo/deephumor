@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import path, reverse
 from django.db.models import Q
 from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotationCollection, ImageAnnotationClass, \
-    CartoonThemeClass
+    CartoonThemeClass, relevant_cartoon_queryset
 
 from django.utils.html import format_html
 
@@ -294,11 +294,8 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = Cartoon.objects.all() \
-                .exclude(id__in=annotation_ids) \
-                .exclude(relevant=False) \
-                .exclude(is_multiple=True) \
-                .exclude(punchline='')
+            unannotated_cartoons = relevant_cartoon_queryset() \
+                .exclude(id__in=annotation_ids)
             selected_cartoon = unannotated_cartoons.first()
             if selected_cartoon is not None:
                 print("make funniness annotation")
