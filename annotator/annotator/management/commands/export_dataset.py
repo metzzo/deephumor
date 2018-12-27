@@ -8,6 +8,7 @@ from annotator.tasks import import_comic
 import os
 import pandas as pd
 import shutil
+import pickle
 
 EXPORT_DIR = 'export/'
 
@@ -59,3 +60,4 @@ class Command(BaseCommand):
             index=False,
             quoting=csv.QUOTE_NONNUMERIC
         )
+        pickle.dump(df, open(os.path.join(EXPORT_DIR, 'export.p'), "wb"))

@@ -19,7 +19,8 @@ install:
 	$(PIP) install -r requirements.txt
 
 test: clean-pyc clean-build
-	source $(SOURCE_VENV) && py.test --verbose --color=yes ./annotator
+	#source $(SOURCE_VENV) && py.test --verbose --color=yes ./annotator
+	source $(SOURCE_VENV) && py.test --verbose --color=yes ./pipeline
 
 run:
 	source $(SOURCE_VENV) && $(PYTHON) $(PYTHONPATH)/manage.py runserver
