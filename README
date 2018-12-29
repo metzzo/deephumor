@@ -8,3 +8,11 @@ Run tests using make test
 Make sure to have Tesseract installed for OCR.
 
 Using Python 3.6 (recommended virtualenv)
+
+
+Or use Anaconda:
+
+conda config --add channels conda-forge
+conda config --add channels phygbu
+
+conda activate C:\Users\rfischer\Miniconda3\envs\DeepHumor
