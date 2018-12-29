@@ -138,3 +138,11 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
         return resized
 
     return op
+
+
+def normalize_size(target_width: int, target_height: int):
+    import cv2
+    def op(arr: np.ndarray) -> np.ndarray:
+        pass
+
+    return op

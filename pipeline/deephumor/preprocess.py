@@ -1,14 +1,11 @@
-import os
 import pickle
 from functools import partial
-
-from progress.bar import Bar
 
 from pipeline.deephumor.dataset import CartoonDataset
 from pipeline.settings import DATASET_PATH
 
 
-def get_average_image_size():
+def extract_averages():
     try:
         avg_width, avg_height = pickle.load(open('average_image_size.p', "rb"))
     except FileNotFoundError:
@@ -36,4 +33,4 @@ def get_average_image_size():
 
 
 if __name__ == '__main__':
-    get_average_image_size()
+    extract_averages()
