@@ -2,8 +2,9 @@ import csv
 
 from django.core.management.base import BaseCommand, CommandError
 
-from annotator.models import Cartoon, relevant_cartoon_queryset, FunninessAnnotation
-from annotator.tasks import import_comic
+from ...models import Cartoon, relevant_cartoon_queryset, FunninessAnnotation
+from ...tasks import import_comic
+from random import shuffle
 
 import os
 import pandas as pd
@@ -14,6 +15,22 @@ EXPORT_DIR = 'export/'
 
 class Command(BaseCommand):
     help = 'Exports the Dataset. Either as CSV or Pickle file'
+
+    def save_records(self, records, name):
+        df = pd.DataFrame.from_records(data=records, columns=(
+            'filename',
+            'punchline',
+            'funniness',
+            'i_understand'
+        ))
+        df.to_csv(
+            os.path.join(EXPORT_DIR, 'data.csv'),
+            sep=';',
+            encoding='utf-8',
+            index=False,
+            quoting=csv.QUOTE_NONNUMERIC
+        )
+        pickle.dump(df, open(os.path.join(EXPORT_DIR, '{0}_set.p'.format(name)), "wb"))
 
     def handle(self, *args, **options):
         if os.path.exists(EXPORT_DIR) and os.path.isdir(EXPORT_DIR):
@@ -46,18 +63,11 @@ class Command(BaseCommand):
             )
 
             records += [fields]
+        shuffle(records)
 
-        df = pd.DataFrame.from_records(data=records, columns=(
-            'filename',
-            'punchline',
-            'funniness',
-            'i_understand'
-        ))
-        df.to_csv(
-            os.path.join(EXPORT_DIR, 'data.csv'),
-            sep=';',
-            encoding='utf-8',
-            index=False,
-            quoting=csv.QUOTE_NONNUMERIC
-        )
-        pickle.dump(df, open(os.path.join(EXPORT_DIR, 'export.p'), "wb"))
+        train_boundary = int(len(records)*0.6)
+        validation_boundary = int(len(records)*0.3)
+
+        self.save_records(records=records[:train_boundary], name='train')
+        self.save_records(records=records[train_boundary:train_boundary + validation_boundary], name='validation')
+        self.save_records(records=records[train_boundary + validation_boundary:], name='test')

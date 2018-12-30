@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from django.core.files.base import ContentFile
 
-from annotator.models import Cartoon
+from .models import Cartoon
 from image_preprocessor.core.preprocess_image import preprocess_image
 from image_preprocessor.core.utility import to_jpeg
 

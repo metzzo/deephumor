@@ -5,17 +5,26 @@ from collections import namedtuple
 
 from torch.utils.data import Dataset
 
+from datamanagement.subset import Subset
+from settings import DATASET_PATH
+
 CartoonSample = namedtuple('Sample', ['idx', 'image', 'punchline', 'funniness'])
 
+subset2file = {
+    Subset.TRAINING: os.path.join(DATASET_PATH, "train_set.p"),
+    Subset.TEST: os.path.join(DATASET_PATH, "test_set.p"),
+    Subset.VALIDATION: os.path.join(DATASET_PATH, "validation_set.p"),
+}
 
 class CartoonDataset(Dataset):
-    def __init__(self, file_path):
+    def __init__(self, subset: Subset):
         """
         Creates a cartoon dataset
         :param csv_file:
         :param root_dir:
         :param transform:
         """
+        file_path = subset2file[subset]
         self.cartoon_df = pickle.load(open(file_path, "rb"))
         self.root_dir = os.path.dirname(file_path)
 

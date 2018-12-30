@@ -1,2 +1,3 @@
 
-DATASET_PATH = '../../../DeepHumorData/export.p'
+DATASET_PATH = './export/'
+USE_DROP_OUT = True
