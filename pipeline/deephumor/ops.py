@@ -1,9 +1,8 @@
 
 import numpy as np
-
+import cv2
 from typing import List, Callable
 
-from skimage.transform import resize
 
 # All operations are functions that take and return numpy arrays
 # See https://docs.python.org/3/library/typing.html#typing.Callable for what this line means
@@ -111,7 +110,8 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
     How padding is done is governed by pad_mode, which should work exactly as the 'mode' argument of numpy.pad.
     Raises ValueError if sz exceeds the array width/height after padding.
     '''
-
+    # TODO: use opencv instead
+    from skimage.transform import resize
     def op(arr: np.ndarray) -> np.ndarray:
         if np.random.uniform(0.0, 1.0) < 0.75:
             return arr
@@ -139,10 +139,43 @@ def rcrop(sz: int, pad: int, pad_mode: str) -> Op:
 
     return op
 
+"""
+private static Rect calcCenter (int vw, int vh, int iw, int ih, boolean neverScaleUp, Rect out) {
+
+    double scale = Math.min( (double)vw/(double)iw, (double)vh/(double)ih );
+
+    int h = (int)(!neverScaleUp || scale<1.0 ? scale * ih : ih);
+    int w = (int)(!neverScaleUp || scale<1.0 ? scale * iw : iw);
+    int x = ((vw - w)>>1);
+    int y = ((vh - h)>>1);
+
+    if (out == null)
+        out = new Rect( x, y, x + w, y + h );
+    else
+        out.set( x, y, x + w, y + h );
+
+    return out;
+}
+"""
 
 def normalize_size(target_width: int, target_height: int):
-    import cv2
+    # copyMakeBorder ?
     def op(arr: np.ndarray) -> np.ndarray:
-        pass
+        # get larger side
+        current_height, current_width = arr.shape[:2]
+        scale = min(target_width / current_width, target_height / current_height)
+        new_height = scale * current_height
+        new_width = scale * current_width
+        x, y = (target_width - new_width) / 2, (target_height - new_height) / 2
+        new_width, new_height = int(new_width), int(new_height)
+        x, y = int(x), int(y)
+
+        resized = cv2.resize(arr, dsize=(new_width, new_height))
+        if new_width == target_width and new_height == target_height:
+            return resized
+        else:
+            target_image = np.zeros((target_height, target_width), np.uint8)
+            target_image[y:y + new_height, x:x + new_width] = resized
+            return target_image
 
     return op

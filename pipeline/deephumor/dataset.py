@@ -1,10 +1,9 @@
 import pickle
 import os
+import cv2
 from collections import namedtuple
 
 from torch.utils.data import Dataset
-
-from skimage import io, transform
 
 CartoonSample = namedtuple('Sample', ['idx', 'image', 'punchline', 'funniness'])
 
@@ -27,7 +26,7 @@ class CartoonDataset(Dataset):
         row = self.cartoon_df.iloc[idx]
 
         img_name = os.path.join(self.root_dir, row['filename'])
-        image = io.imread(img_name)
+        image = cv2.imread(img_name)
 
         sample = CartoonSample(
             idx=idx,
