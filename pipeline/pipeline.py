@@ -1,4 +1,4 @@
-from pipeline.models.model import train
+from pipeline.models.cnn_model import train
 
 
 def pipeline():
