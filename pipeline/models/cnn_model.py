@@ -2,9 +2,10 @@ import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import torch
+from torch import tensor
 from torch.nn import Softmax
 
-from pipeline.models.model import Model
+from models.model import Model
 
 
 class CnnClassifier(Model):
@@ -33,15 +34,8 @@ class CnnClassifier(Model):
         self._wd = wd
         self._softmax = Softmax(dim=0)
 
-        net.cuda()  # TODO: Maybe check CUDA available
-
         self._loss = nn.CrossEntropyLoss()
         self._optimizer = optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=wd, nesterov=True)
-
-        # inside the train() and predict() functions you will need to know whether the network itself
-        # runs on the cpu or on a gpu, and in the latter case transfer input/output tensors via cuda() and cpu().
-        # determine this, check the type of (one of the) parameters, which can be obtained via parameters() (there is an is_cuda flag).
-        # you will want to initialize the optimizer and loss function here. note that pytorch's cross-entropy loss includes normalization so no softmax is required
 
     def input_shape(self) -> tuple:
         '''
@@ -57,57 +51,22 @@ class CnnClassifier(Model):
 
         return (self._num_classes,)
 
-    def train(self, data: np.ndarray, labels: np.ndarray) -> float:
-        '''
-        Train the model on batch of data.
-        Data has shape (m,C,H,W) and type np.float32 (m is arbitrary).
-        Labels has shape (m,) and integral values between 0 and num_classes - 1.
-        Returns the training loss.
-        Raises TypeError on invalid argument types.
-        Raises ValueError on invalid argument values.
-        Raises RuntimeError on other errors.
-        '''
-        # TODO: validate parameters
-        # make sure to set the network to train() mode
-        # see above comments on cpu/gpu TODO
+    def train(self, data: tensor, labels: tensor) -> float:
+        self._net.train()
 
-        if data is None or labels is None:
-            raise ValueError()
+        self._optimizer.zero_grad()
+        output = self._net(data)
 
-        if not isinstance(data, np.ndarray) or not isinstance(labels, np.ndarray):
-            raise TypeError()
+        loss = self._loss(output, labels.long())
+        loss.backward()
+        self._optimizer.step()
 
-        try:
-            self._net.train()
+        return loss.item()
 
-            self._optimizer.zero_grad()
-            output = self._net(torch.from_numpy(data).cuda())
-
-            loss = self._loss(output, torch.from_numpy(labels).cuda().long())
-            loss.backward()
-            self._optimizer.step()
-
-            return loss.item()
-        except Exception:
-            raise RuntimeError()
-
-    def predict(self, data: np.ndarray) -> np.ndarray:
-        '''
-        Predict softmax class scores from input data.
-        Data has shape (m,C,H,W) and type np.float32 (m is arbitrary).
-        The scores are an array with shape (n, output_shape()).
-        Raises TypeError on invalid argument types.
-        Raises ValueError on invalid argument values.
-        Raises RuntimeError on other errors.
-        '''
-        # TODO: validate parameters
-
-        # pass the network's predictions through a nn.Softmax layer to obtain softmax class scores
-        # make sure to set the network to eval() mode
-        # see above comments on cpu/gpu
+    def predict(self, data: tensor) -> np.ndarray:
         self._net.eval()
 
-        result = self._net(torch.from_numpy(data).cuda()).cpu()
+        result = self._net(data).cpu()
         return self._softmax(result).detach().numpy()
 
     def save(self, path: str):

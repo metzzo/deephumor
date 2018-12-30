@@ -4,8 +4,10 @@ import cv2
 from collections import namedtuple
 
 from torch.utils.data import Dataset
+from torchvision import transforms
 
 from datamanagement.subset import Subset
+from processing.preprocess import extract_averages
 from settings import DATASET_PATH
 
 CartoonSample = namedtuple('Sample', ['idx', 'image', 'punchline', 'funniness'])
@@ -16,6 +18,7 @@ subset2file = {
     Subset.VALIDATION: os.path.join(DATASET_PATH, "validation_set.p"),
 }
 
+
 class CartoonDataset(Dataset):
     def __init__(self, subset: Subset):
         """
@@ -25,8 +28,17 @@ class CartoonDataset(Dataset):
         :param transform:
         """
         file_path = subset2file[subset]
-        self.cartoon_df = pickle.load(open(file_path, "rb"))
         self.root_dir = os.path.dirname(file_path)
+        self.cartoon_df = pickle.load(open(file_path, "rb"))
+        self.transform = None
+
+        width, height = extract_averages(self)
+
+        self.transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.Resize(size=(height, width,)), # TODO: keep aspect ratio
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return len(self.cartoon_df)
@@ -36,6 +48,9 @@ class CartoonDataset(Dataset):
 
         img_name = os.path.join(self.root_dir, row['filename'])
         image = cv2.imread(img_name)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        if self.transform is not None:
+            image = self.transform(image)
 
         sample = CartoonSample(
             idx=idx,
@@ -45,6 +60,3 @@ class CartoonDataset(Dataset):
         )
 
         return sample
-
-    def get_batch_data(self, sample):
-        return sample.image, sample.funniness

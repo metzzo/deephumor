@@ -1,10 +1,10 @@
+from datamanagement.subset import Subset
 from pipeline.datamanagement.dataset import CartoonDataset
-from pipeline.settings import DATASET_PATH
 
 
 def test_dataset():
     ds = CartoonDataset(
-        file_path=DATASET_PATH
+        subset=Subset.TRAINING
     )
 
     assert ds is not None

@@ -4,15 +4,13 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
-from pipeline.settings import USE_DROP_OUT
+from settings import USE_DROP_OUT
 
 
-class CatsDogsModel(nn.Module):
-    def __init__(self, input_size):
-        super(CatsDogsModel, self).__init__()
-        self.input_size = input_size
+class SimpleCNNCartoonModel(nn.Module):
+    def __init__(self):
+        super(SimpleCNNCartoonModel, self).__init__()
 
-        self.cuda()
         self.conv1 = nn.Conv2d(3, 36, 3)
         self.conv2 = nn.Conv2d(36, 108, 4)
         self.pool = nn.MaxPool2d(2, 2)

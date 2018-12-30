@@ -1,18 +1,13 @@
 import pickle
 from functools import partial
 
-from pipeline.datamanagement.dataset import CartoonDataset
-from pipeline.settings import DATASET_PATH
+from torch.utils.data import Dataset
 
 
-def extract_averages():
+def extract_averages(dataset: Dataset):
     try:
         avg_width, avg_height = pickle.load(open('average_image_size.p', "rb"))
     except FileNotFoundError:
-        dataset = CartoonDataset(
-            file_path=DATASET_PATH
-        )
-
         def aspect_ratio_of(sample):
             return float(sample.image.shape[0]) / sample.image.shape[1]
 
@@ -33,4 +28,4 @@ def extract_averages():
 
 
 if __name__ == '__main__':
-    extract_averages()
+    extract_averages() # TODO: add parameter
