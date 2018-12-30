@@ -1,4 +1,4 @@
-from pipeline.deephumor.dataset import CartoonDataset
+from pipeline.datamanagement.dataset import CartoonDataset
 from pipeline.settings import DATASET_PATH
 
 

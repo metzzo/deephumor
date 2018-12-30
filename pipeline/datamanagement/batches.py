@@ -1,5 +1,5 @@
-from .dataset import Dataset
-from .ops import Op
+from pipeline.datamanagement.dataset import Dataset
+from pipeline.processing.ops import Op
 
 import typing
 import numpy as np

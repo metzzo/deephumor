@@ -1,4 +1,4 @@
-from pipeline.deephumor.model import train
+from pipeline.models.model import train
 
 
 def pipeline():

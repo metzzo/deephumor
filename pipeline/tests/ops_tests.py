@@ -1,6 +1,6 @@
 import cv2
 
-from pipeline.deephumor.ops import normalize_size
+from pipeline.processing.ops import normalize_size
 import numpy as np
 
 
