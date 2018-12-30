@@ -36,7 +36,7 @@ class CartoonDataset(Dataset):
 
         self.transform = transforms.Compose([
             transforms.ToPILImage(),
-            transforms.Resize(size=(height, width,)), # TODO: keep aspect ratio
+            transforms.Resize(size=(32, 32,)), # TODO: keep aspect ratio
             transforms.ToTensor(),
         ])
 

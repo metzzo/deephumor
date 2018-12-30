@@ -1,3 +1,5 @@
+from unittest.mock import inplace
+
 import numpy as np
 
 
@@ -16,15 +18,15 @@ class SimpleCNNCartoonModel(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.fc1 = nn.Linear(108 * 6 * 6, 200)
         self.dropout = nn.Dropout(p=0.75)
-        self.fc2 = nn.Linear(200, 2)
+        self.fc2 = nn.Linear(200, 7)
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv1(x), inplace=True))
+        x = self.pool(F.relu(self.conv2(x), inplace=True))
         x = x.view(-1, 108 * 6 * 6)
         if USE_DROP_OUT:
             x = self.dropout(x)
-        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc1(x), inplace=True)
         x = self.fc2(x)
 
         return x

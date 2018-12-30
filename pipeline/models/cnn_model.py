@@ -66,8 +66,8 @@ class CnnClassifier(Model):
     def predict(self, data: tensor) -> np.ndarray:
         self._net.eval()
 
-        result = self._net(data).cpu()
-        return self._softmax(result).detach().numpy()
+        result = self._net(data)
+        return self._softmax(result).detach()
 
     def save(self, path: str):
         torch.save(self._net.state_dict(), path)
