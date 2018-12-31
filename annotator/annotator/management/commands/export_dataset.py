@@ -21,7 +21,8 @@ class Command(BaseCommand):
             'filename',
             'punchline',
             'funniness',
-            'i_understand'
+            'i_understand',
+            'id'
         ))
         df.to_csv(
             os.path.join(EXPORT_DIR, 'data.csv'),
@@ -49,6 +50,7 @@ class Command(BaseCommand):
                 cartoon.punchline.replace('\n', '\\n').replace('\r', '').replace('"', "'"),
                 funniness_annotation.funniness,
                 funniness_annotation.i_understand,
+                funniness_annotation.id,
             ]
 
             source_dir = os.path.join(
