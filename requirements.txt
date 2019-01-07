@@ -19,3 +19,4 @@ torchvision>=0.2.1
 scikit-image>=0.14.1
 scipy>=1.2.0
 albumentations>=0.1.8 # https://github.com/albu/albumentations
+progress>=1.4
