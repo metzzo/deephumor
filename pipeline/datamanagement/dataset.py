@@ -3,6 +3,7 @@ import os
 import cv2
 from collections import namedtuple
 
+from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
@@ -30,13 +31,10 @@ class CartoonDataset(Dataset):
         """
         self.root_dir = os.path.dirname(file_path)
         self.cartoon_df = pickle.load(open(file_path, "rb"))
-        self.transform = transforms.Compose([])
 
-        """self.transform = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.Resize(size=(32, 32,)), # TODO: keep aspect ratio
+        self.transform = transforms.Compose([
             transforms.ToTensor(),
-        ])"""
+        ])
 
     def __len__(self):
         return len(self.cartoon_df)
@@ -45,7 +43,7 @@ class CartoonDataset(Dataset):
         row = self.cartoon_df.iloc[idx]
 
         img_name = os.path.join(self.root_dir, row['filename'])
-        image = cv2.imread(img_name, 0)
+        image = Image.open(img_name)
         if self.transform is not None:
             image = self.transform(image)
 

@@ -54,6 +54,6 @@ class Evaluation(object):
 
     def __str__(self):
         if self.ignore_loss:
-            return '\tAccuracy: {0}'.format(self.accuracy)
+            return '\tAccuracy: {0}%'.format(self.accuracy)
         else:
-            return '\tAccuracy: {0}\n\tLoss: {1}'.format(self.accuracy, self.loss)
+            return '\tAccuracy: {0}%\n\tLoss: {1}'.format(self.accuracy, self.loss)

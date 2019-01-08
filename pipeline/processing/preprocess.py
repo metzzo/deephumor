@@ -47,6 +47,9 @@ def downsize_images(source_folder, target_folder, target_size, factor):
     target_width = int(target_width / factor)
     target_height = int(target_height / factor)
 
+    if target_width % 2 == 1: target_width -= 1
+    if target_height % 2 == 1: target_height -= 1
+
     trafo = transforms.Compose([
         transforms.Resize(size=(target_height, target_width))
     ])

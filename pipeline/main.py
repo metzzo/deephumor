@@ -1,7 +1,11 @@
 import argparse
 
+from evaluation.memory_profile import print_memory
+
 
 def main():
+    print_memory()
+
     from processing.preprocess import setup_preprocess
     from train import setup_train
 

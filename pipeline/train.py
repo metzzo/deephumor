@@ -10,25 +10,11 @@ from settings import WEIGHT_DECAY, BATCH_SIZE
 CartoonDataLoader = partial(DataLoader, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
 
 
-def iterate_over(dataloader: DataLoader, device: torch.device, epochs: int, evaluation):
-    if evaluation:
-        evaluation.reset()
-
-    for i in range(epochs):
-        print('{0} / {1}'.format(i + 1, epochs))
-        for samples in dataloader:
-            _, batch_images, _, batch_funniness = samples
-            yield batch_images.to(device), batch_funniness.to(device)
-        if evaluation:
-            print(evaluation)
-            evaluation.reset()
-
-
 def pipeline(source, epochs=1):
     from architectures.cnn import SimpleCNNCartoonModel
     from datamanagement.subset import Subset
-    from evaluation.evaluation import Evaluation
     from models.cnn_model import CnnClassifier
+    from evaluation.evaluation import Evaluation
 
     use_cuda = torch.cuda.is_available()
     print("Uses CUDA: {0}".format(use_cuda))
@@ -40,9 +26,7 @@ def pipeline(source, epochs=1):
     training_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING))
     validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION))
     training_dl = CartoonDataLoader(dataset=training_ds)
-    validation_dl = DataLoader(dataset=validation_ds)
-
-    iterator = partial(iterate_over, epochs=epochs, device=device)
+    validation_dl = DataLoader(dataset=validation_ds, batch_size=16)
 
     net = SimpleCNNCartoonModel()
     net.to(device)
@@ -55,33 +39,40 @@ def pipeline(source, epochs=1):
     )
 
     # training
-    print('Training Phase')
+    print('Training')
 
-    evaluation = Evaluation(num=len(training_dl), batch_size=BATCH_SIZE)
-    training_iterator = iterator(dataloader=training_dl, evaluation=evaluation)
-    for batch_images, batch_funniness in training_iterator:
-        loss = clf.train(
-            data=batch_images,
-            labels=batch_funniness
-        )
-        predictions = clf.predict(data=batch_images)
-        evaluation.add_entry(predictions=predictions, actual_label=batch_funniness, loss=loss)
-
-    # validation
-    print('Test Phase')
-
-    evaluation = Evaluation(num=1, batch_size=len(validation_ds), ignore_loss=True)
-    validation_iterator = iterator(dataloader=validation_dl, evaluation=evaluation)
-    with torch.set_grad_enabled(False):
-        for batch_images, batch_funniness in validation_iterator:
+    for i in range(epochs):
+        print('{0} / {1}'.format(i + 1, epochs))
+        training_evaluation = Evaluation(num=len(training_dl), batch_size=BATCH_SIZE)
+        for samples in training_dl:
+            _, batch_images, _, batch_funniness = samples
+            batch_images, batch_funniness = batch_images.to(device), batch_funniness.to(device)
+            loss = clf.train(
+                data=batch_images,
+                labels=batch_funniness
+            )
             predictions = clf.predict(data=batch_images)
-            evaluation.add_entry(predictions=predictions, actual_label=batch_funniness)
+            training_evaluation.add_entry(predictions=predictions, actual_label=batch_funniness, loss=loss)
+
+        print("Training Evaluation:")
+        print(training_evaluation)
+
+        validation_evaluation = Evaluation(num=1, batch_size=len(validation_ds), ignore_loss=True)
+        with torch.set_grad_enabled(False):
+            for samples in validation_dl:
+                _, batch_images, _, batch_funniness = samples
+                batch_images = batch_images.to(device)
+                batch_funniness = batch_funniness.to(device)
+                predictions = clf.predict(data=batch_images)
+                validation_evaluation.add_entry(predictions=predictions, actual_label=batch_funniness)
+            print("Validation Evaluation:")
+            print(validation_evaluation)
 
 
 def setup_train(parser: argparse.ArgumentParser, group):
     group.add_argument('--train', action="store_true")
 
-    parser.add_argument('--epochs', required=True, type=int)
+    parser.add_argument('--epochs', type=int)
 
     def train(args):
         if not args.train:
