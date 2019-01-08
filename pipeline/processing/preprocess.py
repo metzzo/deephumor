@@ -12,14 +12,17 @@ from torchvision import transforms
 from PIL import Image
 from shutil import copyfile
 
+
 def setup_preprocess(parser: argparse.ArgumentParser, group):
     group.add_argument('--preprocess', action="store_true")
 
-    parser.add_argument("--source", required=True, type=str)
-    parser.add_argument("--target", required=True, type=str)
+    parser.add_argument("--target", type=str)
     parser.add_argument("--factor", type=float, default=2)
 
     def preprocess(args):
+        if not args.preprocess:
+            return
+
         target_size = extract_average_image_size(
             dataset=CartoonDataset(file_path=get_subset(dataset_path=args.source, subset=Subset.TRAINING)),
             target_folder=args.source

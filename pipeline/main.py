@@ -3,13 +3,17 @@ import argparse
 
 def main():
     from processing.preprocess import setup_preprocess
+    from train import setup_train
 
     operations = [
         setup_preprocess,
+        setup_train
     ]
 
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
+
+    parser.add_argument("--source", required=True, type=str)
 
     handlers = []
     for op in operations:
