@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from datamanagement.dataset import get_subset
+from evaluation.overall_evaluation import OverallEvaluation
 from settings import WEIGHT_DECAY, BATCH_SIZE
 
 CartoonDataLoader = partial(DataLoader, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
@@ -14,7 +15,7 @@ def pipeline(source, epochs=1):
     from architectures.cnn import SimpleCNNCartoonModel
     from datamanagement.subset import Subset
     from models.cnn_model import CnnClassifier
-    from evaluation.evaluation import Evaluation
+    from evaluation.accuracy_evaluation import AccuracyEvaluation
 
     use_cuda = torch.cuda.is_available()
     print("Uses CUDA: {0}".format(use_cuda))
@@ -43,7 +44,7 @@ def pipeline(source, epochs=1):
 
     for i in range(epochs):
         print('{0} / {1}'.format(i + 1, epochs))
-        training_evaluation = Evaluation(num=len(training_dl), batch_size=BATCH_SIZE)
+        training_evaluation = OverallEvaluation(num=len(training_dl))
         for samples in training_dl:
             _, batch_images, _, batch_funniness = samples
             batch_images, batch_funniness = batch_images.to(device), batch_funniness.to(device)
@@ -57,7 +58,7 @@ def pipeline(source, epochs=1):
         print("Training Evaluation:")
         print(training_evaluation)
 
-        validation_evaluation = Evaluation(num=1, batch_size=len(validation_ds), ignore_loss=True)
+        validation_evaluation = OverallEvaluation(num=1, ignore_loss=True)
         with torch.set_grad_enabled(False):
             for samples in validation_dl:
                 _, batch_images, _, batch_funniness = samples

@@ -15,8 +15,6 @@ from shutil import copyfile
 
 def setup_preprocess(parser: argparse.ArgumentParser, group):
     group.add_argument('--preprocess', action="store_true")
-
-    parser.add_argument("--target", type=str)
     parser.add_argument("--factor", type=float, default=2)
 
     def preprocess(args):

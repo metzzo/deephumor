@@ -1,6 +1,7 @@
 import argparse
 
 from evaluation.memory_profile import print_memory
+from processing.pickle_to_csv import setup_pickle_to_csv
 
 
 def main():
@@ -11,13 +12,15 @@ def main():
 
     operations = [
         setup_preprocess,
-        setup_train
+        setup_train,
+        setup_pickle_to_csv,
     ]
 
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
 
     parser.add_argument("--source", required=True, type=str)
+    parser.add_argument("--target", type=str)
 
     handlers = []
     for op in operations:
