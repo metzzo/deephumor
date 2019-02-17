@@ -24,7 +24,7 @@ class SimpleCNNCartoonModel(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.fc1 = nn.Linear(108 * self.final_size, 200)
         self.dropout = nn.Dropout(p=0.75)
-        self.fc2 = nn.Linear(200, 7)
+        self.fc2 = nn.Linear(200, 1)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x), inplace=True))

@@ -34,7 +34,7 @@ class CnnClassifier(Model):
         self._wd = wd
         self._softmax = Softmax(dim=0)
 
-        self._loss = nn.L1Loss()
+        self._loss = nn.L1Loss(reduction='mean')
         self._optimizer = optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=wd, nesterov=True)
 
     def input_shape(self) -> tuple:
@@ -57,7 +57,7 @@ class CnnClassifier(Model):
         self._optimizer.zero_grad()
         output = self._net(data)
 
-        loss = self._loss(output, labels.long())
+        loss = self._loss(output, labels.float())
         loss.backward()
         self._optimizer.step()
 
@@ -67,7 +67,7 @@ class CnnClassifier(Model):
         self._net.eval()
 
         result = self._net(data)
-        return self._softmax(result).detach()
+        return result.detach()
 
     def save(self, path: str):
         torch.save(self._net.state_dict(), path)

@@ -51,7 +51,7 @@ class CartoonDataset(Dataset):
             idx=idx,
             image=image,
             punchline=row['punchline'],
-            funniness=row['funniness'],
+            funniness=(row['funniness'] - 1) / 7.0,
         )
 
         return sample

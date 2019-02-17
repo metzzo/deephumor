@@ -9,7 +9,7 @@ class OverallEvaluation(BaseEvaluation):
         super(OverallEvaluation, self).__init__(num=num)
         self.evaluations = [
             MAEEvaluation(num=num),
-            AccuracyEvaluation(num=num),
+            #AccuracyEvaluation(num=num)
         ]
         if not ignore_loss:
             self.evaluations.append(LossEvaluation(num=num))
@@ -19,5 +19,5 @@ class OverallEvaluation(BaseEvaluation):
             eval.add_entry(predictions=predictions, actual_label=actual_label, loss=loss)
 
     def __str__(self):
-        output = map(self.evaluations, str)
+        output = map(str, self.evaluations)
         return '\n'.join(output)

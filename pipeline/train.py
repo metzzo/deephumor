@@ -27,7 +27,7 @@ def pipeline(source, epochs=1):
     training_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING))
     validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION))
     training_dl = CartoonDataLoader(dataset=training_ds)
-    validation_dl = DataLoader(dataset=validation_ds, batch_size=16)
+    validation_dl = DataLoader(dataset=validation_ds, batch_size=BATCH_SIZE)
 
     net = SimpleCNNCartoonModel()
     net.to(device)
@@ -35,7 +35,7 @@ def pipeline(source, epochs=1):
         net=net,
         input_shape=(3, 32, 32),
         num_classes=7,
-        lr=0.01,
+        lr=0.001,
         wd=WEIGHT_DECAY,
     )
 
@@ -44,7 +44,7 @@ def pipeline(source, epochs=1):
 
     for i in range(epochs):
         print('{0} / {1}'.format(i + 1, epochs))
-        training_evaluation = OverallEvaluation(num=len(training_dl))
+        training_evaluation = OverallEvaluation(num=len(training_dl), ignore_loss=False)
         for samples in training_dl:
             _, batch_images, _, batch_funniness = samples
             batch_images, batch_funniness = batch_images.to(device), batch_funniness.to(device)
@@ -58,14 +58,14 @@ def pipeline(source, epochs=1):
         print("Training Evaluation:")
         print(training_evaluation)
 
-        validation_evaluation = OverallEvaluation(num=1, ignore_loss=True)
+        validation_evaluation = OverallEvaluation(num=len(validation_dl), ignore_loss=True)
         with torch.set_grad_enabled(False):
             for samples in validation_dl:
                 _, batch_images, _, batch_funniness = samples
                 batch_images = batch_images.to(device)
                 batch_funniness = batch_funniness.to(device)
                 predictions = clf.predict(data=batch_images)
-                validation_evaluation.add_entry(predictions=predictions, actual_label=batch_funniness)
+                validation_evaluation.add_entry(predictions=predictions, actual_label=batch_funniness, loss=0)
             print("Validation Evaluation:")
             print(validation_evaluation)
 
