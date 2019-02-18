@@ -35,7 +35,7 @@ def pipeline(source, epochs=1):
         net=net,
         input_shape=(3, 32, 32),
         num_classes=7,
-        lr=0.001,
+        lr=0.00001,
         wd=WEIGHT_DECAY,
     )
 
@@ -57,7 +57,7 @@ def pipeline(source, epochs=1):
 
         print("Training Evaluation:")
         print(training_evaluation)
-
+        """
         validation_evaluation = OverallEvaluation(num=len(validation_dl), ignore_loss=True)
         with torch.set_grad_enabled(False):
             for samples in validation_dl:
@@ -67,7 +67,7 @@ def pipeline(source, epochs=1):
                 predictions = clf.predict(data=batch_images)
                 validation_evaluation.add_entry(predictions=predictions, actual_label=batch_funniness, loss=0)
             print("Validation Evaluation:")
-            print(validation_evaluation)
+            print(validation_evaluation)"""
 
 
 def setup_train(parser: argparse.ArgumentParser, group):

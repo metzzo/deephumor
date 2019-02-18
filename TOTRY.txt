@@ -1,0 +1,6 @@
+Things to try:
+
+CNN:
+ - Classification only
+ - 2 stage classification (first only 3 levels, then fine grained classification
+ - Transfer Learning

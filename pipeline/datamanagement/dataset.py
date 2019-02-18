@@ -34,6 +34,7 @@ class CartoonDataset(Dataset):
 
         self.transform = transforms.Compose([
             transforms.ToTensor(),
+            transforms.Normalize([0.485], [0.224])
         ])
 
     def __len__(self):

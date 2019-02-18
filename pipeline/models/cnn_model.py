@@ -34,7 +34,7 @@ class CnnClassifier(Model):
         self._wd = wd
         self._softmax = Softmax(dim=0)
 
-        self._loss = nn.L1Loss(reduction='mean')
+        self._loss = nn.L1Loss(reduction='sum')
         self._optimizer = optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=wd, nesterov=True)
 
     def input_shape(self) -> tuple:
