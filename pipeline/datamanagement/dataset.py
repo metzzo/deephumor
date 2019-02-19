@@ -34,6 +34,7 @@ class CartoonDataset(Dataset):
         self.cartoon_df = pickle.load(open(file_path, "rb"))
 
         self.transform = transforms.Compose([
+            #transforms.RandomResizedCrop(224),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
@@ -45,7 +46,7 @@ class CartoonDataset(Dataset):
         row = self.cartoon_df.iloc[idx]
 
         img_name = os.path.join(self.root_dir, row['filename'])
-        image = Image.open(img_name)
+        image = Image.open(img_name)#.convert('RGB')
         if self.transform is not None:
             image = self.transform(image)
 

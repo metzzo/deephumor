@@ -17,7 +17,8 @@ def train_cnn_model(
         batch_size,
         device,
         num_epochs=25):
-    model.to(device)
+    network = model.network
+    network.to(device)
 
     optimizer = optimizer(params=model.optimization_parameters)
     scheduler = scheduler(optimizer=optimizer)
@@ -34,7 +35,7 @@ def train_cnn_model(
 
     since = time.time()
 
-    best_model_wts = copy.deepcopy(model.state_dict())
+    best_network_wts = copy.deepcopy(network.state_dict())
     best_acc = 0.0
 
     for epoch in range(num_epochs):
@@ -47,9 +48,9 @@ def train_cnn_model(
 
             if phase == 'train':
                 scheduler.step()
-                model.train()  # Set model to training mode
+                network.train()  # Set network to training mode
             else:
-                model.eval()   # Set model to evaluate mode
+                network.eval()   # Set network to evaluate mode
 
             # Iterate over data.
             for _, inputs, _, labels in dataloaders[phase]:
@@ -62,8 +63,9 @@ def train_cnn_model(
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
+                    outputs = network(inputs)
                     preds = model.get_predictions(outputs=outputs)
+                    labels = model.get_labels(labels=labels)
 
                     loss = criterion(outputs, labels)
 
@@ -78,7 +80,7 @@ def train_cnn_model(
             print('{0} evaluation:\n {1}'.format(
                 phase, str(evaluations[phase])))
 
-            # deep copy the model
+            # deep copy the network
             # TODO
             #if phase == 'val' and epoch_acc > best_acc:
             #    best_acc = epoch_acc
@@ -92,6 +94,6 @@ def train_cnn_model(
     print('Best val Acc: {:4f}'.format(best_acc))
 
     # load best model weights
-    model.load_state_dict(best_model_wts)
+    network.load_state_dict(best_network_wts)
 
-    return model
+    return network

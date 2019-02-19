@@ -4,6 +4,7 @@ from functools import partial
 import torch
 from torch.nn import CrossEntropyLoss, L1Loss
 
+from architectures.pretrained_cnn import PretrainedCNNCartoonModel
 from datamanagement.dataset import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
@@ -18,6 +19,7 @@ def pipeline(source, model, epochs, batch_size, loss):
     models = [
         SimpleRegressionCNNCartoonModel,
         SimpleClassificationCNNCartoonModel,
+        PretrainedCNNCartoonModel,
     ]
     losses = {
         'cel': CrossEntropyLoss,
