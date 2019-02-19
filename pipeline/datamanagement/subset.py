@@ -9,3 +9,4 @@ class Subset(Enum):
     TRAINING = 1
     VALIDATION = 2
     TEST = 3
+    DEBUG = 4

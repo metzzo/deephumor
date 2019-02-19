@@ -12,7 +12,7 @@ class LossEvaluation(BaseEvaluation):
         losses = self.entries
         if self.entry_count != len(self.entries):
             losses = losses[:self.entry_count]
-        return np.mean(losses) * 7
+        return np.mean(losses)
 
     def __str__(self):
         return "Loss: {0}".format(self.loss)

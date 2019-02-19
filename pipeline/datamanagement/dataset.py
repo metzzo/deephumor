@@ -17,6 +17,7 @@ def get_subset(dataset_path, subset: Subset):
         Subset.TRAINING: os.path.join(dataset_path, "train_set.p"),
         Subset.TEST: os.path.join(dataset_path, "test_set.p"),
         Subset.VALIDATION: os.path.join(dataset_path, "validation_set.p"),
+        Subset.DEBUG: os.path.join(dataset_path, "debug_set.p"),
     }
     return dict[subset]
 
@@ -34,7 +35,7 @@ class CartoonDataset(Dataset):
 
         self.transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize([0.485], [0.224])
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
     def __len__(self):
@@ -52,7 +53,7 @@ class CartoonDataset(Dataset):
             idx=idx,
             image=image,
             punchline=row['punchline'],
-            funniness=(row['funniness'] - 1) / 7.0,
+            funniness=row['funniness'], #row['funniness'] - 1) / 7.0,
         )
 
         return sample

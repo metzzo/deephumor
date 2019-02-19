@@ -1,6 +1,7 @@
 import argparse
 
 from evaluation.memory_profile import print_memory
+from processing.create_debug_set import setup_create_debug_set
 from processing.pickle_to_csv import setup_pickle_to_csv
 
 
@@ -14,6 +15,7 @@ def main():
         setup_preprocess,
         setup_train,
         setup_pickle_to_csv,
+        setup_create_debug_set,
     ]
 
     parser = argparse.ArgumentParser()

@@ -5,38 +5,23 @@ from evaluation.base_evaluation import BaseEvaluation
 
 
 class AccuracyEvaluation(BaseEvaluation):
-    def __init__(self, num):
-        super(AccuracyEvaluation, self).__init__(num=0)
+    def __init__(self, num, batch_size):
+        super(AccuracyEvaluation, self).__init__(num=0, batch_size=batch_size)
         self.sample_count = 0
-        self.true_predictions = None
+        self.true_predictions = 0
 
     def reset(self):
         super(AccuracyEvaluation, self).reset()
-        self.true_predictions = None
+        self.true_predictions = 0
+        self.sample_count = 0
 
     def add_entry(self, predictions, actual_label, loss):
-        predicted = torch.argmax(predictions, dim=1)
-        pred_size = predicted.size()[0]
-        self.sample_count += pred_size
-
-        is_correct = (predicted == actual_label).int()
-
-        if self.true_predictions is not None:
-            true_pred_size = self.true_predictions.size()[0]
-            if pred_size < true_pred_size:
-                # increase size of is_correct
-                # this might not work if there are multiple GPUs
-                new_is_correct = torch.zeros(true_pred_size, dtype=torch.int32).cuda()
-                new_is_correct[0:pred_size] = is_correct
-                is_correct = new_is_correct
-
-            self.true_predictions += is_correct
-        else:
-            self.true_predictions = is_correct
+        self.true_predictions += torch.sum(predictions == actual_label)
+        self.sample_count += len(predictions)
 
     @property
     def accuracy(self):
-        return (float(self.true_predictions.sum()) / float(self.sample_count)) * 100.0
+        return (float(self.true_predictions) / float(self.sample_count)) * 100.0
 
     def __str__(self):
         return 'Accuracy: {0}%'.format(self.accuracy)
