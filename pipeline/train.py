@@ -31,7 +31,7 @@ def pipeline(source, model, epochs, batch_size, loss):
         torch.cuda.empty_cache()
 
     training_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING))
-    validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING))
+    validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION))
 
     selected_model = next((x for x in models if x.__name__ == model), None)
 
