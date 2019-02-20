@@ -3,6 +3,7 @@ import argparse
 from evaluation.memory_profile import print_memory
 from processing.create_debug_set import setup_create_debug_set
 from processing.pickle_to_csv import setup_pickle_to_csv
+from processing.prepare_mnist import setup_prepare_mnist
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
         setup_train,
         setup_pickle_to_csv,
         setup_create_debug_set,
+        setup_prepare_mnist
     ]
 
     parser = argparse.ArgumentParser()
