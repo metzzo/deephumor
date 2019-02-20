@@ -1,3 +1,4 @@
+from PIL import Image
 from torch import nn
 
 
@@ -18,3 +19,9 @@ class BaseModel(object):
 
     def get_labels(self, labels):
         return labels
+
+    def get_custom_transformation(self):
+        return []
+
+    def load_image(self, img_name):
+        return Image.open(img_name)

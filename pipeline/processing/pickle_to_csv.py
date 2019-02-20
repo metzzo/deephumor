@@ -15,9 +15,9 @@ def setup_pickle_to_csv(parser: argparse.ArgumentParser, group):
     def pickle_to_csv(args):
         if not args.pickle_to_csv:
             return
-        file_path = get_subset(dataset_path=args.source, subset=Subset.TRAINING)
+        file_path = get_subset(dataset_path=args.source, subset=Subset.VALIDATION)
         df = pickle.load(open(file_path, "rb"))
-        df.to_csv(path_or_buf='./training_set.csv')
+        df.to_csv(path_or_buf='./validation_set.csv')
         print("Finished!")
 
     return pickle_to_csv

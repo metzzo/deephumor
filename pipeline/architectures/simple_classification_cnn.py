@@ -18,15 +18,15 @@ class SimpleClassificationCNNCartoonModel(BaseModel):
             # 279x345
             super(SimpleClassificationCNNCartoonModel.Network, self).__init__()
 
-            self.conv1 = nn.Conv2d(1, 500, kernel_size=3, padding=1)
-            self.conv2 = nn.Conv2d(500, 1000, kernel_size=3, padding=1)
+            self.conv1 = nn.Conv2d(1, 100, kernel_size=3, padding=1)
+            self.conv2 = nn.Conv2d(100, 100, kernel_size=3, padding=1)
             self.pool = nn.MaxPool2d(2, 2)
-            self.fc1 = nn.Linear(1000 * self.final_size, 7)
+            self.fc1 = nn.Linear(100 * self.final_size, 7)
 
         def forward(self, x):
             x = self.pool(F.relu(self.conv1(x), inplace=True))
             x = self.pool(F.relu(self.conv2(x), inplace=True))
-            x = x.view(-1, 1000 * self.final_size)
+            x = x.view(-1, 100 * self.final_size)
             x = self.fc1(x)
 
             return x

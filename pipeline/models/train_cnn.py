@@ -1,3 +1,5 @@
+import datetime
+import os
 import time
 import copy
 
@@ -33,6 +35,9 @@ def train_cnn_model(
         "val": OverallEvaluation(num=len(dataloaders["val"]), ignore_loss=True, batch_size=batch_size),
     }
 
+    target_path = os.path.abspath("./../models/{0}_model.pth".format(
+        str(datetime.datetime.today()).replace('-', '').replace(':', '').replace(' ', '_')
+    ))
     since = time.time()
 
     best_network_wts = copy.deepcopy(network.state_dict())
@@ -80,11 +85,12 @@ def train_cnn_model(
             print('{0} evaluation:\n {1}'.format(
                 phase, str(evaluations[phase])))
 
-            # deep copy the network
-            # TODO
-            #if phase == 'val' and epoch_acc > best_acc:
-            #    best_acc = epoch_acc
-            #    best_model_wts = copy.deepcopy(model.state_dict())
+        # deep copy the network
+        epoch_acc = evaluations['val'].accuracy_evaluation.accuracy
+        if epoch_acc > best_acc:
+            best_acc = epoch_acc
+            best_network_wts = copy.deepcopy(network.state_dict())
+            torch.save(network.state_dict(), target_path)
 
         print()
 

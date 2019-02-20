@@ -52,5 +52,6 @@ npm-debug.log*
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-processed
-raw
+processed/
+raw/
+models/

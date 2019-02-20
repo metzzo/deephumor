@@ -5,10 +5,12 @@ from evaluation.mae_evaluation import MAEEvaluation
 
 
 class OverallEvaluation(BaseEvaluation):
+
     def __init__(self, num, batch_size, ignore_loss=True):
+        self.accuracy_evaluation = AccuracyEvaluation(num=num, batch_size=batch_size)
         self.evaluations = [
             MAEEvaluation(num=num, batch_size=batch_size),
-            AccuracyEvaluation(num=num, batch_size=batch_size),
+            self.accuracy_evaluation,
         ]
         if not ignore_loss:
             self.evaluations.append(LossEvaluation(num=num, batch_size=batch_size))
