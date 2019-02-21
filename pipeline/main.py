@@ -10,11 +10,11 @@ def main():
     print_memory()
 
     from processing.preprocess import setup_preprocess
-    from train import setup_train
+    from train_cnn import setup_train_cnn
 
     operations = [
         setup_preprocess,
-        setup_train,
+        setup_train_cnn,
         setup_pickle_to_csv,
         setup_create_debug_set,
         setup_prepare_mnist
