@@ -12,7 +12,7 @@ from datamanagement.subset import Subset
 def setup_pickle_to_csv(parser: argparse.ArgumentParser, group):
     group.add_argument('--pickle_to_csv', action="store_true")
 
-    def pickle_to_csv(args):
+    def pickle_to_csv(args, device):
         if not args.pickle_to_csv:
             return
         file_path = get_subset(dataset_path=args.source, subset=Subset.VALIDATION)

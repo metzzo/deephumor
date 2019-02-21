@@ -1,5 +1,7 @@
 import argparse
 
+import torch
+
 from evaluation.memory_profile import print_memory
 from processing.create_debug_set import setup_create_debug_set
 from processing.pickle_to_csv import setup_pickle_to_csv
@@ -11,6 +13,14 @@ def main():
 
     from processing.preprocess import setup_preprocess
     from train_cnn import setup_train_cnn
+
+    torch.manual_seed(42)
+
+    use_cuda = torch.cuda.is_available()
+    print("Uses CUDA: {0}".format(use_cuda))
+    device = torch.device("cuda:0" if use_cuda else "cpu")
+    if use_cuda:
+        torch.cuda.empty_cache()
 
     operations = [
         setup_preprocess,
@@ -33,7 +43,7 @@ def main():
     args = parser.parse_args()
 
     for handler in handlers:
-        handler(args=args)
+        handler(args=args, device=device)
 
 
 if __name__ == '__main__':

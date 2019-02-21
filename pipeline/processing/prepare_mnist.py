@@ -15,7 +15,7 @@ from datamanagement.subset import Subset
 def setup_prepare_mnist(parser: argparse.ArgumentParser, group):
     group.add_argument('--prepare_mnist', action="store_true")
 
-    def prepare_mnist(args):
+    def prepare_mnist(args, device):
         if not args.prepare_mnist:
             return
         train_set = dset.MNIST(root='./', train=True, download=True)

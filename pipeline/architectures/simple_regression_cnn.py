@@ -7,8 +7,6 @@ import torch.nn.functional as F
 from architectures.base_model import BaseModel
 
 
-
-
 class SimpleRegressionCNNCartoonModel(BaseModel):
     class Network(nn.Module):
         @property

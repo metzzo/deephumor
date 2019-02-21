@@ -16,7 +16,7 @@ def setup_create_debug_set(parser: argparse.ArgumentParser, group):
 
     parser.add_argument("--size", type=float, default=2)
 
-    def create_debug_set(args):
+    def create_debug_set(args, device):
         if not args.create_debug_set:
             return
         dataset_path = args.source

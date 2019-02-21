@@ -48,7 +48,7 @@ def setup_preprocess(parser: argparse.ArgumentParser, group):
     group.add_argument('--preprocess', action="store_true")
     parser.add_argument("--factor", type=float, default=2)
 
-    def preprocess(args):
+    def preprocess(args, device):
         if not args.preprocess:
             return
 

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
+from torch_dct import dct_2d
 from torchvision import transforms
 
 from architectures.base_model import BaseModel
@@ -25,6 +26,7 @@ class PretrainedCNNCartoonModel(BaseModel):
             self.fc2 = nn.Linear(100, 8)
 
         def forward(self, x):
+            x = dct_2d(x)
             x = F.relu(self.model_conv(x))
             x = self.fc2(x)
             return x

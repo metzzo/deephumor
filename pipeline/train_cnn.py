@@ -11,6 +11,7 @@ from datamanagement.dataset import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
 
+
 def custom_loss():
     def calc(outputs, label):
         outputs = softmax(outputs)
@@ -21,17 +22,15 @@ def custom_loss():
                 arr[j] += outputs[j][i - 1] * (i - c) * (i - c) if i != c else 0
         return torch.sum(Variable(torch.tensor(arr, dtype=torch.float32), requires_grad=True))
 
-
     return calc
 
-def pipeline(source, model, epochs, batch_size, loss):
+
+def pipeline(source, model, epochs, batch_size, loss, device):
     from datamanagement.subset import Subset
     from datamanagement.dataset import CartoonDataset
 
     from architectures.simple_regression_cnn import SimpleRegressionCNNCartoonModel
     from architectures.simple_classification_cnn import SimpleClassificationCNNCartoonModel
-
-    torch.manual_seed(42)
 
     models = [
         SimpleRegressionCNNCartoonModel,
@@ -44,18 +43,11 @@ def pipeline(source, model, epochs, batch_size, loss):
         'custom': custom_loss
     }
 
-    use_cuda = torch.cuda.is_available()
-    print("Uses CUDA: {0}".format(use_cuda))
-    device = torch.device("cuda:0" if use_cuda else "cpu")
-    if use_cuda:
-        torch.cuda.empty_cache()
-
     selected_model = next((x for x in models if x.__name__ == model), None)()
     selected_loss = losses[loss]()
 
     training_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING), model=selected_model)
     validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION), model=selected_model)
-
 
     train_cnn_model(
         model=selected_model,
@@ -78,7 +70,7 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
     parser.add_argument('--model', type=str)
     parser.add_argument('--loss', type=str)
 
-    def train(args):
+    def train(args, device):
         if not args.train_cnn:
             return
 
@@ -87,7 +79,8 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
             model=args.model,
             epochs=args.epochs,
             batch_size=args.batch_size,
-            loss=args.loss
+            loss=args.loss,
+            device=device,
         )
 
     return train

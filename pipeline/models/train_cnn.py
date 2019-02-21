@@ -35,7 +35,7 @@ def train_cnn_model(
         "val": OverallEvaluation(num=len(dataloaders["val"]), ignore_loss=True, batch_size=batch_size),
     }
 
-    target_path = os.path.abspath("./../models/{0}_model.pth".format(
+    target_path = os.path.abspath("./../models/{0}_cnn_model.pth".format(
         str(datetime.datetime.today()).replace('-', '').replace(':', '').replace(' ', '_')
     ))
     since = time.time()
