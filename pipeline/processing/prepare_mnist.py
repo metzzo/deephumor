@@ -8,8 +8,8 @@ import pickle
 
 from PIL import Image
 
-from datamanagement.dataset import get_subset, CartoonDataset
-from datamanagement.subset import Subset
+from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.subset import Subset, get_subset
 
 
 def setup_prepare_mnist(parser: argparse.ArgumentParser, group):

@@ -1,26 +1,13 @@
 import pickle
 import os
-import cv2
 from collections import namedtuple
 
-from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
 from architectures.base_model import BaseModel
-from datamanagement.subset import Subset
 
 CartoonSample = namedtuple('Sample', ['idx', 'image', 'punchline', 'funniness'])
-
-
-def get_subset(dataset_path, subset: Subset):
-    dict = {
-        Subset.TRAINING: os.path.join(dataset_path, "train_set.p"),
-        Subset.TEST: os.path.join(dataset_path, "test_set.p"),
-        Subset.VALIDATION: os.path.join(dataset_path, "validation_set.p"),
-        Subset.DEBUG: os.path.join(dataset_path, "debug_set.p"),
-    }
-    return dict[subset]
 
 
 class CartoonDataset(Dataset):

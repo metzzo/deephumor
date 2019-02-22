@@ -58,7 +58,8 @@ def train_cnn_model(
                 network.eval()   # Set network to evaluate mode
 
             # Iterate over data.
-            for _, inputs, _, labels in dataloaders[phase]:
+            for data in dataloaders[phase]:
+                inputs, labels = model.get_input_and_label(data)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -69,10 +70,11 @@ def train_cnn_model(
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = network(inputs)
-                    preds = model.get_predictions(outputs=outputs)
                     labels = model.get_labels(labels=labels)
 
                     loss = criterion(outputs, labels)
+
+                    preds = model.get_predictions(outputs=outputs)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':

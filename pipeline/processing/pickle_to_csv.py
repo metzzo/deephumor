@@ -5,8 +5,8 @@ This allows analysis in Excel.
 import argparse
 import pickle
 
-from datamanagement.dataset import get_subset, CartoonDataset
-from datamanagement.subset import Subset
+from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.subset import Subset, get_subset
 
 
 def setup_pickle_to_csv(parser: argparse.ArgumentParser, group):

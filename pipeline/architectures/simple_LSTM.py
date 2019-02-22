@@ -23,4 +23,4 @@ class SimpleLSTMPunchlineModel(BaseModel):
             return output, hidden
 
         def init_hidden(self):
-            return torch.zeros(1, self.hidden_size
+            return torch.zeros(1, self.hidden_size)

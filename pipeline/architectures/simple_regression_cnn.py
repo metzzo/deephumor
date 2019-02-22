@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from architectures.base_model import BaseModel
+from datamanagement.cartoon_dataset import CartoonDataset
 
 
 class SimpleRegressionCNNCartoonModel(BaseModel):
@@ -49,5 +50,11 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
     def optimization_parameters(self):
         return self.network.parameters()
 
+    @property
+    def Dataset(self):
+        raise CartoonDataset
 
+    def get_input_and_label(self, data):
+        _, image, _, labels = data
+        return image, labels
 

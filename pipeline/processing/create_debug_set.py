@@ -7,8 +7,8 @@ import pickle
 import os
 import shutil
 
-from datamanagement.dataset import get_subset, CartoonDataset
-from datamanagement.subset import Subset
+from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.subset import Subset, get_subset
 
 
 def setup_create_debug_set(parser: argparse.ArgumentParser, group):

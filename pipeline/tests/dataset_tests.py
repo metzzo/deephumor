@@ -1,5 +1,5 @@
 from datamanagement.subset import Subset
-from pipeline.datamanagement.dataset import CartoonDataset
+from pipeline.datamanagement.cartoon_dataset import CartoonDataset
 
 
 def test_dataset():

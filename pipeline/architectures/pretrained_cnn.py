@@ -6,6 +6,7 @@ from torch_dct import dct_2d, idct_2d
 from torchvision import transforms
 
 from architectures.base_model import BaseModel
+from datamanagement.cartoon_dataset import CartoonDataset
 
 
 class PretrainedCNNCartoonModel(BaseModel):
@@ -26,7 +27,6 @@ class PretrainedCNNCartoonModel(BaseModel):
             self.fc2 = nn.Linear(500, 7)
 
         def forward(self, x):
-            #x = dct_2d(x)
             x = F.relu(self.model_conv(x))
             x = self.fc2(x)
             return x
@@ -55,3 +55,10 @@ class PretrainedCNNCartoonModel(BaseModel):
     def load_image(self, img_name):
         return super(PretrainedCNNCartoonModel, self).load_image(img_name=img_name).convert('RGB')
 
+    @property
+    def Dataset(self):
+        raise CartoonDataset
+
+    def get_input_and_label(self, data):
+        _, image, _, labels = data
+        return image, labels

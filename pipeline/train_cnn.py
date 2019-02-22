@@ -3,11 +3,12 @@ from functools import partial
 
 import torch
 from torch.autograd import Variable
-from torch.nn import CrossEntropyLoss, L1Loss
+from torch.nn import CrossEntropyLoss, L1Loss, NLLLoss
 from torch.nn.functional import softmax
 
 from architectures.pretrained_cnn import PretrainedCNNCartoonModel
-from datamanagement.dataset import get_subset
+from architectures.tuberlin_classification_cnn import TUBerlinClassificationModel
+from datamanagement.subset import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
 
@@ -25,9 +26,8 @@ def custom_loss():
     return calc
 
 
-def pipeline(source, model, epochs, batch_size, loss, device):
+def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, device):
     from datamanagement.subset import Subset
-    from datamanagement.dataset import CartoonDataset
 
     from architectures.simple_regression_cnn import SimpleRegressionCNNCartoonModel
     from architectures.simple_classification_cnn import SimpleClassificationCNNCartoonModel
@@ -36,24 +36,32 @@ def pipeline(source, model, epochs, batch_size, loss, device):
         SimpleRegressionCNNCartoonModel,
         SimpleClassificationCNNCartoonModel,
         PretrainedCNNCartoonModel,
+        TUBerlinClassificationModel,
     ]
     losses = {
         'cel': CrossEntropyLoss,
         'l1': partial(L1Loss, reduction='mean'),
+        'nll': NLLLoss,
         'custom': custom_loss
     }
-
     selected_model = next((x for x in models if x.__name__ == model), None)()
     selected_loss = losses[loss]()
 
-    training_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING), model=selected_model)
-    validation_ds = CartoonDataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION), model=selected_model)
+    if optimizer == 'sgd':
+        selected_optimizer = partial(torch.optim.SGD, lr=learning_rate, momentum=0.9, weight_decay=0.001, nesterov=True)
+    elif optimizer == 'adam':
+        selected_optimizer = partial(torch.optim.Adam, lr=learning_rate)
+    else:
+        raise RuntimeError()
+
+    training_ds = selected_model.Dataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING), model=selected_model)
+    validation_ds = selected_model.Dataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION), model=selected_model)
 
     train_cnn_model(
         model=selected_model,
         criterion=selected_loss,
-        optimizer=partial(torch.optim.SGD, lr=0.001, momentum=0.9, weight_decay=0.00001, nesterov=True),
-        scheduler=partial(lr_scheduler.StepLR, step_size=8, gamma=0.1),
+        optimizer=selected_optimizer,
+        scheduler=partial(lr_scheduler.StepLR, step_size=10, gamma=0.1),
         training_dataset=training_ds,
         validation_dataset=validation_ds,
         batch_size=batch_size,
@@ -69,6 +77,8 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--model', type=str)
     parser.add_argument('--loss', type=str)
+    parser.add_argument('--learning_rate', type=float, default=0.001)
+    parser.add_argument('--optimizer', type=str, default='sgd')
 
     def train(args, device):
         if not args.train_cnn:
@@ -79,7 +89,9 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
             model=args.model,
             epochs=args.epochs,
             batch_size=args.batch_size,
+            learning_rate=args.learning_rate,
             loss=args.loss,
+            optimizer=args.optimizer,
             device=device,
         )
 

@@ -6,14 +6,14 @@ from torch.autograd import Variable
 from torch.nn import CrossEntropyLoss, L1Loss
 from torch.nn.functional import softmax
 
-from datamanagement.dataset import get_subset
+from datamanagement.subset import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
 
 
 def pipeline(source, model, epochs, batch_size, loss, device):
     from datamanagement.subset import Subset
-    from datamanagement.dataset import CartoonDataset
+    from datamanagement.cartoon_dataset import CartoonDataset
 
     torch.manual_seed(42)
 

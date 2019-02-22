@@ -25,3 +25,10 @@ class BaseModel(object):
 
     def load_image(self, img_name):
         return Image.open(img_name)
+
+    @property
+    def Dataset(self):
+        raise NotImplementedError()
+
+    def get_input_and_label(self, data):
+        raise NotImplementedError()

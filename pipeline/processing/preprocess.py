@@ -4,8 +4,8 @@ import cv2
 import time
 from progress.spinner import Spinner
 
-from datamanagement.dataset import get_subset, CartoonDataset
-from datamanagement.subset import Subset
+from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.subset import Subset, get_subset
 from matplotlib import pyplot as plt
 from torchvision import transforms
 from PIL import Image
