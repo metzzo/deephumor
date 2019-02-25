@@ -3,6 +3,7 @@ from torch import nn
 
 from architectures.base_model import BaseModel
 
+# TODO: not implemented
 
 class SimpleLSTMPunchlineModel(BaseModel):
     class Network(nn.Module):

@@ -54,8 +54,16 @@ def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, 
     else:
         raise RuntimeError()
 
-    training_ds = selected_model.Dataset(file_path=get_subset(dataset_path=source, subset=Subset.TRAINING), model=selected_model)
-    validation_ds = selected_model.Dataset(file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION), model=selected_model)
+    training_ds = selected_model.Dataset(
+        file_path=get_subset(dataset_path=source, subset=Subset.TRAINING),
+        model=selected_model,
+        trafo=selected_model.get_train_transformation(),
+    )
+    validation_ds = selected_model.Dataset(
+        file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION),
+        model=selected_model,
+        trafo=selected_model.get_train_transformation(),
+    )
 
     train_cnn_model(
         model=selected_model,

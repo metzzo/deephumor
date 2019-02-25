@@ -84,7 +84,7 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False)
+            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False).exclude(punchline='')
             selected_cartoon = unannotated_cartoons.first()
             if selected_cartoon is not None:
                 print("make funniness annotation")

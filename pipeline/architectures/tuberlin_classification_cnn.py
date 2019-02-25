@@ -68,14 +68,13 @@ class TUBerlinClassificationModel(BaseModel):
     def optimization_parameters(self):
         return self.network.parameters()
 
-    def get_custom_transformation(self):
+    def get_train_transformation(self):
         return [
             transforms.RandomResizedCrop(225, scale=(0.9, 1.1), ratio=(0.75, 1.3333333333333333), interpolation=2),
             transforms.RandomRotation(5),
             transforms.RandomHorizontalFlip(),
             Invert(),
             transforms.ToTensor(),
-            #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
 
     @property

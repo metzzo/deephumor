@@ -1,5 +1,5 @@
 from PIL import Image
-from torch import nn
+from torchvision import transforms
 
 
 class BaseModel(object):
@@ -20,8 +20,15 @@ class BaseModel(object):
     def get_labels(self, labels):
         return labels
 
-    def get_custom_transformation(self):
-        return []
+    def get_train_transformation(self):
+        return [
+            transforms.ToTensor(),
+        ]
+
+    def get_validation_transformation(self):
+        raise [
+            transforms.ToTensor(),
+        ]
 
     def load_image(self, img_name):
         return Image.open(img_name)

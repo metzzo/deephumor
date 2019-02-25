@@ -1,0 +1,741 @@
+C:\Users\rfischer\Development\DeepHumor\venv\Scripts\python.exe C:/Users/rfischer/Development/DeepHumor/pipeline/main.py --train_cnn --source ../export/tuberlin/ --epochs 500 --batch_size 255 --model TUBerlinClassificationModel --loss cel --learning_rate 0.1 --optimizer sgd
+Memory allocated: 0.0 MB - Memory Cached: 0.0 MB
+Uses CUDA: True
+Epoch 0/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 77.8290023803711
+	Accuracy: 3.8625%
+	Loss: 4.981346130371094
+val evaluation:
+ 	Mean Absolute Error: 82.96499633789062
+	Accuracy: 3.975%
+
+Epoch 1/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 74.88306427001953
+	Accuracy: 12.4625%
+	Loss: 4.069052696228027
+val evaluation:
+ 	Mean Absolute Error: 75.12999725341797
+	Accuracy: 13.5%
+
+Epoch 2/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 66.26212310791016
+	Accuracy: 20.90625%
+	Loss: 3.499741792678833
+val evaluation:
+ 	Mean Absolute Error: 61.819000244140625
+	Accuracy: 26.875%
+
+Epoch 3/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 59.61712646484375
+	Accuracy: 28.431250000000002%
+	Loss: 3.053842544555664
+val evaluation:
+ 	Mean Absolute Error: 55.01224899291992
+	Accuracy: 34.55%
+
+Epoch 4/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 54.92162322998047
+	Accuracy: 34.18125%
+	Loss: 2.746319055557251
+val evaluation:
+ 	Mean Absolute Error: 43.92274856567383
+	Accuracy: 45.35%
+
+Epoch 5/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 50.47481155395508
+	Accuracy: 39.375%
+	Loss: 2.480031728744507
+val evaluation:
+ 	Mean Absolute Error: 44.00825119018555
+	Accuracy: 45.95%
+
+Epoch 6/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 46.20431137084961
+	Accuracy: 43.35625%
+	Loss: 2.286330461502075
+val evaluation:
+ 	Mean Absolute Error: 41.5047492980957
+	Accuracy: 48.6%
+
+Epoch 7/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 43.76124954223633
+	Accuracy: 47.0%
+	Loss: 2.11100172996521
+val evaluation:
+ 	Mean Absolute Error: 38.80875015258789
+	Accuracy: 53.15%
+
+Epoch 8/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 41.431312561035156
+	Accuracy: 49.775000000000006%
+	Loss: 1.9830909967422485
+val evaluation:
+ 	Mean Absolute Error: 39.41725158691406
+	Accuracy: 53.1%
+
+Epoch 9/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 39.712249755859375
+	Accuracy: 51.824999999999996%
+	Loss: 1.877442717552185
+val evaluation:
+ 	Mean Absolute Error: 36.260250091552734
+	Accuracy: 56.225%
+
+Epoch 10/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 34.131248474121094
+	Accuracy: 58.72500000000001%
+	Loss: 1.6004301309585571
+val evaluation:
+ 	Mean Absolute Error: 29.76824951171875
+	Accuracy: 62.74999999999999%
+
+Epoch 11/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 31.996625900268555
+	Accuracy: 61.41875%
+	Loss: 1.5003371238708496
+val evaluation:
+ 	Mean Absolute Error: 29.184499740600586
+	Accuracy: 63.74999999999999%
+
+Epoch 12/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 30.35474967956543
+	Accuracy: 63.3%
+	Loss: 1.4389508962631226
+val evaluation:
+ 	Mean Absolute Error: 28.9377498626709
+	Accuracy: 64.275%
+
+Epoch 13/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 29.15856170654297
+	Accuracy: 64.34375%
+	Loss: 1.3849598169326782
+val evaluation:
+ 	Mean Absolute Error: 28.523250579833984
+	Accuracy: 64.9%
+
+Epoch 14/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 28.97043800354004
+	Accuracy: 64.80625%
+	Loss: 1.3496915102005005
+val evaluation:
+ 	Mean Absolute Error: 28.5049991607666
+	Accuracy: 64.725%
+
+Epoch 15/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 27.964311599731445
+	Accuracy: 66.14999999999999%
+	Loss: 1.3047899007797241
+val evaluation:
+ 	Mean Absolute Error: 27.997499465942383
+	Accuracy: 64.7%
+
+Epoch 16/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 26.610313415527344
+	Accuracy: 67.27499999999999%
+	Loss: 1.272284984588623
+val evaluation:
+ 	Mean Absolute Error: 27.589250564575195
+	Accuracy: 65.725%
+
+Epoch 17/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 27.0231876373291
+	Accuracy: 67.01875000000001%
+	Loss: 1.2441270351409912
+val evaluation:
+ 	Mean Absolute Error: 28.2237491607666
+	Accuracy: 65.55%
+
+Epoch 18/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 25.391624450683594
+	Accuracy: 68.69375%
+	Loss: 1.200055480003357
+val evaluation:
+ 	Mean Absolute Error: 27.443750381469727
+	Accuracy: 65.875%
+
+Epoch 19/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 24.505062103271484
+	Accuracy: 69.75%
+	Loss: 1.1702287197113037
+val evaluation:
+ 	Mean Absolute Error: 27.288000106811523
+	Accuracy: 66.175%
+
+Epoch 20/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 23.726436614990234
+	Accuracy: 71.06875000000001%
+	Loss: 1.1179131269454956
+val evaluation:
+ 	Mean Absolute Error: 26.60474967956543
+	Accuracy: 66.425%
+
+Epoch 21/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 23.15162467956543
+	Accuracy: 71.3625%
+	Loss: 1.1032472848892212
+val evaluation:
+ 	Mean Absolute Error: 26.809749603271484
+	Accuracy: 66.825%
+
+Epoch 22/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.979562759399414
+	Accuracy: 71.7125%
+	Loss: 1.0929961204528809
+val evaluation:
+ 	Mean Absolute Error: 27.155000686645508
+	Accuracy: 66.77499999999999%
+
+Epoch 23/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.85187530517578
+	Accuracy: 71.86875%
+	Loss: 1.0887104272842407
+val evaluation:
+ 	Mean Absolute Error: 27.01300048828125
+	Accuracy: 66.825%
+
+Epoch 24/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.918062210083008
+	Accuracy: 71.9125%
+	Loss: 1.0814435482025146
+val evaluation:
+ 	Mean Absolute Error: 27.07324981689453
+	Accuracy: 66.85%
+
+Epoch 25/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.62874984741211
+	Accuracy: 72.43125%
+	Loss: 1.0730304718017578
+val evaluation:
+ 	Mean Absolute Error: 26.45574951171875
+	Accuracy: 67.07499999999999%
+
+Epoch 26/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.594125747680664
+	Accuracy: 72.60625%
+	Loss: 1.0583407878875732
+val evaluation:
+ 	Mean Absolute Error: 26.563749313354492
+	Accuracy: 67.25%
+
+Epoch 27/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.96725082397461
+	Accuracy: 72.975%
+	Loss: 1.0575984716415405
+val evaluation:
+ 	Mean Absolute Error: 26.68549919128418
+	Accuracy: 66.975%
+
+Epoch 28/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.885000228881836
+	Accuracy: 72.79375%
+	Loss: 1.0482591390609741
+val evaluation:
+ 	Mean Absolute Error: 26.370750427246094
+	Accuracy: 67.25%
+
+Epoch 29/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.30756187438965
+	Accuracy: 72.5%
+	Loss: 1.0581157207489014
+val evaluation:
+ 	Mean Absolute Error: 26.554500579833984
+	Accuracy: 67.375%
+
+Epoch 30/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.907875061035156
+	Accuracy: 73.25%
+	Loss: 1.0460079908370972
+val evaluation:
+ 	Mean Absolute Error: 26.566499710083008
+	Accuracy: 66.925%
+
+Epoch 31/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.027374267578125
+	Accuracy: 73.15%
+	Loss: 1.0475561618804932
+val evaluation:
+ 	Mean Absolute Error: 26.034250259399414
+	Accuracy: 67.45%
+
+Epoch 32/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.826749801635742
+	Accuracy: 73.0625%
+	Loss: 1.0450648069381714
+val evaluation:
+ 	Mean Absolute Error: 26.748249053955078
+	Accuracy: 67.175%
+
+Epoch 33/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.20343780517578
+	Accuracy: 72.91250000000001%
+	Loss: 1.0534809827804565
+val evaluation:
+ 	Mean Absolute Error: 26.847999572753906
+	Accuracy: 66.925%
+
+Epoch 34/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.681625366210938
+	Accuracy: 72.81875%
+	Loss: 1.0505722761154175
+val evaluation:
+ 	Mean Absolute Error: 26.908750534057617
+	Accuracy: 66.9%
+
+Epoch 35/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.42275047302246
+	Accuracy: 72.71875%
+	Loss: 1.0446194410324097
+val evaluation:
+ 	Mean Absolute Error: 27.127750396728516
+	Accuracy: 66.95%
+
+Epoch 36/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.147188186645508
+	Accuracy: 72.8625%
+	Loss: 1.0512728691101074
+val evaluation:
+ 	Mean Absolute Error: 27.176250457763672
+	Accuracy: 66.8%
+
+Epoch 37/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.735687255859375
+	Accuracy: 73.28125%
+	Loss: 1.0417710542678833
+val evaluation:
+ 	Mean Absolute Error: 26.768749237060547
+	Accuracy: 66.975%
+
+Epoch 38/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.765188217163086
+	Accuracy: 73.3875%
+	Loss: 1.0410553216934204
+val evaluation:
+ 	Mean Absolute Error: 27.0362491607666
+	Accuracy: 67.175%
+
+Epoch 39/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.984188079833984
+	Accuracy: 72.81875%
+	Loss: 1.0504086017608643
+val evaluation:
+ 	Mean Absolute Error: 26.13224983215332
+	Accuracy: 67.2%
+
+Epoch 40/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.151500701904297
+	Accuracy: 73.16875%
+	Loss: 1.0383052825927734
+val evaluation:
+ 	Mean Absolute Error: 27.030750274658203
+	Accuracy: 67.15%
+
+Epoch 41/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.829437255859375
+	Accuracy: 72.6875%
+	Loss: 1.0424243211746216
+val evaluation:
+ 	Mean Absolute Error: 27.2762508392334
+	Accuracy: 66.75%
+
+Epoch 42/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.73993682861328
+	Accuracy: 73.41875%
+	Loss: 1.040531039237976
+val evaluation:
+ 	Mean Absolute Error: 25.993000030517578
+	Accuracy: 67.625%
+
+Epoch 43/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.363813400268555
+	Accuracy: 72.8%
+	Loss: 1.0437437295913696
+val evaluation:
+ 	Mean Absolute Error: 27.464750289916992
+	Accuracy: 66.825%
+
+Epoch 44/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.62874984741211
+	Accuracy: 73.60624999999999%
+	Loss: 1.0367897748947144
+val evaluation:
+ 	Mean Absolute Error: 27.072250366210938
+	Accuracy: 66.8%
+
+Epoch 45/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.307437896728516
+	Accuracy: 72.86875%
+	Loss: 1.038802146911621
+val evaluation:
+ 	Mean Absolute Error: 26.834749221801758
+	Accuracy: 67.15%
+
+Epoch 46/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.787250518798828
+	Accuracy: 72.1375%
+	Loss: 1.046122670173645
+val evaluation:
+ 	Mean Absolute Error: 26.81974983215332
+	Accuracy: 67.07499999999999%
+
+Epoch 47/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.72162437438965
+	Accuracy: 73.275%
+	Loss: 1.0411101579666138
+val evaluation:
+ 	Mean Absolute Error: 27.46324920654297
+	Accuracy: 66.9%
+
+Epoch 48/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.149250030517578
+	Accuracy: 73.075%
+	Loss: 1.044346809387207
+val evaluation:
+ 	Mean Absolute Error: 26.679000854492188
+	Accuracy: 67.30000000000001%
+
+Epoch 49/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.143125534057617
+	Accuracy: 72.85000000000001%
+	Loss: 1.0375796556472778
+val evaluation:
+ 	Mean Absolute Error: 26.9424991607666
+	Accuracy: 66.675%
+
+Epoch 50/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.706937789916992
+	Accuracy: 73.25%
+	Loss: 1.040427565574646
+val evaluation:
+ 	Mean Absolute Error: 26.438749313354492
+	Accuracy: 67.95%
+
+Epoch 51/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.323749542236328
+	Accuracy: 72.78750000000001%
+	Loss: 1.042356014251709
+val evaluation:
+ 	Mean Absolute Error: 26.762250900268555
+	Accuracy: 67.2%
+
+Epoch 52/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.137374877929688
+	Accuracy: 73.41250000000001%
+	Loss: 1.0406174659729004
+val evaluation:
+ 	Mean Absolute Error: 26.934249877929688
+	Accuracy: 67.325%
+
+Epoch 53/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.02893829345703
+	Accuracy: 73.08125%
+	Loss: 1.040558934211731
+val evaluation:
+ 	Mean Absolute Error: 26.606250762939453
+	Accuracy: 66.975%
+
+Epoch 54/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.841812133789062
+	Accuracy: 73.0125%
+	Loss: 1.0443041324615479
+val evaluation:
+ 	Mean Absolute Error: 27.90074920654297
+	Accuracy: 66.25%
+
+Epoch 55/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.60700035095215
+	Accuracy: 73.43125%
+	Loss: 1.0303152799606323
+val evaluation:
+ 	Mean Absolute Error: 26.416000366210938
+	Accuracy: 67.225%
+
+Epoch 56/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.00225067138672
+	Accuracy: 73.10624999999999%
+	Loss: 1.0379834175109863
+val evaluation:
+ 	Mean Absolute Error: 26.956750869750977
+	Accuracy: 66.64999999999999%
+
+Epoch 57/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.242937088012695
+	Accuracy: 73.09375%
+	Loss: 1.0464905500411987
+val evaluation:
+ 	Mean Absolute Error: 26.33799934387207
+	Accuracy: 67.45%
+
+Epoch 58/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.06100082397461
+	Accuracy: 73.02499999999999%
+	Loss: 1.034760594367981
+val evaluation:
+ 	Mean Absolute Error: 26.555749893188477
+	Accuracy: 67.125%
+
+Epoch 59/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.82181167602539
+	Accuracy: 73.15%
+	Loss: 1.0417903661727905
+val evaluation:
+ 	Mean Absolute Error: 26.798749923706055
+	Accuracy: 66.925%
+
+Epoch 60/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.189624786376953
+	Accuracy: 73.14375%
+	Loss: 1.0477893352508545
+val evaluation:
+ 	Mean Absolute Error: 26.415250778198242
+	Accuracy: 67.425%
+
+Epoch 61/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.59987449645996
+	Accuracy: 73.61875%
+	Loss: 1.0319066047668457
+val evaluation:
+ 	Mean Absolute Error: 26.517000198364258
+	Accuracy: 67.375%
+
+Epoch 62/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.347562789916992
+	Accuracy: 73.75625%
+	Loss: 1.0351835489273071
+val evaluation:
+ 	Mean Absolute Error: 27.121999740600586
+	Accuracy: 66.95%
+
+Epoch 63/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.11425018310547
+	Accuracy: 72.81875%
+	Loss: 1.0505502223968506
+val evaluation:
+ 	Mean Absolute Error: 26.316999435424805
+	Accuracy: 67.15%
+
+Epoch 64/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.104312896728516
+	Accuracy: 73.0375%
+	Loss: 1.0526273250579834
+val evaluation:
+ 	Mean Absolute Error: 27.267749786376953
+	Accuracy: 66.7%
+
+Epoch 65/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.22825050354004
+	Accuracy: 73.16875%
+	Loss: 1.0371590852737427
+val evaluation:
+ 	Mean Absolute Error: 26.616249084472656
+	Accuracy: 67.30000000000001%
+
+Epoch 66/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.95256233215332
+	Accuracy: 72.95625%
+	Loss: 1.0464786291122437
+val evaluation:
+ 	Mean Absolute Error: 26.881750106811523
+	Accuracy: 67.5%
+
+Epoch 67/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.224437713623047
+	Accuracy: 73.7625%
+	Loss: 1.0306588411331177
+val evaluation:
+ 	Mean Absolute Error: 27.310749053955078
+	Accuracy: 66.725%
+
+Epoch 68/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 22.152936935424805
+	Accuracy: 72.925%
+	Loss: 1.0401222705841064
+val evaluation:
+ 	Mean Absolute Error: 26.137500762939453
+	Accuracy: 67.45%
+
+Epoch 69/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.95050048828125
+	Accuracy: 73.2%
+	Loss: 1.0436484813690186
+val evaluation:
+ 	Mean Absolute Error: 26.577499389648438
+	Accuracy: 67.0%
+
+Epoch 70/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.630874633789062
+	Accuracy: 73.13125000000001%
+	Loss: 1.0398693084716797
+val evaluation:
+ 	Mean Absolute Error: 26.803499221801758
+	Accuracy: 67.0%
+
+Epoch 71/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.826875686645508
+	Accuracy: 73.09375%
+	Loss: 1.0478906631469727
+val evaluation:
+ 	Mean Absolute Error: 26.75575065612793
+	Accuracy: 67.07499999999999%
+
+Epoch 72/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.787813186645508
+	Accuracy: 73.11875%
+	Loss: 1.0364381074905396
+val evaluation:
+ 	Mean Absolute Error: 26.330249786376953
+	Accuracy: 67.55%
+
+Epoch 73/499
+----------
+train evaluation:
+ 	Mean Absolute Error: 21.80637550354004
+	Accuracy: 73.11875%
+	Loss: 1.0460147857666016
+
+Process finished with exit code -1

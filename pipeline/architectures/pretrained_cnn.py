@@ -6,7 +6,12 @@ from torch_dct import dct_2d, idct_2d
 from torchvision import transforms
 
 from architectures.base_model import BaseModel
+from architectures.tuberlin_classification_cnn import TUBerlinClassificationModel
 from datamanagement.cartoon_dataset import CartoonDataset
+from processing.utility import Invert
+
+# for 26.XX%
+# --train_cnn --source ../export/more_downsized_export/ --epochs 2000 --batch_size 64 --model PretrainedCNNCartoonModel --loss cel
 
 
 class PretrainedCNNCartoonModel(BaseModel):
@@ -14,21 +19,22 @@ class PretrainedCNNCartoonModel(BaseModel):
         def __init__(self):
             super(PretrainedCNNCartoonModel.Network, self).__init__()
 
-            self.model_conv = torchvision.models.resnet18(pretrained=True)
-            for param in self.model_conv.layer1.parameters():
-                param.requires_grad = False
-            for param in self.model_conv.layer2.parameters():
-                param.requires_grad = False
-            for param in self.model_conv.layer3.parameters():
-                param.requires_grad = False
+            self.model_conv = TUBerlinClassificationModel.Network()
+            #self.model_conv.load_state_dict(torch.load("../good_models/20190222_134138.501959_cnn_model_sketchanet.pth"))
 
-            num_ftrs = self.model_conv.fc.in_features
-            self.model_conv.fc = nn.Linear(num_ftrs, 500)
-            self.fc2 = nn.Linear(500, 7)
+
+            removed = list(self.model_conv.seq.children())[:-1]
+            model = torch.nn.Sequential(*removed)
+            #for elem in list(model.children())[:-16]:
+            #    for param in elem.parameters():
+            #        param.requires_grad = False
+            self.model_conv = torch.nn.Sequential(model,
+                                                  nn.Conv2d(512, 7, kernel_size=1, stride=1),
+                                                  nn.ReLU(),)
 
         def forward(self, x):
-            x = F.relu(self.model_conv(x))
-            x = self.fc2(x)
+            x = self.model_conv(x)
+            x = x.view(x.size(0), -1)
             return x
 
     def get_predictions(self, outputs):
@@ -40,24 +46,23 @@ class PretrainedCNNCartoonModel(BaseModel):
 
     @property
     def optimization_parameters(self):
-        return self.network.model_conv.fc.parameters()
+        return self.network.model_conv.parameters()
 
-    def get_custom_transformation(self):
+    def get_train_transformation(self):
         return [
-            transforms.RandomResizedCrop(224, scale=(0.08, 1.0), ratio=(0.75, 1.3333333333333333), interpolation=2),
-            transforms.RandomRotation(16),
+            transforms.RandomResizedCrop(225, scale=(0.9, 1.1), ratio=(0.75, 1.3333333333333333), interpolation=2),
+            transforms.RandomRotation(5),
             transforms.RandomHorizontalFlip(),
-            #transforms.Resize((224, 224)),
+            Invert(),
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
 
-    def load_image(self, img_name):
-        return super(PretrainedCNNCartoonModel, self).load_image(img_name=img_name).convert('RGB')
+    #def load_image(self, img_name):
+    #    return super(PretrainedCNNCartoonModel, self).load_image(img_name=img_name).convert('RGB')
 
     @property
     def Dataset(self):
-        raise CartoonDataset
+        return CartoonDataset
 
     def get_input_and_label(self, data):
         _, image, _, labels = data

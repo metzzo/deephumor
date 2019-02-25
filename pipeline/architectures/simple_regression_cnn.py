@@ -3,6 +3,7 @@ import numpy as np
 
 import torch.nn as nn
 import torch.nn.functional as F
+from albumentations.pytorch import transforms
 
 from architectures.base_model import BaseModel
 from datamanagement.cartoon_dataset import CartoonDataset
@@ -52,9 +53,9 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
 
     @property
     def Dataset(self):
-        raise CartoonDataset
+        return CartoonDataset
 
     def get_input_and_label(self, data):
-        _, image, _, labels = data
+        _, image, labels = data
         return image, labels
 
