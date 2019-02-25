@@ -1,6 +1,8 @@
 from PIL import Image
 from torchvision import transforms
 
+from evaluation.loss_evaluation import LossEvaluation
+
 
 class BaseModel(object):
     def __init__(self):
@@ -26,7 +28,7 @@ class BaseModel(object):
         ]
 
     def get_validation_transformation(self):
-        raise [
+        return [
             transforms.ToTensor(),
         ]
 
@@ -39,3 +41,12 @@ class BaseModel(object):
 
     def get_input_and_label(self, data):
         raise NotImplementedError()
+
+    @property
+    def train_evaluations(self):
+        return [LossEvaluation]
+
+    @property
+    def validation_evaluations(self):
+        return []
+

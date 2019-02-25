@@ -8,6 +8,7 @@ from torchvision import transforms
 from architectures.base_model import BaseModel
 from architectures.tuberlin_classification_cnn import TUBerlinClassificationModel
 from datamanagement.cartoon_dataset import CartoonDataset
+from evaluation.accuracy_evaluation import AccuracyEvaluation
 from processing.utility import Invert
 
 # for 26.XX%
@@ -67,3 +68,11 @@ class PretrainedCNNCartoonModel(BaseModel):
     def get_input_and_label(self, data):
         _, image, _, labels = data
         return image, labels
+
+    @property
+    def train_evaluations(self):
+        return super(PretrainedCNNCartoonModel, self).train_evaluations + [AccuracyEvaluation]
+
+    @property
+    def validation_evaluations(self):
+        return super(PretrainedCNNCartoonModel, self).validation_evaluations + [AccuracyEvaluation]

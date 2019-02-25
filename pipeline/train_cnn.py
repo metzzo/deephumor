@@ -6,9 +6,8 @@ from torch.autograd import Variable
 from torch.nn import CrossEntropyLoss, L1Loss, NLLLoss
 from torch.nn.functional import softmax
 
-from architectures.pretrained_cnn import PretrainedCNNCartoonModel
-from architectures.tuberlin_classification_cnn import TUBerlinClassificationModel
-from datamanagement.subset import get_subset
+from architectures.factory import get_model
+from datamanagement.factory import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
 
@@ -29,23 +28,14 @@ def custom_loss():
 def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, device):
     from datamanagement.subset import Subset
 
-    from architectures.simple_regression_cnn import SimpleRegressionCNNCartoonModel
-    from architectures.simple_classification_cnn import SimpleClassificationCNNCartoonModel
-
-    models = [
-        SimpleRegressionCNNCartoonModel,
-        SimpleClassificationCNNCartoonModel,
-        PretrainedCNNCartoonModel,
-        TUBerlinClassificationModel,
-    ]
     losses = {
         'cel': CrossEntropyLoss,
         'l1': partial(L1Loss, reduction='mean'),
         'nll': NLLLoss,
         'custom': custom_loss
     }
-    selected_model = next((x for x in models if x.__name__ == model), None)()
     selected_loss = losses[loss]()
+    selected_model = get_model(model_name=model)
 
     if optimizer == 'sgd':
         selected_optimizer = partial(torch.optim.SGD, lr=learning_rate, momentum=0.9, weight_decay=0.001, nesterov=True)
@@ -62,7 +52,7 @@ def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, 
     validation_ds = selected_model.Dataset(
         file_path=get_subset(dataset_path=source, subset=Subset.VALIDATION),
         model=selected_model,
-        trafo=selected_model.get_train_transformation(),
+        trafo=selected_model.get_validation_transformation(),
     )
 
     train_cnn_model(
@@ -83,7 +73,6 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
 
     parser.add_argument('--epochs', type=int)
     parser.add_argument('--batch_size', type=int)
-    parser.add_argument('--model', type=str)
     parser.add_argument('--loss', type=str)
     parser.add_argument('--learning_rate', type=float, default=0.001)
     parser.add_argument('--optimizer', type=str, default='sgd')

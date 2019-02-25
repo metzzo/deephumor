@@ -7,6 +7,7 @@ from torchvision import transforms
 
 from architectures.base_model import BaseModel
 from datamanagement.cartoon_dataset import CartoonDataset
+from evaluation.accuracy_evaluation import AccuracyEvaluation
 
 
 class SimpleClassificationCNNCartoonModel(BaseModel):
@@ -21,13 +22,16 @@ class SimpleClassificationCNNCartoonModel(BaseModel):
             super(SimpleClassificationCNNCartoonModel.Network, self).__init__()
 
             self.conv1 = nn.Conv2d(1, 100, kernel_size=3, padding=1)
+            self.norm = nn.BatchNorm2d(100)
             self.conv2 = nn.Conv2d(100, 100, kernel_size=3, padding=1)
             self.pool = nn.MaxPool2d(2, 2)
             self.fc1 = nn.Linear(100 * self.final_size, 7)
+            self.dropout = nn.Dropout(p=0.5)
 
         def forward(self, x):
             x = self.pool(F.relu(self.conv1(x), inplace=True))
-            x = self.pool(F.relu(self.conv2(x), inplace=True))
+            x = self.pool(F.relu(self.norm(self.conv2(x)), inplace=True))
+            x = self.dropout(x)
             x = x.view(-1, 100 * self.final_size)
             x = self.fc1(x)
 
@@ -52,3 +56,10 @@ class SimpleClassificationCNNCartoonModel(BaseModel):
         _, image, labels = data
         return image, labels
 
+    @property
+    def train_evaluations(self):
+        return super(SimpleClassificationCNNCartoonModel, self).train_evaluations + [AccuracyEvaluation]
+
+    @property
+    def validation_evaluations(self):
+        return super(SimpleClassificationCNNCartoonModel, self).validation_evaluations + [AccuracyEvaluation]

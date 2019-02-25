@@ -5,7 +5,8 @@ import time
 from progress.spinner import Spinner
 
 from datamanagement.cartoon_dataset import CartoonDataset
-from datamanagement.subset import Subset, get_subset
+from datamanagement.subset import Subset
+from datamanagement.factory import get_subset
 from matplotlib import pyplot as plt
 from torchvision import transforms
 from PIL import Image

@@ -1,21 +1,22 @@
 from evaluation.accuracy_evaluation import AccuracyEvaluation
 from evaluation.base_evaluation import BaseEvaluation
-from evaluation.loss_evaluation import LossEvaluation
-from evaluation.mae_evaluation import MAEEvaluation
 
 
 class OverallEvaluation(BaseEvaluation):
+    @property
+    def accuracy_evaluation(self):
+        for eval in self.evaluations:
+            if isinstance(eval, AccuracyEvaluation):
+                return eval
 
-    def __init__(self, num, batch_size, ignore_loss=True):
-        self.accuracy_evaluation = AccuracyEvaluation(num=num, batch_size=batch_size)
-        self.evaluations = [
-            MAEEvaluation(num=num, batch_size=batch_size),
-            self.accuracy_evaluation,
-        ]
-        if not ignore_loss:
-            self.evaluations.append(LossEvaluation(num=num, batch_size=batch_size))
-
+    def __init__(self, num, batch_size):
         super(OverallEvaluation, self).__init__(num=num, batch_size=batch_size)
+        self.evaluations = []
+
+    def add_evaluations(self, evaluations):
+        self.evaluations += list(map(lambda e: e(num=self.num, batch_size=self.batch_size), evaluations))
+        self.reset()
+        return self
 
     def add_entry(self, predictions, actual_label, loss):
         for eval in self.evaluations:
@@ -23,8 +24,9 @@ class OverallEvaluation(BaseEvaluation):
 
     def reset(self):
         super(OverallEvaluation, self).reset()
-        for eval in self.evaluations:
-            eval.reset()
+        if hasattr(self, 'evaluations'):
+            for eval in self.evaluations:
+                eval.reset()
 
     def __str__(self):
         output = map(lambda x: '\t' + str(x), self.evaluations)

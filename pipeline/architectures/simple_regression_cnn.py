@@ -7,6 +7,7 @@ from albumentations.pytorch import transforms
 
 from architectures.base_model import BaseModel
 from datamanagement.cartoon_dataset import CartoonDataset
+from evaluation.mae_evaluation import MAEEvaluation
 
 
 class SimpleRegressionCNNCartoonModel(BaseModel):
@@ -58,4 +59,12 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
     def get_input_and_label(self, data):
         _, image, labels = data
         return image, labels
+
+    @property
+    def train_evaluations(self):
+        return super(SimpleRegressionCNNCartoonModel, self).train_evaluations + [MAEEvaluation]
+
+    @property
+    def validation_evaluations(self):
+        return super(SimpleRegressionCNNCartoonModel, self).validation_evaluations + [MAEEvaluation]
 

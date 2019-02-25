@@ -1,12 +1,11 @@
-import numpy as np
 import torch
 
 import torch.nn as nn
-import torch.nn.functional as F
 from torchvision import transforms
 
 from architectures.base_model import BaseModel
 from datamanagement.tuberlin_dataset import TUBerlinDataset
+from evaluation.accuracy_evaluation import AccuracyEvaluation
 from processing.utility import Invert
 
 
@@ -77,9 +76,24 @@ class TUBerlinClassificationModel(BaseModel):
             transforms.ToTensor(),
         ]
 
+    def get_validation_transformation(self):
+        return [
+            transforms.Resize(225),
+            Invert(),
+            transforms.ToTensor(),
+        ]
+
     @property
     def Dataset(self):
         return TUBerlinDataset
 
     def get_input_and_label(self, data):
         return data
+
+    @property
+    def train_evaluations(self):
+        return super(TUBerlinClassificationModel, self).train_evaluations + [AccuracyEvaluation]
+
+    @property
+    def validation_evaluations(self):
+        return super(TUBerlinClassificationModel, self).validation_evaluations + [AccuracyEvaluation]

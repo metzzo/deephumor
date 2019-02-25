@@ -22,7 +22,7 @@ def setup_create_tuberlin(parser: argparse.ArgumentParser, group):
             #return
 
 
-            df = pd.DataFrame(index=range(0, 20000), columns=["class", "file"])
+            df = pd.DataFrame(index=range(0, 20000), columns=["cl", "filename"])
             pos = 0
             for cl in classes:
                 cl_path = os.path.join(args.source, cl)
@@ -31,8 +31,8 @@ def setup_create_tuberlin(parser: argparse.ArgumentParser, group):
 
                 for file in os.listdir(cl_path):
                     if os.path.isfile(os.path.join(cl_path, file)):
-                        df.iloc[pos]['class'] = cl
-                        df.iloc[pos]['file'] = os.path.join(cl, file)
+                        df.iloc[pos]['cl'] = cl
+                        df.iloc[pos]['filename'] = os.path.join(cl, file)
                         pos += 1
 
             df = df.sample(frac=1).reset_index(drop=True)

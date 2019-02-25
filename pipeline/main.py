@@ -3,6 +3,7 @@ import argparse
 import torch
 
 from evaluation.memory_profile import print_memory
+from models.predict_cnn import setup_predict_cnn
 from processing.create_debug_set import setup_create_debug_set
 from processing.create_tuberlin import setup_create_tuberlin
 from processing.pickle_to_csv import setup_pickle_to_csv
@@ -30,6 +31,7 @@ def main():
         setup_create_debug_set,
         setup_prepare_mnist,
         setup_create_tuberlin,
+        setup_predict_cnn,
     ]
 
     parser = argparse.ArgumentParser()
@@ -37,6 +39,8 @@ def main():
 
     parser.add_argument("--source", required=True, type=str)
     parser.add_argument("--target", type=str)
+
+    parser.add_argument('--model', type=str)
 
     handlers = []
     for op in operations:

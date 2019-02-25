@@ -10,6 +10,6 @@ Classes = ['airplane', 'alarm clock', 'angel', 'ant', 'apple', 'arm', 'armchair'
 class TUBerlinDataset(BaseDataset):
     def create_item(self, row, idx):
         return TUBerlinSample(
-            cl=Classes.index(row['class']),
-            image=self.get_image(row['file']),
+            cl=Classes.index(row['cl']),
+            image=self.get_image(row['filename']),
         )

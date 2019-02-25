@@ -31,8 +31,12 @@ def train_cnn_model(
     }
 
     evaluations = {
-        "train": OverallEvaluation(num=len(dataloaders["train"]), ignore_loss=False, batch_size=batch_size),
-        "val": OverallEvaluation(num=len(dataloaders["val"]), ignore_loss=True, batch_size=batch_size),
+        "train": OverallEvaluation(
+            num=len(dataloaders["train"]), batch_size=batch_size
+        ).add_evaluations(model.train_evaluations),
+        "val": OverallEvaluation(
+            num=len(dataloaders["val"]), batch_size=batch_size
+        ).add_evaluations(model.validation_evaluations),
     }
 
     target_path = os.path.abspath("./../models/{0}_cnn_model.pth".format(

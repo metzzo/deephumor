@@ -8,7 +8,8 @@ import os
 import shutil
 
 from datamanagement.cartoon_dataset import CartoonDataset
-from datamanagement.subset import Subset, get_subset
+from datamanagement.subset import Subset
+from datamanagement.factory import get_subset
 
 
 def setup_create_debug_set(parser: argparse.ArgumentParser, group):
