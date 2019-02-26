@@ -35,4 +35,3 @@ class BaseDataset(Dataset):
         if self.transform is not None:
             image = self.transform(image)
         return image
-

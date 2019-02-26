@@ -52,7 +52,7 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
     punchline.short_description = 'Punchline'
 
     fields = ['original_cartoon_image', 'punchline', 'annotated_by', 'cartoon', 'annotated',]
-    readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline', 'cartoon',]
+    readonly_fields = ['annotated_by', 'original_cartoon_image', 'punchline',]
     list_display = ['original_cartoon_image_small', 'punchline',]
     inlines = [ImageAnnotationAdmin]
 

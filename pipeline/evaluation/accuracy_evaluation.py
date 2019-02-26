@@ -6,7 +6,7 @@ from evaluation.base_evaluation import BaseEvaluation
 
 class AccuracyEvaluation(BaseEvaluation):
     def __init__(self, num, batch_size):
-        super(AccuracyEvaluation, self).__init__(num=0, batch_size=batch_size)
+        super(AccuracyEvaluation, self).__init__(num=num, batch_size=batch_size)
         self.sample_count = 0
         self.true_predictions = 0
 
@@ -17,7 +17,6 @@ class AccuracyEvaluation(BaseEvaluation):
 
     def add_entry(self, predictions, actual_label, loss):
         self.true_predictions += torch.sum(predictions == actual_label)
-        #self.true_predictions += torch.sum(torch.abs(predictions - actual_label) < 0.5)
         self.sample_count += len(predictions)
 
     @property

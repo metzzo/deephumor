@@ -50,3 +50,5 @@ class BaseModel(object):
     def validation_evaluations(self):
         return []
 
+    def get_human_readable_class(self, cl, is_predicted):
+        return cl

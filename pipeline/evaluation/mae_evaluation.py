@@ -6,8 +6,9 @@ from evaluation.base_evaluation import BaseEvaluation
 
 class MAEEvaluation(BaseEvaluation):
     def __init__(self, num, batch_size):
-        super(MAEEvaluation, self).__init__(num=num * batch_size, batch_size=batch_size)
+        super(MAEEvaluation, self).__init__(num=num, batch_size=batch_size)
 
+        self.entries = np.zeros(num * batch_size, dtype=np.float32)
         self.reset()
 
     def add_entry(self, predictions, actual_label, loss):
