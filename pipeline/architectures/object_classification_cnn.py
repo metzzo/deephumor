@@ -1,6 +1,10 @@
+import cv2
+import numpy as np
 from functools import partial
 
-from torchvision import transforms
+from albumentations import Resize
+from albumentations.augmentations import transforms
+from albumentations.pytorch import ToTensor
 
 from architectures.tuberlin_classification_cnn import TUBerlinClassificationModel
 from datamanagement.object_dataset import ObjectDataset
@@ -15,9 +19,23 @@ class ObjectClassificationModel(TUBerlinClassificationModel):
         return ObjectDataset
 
     def get_validation_transformation(self):
+        def to_comic(**kwargs):
+            img = kwargs['image']
+            img = cv2.blur(img, (7, 7))
+            newImg = np.zeros(img.shape, np.uint8)
+            #ret, thresh = cv2.threshold(img, 127, 255, 0)
+            thresh = cv2.Canny(img, 100, 200)
+
+            im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(newImg, contours, -1, 255, 1)
+            cv2.imshow('swag', thresh)
+            kwargs['image'] = newImg
+            cv2.waitKey(0)
+            return kwargs
         return [
-            transforms.Resize((225, 225)),
-            transforms.ToTensor(),
+            to_comic,
+            Resize(width=225, height=225),
+            ToTensor(),
         ]
 
     @property
@@ -29,3 +47,6 @@ class ObjectClassificationModel(TUBerlinClassificationModel):
             return TUBerlinDataset.Classes[cl]
         else:
             return ObjectDataset.Classes[cl]
+
+    def load_image(self, img_name):
+        return cv2.imread(img_name, 0)

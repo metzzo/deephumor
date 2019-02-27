@@ -16,7 +16,7 @@ class BaseDataset(Dataset):
         self.df = pickle.load(open(file_path, "rb"))
         self.model = model if model else BaseDataset.EmptyModel()
 
-        self.transform = transforms.Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
+        self.transform = self.create_trafo(trafo=trafo)
 
     def __len__(self):
         return len(self.df)
@@ -35,3 +35,6 @@ class BaseDataset(Dataset):
         if self.transform is not None:
             image = self.transform(image)
         return image
+
+    def create_trafo(self, trafo):
+        return transforms.Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
