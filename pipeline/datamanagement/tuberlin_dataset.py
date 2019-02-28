@@ -36,6 +36,11 @@ class TUBerlinDataset(BaseDataset):
                'trombone', 'trousers', 'truck', 'trumpet', 'tv', 'umbrella', 'van', 'vase', 'violin', 'walkie talkie',
                'wheel', 'wheelbarrow', 'windmill', 'wine-bottle', 'wineglass', 'wrist-watch', 'zebra']
 
+
+    @property
+    def use_pytorch_trafo(self):
+        return False
+
     def create_item(self, row, idx):
         return TUBerlinSample(
             cl=TUBerlinDataset.Classes.index(row['cl']),

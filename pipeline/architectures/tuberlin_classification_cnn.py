@@ -1,12 +1,18 @@
+import cv2
+
 import torch
 
 import torch.nn as nn
-from torchvision import transforms
+from albumentations import Resize, InvertImg, HorizontalFlip, RandomSizedCrop, Rotate, ShiftScaleRotate
+from imgaug.augmenters import Invert
 
 from architectures.base_model import BaseModel
 from datamanagement.tuberlin_dataset import TUBerlinDataset
 from evaluation.accuracy_evaluation import AccuracyEvaluation
-from processing.utility import Invert
+
+from albumentations.pytorch import ToTensor
+
+from processing.utility import take_spectogram
 
 
 class TUBerlinClassificationModel(BaseModel):
@@ -68,19 +74,28 @@ class TUBerlinClassificationModel(BaseModel):
         return self.network.parameters()
 
     def get_train_transformation(self):
-        return [
+        """return [
             transforms.RandomResizedCrop(225, scale=(0.9, 1.1), ratio=(0.75, 1.3333333333333333), interpolation=2),
             transforms.RandomRotation(5),
             transforms.RandomHorizontalFlip(),
             Invert(),
             transforms.ToTensor(),
+        ]"""
+        return [
+            HorizontalFlip(),
+            ShiftScaleRotate(),
+            Resize(width=225, height=225),
+            InvertImg(p=1.0),
+            take_spectogram,
+            ToTensor(),
         ]
 
     def get_validation_transformation(self):
         return [
-            transforms.Resize(225),
-            Invert(),
-            transforms.ToTensor(),
+            Resize(width=225, height=225),
+            InvertImg(p=1.0),
+            take_spectogram,
+            ToTensor(),
         ]
 
     @property
@@ -97,3 +112,6 @@ class TUBerlinClassificationModel(BaseModel):
     @property
     def validation_evaluations(self):
         return super(TUBerlinClassificationModel, self).validation_evaluations + [AccuracyEvaluation]
+
+    def load_image(self, img_name):
+        return cv2.imread(img_name, 0)

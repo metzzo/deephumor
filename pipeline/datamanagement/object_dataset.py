@@ -14,6 +14,10 @@ ObjectSample = namedtuple('Sample', ['image', 'cl'])
 class ObjectDataset(BaseDataset):
     Classes = []
 
+    @property
+    def use_pytorch_trafo(self):
+        return False
+
     def __init__(self, *args, **kwargs):
         super(ObjectDataset, self).__init__(*args, **kwargs)
         ObjectDataset.Classes = pickle.load(open(os.path.join(self.root_dir, 'classes.p'), "rb"))
@@ -25,12 +29,3 @@ class ObjectDataset(BaseDataset):
             cl=ObjectDataset.Classes.index(row['cl']),
             image=img,
         )
-
-    def create_trafo(self, trafo):
-        augmentation = Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
-
-        def transform(image):
-            result = augmentation(image=image)
-            return result['image'][None, :, :]  # MxN => 1xMxN
-
-        return transform

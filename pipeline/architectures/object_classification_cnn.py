@@ -1,3 +1,5 @@
+import numpy
+
 import cv2
 import numpy as np
 from functools import partial
@@ -21,16 +23,46 @@ class ObjectClassificationModel(TUBerlinClassificationModel):
     def get_validation_transformation(self):
         def to_comic(**kwargs):
             img = kwargs['image']
-            img = cv2.blur(img, (7, 7))
+            img = cv2.fastNlMeansDenoising(img)
+            img = cv2.fastNlMeansDenoising(img)
+            img = cv2.fastNlMeansDenoising(img)
+            img = cv2.blur(img, (5, 5))
             newImg = np.zeros(img.shape, np.uint8)
             #ret, thresh = cv2.threshold(img, 127, 255, 0)
             thresh = cv2.Canny(img, 100, 200)
 
-            im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+            # if contour near enough => combine
+            """
+            newContours = []
+            dist_thres = max(img.shape[0] * 0.1, img.shape[1] * 0.1)
+            for c1 in contours:
+                p1, p2 = np.array(c1[0][0]), np.array(c1[1][0])
+
+                for c2 in contours:
+                    p3, p4 = np.array(c2[0][0]), np.array(c2[1][0])
+
+                    if (p1 - p3 == 0).all() and (p2 - p4 == 0).all():
+                        continue
+
+                    if numpy.linalg.norm(p1-p3) < dist_thres and numpy.linalg.norm(p2-p4) < dist_thres:
+                        newContours.append([
+                            *(p1+p3)/2.0,
+                            *(p2+p4)/2.0,
+                        ])
+                        break
+                    if numpy.linalg.norm(p1-p4) < dist_thres and numpy.linalg.norm(p2-p3) < dist_thres:
+                        newContours.append([
+                            *(p1+p4)/2.0,
+                            *(p2+p3)/2.0,
+                        ])
+                        break
+            """
             cv2.drawContours(newImg, contours, -1, 255, 1)
-            cv2.imshow('swag', thresh)
+            #cv2.imshow('swag', newImg)
             kwargs['image'] = newImg
-            cv2.waitKey(0)
+            #cv2.waitKey(0)
             return kwargs
         return [
             to_comic,
@@ -48,5 +80,3 @@ class ObjectClassificationModel(TUBerlinClassificationModel):
         else:
             return ObjectDataset.Classes[cl]
 
-    def load_image(self, img_name):
-        return cv2.imread(img_name, 0)

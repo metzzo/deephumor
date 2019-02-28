@@ -21,7 +21,7 @@ class ImageAnnotationAdmin(admin.StackedInline):
     model = ImageAnnotation
     extra = 0
     readonly_fields = ['cartoon_image',]
-    fields = ['cartoon_image', 'dimensions', 'annotation_class',]
+    fields = ['cartoon_image', 'dimensions', 'annotation_class', 'usable']
 
     def cartoon_image(self, obj):
         return format_html('<img src="{}" id="{}"'.format(obj.collection.cartoon.img.url, 'crop' + str(obj.pk)) +

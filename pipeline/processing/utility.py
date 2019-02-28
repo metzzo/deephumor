@@ -1,9 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+def take_spectogram(**kwargs):
+    f = np.fft.fft2(kwargs['image'])
+    fshift = np.fft.fftshift(f)
+    kwargs['image'] = np.log(np.abs(fshift))
+    return kwargs
+
 # functions to show an image
-
-
 def imshow(img):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()

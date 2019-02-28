@@ -81,6 +81,11 @@ class ImageAnnotation(models.Model):
         blank=True,
         null=True
     )
+
+    usable = models.BooleanField(
+        default=True
+    )
+
     dimensions = models.CharField(default='', max_length=100)
 
 

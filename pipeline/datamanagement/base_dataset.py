@@ -1,6 +1,7 @@
 import os
 import pickle
 
+from albumentations import Compose
 from torch.utils.data import Dataset
 from torchvision import transforms
 
@@ -10,6 +11,10 @@ from architectures.base_model import BaseModel
 class BaseDataset(Dataset):
     class EmptyModel(BaseModel):
         pass
+
+    @property
+    def use_pytorch_trafo(self):
+        return True
 
     def __init__(self, file_path, model, trafo):
         self.root_dir = os.path.dirname(file_path)
@@ -37,4 +42,13 @@ class BaseDataset(Dataset):
         return image
 
     def create_trafo(self, trafo):
-        return transforms.Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
+        if self.use_pytorch_trafo:
+            return transforms.Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
+        else:
+            augmentation = Compose(trafo if len(trafo) > 0 else self.model.get_transformation())
+
+            def transform(image):
+                result = augmentation(image=image)
+                return result['image'][None, :, :]  # MxN => 1xMxN
+
+            return transform
