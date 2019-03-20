@@ -53,7 +53,7 @@ UserInterfaceState.xcuserstate
 
 processed/
 raw/
-models/
+/models/
 
 .idea/*
 !.idea/runConfigurations/
