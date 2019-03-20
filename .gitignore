@@ -6,7 +6,6 @@
 /env/
 /venv/
 /.venv/
-/.idea/
 sample_comic.jpg
 sample_comic2.jpg
 .pytest_cache
@@ -30,7 +29,6 @@ log.txt
 .vscode/
 npm-debug.log*
 
-**/.idea/
 **/.sourcemaps/
 **/.sass-cache/
 **/.tmp/
@@ -48,6 +46,7 @@ npm-debug.log*
 **/www/
 **/$RECYCLE.BIN/
 
+
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
@@ -55,3 +54,6 @@ UserInterfaceState.xcuserstate
 processed/
 raw/
 models/
+
+.idea/*
+!.idea/runConfigurations/
