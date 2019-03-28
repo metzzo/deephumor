@@ -78,13 +78,14 @@ class ImageAnnotationCollectionAdmin(admin.ModelAdmin):
         all_annotations = ImageAnnotationCollection.objects\
             .all()\
             .filter(annotated_by=request.user)
-        annotation = all_annotations.filter(annotated=False).first()
 
+        annotation = all_annotations.filter(annotated=False).first()
+        annotation = None
         if annotation is None:
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False).exclude(punchline='')
+            unannotated_cartoons = Cartoon.objects.all().exclude(id__in=annotation_ids).exclude(relevant=False).exclude(punchline='').execlude(is_multiple=True)
             selected_cartoon = unannotated_cartoons.first()
             if selected_cartoon is not None:
                 print("make funniness annotation")
