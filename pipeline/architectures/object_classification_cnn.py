@@ -13,7 +13,6 @@ from datamanagement.object_dataset import ObjectDataset
 from datamanagement.tuberlin_dataset import TUBerlinDataset
 from evaluation.accuracy_evaluation import AccuracyEvaluation
 from evaluation.detailed_evaluation import DetailedEvaluation
-from processing.utility import edge_detection
 
 
 class ObjectClassificationModel(TUBerlinClassificationModel):
@@ -24,13 +23,16 @@ class ObjectClassificationModel(TUBerlinClassificationModel):
     def get_validation_transformation(self):
         def to_comic(**kwargs):
             img = kwargs['image']
-            img = np.array(img)
-            img = img[..., ::-1]
-            img = edge_detection(img, to_pil=False)
-
-            return {
-                'image': img
-            }
+            img = cv2.blur(img, (5, 5))
+            newImg = np.zeros(img.shape, np.uint8)
+            #ret, thresh = cv2.threshold(img, 127, 255, 0)
+            thresh = cv2.Canny(img, 100, 200)
+            im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(newImg, contours, -1, 255, 1)
+            #cv2.imshow('swag', newImg)
+            kwargs['image'] = newImg
+            #cv2.waitKey(0)
+            return kwargs
         return [
             to_comic,
             Resize(width=225, height=225),

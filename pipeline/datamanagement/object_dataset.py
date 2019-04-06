@@ -16,7 +16,7 @@ class ObjectDataset(BaseDataset):
 
     @property
     def use_pytorch_trafo(self):
-        return False
+        return True
 
     def __init__(self, *args, **kwargs):
         super(ObjectDataset, self).__init__(*args, **kwargs)
