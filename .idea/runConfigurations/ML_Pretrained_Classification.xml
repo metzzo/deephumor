@@ -13,7 +13,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline/main.py" />
-    <option name="PARAMETERS" value="--train_cnn --source ../export/original_export/ --epochs 2000 --batch_size 128 --model PretrainedCNNCartoonModel --loss cel --configuration ../good_models/20190411_imagenet_good.tar" />
+    <option name="PARAMETERS" value="--train_cnn --source ../export/original_export/ --epochs 2000 --batch_size 64 --model PretrainedCNNCartoonModel --loss cel --configuration ../good_models/20190411_imagenet_good.tar" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

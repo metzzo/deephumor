@@ -74,7 +74,7 @@ def setup_train_cnn(parser: argparse.ArgumentParser, group):
     parser.add_argument('--epochs', type=int)
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--loss', type=str)
-    parser.add_argument('--learning_rate', type=float, default=0.001)
+    parser.add_argument('--learning_rate', type=float, default=0.1)
     parser.add_argument('--optimizer', type=str, default='sgd')
 
     def train(args, device):

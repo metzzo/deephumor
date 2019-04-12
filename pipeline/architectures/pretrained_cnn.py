@@ -77,9 +77,9 @@ class PretrainedCNNCartoonModel(BaseModel):
             for param in self.model_conv.layer3.parameters():
                 param.requires_grad = False
             for param in self.model_conv.layer4.parameters():
-                param.requires_grad = True
-            self.model_conv.fc = nn.Linear(512, 2000)
-            self.fc2 = nn.Linear(2000, 8)
+                param.requires_grad = False
+            self.model_conv.fc = nn.Linear(512, 100)
+            self.fc2 = nn.Linear(100, 8)
 
         def forward(self, x):
             x = F.relu(self.model_conv(x))
@@ -126,11 +126,11 @@ class PretrainedCNNCartoonModel(BaseModel):
 
     def get_input_and_label(self, data):
         _, image, labels = data
-        labels = labels.double()
+        """labels = labels.double()
         s = torch.from_numpy(np.random.normal(0, 0.5, len(labels)))
         labels += s
         labels = labels.round().long()
-        labels = torch.clamp(labels, 1, 7)
+        labels = torch.clamp(labels, 1, 7)"""
 
         return image, labels
     @property

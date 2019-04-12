@@ -7,7 +7,7 @@ class LossEvaluation(BaseEvaluation):
         super(LossEvaluation, self).__init__(num=num, batch_size=batch_size)
         self.entries = np.zeros(num, dtype=np.float32)
 
-    def add_entry(self, predictions, actual_label, loss):
+    def add_entry(self, predictions, actual_label, loss, top_five=None):
         self.entries[self.entry_count] = loss
         self.entry_count += 1
 

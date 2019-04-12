@@ -34,7 +34,7 @@ def pipeline(source, model, epochs, batch_size, loss, device):
     train_cnn_model(
         model=selected_model,
         criterion=selected_loss,
-        optimizer=partial(torch.optim.SGD, lr=0.001, momentum=0.9, weight_decay=0.00001, nesterov=True),
+        optimizer=partial(torch.optim.SGD, lr=0.00001, momentum=0.9, weight_decay=0, nesterov=True),
         scheduler=partial(lr_scheduler.StepLR, step_size=8, gamma=0.1),
         training_dataset=training_ds,
         validation_dataset=validation_ds,
