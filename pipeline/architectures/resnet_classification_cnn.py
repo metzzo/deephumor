@@ -1066,19 +1066,34 @@ class ResNetClassificationModel(BaseModel):
             # TODO: instead of simple edge detection use stylized imagenet
             thresh = auto_canny(image=img)
             im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(newImg, contours, -1, 255, 6)
+            cv2.drawContours(newImg, contours, -1, 255, 1)
 
+            old_size = newImg.shape[:2]
+
+            ratio = float(224) / max(old_size)
+            new_size = tuple([int(x * ratio) for x in old_size])
+
+            # new_size should be in (width, height) format
+
+            newImg = cv2.resize(newImg, (new_size[1], new_size[0]))
+
+            delta_w = 224 - new_size[1]
+            delta_h = 224 - new_size[0]
+            top, bottom = delta_h // 2, delta_h - (delta_h // 2)
+            left, right = delta_w // 2, delta_w - (delta_w // 2)
+
+            color = [0, 0, 0]
+            newImg = cv2.copyMakeBorder(newImg, top, bottom, left, right, cv2.BORDER_CONSTANT,
+                                        value=color)
 
             # cv2.imshow('swag', newImg)
             # cv2.imshow('swag2', newImg2)
             # cv2.waitKey(0)
 
-            return Image.fromarray(cv2.cvtColor(img, cv2.COLOR_GRAY2BGR))
+            return Image.fromarray(cv2.cvtColor(newImg, cv2.COLOR_GRAY2BGR))
 
         return [
             transforms.Lambda(edge_detection_impl),
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize(
                 mean=[0.485, 0.456, 0.406],
