@@ -44,6 +44,8 @@ def train_lstm_model(
         batch_size,
         device,
         num_epochs=25):
+    assert batch_size == 1 # only supported yet
+
     network = model.network
     network.to(device)
 
@@ -56,8 +58,8 @@ def train_lstm_model(
     }
 
     evaluations = {
-        "train": OverallEvaluation(num=len(dataloaders["train"]), ignore_loss=False, batch_size=batch_size),
-        "val": OverallEvaluation(num=len(dataloaders["val"]), ignore_loss=True, batch_size=batch_size),
+        "train": OverallEvaluation(num=len(dataloaders["train"]), batch_size=batch_size),
+        "val": OverallEvaluation(num=len(dataloaders["val"]), batch_size=batch_size),
     }
 
     target_path = os.path.abspath("./../models/{0}_lstm_model.pth".format(

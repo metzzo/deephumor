@@ -5,7 +5,7 @@ from datamanagement.base_dataset import BaseDataset
 CartoonSample = namedtuple('Sample', ['idx', 'image', 'funniness'])
 
 
-class CartoonDataset(BaseDataset):
+class CartoonCNNDataset(BaseDataset):
     def create_item(self, row, idx):
         return CartoonSample(
             idx=idx,

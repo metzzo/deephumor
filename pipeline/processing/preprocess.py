@@ -4,7 +4,7 @@ import cv2
 import time
 from progress.spinner import Spinner
 
-from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.cartoon_dataset import CartoonCNNDataset
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 from matplotlib import pyplot as plt
@@ -54,7 +54,7 @@ def setup_preprocess(parser: argparse.ArgumentParser, group):
             return
 
         target_size = extract_average_image_size(
-            dataset=CartoonDataset(file_path=get_subset(dataset_path=args.source, subset=Subset.TRAINING)),
+            dataset=CartoonCNNDataset(file_path=get_subset(dataset_path=args.source, subset=Subset.TRAINING)),
             target_folder=args.source
         )
         downsize_images(

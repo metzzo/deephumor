@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torchvision import transforms
 
 from cnn_experiments.base_model import BaseCNNModel
-from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.cartoon_dataset import CartoonCNNDataset
 from evaluation.accuracy_evaluation import AccuracyEvaluation
 
 
@@ -50,7 +50,7 @@ class SimpleClassificationCNNCartoonCNNModel(BaseCNNModel):
 
     @property
     def Dataset(self):
-        return CartoonDataset
+        return CartoonCNNDataset
 
     def get_input_and_label(self, data):
         _, image, labels = data
