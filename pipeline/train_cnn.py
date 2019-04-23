@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from torch.nn import CrossEntropyLoss, L1Loss, NLLLoss
 from torch.nn.functional import softmax
 
-from architectures.factory import get_model
+from cnn_experiments.factory import get_model
 from datamanagement.factory import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler

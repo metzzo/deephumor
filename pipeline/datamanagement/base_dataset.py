@@ -5,11 +5,11 @@ from albumentations import Compose
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from architectures.base_model import BaseModel
+from cnn_experiments.base_model import BaseCNNModel
 
 
 class BaseDataset(Dataset):
-    class EmptyModel(BaseModel):
+    class EmptyCNNModel(BaseCNNModel):
         pass
 
     @property
@@ -19,7 +19,7 @@ class BaseDataset(Dataset):
     def __init__(self, file_path, model, trafo):
         self.root_dir = os.path.dirname(file_path)
         self.df = pickle.load(open(file_path, "rb"))
-        self.model = model if model else BaseDataset.EmptyModel()
+        self.model = model if model else BaseDataset.EmptyCNNModel()
 
         self.transform = self.create_trafo(trafo=trafo)
 

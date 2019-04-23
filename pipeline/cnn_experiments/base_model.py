@@ -4,7 +4,7 @@ from torchvision import transforms
 from evaluation.loss_evaluation import LossEvaluation
 
 
-class BaseModel(object):
+class BaseCNNModel(object):
     def __init__(self):
         self.network = self.get_network_class()
 

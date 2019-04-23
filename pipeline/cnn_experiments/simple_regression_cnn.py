@@ -5,12 +5,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from albumentations.pytorch import transforms
 
-from architectures.base_model import BaseModel
+from cnn_experiments.base_model import BaseCNNModel
 from datamanagement.cartoon_dataset import CartoonDataset
 from evaluation.mae_evaluation import MAEEvaluation
 
 
-class SimpleRegressionCNNCartoonModel(BaseModel):
+class SimpleRegressionCNNCartoonCNNModel(BaseCNNModel):
     class Network(nn.Module):
         @property
         def final_size(self):
@@ -19,7 +19,7 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
 
         def __init__(self):
             # 279x345
-            super(SimpleRegressionCNNCartoonModel.Network, self).__init__()
+            super(SimpleRegressionCNNCartoonCNNModel.Network, self).__init__()
 
             self.conv1 = nn.Conv2d(1, 200, kernel_size=5, padding=1)
             self.conv2 = nn.Conv2d(200, 200, kernel_size=3, padding=1)
@@ -40,7 +40,7 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
 
     @property
     def get_network_class(self):
-        return SimpleRegressionCNNCartoonModel.Network
+        return SimpleRegressionCNNCartoonCNNModel.Network
 
     def get_predictions(self, outputs):
         return outputs.detach().flatten()
@@ -62,9 +62,9 @@ class SimpleRegressionCNNCartoonModel(BaseModel):
 
     @property
     def train_evaluations(self):
-        return super(SimpleRegressionCNNCartoonModel, self).train_evaluations + [MAEEvaluation]
+        return super(SimpleRegressionCNNCartoonCNNModel, self).train_evaluations + [MAEEvaluation]
 
     @property
     def validation_evaluations(self):
-        return super(SimpleRegressionCNNCartoonModel, self).validation_evaluations + [MAEEvaluation]
+        return super(SimpleRegressionCNNCartoonCNNModel, self).validation_evaluations + [MAEEvaluation]
 

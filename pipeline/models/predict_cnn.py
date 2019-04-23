@@ -8,7 +8,7 @@ import pickle
 import torch
 from torch.utils.data import DataLoader
 
-from architectures.factory import get_model
+from cnn_experiments.factory import get_model
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 from evaluation.overall_evaluation import OverallEvaluation
