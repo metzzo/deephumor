@@ -4,7 +4,7 @@ import cv2
 import time
 from progress.spinner import Spinner
 
-from datamanagement.cartoon_dataset import CartoonCNNDataset
+from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 from matplotlib import pyplot as plt

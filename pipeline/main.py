@@ -8,6 +8,7 @@ from processing.create_debug_set import setup_create_debug_set
 from processing.create_tuberlin import setup_create_tuberlin
 from processing.pickle_to_csv import setup_pickle_to_csv
 from processing.prepare_mnist import setup_prepare_mnist
+from train_lstm import setup_train_lstm
 
 
 def main():
@@ -32,6 +33,7 @@ def main():
         setup_prepare_mnist,
         setup_create_tuberlin,
         setup_predict_cnn,
+        setup_train_lstm,
     ]
 
     parser = argparse.ArgumentParser()
@@ -39,8 +41,13 @@ def main():
 
     parser.add_argument("--source", required=True, type=str)
     parser.add_argument("--target", type=str)
-
     parser.add_argument('--model', type=str)
+    parser.add_argument('--epochs', type=int)
+    parser.add_argument('--batch_size', type=int)
+    parser.add_argument('--loss', type=str)
+    parser.add_argument('--learning_rate', type=float, default=0.1)
+    parser.add_argument('--optimizer', type=str, default='sgd')
+
 
     handlers = []
     for op in operations:

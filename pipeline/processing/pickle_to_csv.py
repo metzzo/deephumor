@@ -5,7 +5,7 @@ This allows analysis in Excel.
 import argparse
 import pickle
 
-from datamanagement.cartoon_dataset import CartoonCNNDataset
+from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 

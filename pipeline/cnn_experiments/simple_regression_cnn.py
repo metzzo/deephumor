@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from albumentations.pytorch import transforms
 
 from cnn_experiments.base_model import BaseCNNModel
-from datamanagement.cartoon_dataset import CartoonCNNDataset
+from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from evaluation.mae_evaluation import MAEEvaluation
 
 

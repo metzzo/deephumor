@@ -10,17 +10,20 @@ from cnn_experiments.base_model import BaseCNNModel
 
 class BaseDataset(Dataset):
     class EmptyCNNModel(BaseCNNModel):
-        pass
+        @property
+        def get_network_class(self):
+            return lambda: None
 
     @property
     def use_pytorch_trafo(self):
         return True
 
-    def __init__(self, file_path, model, trafo):
+    def __init__(self, file_path, model=None, trafo=None):
         self.root_dir = os.path.dirname(file_path)
         self.df = pickle.load(open(file_path, "rb"))
         self.model = model if model else BaseDataset.EmptyCNNModel()
 
+        trafo = [] if trafo is None else trafo
         self.transform = self.create_trafo(trafo=trafo)
 
     def __len__(self):

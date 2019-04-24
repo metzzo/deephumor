@@ -5,37 +5,39 @@ import time
 import copy
 
 import torch
-from torch.utils.data import DataLoader
+from torch import nn
+from torch.utils.data import DataLoader, WeightedRandomSampler
+import numpy as np
 
+from datamanagement.cartoon_lstm_dataset import n_letters
+from evaluation.accuracy_evaluation import AccuracyEvaluation
+from evaluation.loss_evaluation import LossEvaluation
 from evaluation.overall_evaluation import OverallEvaluation
 
-all_letters = string.ascii_letters + " .,;'"
-n_letters = len(all_letters)
+n_hidden = 128
 
 
-# Find letter index from all_letters, e.g. "a" = 0
-def letter_to_index(letter):
-    return all_letters.find(letter)
+class Network(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(Network, self).__init__()
 
+        self.hidden_size = hidden_size
 
-# Just for demonstration, turn a letter into a <1 x n_letters> Tensor
-def letter_to_tensor(letter):
-    tensor = torch.zeros(1, n_letters)
-    tensor[0][letter_to_index(letter)] = 1
-    return tensor
+        self.i2h = nn.Linear(input_size + hidden_size, hidden_size)
+        self.i2o = nn.Linear(input_size + hidden_size, output_size)
+        self.softmax = nn.LogSoftmax(dim=1)
 
+    def forward(self, input, hidden):
+        combined = torch.cat((input, hidden), 1)
+        hidden = self.i2h(combined)
+        output = self.i2o(combined)
+        output = self.softmax(output)
+        return output, hidden
 
-# Turn a line into a <line_length x 1 x n_letters>,
-# or an array of one-hot letter vectors
-def line_to_tensor(line):
-    tensor = torch.zeros(len(line), 1, n_letters)
-    for li, letter in enumerate(line):
-        tensor[li][0][letter_to_tensor(letter)] = 1
-    return tensor
-
+    def init_hidden(self):
+        return torch.zeros(1, self.hidden_size)
 
 def train_lstm_model(
-        model,
         criterion,
         optimizer,
         scheduler,
@@ -46,20 +48,42 @@ def train_lstm_model(
         num_epochs=25):
     assert batch_size == 1 # only supported yet
 
-    network = model.network
+    network = Network(
+        input_size=n_letters,
+        hidden_size=n_hidden,
+        output_size=7,
+    )
     network.to(device)
 
-    optimizer = optimizer(params=model.optimization_parameters)
+    optimizer = optimizer(params=network.parameters())
     scheduler = scheduler(optimizer=optimizer)
+    target = training_dataset.df['funniness']
+    class_sample_count = np.array(
+        [len(np.where(target == t)[0]) for t in np.unique(target)])
+    weight = len(target) / class_sample_count
+    samples_weight = np.array([weight[t - 1] for t in target])
+
+    samples_weight = torch.from_numpy(samples_weight)
+    samples_weight = samples_weight.double()
+    sampler = WeightedRandomSampler(samples_weight, len(samples_weight))
 
     dataloaders = {
-        "train": DataLoader(dataset=training_dataset, batch_size=batch_size, shuffle=True, num_workers=0),
+        "train": DataLoader(
+            dataset=training_dataset,
+            batch_size=batch_size,
+            num_workers=0,
+            sampler=sampler
+        ),
         "val": DataLoader(dataset=validation_dataset, batch_size=batch_size, shuffle=True, num_workers=0),
     }
 
     evaluations = {
-        "train": OverallEvaluation(num=len(dataloaders["train"]), batch_size=batch_size),
-        "val": OverallEvaluation(num=len(dataloaders["val"]), batch_size=batch_size),
+        "train": OverallEvaluation(num=len(dataloaders["train"]), batch_size=batch_size).add_evaluations(
+            [LossEvaluation, AccuracyEvaluation]
+        ),
+        "val": OverallEvaluation(num=len(dataloaders["val"]), batch_size=batch_size).add_evaluations(
+            [AccuracyEvaluation]
+        ),
     }
 
     target_path = os.path.abspath("./../models/{0}_lstm_model.pth".format(
@@ -85,9 +109,17 @@ def train_lstm_model(
                 network.eval()   # Set network to evaluate mode
 
             # Iterate over data.
-            for _, inputs, _, labels in dataloaders[phase]:
+            data = list(dataloaders[phase])
+            for entry in data:
+                pass
+
+
+
+            for _, inputs, labels in data: # [:100]:
                 inputs = inputs.to(device)
-                labels = labels.to(device)
+                labels = labels.to(device).float()
+
+                input = inputs[0].to(device)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -95,19 +127,22 @@ def train_lstm_model(
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = network(inputs)
-                    preds = model.get_predictions(outputs=outputs)
-                    labels = model.get_labels(labels=labels)
+                    hidden = network.init_hidden().to(device)
+                    for i in range(input.size()[0]):
+                        output, hidden = network(input[i], hidden)
 
-                    loss = criterion(outputs, labels)
+                    loss = criterion(output, labels)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
                         loss.backward()
                         optimizer.step()
 
+                    # Get top N categories
+                    _, topi = output.data.topk(1, 1, True)
+
                 # statistics
-                evaluations[phase].add_entry(predictions=preds, actual_label=labels, loss=loss.item())
+                evaluations[phase].add_entry(predictions=topi.flatten(), actual_label=labels, loss=loss.item())
 
             print('{0} evaluation:\n {1}'.format(
                 phase, str(evaluations[phase])))

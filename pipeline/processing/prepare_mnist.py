@@ -8,7 +8,7 @@ import pickle
 
 from PIL import Image
 
-from datamanagement.cartoon_dataset import CartoonCNNDataset
+from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 
