@@ -3,3 +3,4 @@ sklearn
 torch>=1.0
 torchvision>=0.2.1
 xgboost>=0.82
+allennlp>=0.8.3

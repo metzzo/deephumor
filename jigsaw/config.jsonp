@@ -1,0 +1,39 @@
+{
+    "dataset_reader": {
+        "type": "jigsaw-dataset"
+    },
+    "train_data_path": "../dataset/jigsaw/train.csv",
+    "validation_data_path": "../dataset/jigsaw/validation.csv",
+    "model": {
+        "type": "jigsaw-lstm",
+        "word_embeddings": {
+            "type": "basic",
+            "token_embedders": {
+                "tokens": {
+                    "type": "embedding",
+                    "embedding_dim": 100
+                }
+            }
+        },
+        "encoder": {
+            "type": "lstm",
+            "input_size": 100,
+            "hidden_size": 200
+        }
+    },
+    "iterator": {
+        "type": "bucket",
+        "sorting_keys": [
+            ["tokens", "num_tokens"]
+        ]
+    },
+    "trainer": {
+        "optimizer": {
+            "type": "adam",
+            "lr": 0.001,
+            "eps": 1e-8,
+            "weight_decay": 0
+        },
+        "num_epochs": 1
+    }
+}
