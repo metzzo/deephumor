@@ -14,13 +14,15 @@ class JigsawDatasetReader(DatasetReader):
         super().__init__(lazy=False)
         self.token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
 
-    def text_to_instance(self, tokens: List[Token], target) -> Instance:
+    def text_to_instance(self, tokens: List[Token], target=None) -> Instance:
         tokens_field = TextField(tokens, self.token_indexers)
-        target_field = LabelField(target)
         fields = {
             "tokens": tokens_field,
-            "label": target_field,
         }
+
+        if target is not None:
+            target_field = LabelField(target)
+            fields["label"] = target_field
 
         return Instance(fields)
 
