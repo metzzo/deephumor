@@ -6,8 +6,8 @@ from allennlp.models import Model
 from allennlp.modules import Seq2VecEncoder, Embedding
 from allennlp.modules.text_field_embedders import TextFieldEmbedder, BasicTextFieldEmbedder
 from allennlp.nn.util import get_text_field_mask
-from allennlp.training.metrics import CategoricalAccuracy
-Embedding
+from allennlp.training.metrics import CategoricalAccuracy, F1Measure
+
 
 @Model.register('jigsaw-lstm')
 class LstmClassifier(Model):
@@ -20,11 +20,18 @@ class LstmClassifier(Model):
 
         self.encoder = encoder
 
-        self.hidden2tag = torch.nn.Linear(
+        self.hidden2tag1 = torch.nn.Linear(
             in_features=encoder.get_output_dim(),
+            out_features=200
+        )
+        self.norm = torch.nn.BatchNorm1d(num_features=200)
+        self.hidden2tag2 = torch.nn.Linear(
+            in_features=200,
             out_features=vocab.get_vocab_size('label')
         )
+
         self.accuracy = CategoricalAccuracy()
+        self.f1_measure = F1Measure(positive_label=1)
 
         self.loss_function = torch.nn.CrossEntropyLoss()
 
@@ -35,14 +42,21 @@ class LstmClassifier(Model):
 
         embeddings = self.word_embeddings(tokens)
         encoder_out = self.encoder(embeddings, mask)
-        logits = self.hidden2tag(encoder_out)
+        x = torch.nn.functional.relu(self.norm(self.hidden2tag1(encoder_out)))
+        logits = self.hidden2tag2(x)
 
         output = {"logits": logits}
         if label is not None:
             self.accuracy(logits, label)
+            self.f1_measure(logits, label)
             output["loss"] = self.loss_function(logits, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        return {"accuracy": self.accuracy.get_metric(reset)}
+        precision, recall, f1_measure = self.f1_measure.get_metric(reset)
+        return {'accuracy': self.accuracy.get_metric(reset),
+                'precision': precision,
+                'recall': recall,
+                'f1_measure': f1_measure}
+

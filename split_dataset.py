@@ -4,7 +4,7 @@ import pandas as pd
 
 SOURCE_FOLDER = '../dataset/raw_jigsaw/'
 TARGET_FOLDER = '../dataset/jigsaw/'
-SMALL = False
+SMALL = True
 
 df = pd.read_csv(os.path.join(SOURCE_FOLDER, 'train.csv')) # , nrows=100)
 df = df.sample(frac=1)
