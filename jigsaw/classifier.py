@@ -24,7 +24,7 @@ class LstmClassifier(Model):
             in_features=encoder.get_output_dim(),
             out_features=200
         )
-        self.norm = torch.nn.BatchNorm1d(num_features=200)
+        #self.norm = torch.nn.BatchNorm1d(num_features=200)
         self.hidden2tag2 = torch.nn.Linear(
             in_features=200,
             out_features=vocab.get_vocab_size('label')
@@ -42,7 +42,11 @@ class LstmClassifier(Model):
 
         embeddings = self.word_embeddings(tokens)
         encoder_out = self.encoder(embeddings, mask)
-        x = torch.nn.functional.relu(self.norm(self.hidden2tag1(encoder_out)))
+        x = torch.nn.functional.relu(
+            #self.norm(
+                self.hidden2tag1(encoder_out)
+            #)
+        )
         logits = self.hidden2tag2(x)
 
         output = {"logits": logits}

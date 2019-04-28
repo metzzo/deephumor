@@ -10,8 +10,8 @@ from allennlp.data.tokenizers import Token
 
 @DatasetReader.register('jigsaw-dataset')
 class JigsawDatasetReader(DatasetReader):
-    def __init__(self, token_indexers: Dict[str, TokenIndexer] = None) -> None:
-        super().__init__(lazy=False)
+    def __init__(self, token_indexers: Dict[str, TokenIndexer] = None, lazy=False) -> None:
+        super().__init__(lazy=lazy)
         self.token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
 
     def text_to_instance(self, tokens: List[Token], target=None) -> Instance:

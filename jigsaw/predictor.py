@@ -14,9 +14,9 @@ class SentenceClassifierPredictor(Predictor):
 
     def predict(self, sentences: [str]) -> JsonDict:
         result = []
-        for i in range(0, len(sentences), 1000):
-            print("{} of {}".format(i / 1000, len(sentences) / 1000))
-            sentences_batch = sentences[i : min(i + 1000, len(sentences))]
+        for i in range(0, len(sentences), 100):
+            print("{} of {}".format(i / 100, len(sentences) / 100))
+            sentences_batch = sentences[i : min(i + 100, len(sentences))]
             batch = list(map(lambda x: {"sentence": x}, sentences_batch))
             result += self.predict_batch_json(inputs=batch)
         return result

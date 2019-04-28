@@ -10,10 +10,11 @@ from predictor import predict, predict_test
 def train():
     train_model_from_file(
         parameter_filename='./jigsaw/config.json',
-        serialization_dir='./result/',
-        force=True,
+        serialization_dir='./result_2/',
+        recover=True,
+        #force=True,
     )
-    archive_path = './result/model.tar.gz'
+    archive_path = './result_2/model.tar.gz'
     predicted, df = predict(
         archive=archive_path,
         file='../dataset/jigsaw/validation.csv'
