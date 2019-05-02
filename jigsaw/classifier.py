@@ -20,18 +20,42 @@ class LstmClassifier(Model):
 
         self.encoder = encoder
 
+        self.convs = torch.nn.Sequential(
+            torch.nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(32),
+            torch.nn.MaxPool2d(2, 2),
+
+            torch.nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(64),
+            torch.nn.MaxPool2d(2, 2),
+
+            torch.nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(128),
+            torch.nn.MaxPool2d(2, 2),
+
+            torch.nn.AvgPool2d(4),
+        )
+
+        self.linear = torch.nn.Sequential(
+            torch.nn.Dropout(),
+            torch.nn.Linear(128, vocab.get_vocab_size('labels'))
+        )
+
         self.hidden2tag1 = torch.nn.Linear(
             in_features=encoder.get_output_dim(),
-            out_features=200
+            out_features=512
         )
-        #self.norm = torch.nn.BatchNorm1d(num_features=200)
+        self.norm = torch.nn.BatchNorm1d(num_features=512)
         self.hidden2tag2 = torch.nn.Linear(
-            in_features=200,
-            out_features=vocab.get_vocab_size('label')
+            in_features=512,
+            out_features=vocab.get_vocab_size('labels')
         )
 
         self.accuracy = CategoricalAccuracy()
-        self.f1_measure = F1Measure(positive_label=1)
+        #self.f1_measure = F1Measure(positive_label=1)
 
         self.loss_function = torch.nn.CrossEntropyLoss()
 
@@ -42,25 +66,33 @@ class LstmClassifier(Model):
 
         embeddings = self.word_embeddings(tokens)
         encoder_out = self.encoder(embeddings, mask)
-        x = torch.nn.functional.relu(
-            #self.norm(
-                self.hidden2tag1(encoder_out)
-            #)
-        )
-        logits = self.hidden2tag2(x)
 
+        x = encoder_out.reshape(encoder_out.shape[0], 1, 32, 32)
+        x = self.convs(x)
+        x = x.reshape(x.size(0), -1)
+        x = self.linear(x)
+
+        """x = torch.nn.functional.relu(
+            self.norm(
+                self.hidden2tag1(encoder_out)
+            )
+        )"""
+        #logits = self.hidden2tag2(x)
+        logits = x
         output = {"logits": logits}
         if label is not None:
             self.accuracy(logits, label)
-            self.f1_measure(logits, label)
+            #self.f1_measure(logits, label)
             output["loss"] = self.loss_function(logits, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        precision, recall, f1_measure = self.f1_measure.get_metric(reset)
-        return {'accuracy': self.accuracy.get_metric(reset),
-                'precision': precision,
-                'recall': recall,
-                'f1_measure': f1_measure}
+        #precision, recall, f1_measure = self.f1_measure.get_metric(reset)
+        return {
+            'accuracy': self.accuracy.get_metric(reset),
+            #'precision': precision,
+            #'recall': recall,
+            #'f1_measure': f1_measure
+        }
 

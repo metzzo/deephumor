@@ -3,7 +3,7 @@ from allennlp.models import load_archive
 
 from jigsaw import *
 
-ARCHIVE_PATH = './result/model.tar.gz'
+ARCHIVE_PATH = './result_2/model.tar.gz'
 FILE_PATH = '../dataset/jigsaw/test.csv'
 
 
