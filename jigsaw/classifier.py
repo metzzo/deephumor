@@ -21,6 +21,9 @@ class LstmClassifier(Model):
         self.encoder = encoder
 
         self.convs = torch.nn.Sequential(
+            torch.nn.Dropout(0.1),
+            torch.nn.BatchNorm2d(1),
+
             torch.nn.Conv2d(1, 32, kernel_size=3, padding=1),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(32),
@@ -31,27 +34,12 @@ class LstmClassifier(Model):
             torch.nn.BatchNorm2d(64),
             torch.nn.MaxPool2d(2, 2),
 
-            torch.nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(128),
-            torch.nn.MaxPool2d(2, 2),
-
-            torch.nn.AvgPool2d(4),
+            torch.nn.AvgPool2d(64),
         )
 
         self.linear = torch.nn.Sequential(
             torch.nn.Dropout(),
-            torch.nn.Linear(128, vocab.get_vocab_size('labels'))
-        )
-
-        self.hidden2tag1 = torch.nn.Linear(
-            in_features=encoder.get_output_dim(),
-            out_features=512
-        )
-        self.norm = torch.nn.BatchNorm1d(num_features=512)
-        self.hidden2tag2 = torch.nn.Linear(
-            in_features=512,
-            out_features=vocab.get_vocab_size('labels')
+            torch.nn.Linear(24, vocab.get_vocab_size('labels'))
         )
 
         self.accuracy = CategoricalAccuracy()
@@ -65,19 +53,16 @@ class LstmClassifier(Model):
         mask = get_text_field_mask(tokens)
 
         embeddings = self.word_embeddings(tokens)
-        encoder_out = self.encoder(embeddings, mask)
+        x = self.encoder(embeddings, mask)
 
-        x = encoder_out.reshape(encoder_out.shape[0], 1, 32, 32)
-        x = self.convs(x)
+        #x = encoder_out.reshape(encoder_out.shape[0], 1, 32, 32)
+        #x = self.convs(x)
         x = x.reshape(x.size(0), -1)
+
+        #additional_data = torch.tensor([[0.0]] * x.shape[0]).cuda()
+        #x = torch.cat((x, additional_data), dim=1)
         x = self.linear(x)
 
-        """x = torch.nn.functional.relu(
-            self.norm(
-                self.hidden2tag1(encoder_out)
-            )
-        )"""
-        #logits = self.hidden2tag2(x)
         logits = x
         output = {"logits": logits}
         if label is not None:

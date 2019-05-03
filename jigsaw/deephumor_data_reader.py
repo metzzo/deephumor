@@ -30,6 +30,6 @@ class DeepHumorDatasetReader(DatasetReader):
     def _read(self, file_path: str) -> Iterator[Instance]:
         df = pickle.load(open(file_path, "rb"))
         for _, data in df.iterrows():
-            punchline = data['punchline'].strip().split()
             target = str((int(data['funniness']) - 1))
+            punchline = data['punchline'].strip().split() #{} {}'.format(target, data['punchline'].strip().split())
             yield self.text_to_instance([Token(word) for word in punchline], target)
