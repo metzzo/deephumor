@@ -42,7 +42,7 @@ class WassersteinLossStab(Function):
 
         for i in range(self.sinkhorn_iter):
             log_u_max = torch.max(log_u, dim=1)[0]
-            u_stab = torch.exp(log_u.expand_as(log_u) - log_u_max)
+            u_stab = torch.exp(log_u - log_u_max.expand_as(log_u))
             log_v = log_b - torch.log(torch.mm(self.K.t(), u_stab.t()).t()) - log_u_max.expand_as(log_v)
             log_v_max = torch.max(log_v, dim=1)[0]
             v_stab = torch.exp(log_v - log_v_max.expand_as(log_v))

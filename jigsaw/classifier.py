@@ -29,6 +29,54 @@ def one_hot_embedding(labels, num_classes):
     y = torch.eye(num_classes)
     return y[labels]
 
+class WassersteinLoss(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        x = np.arange(7, dtype=np.float32)
+        D = (x[:, np.newaxis] - x[np.newaxis, :])
+        D = D ** 3
+        D /= D.max()
+        #D *= 100
+
+        self.D = torch.from_numpy(D).cuda().float()
+        #self.D.requires_grad = True
+
+    def forward(self, input, pred):
+        #input = input - input.min()
+        #input = input / input.max()
+
+        predicted = pred.clone().detach().cpu().numpy()
+
+        batch_size = input.shape[0]
+        Dcs = []
+        for i in range(input.shape[0]):
+            Dc = self.D[predicted[i]]
+            Dcs.append(Dc.reshape(1, Dc.size(0)))
+        Dcs = torch.cat(Dcs, dim=0)
+        result = (Dcs * input).sum()
+        """for i in range(input.shape[0]):
+            p = input[i]
+            size = p.shape[0]
+
+            #p = p.reshape(size, 1)
+
+            Dcs = self.D[predicted[i]]
+            Dc = Dcs.reshape(1, size)
+
+            cur_loss = torch.mm(Dc, p).sum()
+            #cur_loss = p[0] * Dcs[0] + p[1] * Dcs[1] + p[2] * Dcs[2] + p[3] * Dcs[3] + p[4] * Dcs[4] + p[5] * Dcs[5] + p[6] * Dcs[6]
+            if result is None:
+                result = cur_loss
+            else:
+                result += cur_loss"""
+
+        result /= batch_size
+
+        return result * result
+
+
+
 @Model.register('jigsaw-lstm')
 class LstmClassifier(Model):
     def __init__(self,
@@ -59,9 +107,8 @@ class LstmClassifier(Model):
 
         self.linear = torch.nn.Sequential(
             torch.nn.Dropout(),
-            torch.nn.Linear(128, 16),
-            torch.nn.ReLU(),
             torch.nn.Linear(16, vocab.get_vocab_size('labels')),
+            torch.nn.Softmax(),
         )
 
         self.accuracy = CategoricalAccuracy()
@@ -69,11 +116,7 @@ class LstmClassifier(Model):
 
         #self.loss_function = torch.nn.CrossEntropyLoss()
 
-        x = np.arange(7, dtype=np.float32)
-        M = (x[:, np.newaxis] - x[np.newaxis, :]) ** 2
-        M /= M.max()
-
-        self.loss_function = WassersteinLossStab(torch.from_numpy(M)) # EMDLoss()
+        self.loss_function = WassersteinLoss()
         self.y_onehot = None
 
         self.mae = MeanAbsoluteError()
@@ -93,24 +136,30 @@ class LstmClassifier(Model):
         #additional_data = torch.tensor([[0.0]] * x.shape[0]).cuda()
         #x = torch.cat((x, additional_data), dim=1)
         x = self.linear(x)
-        original_logits = x
+        #x = torch.abs(x)
+        logits = x
 
-        logits = torch.abs(x)
+        #logits = torch.abs(x)
 
         batch_size = x.shape[0]
-        logits = logits.double() #logits.reshape(1, batch_size, 7).double()
+        #logits = logits.double() #logits.reshape(1, batch_size, 7).double()
         output = {"logits": logits}
         if label is not None:
-            self.accuracy(original_logits, label)
-            for f1 in self.f1_measures:
-                f1(original_logits, label)
-            one_hot = one_hot_embedding(labels=label, num_classes=7).cuda().double() #.reshape(1, batch_size, 7)
-            one_hot.requires_grad = True
-            loss = self.loss_function(logits, one_hot)# / batch_size
-            output["loss"] = torch.sum(loss)
+            _, predicted = torch.max(logits, 1)
 
-            _, predicted = torch.max(original_logits, 1)
+            self.accuracy(logits, label)
+            for f1 in self.f1_measures:
+                f1(logits, label)
+            #one_hot = one_hot_embedding(labels=label, num_classes=7).cuda().double() #.reshape(1, batch_size, 7)
+            #one_hot.requires_grad = True
+            loss = self.loss_function(logits, label)# / batch_size
+            output["loss"] = loss
+
             self.mae(predicted, label)
+
+        #for param in self.parameters():
+        #    print(param.data)
+        #    break
 
         return output
 
