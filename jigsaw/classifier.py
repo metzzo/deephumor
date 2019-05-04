@@ -6,8 +6,28 @@ from allennlp.models import Model
 from allennlp.modules import Seq2VecEncoder, Embedding
 from allennlp.modules.text_field_embedders import TextFieldEmbedder, BasicTextFieldEmbedder
 from allennlp.nn.util import get_text_field_mask
-from allennlp.training.metrics import CategoricalAccuracy, F1Measure
+from allennlp.training.metrics import CategoricalAccuracy, F1Measure, MeanAbsoluteError
+from sklearn.metrics import mean_absolute_error
 
+from jigsaw.wasserstein_loss import WassersteinLossStab
+
+from emd import EMDLoss
+
+import numpy as np
+import ot
+
+def one_hot_embedding(labels, num_classes):
+    """Embedding labels to one-hot form.
+
+    Args:
+      labels: (LongTensor) class labels, sized [N,].
+      num_classes: (int) number of classes.
+
+    Returns:
+      (tensor) encoded labels, sized [N, #classes].
+    """
+    y = torch.eye(num_classes)
+    return y[labels]
 
 @Model.register('jigsaw-lstm')
 class LstmClassifier(Model):
@@ -39,13 +59,24 @@ class LstmClassifier(Model):
 
         self.linear = torch.nn.Sequential(
             torch.nn.Dropout(),
-            torch.nn.Linear(24, vocab.get_vocab_size('labels'))
+            torch.nn.Linear(128, 16),
+            torch.nn.ReLU(),
+            torch.nn.Linear(16, vocab.get_vocab_size('labels')),
         )
 
         self.accuracy = CategoricalAccuracy()
-        #self.f1_measure = F1Measure(positive_label=1)
+        self.f1_measures = [F1Measure(positive_label=i) for i in range(0, 7)]
 
-        self.loss_function = torch.nn.CrossEntropyLoss()
+        #self.loss_function = torch.nn.CrossEntropyLoss()
+
+        x = np.arange(7, dtype=np.float32)
+        M = (x[:, np.newaxis] - x[np.newaxis, :]) ** 2
+        M /= M.max()
+
+        self.loss_function = WassersteinLossStab(torch.from_numpy(M)) # EMDLoss()
+        self.y_onehot = None
+
+        self.mae = MeanAbsoluteError()
 
     def forward(self,
                 tokens: Dict[str, torch.Tensor],
@@ -62,22 +93,40 @@ class LstmClassifier(Model):
         #additional_data = torch.tensor([[0.0]] * x.shape[0]).cuda()
         #x = torch.cat((x, additional_data), dim=1)
         x = self.linear(x)
+        original_logits = x
 
-        logits = x
+        logits = torch.abs(x)
+
+        batch_size = x.shape[0]
+        logits = logits.double() #logits.reshape(1, batch_size, 7).double()
         output = {"logits": logits}
         if label is not None:
-            self.accuracy(logits, label)
-            #self.f1_measure(logits, label)
-            output["loss"] = self.loss_function(logits, label)
+            self.accuracy(original_logits, label)
+            for f1 in self.f1_measures:
+                f1(original_logits, label)
+            one_hot = one_hot_embedding(labels=label, num_classes=7).cuda().double() #.reshape(1, batch_size, 7)
+            one_hot.requires_grad = True
+            loss = self.loss_function(logits, one_hot)# / batch_size
+            output["loss"] = torch.sum(loss)
+
+            _, predicted = torch.max(original_logits, 1)
+            self.mae(predicted, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        #precision, recall, f1_measure = self.f1_measure.get_metric(reset)
-        return {
+        data = {
             'accuracy': self.accuracy.get_metric(reset),
-            #'precision': precision,
-            #'recall': recall,
-            #'f1_measure': f1_measure
+            'mae': self.mae.get_metric(reset),
         }
+
+        for index, f1 in enumerate(self.f1_measures):
+            precision, recall, f1_measure = f1.get_metric(reset)
+            data.update({
+                #'{}_precision'.format(index + 1): precision,
+                #'{}_recall'.format(index + 1): recall,
+                '{}_f1_measure'.format(index + 1): f1_measure
+            })
+
+        return data
 
