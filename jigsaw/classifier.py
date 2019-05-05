@@ -35,7 +35,7 @@ class WassersteinLoss(torch.nn.Module):
 
         x = np.arange(7, dtype=np.float32)
         D = (x[:, np.newaxis] - x[np.newaxis, :])
-        D = D ** 3
+        D = D ** 2
         D /= D.max()
         #D *= 100
 
@@ -43,37 +43,14 @@ class WassersteinLoss(torch.nn.Module):
         #self.D.requires_grad = True
 
     def forward(self, input, pred):
-        #input = input - input.min()
-        #input = input / input.max()
-
-        predicted = pred.clone().detach().cpu().numpy()
-
-        batch_size = input.shape[0]
+        batch_size = input.size(0)
         Dcs = []
-        for i in range(input.shape[0]):
-            Dc = self.D[predicted[i]]
+        for i in range(batch_size):
+            Dc = self.D[pred[i]]
             Dcs.append(Dc.reshape(1, Dc.size(0)))
         Dcs = torch.cat(Dcs, dim=0)
         result = (Dcs * input).sum()
-        """for i in range(input.shape[0]):
-            p = input[i]
-            size = p.shape[0]
-
-            #p = p.reshape(size, 1)
-
-            Dcs = self.D[predicted[i]]
-            Dc = Dcs.reshape(1, size)
-
-            cur_loss = torch.mm(Dc, p).sum()
-            #cur_loss = p[0] * Dcs[0] + p[1] * Dcs[1] + p[2] * Dcs[2] + p[3] * Dcs[3] + p[4] * Dcs[4] + p[5] * Dcs[5] + p[6] * Dcs[6]
-            if result is None:
-                result = cur_loss
-            else:
-                result += cur_loss"""
-
-        result /= batch_size
-
-        return result * result
+        return (result * result) / batch_size
 
 
 
@@ -107,6 +84,8 @@ class LstmClassifier(Model):
 
         self.linear = torch.nn.Sequential(
             torch.nn.Dropout(),
+            torch.nn.Linear(16, 16),
+            torch.nn.ReLU(),
             torch.nn.Linear(16, vocab.get_vocab_size('labels')),
             torch.nn.Softmax(),
         )
