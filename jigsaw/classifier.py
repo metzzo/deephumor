@@ -30,10 +30,10 @@ def one_hot_embedding(labels, num_classes):
     return y[labels]
 
 class WassersteinLoss(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, size=7):
         super().__init__()
 
-        x = np.arange(7, dtype=np.float32)
+        x = np.arange(size, dtype=np.float32)
         D = (x[:, np.newaxis] - x[np.newaxis, :])
         D = D ** 2
         D /= D.max()
