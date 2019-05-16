@@ -19,7 +19,7 @@ from jigsaw import DeepHumorDatasetReader, SentenceClassifierPredictor, Wasserst
 
 EMBEDDING_DIM = 128
 HIDDEN_DIM = 128
-BATCH_SIZE = 32
+BATCH_SIZE = 256
 
 # Model in AllenNLP represents a model that is trained.
 @Model.register("lstm_classifier")
@@ -35,15 +35,15 @@ class LstmClassifier(Model):
 
         self.encoder = encoder
 
-        self.linear = torch.nn.Linear(in_features=encoder.get_output_dim(),
-                                      out_features=2)
-
-        self.linear = torch.nn.Sequential(
-            torch.nn.Dropout(),
-            torch.nn.Linear(encoder.get_output_dim(), 16),
+        self.decision = torch.nn.Sequential(
+            torch.nn.Linear(encoder.get_output_dim(), 128),
             torch.nn.ReLU(),
-            torch.nn.Linear(16, 1),
-        )
+            torch.nn.BatchNorm1d(128),
+            torch.nn.Linear(128, 128),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(128),
+            torch.nn.Linear(128, 1),
+        ).cuda()
 
         self.accuracy = CategoricalAccuracy()
         self.f1_measure = F1Measure(1)
@@ -67,7 +67,7 @@ class LstmClassifier(Model):
         # Forward pass
         embeddings = self.word_embeddings(tokens)
         encoder_out = self.encoder(embeddings, mask)
-        logits = self.linear(encoder_out)
+        logits = self.decision(encoder_out)
 
 
         output = {"logits": logits}
@@ -113,10 +113,23 @@ class FinalClassifier(Model):
 
         self.loss_function = torch.nn.CrossEntropyLoss()
 
-        self.linear = torch.nn.Linear(
-            in_features=encoder.get_output_dim(),
-            out_features=vocab.get_vocab_size('labels')
-        )
+        self.decision = torch.nn.Sequential(
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(7),
+            torch.nn.Linear(7, 7),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(7),
+            torch.nn.Linear(7, 7),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(7),
+            torch.nn.Linear(
+                in_features=7,
+                out_features=vocab.get_vocab_size('labels')
+            )
+        ).cuda()
+
+        self.accuracy = CategoricalAccuracy()
+        self.f1_measures = [F1Measure(positive_label=i) for i in range(0, 7)]
 
 
     # Instances are fed to forward after batching.
@@ -124,26 +137,39 @@ class FinalClassifier(Model):
     def forward(self,
                 tokens: Dict[str, torch.Tensor],
                 label: torch.Tensor = None) -> torch.Tensor:
+        def apply_model(model, idx):
+            result = model(tokens, (label == idx).int())['logits'].flatten()
+            return result
 
-        results = [model(tokens, label) for model in self.models]
-        combined = torch.cat(list(results), 1)
+
+        results = [apply_model(model, idx) for idx, model in enumerate(self.models)]
+        combined = torch.stack(results, 1)
+        logits = self.decision(combined)
 
         # In AllenNLP, the output of forward() is a dictionary.
         # Your output dictionary must contain a "loss" key for your model to be trained.
         output = {"logits": logits}
         if label is not None:
             self.accuracy(logits, label)
-            self.f1_measure(logits, label)
+            for f1 in self.f1_measures:
+                f1(logits, label)
+
             output["loss"] = self.loss_function(logits, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        precision, recall, f1_measure = self.f1_measure.get_metric(reset)
-        return {'accuracy': self.accuracy.get_metric(reset),
-                'precision': precision,
-                'recall': recall,
-                'f1_measure': f1_measure}
+        results = {
+            'accuracy': self.accuracy.get_metric(reset),
+        }
+        for index, f1 in enumerate(self.f1_measures):
+            precision, recall, f1_measure = f1.get_metric(reset)
+            results.update({
+                #'{}_precision'.format(index + 1): precision,
+                #'{}_recall'.format(index + 1): recall,
+                '{}_f1_measure'.format(index + 1): f1_measure
+            })
+        return results
 
 
 def get_one_vs_all_model(positive_label, word_embeddings, encoder, vocab):
@@ -166,11 +192,14 @@ def get_one_vs_all_model(positive_label, word_embeddings, encoder, vocab):
                       iterator=iterator,
                       train_dataset=train_dataset,
                       validation_dataset=dev_dataset,
-                      patience=10,
+                      patience=30,
                       cuda_device=0,
-                      num_epochs=20)
+                      validation_metric='+f1_measure',
+                      num_epochs=500)
 
-    trainer.train()
+
+    results = trainer.train()
+    print("Resilt for ", positive_label, str(results))
 
     return model
 
@@ -194,11 +223,12 @@ def get_final_classifier(models, word_embeddings, encoder, vocab):
                       iterator=iterator,
                       train_dataset=train_dataset,
                       validation_dataset=dev_dataset,
-                      patience=10,
+                      patience=30,
                       cuda_device=0,
-                      num_epochs=20)
+                      num_epochs=500)
 
-    trainer.train()
+    results = trainer.train()
+    print("Final result", str(results))
 
     return final_model
 
@@ -220,7 +250,7 @@ def main():
     word_embeddings = BasicTextFieldEmbedder({"tokens": token_embedding}).cuda()
 
     encoder = PytorchSeq2VecWrapper(
-        torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True).cuda(),
+        torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True)
     )
 
     models = list([get_one_vs_all_model(i, word_embeddings, encoder, vocab) for i in range(0, 7)])
