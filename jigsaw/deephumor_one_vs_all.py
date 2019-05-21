@@ -7,25 +7,27 @@ import torch.optim as optim
 from allennlp.data.iterators import BucketIterator
 from allennlp.data.vocabulary import Vocabulary
 from allennlp.models import Model
-from allennlp.modules.seq2vec_encoders import Seq2VecEncoder, PytorchSeq2VecWrapper
+from allennlp.modules.seq2vec_encoders import Seq2VecEncoder, PytorchSeq2VecWrapper, CnnEncoder
 from allennlp.modules.text_field_embedders import TextFieldEmbedder, BasicTextFieldEmbedder
-from allennlp.modules.token_embedders import Embedding
+from allennlp.modules.token_embedders import Embedding, ElmoTokenEmbedder
 from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import CategoricalAccuracy, F1Measure
 from allennlp.training.trainer import Trainer
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
-from jigsaw import DeepHumorDatasetReader, SentenceClassifierPredictor, WassersteinLoss, one_hot_embedding
+from jigsaw import DeepHumorDatasetReader, SentenceClassifierPredictor, WassersteinLoss, one_hot_embedding, \
+    MeanAbsoluteError
 
-EMBEDDING_DIM = 128
+EMBEDDING_DIM = 256
 HIDDEN_DIM = 128
-BATCH_SIZE = 256
+BATCH_SIZE = 64
 
 # Model in AllenNLP represents a model that is trained.
 @Model.register("lstm_classifier")
 class LstmClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
+                 weight: float,
                  word_embeddings: TextFieldEmbedder,
                  encoder: Seq2VecEncoder,
                  vocab: Vocabulary) -> None:
@@ -36,10 +38,8 @@ class LstmClassifier(Model):
         self.encoder = encoder
 
         self.decision = torch.nn.Sequential(
+            torch.nn.Dropout(),
             torch.nn.Linear(encoder.get_output_dim(), 128),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(128),
-            torch.nn.Linear(128, 128),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(128),
             torch.nn.Linear(128, 1),
@@ -54,7 +54,7 @@ class LstmClassifier(Model):
         pos_weight = reader.distribution[reader.positive_label]
         print("pos weight", pos_weight)
         self.loss_function = BCEWithLogitsLoss(
-            pos_weight=torch.tensor(3.0)
+            pos_weight=torch.tensor(weight)
         )
 
         self.threshold = torch.tensor([0.5] * BATCH_SIZE).cuda()
@@ -130,6 +130,7 @@ class FinalClassifier(Model):
 
         self.accuracy = CategoricalAccuracy()
         self.f1_measures = [F1Measure(positive_label=i) for i in range(0, 7)]
+        self.mae = MeanAbsoluteError()
 
 
     # Instances are fed to forward after batching.
@@ -150,17 +151,21 @@ class FinalClassifier(Model):
         # Your output dictionary must contain a "loss" key for your model to be trained.
         output = {"logits": logits}
         if label is not None:
+            _, predicted = torch.max(logits, 1)
+
             self.accuracy(logits, label)
             for f1 in self.f1_measures:
                 f1(logits, label)
 
             output["loss"] = self.loss_function(logits, label)
+            self.mae(predicted, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         results = {
             'accuracy': self.accuracy.get_metric(reset),
+            'mae': self.mae.get_metric(reset),
         }
         for index, f1 in enumerate(self.f1_measures):
             precision, recall, f1_measure = f1.get_metric(reset)
@@ -172,38 +177,82 @@ class FinalClassifier(Model):
         return results
 
 
-def get_one_vs_all_model(positive_label, word_embeddings, encoder, vocab):
-    print("Train one vs all for label ", positive_label)
-    reader = DeepHumorDatasetReader(positive_label=positive_label)
+def     get_one_vs_all_model(positive_label, vocab):
+    best_model = None
+    best_performance = None
+    best_weight = None
 
-    train_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/train_set.p')
-    dev_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/validation_set.p')
+    encoder = PytorchSeq2VecWrapper(
+        torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True)
+    )
 
-    model = LstmClassifier(reader, word_embeddings, encoder, vocab).cuda()
+    # original
+    options_file = "https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json"
+    weight_file = "https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5"
 
-    optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
+    # small
+    options_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
+                    '/2x1024_128_2048cnn_1xhighway/elmo_2x1024_128_2048cnn_1xhighway_options.json')
+    weight_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
+                   '/2x1024_128_2048cnn_1xhighway/elmo_2x1024_128_2048cnn_1xhighway_weights.hdf5')
 
-    iterator = BucketIterator(batch_size=BATCH_SIZE, sorting_keys=[("tokens", "num_tokens")])
+    elmo_embedder = ElmoTokenEmbedder(
+        options_file,
+        weight_file,
+        dropout=0.5,
+        do_layer_norm=False,
+    ).cuda()
 
-    iterator.index_with(vocab)
+    # token_embedding = Embedding(
+    #    num_embeddings=vocab.get_vocab_size('tokens'),
+    #    embedding_dim=EMBEDDING_DIM
+    # ).cuda()
 
-    trainer = Trainer(model=model,
-                      optimizer=optimizer,
-                      iterator=iterator,
-                      train_dataset=train_dataset,
-                      validation_dataset=dev_dataset,
-                      patience=30,
-                      cuda_device=0,
-                      validation_metric='+f1_measure',
-                      num_epochs=500)
+    word_embeddings = BasicTextFieldEmbedder({"tokens": elmo_embedder}).cuda()
+
+    # encoder = CnnEncoder(
+    #    embedding_dim=EMBEDDING_DIM,
+    #    num_filters=6,
+    # )
+
+    for weight in [3.0]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
+        print("Train one vs all for label ", positive_label)
+        reader = DeepHumorDatasetReader(positive_label=positive_label)
+
+        train_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/train_set.p')
+        dev_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/validation_set.p')
+
+        model = LstmClassifier(reader, weight, word_embeddings, encoder, vocab).cuda()
+
+        optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
+
+        iterator = BucketIterator(batch_size=BATCH_SIZE, sorting_keys=[("tokens", "num_tokens")])
+
+        iterator.index_with(vocab)
+
+        trainer = Trainer(model=model,
+                          optimizer=optimizer,
+                          iterator=iterator,
+                          train_dataset=train_dataset,
+                          validation_dataset=dev_dataset,
+                          patience=75,
+                          cuda_device=0,
+                          validation_metric='+f1_measure',
+                          num_epochs=1000)
 
 
-    results = trainer.train()
-    print("Resilt for ", positive_label, str(results))
+        results = trainer.train()
+        performance = results['best_validation_f1_measure']
+        if best_performance is None or best_performance < performance:
+            best_performance = performance
+            best_model = model
+            best_weight = weight
+    print("Result for ", positive_label, str(results))
+    print("With weight ", best_weight)
+    raise NotImplementedError()
+    return best_model
 
-    return model
-
-def get_final_classifier(models, word_embeddings, encoder, vocab):
+def get_final_classifier(models, vocab):
     print("Train final classifier ")
     reader = DeepHumorDatasetReader()
 
@@ -212,7 +261,7 @@ def get_final_classifier(models, word_embeddings, encoder, vocab):
 
     final_model = FinalClassifier(vocab=vocab, models=models)
 
-    optimizer = optim.Adam(final_model.parameters(), lr=1e-4, weight_decay=1e-5)
+    optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=1e-5)
 
     iterator = BucketIterator(batch_size=BATCH_SIZE, sorting_keys=[("tokens", "num_tokens")])
 
@@ -242,19 +291,8 @@ def main():
 
     vocab = Vocabulary.from_instances(train_dataset + dev_dataset, min_count={'tokens': 3})
 
-    token_embedding = Embedding(
-        num_embeddings=vocab.get_vocab_size('tokens'),
-        embedding_dim=EMBEDDING_DIM
-    ).cuda()
-
-    word_embeddings = BasicTextFieldEmbedder({"tokens": token_embedding}).cuda()
-
-    encoder = PytorchSeq2VecWrapper(
-        torch.nn.LSTM(EMBEDDING_DIM, HIDDEN_DIM, batch_first=True)
-    )
-
-    models = list([get_one_vs_all_model(i, word_embeddings, encoder, vocab) for i in range(0, 7)])
-    final_model = get_final_classifier(models=models, word_embeddings=word_embeddings, encoder=encoder, vocab=vocab)
+    models = list([get_one_vs_all_model(i, vocab) for i in range(0, 7)])
+    final_model = get_final_classifier(models=models, vocab=vocab)
 
 
 
