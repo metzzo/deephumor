@@ -5,7 +5,8 @@ import time
 import copy
 
 import torch
-from torch import nn
+from torch import nn, autograd
+from torch.nn.utils.rnn import pack_padded_sequence
 from torch.utils.data import DataLoader, WeightedRandomSampler
 import numpy as np
 
@@ -15,27 +16,49 @@ from evaluation.loss_evaluation import LossEvaluation
 from evaluation.overall_evaluation import OverallEvaluation
 
 n_hidden = 128
+all_letters = string.ascii_letters + " .,;'"
+n_letters = len(all_letters)
 
 
 class Network(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
+    def __init__(self, embedding_dim, hidden_dim, output_size):
         super(Network, self).__init__()
 
-        self.hidden_size = hidden_size
+        vocab_size = n_letters
 
-        self.i2h = nn.Linear(input_size + hidden_size, hidden_size)
-        self.i2o = nn.Linear(input_size + hidden_size, output_size)
+        self.hidden_dim = hidden_dim
+
+        self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
+
+        # The LSTM takes word embeddings as inputs, and outputs hidden states
+        # with dimensionality hidden_dim.
+        self.lstm = nn.LSTM(embedding_dim, hidden_dim)
+
+        # The linear layer that maps from hidden state space to classification space
+        self.hidden2classification = nn.Linear(hidden_dim, output_size)
+        self.dropout_layer = nn.Dropout(p=0.2)
         self.softmax = nn.LogSoftmax(dim=1)
 
-    def forward(self, input, hidden):
-        combined = torch.cat((input, hidden), 1)
-        hidden = self.i2h(combined)
-        output = self.i2o(combined)
-        output = self.softmax(output)
-        return output, hidden
+    def forward(self, batch, lengths):
+        self.hidden = self.init_hidden(batch.size(-1))
 
-    def init_hidden(self):
-        return torch.zeros(1, self.hidden_size)
+        embeds = self.embedding(batch)
+        packed_input = pack_padded_sequence(embeds, lengths)
+        outputs, (ht, ct) = self.lstm(packed_input, self.hidden)
+
+        # ht is the last hidden state of the sequences
+        # ht = (1 x batch_size x hidden_dim)
+        # ht[-1] = (batch_size x hidden_dim)
+        output = self.dropout_layer(ht[-1])
+        output = self.hidden2out(output)
+        output = self.softmax(output)
+
+        return output
+
+    def init_hidden(self, batch_size):
+        return (autograd.Variable(torch.randn(1, batch_size, self.hidden_dim)),
+                autograd.Variable(torch.randn(1, batch_size, self.hidden_dim)))
+
 
 def train_lstm_model(
         criterion,
