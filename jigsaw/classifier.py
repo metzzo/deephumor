@@ -11,10 +11,10 @@ from sklearn.metrics import mean_absolute_error
 
 from jigsaw.wasserstein_loss import WassersteinLossStab
 
-from emd import EMDLoss
+#from emd import EMDLoss
 
 import numpy as np
-import ot
+#import ot
 
 def one_hot_embedding(labels, num_classes):
     """Embedding labels to one-hot form.
