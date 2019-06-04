@@ -57,3 +57,5 @@ raw/
 
 .idea/*
 !.idea/runConfigurations/
+
+PyTorch-EMDLoss/
