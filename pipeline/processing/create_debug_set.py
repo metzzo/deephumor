@@ -7,7 +7,7 @@ import pickle
 import os
 import shutil
 
-from datamanagement.cartoon_dataset import CartoonDataset
+from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 

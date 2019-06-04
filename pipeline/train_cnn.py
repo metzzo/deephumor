@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from torch.nn import CrossEntropyLoss, L1Loss, NLLLoss
 from torch.nn.functional import softmax
 
-from architectures.factory import get_model
+from cnn_experiments.factory import get_model
 from datamanagement.factory import get_subset
 from models.train_cnn import train_cnn_model
 from torch.optim import lr_scheduler
@@ -70,12 +70,6 @@ def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, 
 
 def setup_train_cnn(parser: argparse.ArgumentParser, group):
     group.add_argument('--train_cnn', action="store_true")
-
-    parser.add_argument('--epochs', type=int)
-    parser.add_argument('--batch_size', type=int)
-    parser.add_argument('--loss', type=str)
-    parser.add_argument('--learning_rate', type=float, default=0.001)
-    parser.add_argument('--optimizer', type=str, default='sgd')
 
     def train(args, device):
         if not args.train_cnn:

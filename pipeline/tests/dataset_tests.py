@@ -1,9 +1,9 @@
 from datamanagement.subset import Subset
-from pipeline.datamanagement.cartoon_dataset import CartoonDataset
+from pipeline.datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 
 
 def test_dataset():
-    ds = CartoonDataset(
+    ds = CartoonCNNDataset(
         subset=Subset.TRAINING
     )
 

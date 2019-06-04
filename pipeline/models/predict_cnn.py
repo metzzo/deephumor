@@ -8,7 +8,7 @@ import pickle
 import torch
 from torch.utils.data import DataLoader
 
-from architectures.factory import get_model
+from cnn_experiments.factory import get_model
 from datamanagement.subset import Subset
 from datamanagement.factory import get_subset
 from evaluation.overall_evaluation import OverallEvaluation
@@ -59,9 +59,10 @@ def setup_predict_cnn(parser: argparse.ArgumentParser, group):
                 outputs = network(inputs)
                 labels = selected_model.get_labels(labels=labels)
                 preds = selected_model.get_predictions(outputs=outputs)
+                _, top_five = outputs.topk(5, 1, True, True)
 
                 # statistics
-                evaluation.add_entry(predictions=preds, actual_label=labels, loss=None)
+                evaluation.add_entry(predictions=preds, actual_label=labels, loss=None, top_five=top_five)
 
         print('Prediction Evaluation:\n {0}'.format(str(evaluation)))
 

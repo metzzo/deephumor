@@ -18,9 +18,9 @@ class OverallEvaluation(BaseEvaluation):
         self.reset()
         return self
 
-    def add_entry(self, predictions, actual_label, loss):
+    def add_entry(self, **kwargs):
         for eval in self.evaluations:
-            eval.add_entry(predictions=predictions, actual_label=actual_label, loss=loss)
+            eval.add_entry(**kwargs)
 
     def reset(self):
         super(OverallEvaluation, self).reset()

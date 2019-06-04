@@ -15,8 +15,8 @@ class AccuracyEvaluation(BaseEvaluation):
         self.true_predictions = 0
         self.sample_count = 0
 
-    def add_entry(self, predictions, actual_label, loss):
-        self.true_predictions += torch.sum(predictions == actual_label)
+    def add_entry(self, predictions, actual_label, loss, top_five=None):
+        self.true_predictions += torch.sum(predictions.long() == actual_label.long())
         self.sample_count += len(predictions)
 
     @property

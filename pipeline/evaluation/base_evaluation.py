@@ -8,5 +8,5 @@ class BaseEvaluation(object):
     def reset(self):
         self.entry_count = 0
 
-    def add_entry(self, predictions, actual_label, loss):
+    def add_entry(self, predictions, actual_label, loss, top_five=None):
         raise NotImplementedError()

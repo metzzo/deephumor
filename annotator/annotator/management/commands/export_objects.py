@@ -47,7 +47,7 @@ class Command(BaseCommand):
         os.mkdir(EXPORT_DIR)
 
         records = []
-        for collection in ImageAnnotationCollection.objects.all().filter(annotated=True):
+        for collection in ImageAnnotationCollection.objects.all(): #.filter(annotated=True):
             samples = []
             try:
                 im = Image.open('./media/photos/{0}/cartoon.jpg'.format(collection.cartoon.id))
@@ -62,7 +62,7 @@ class Command(BaseCommand):
                     copy = im.copy()
                     copy = copy.crop(dims)
                     copy.save(os.path.join(EXPORT_DIR, filename), "JPEG")
-
+                    print("Save {0}".format(collection.id))
                     fields = [
                         filename,
                         annotation.id,

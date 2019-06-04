@@ -11,7 +11,7 @@ class MAEEvaluation(BaseEvaluation):
         self.entries = np.zeros(num * batch_size, dtype=np.float32)
         self.reset()
 
-    def add_entry(self, predictions, actual_label, loss):
+    def add_entry(self, predictions, actual_label, loss, top_five=None):
         mae = torch.abs(actual_label - predictions).cpu()
         self.entries[self.entry_count:self.entry_count + len(mae)] = mae
         self.entry_count += len(mae)
