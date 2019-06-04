@@ -9,3 +9,5 @@ __pycache__/
 result/
 result_2/
 */build/
+
+tfidf

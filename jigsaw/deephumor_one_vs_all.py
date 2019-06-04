@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.optim as optim
 
-from allennlp.data.iterators import BucketIterator
+from allennlp.data.iterators import BucketIterator, BasicIterator
 from allennlp.data.vocabulary import Vocabulary
 from allennlp.models import Model
 from allennlp.modules.seq2vec_encoders import Seq2VecEncoder, PytorchSeq2VecWrapper, CnnEncoder
@@ -226,7 +226,7 @@ def     get_one_vs_all_model(positive_label, vocab):
 
         optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
 
-        iterator = BucketIterator(batch_size=BATCH_SIZE, sorting_keys=[("tokens", "num_tokens")])
+        iterator = BasicIterator(batch_size=BATCH_SIZE, sorting_keys=[("tokens", "num_tokens")])
 
         iterator.index_with(vocab)
 
