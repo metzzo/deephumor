@@ -9,7 +9,6 @@ from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import CategoricalAccuracy, F1Measure, MeanAbsoluteError
 from sklearn.metrics import mean_absolute_error
 
-from jigsaw.wasserstein_loss import WassersteinLossStab
 
 #from emd import EMDLoss
 
