@@ -28,13 +28,10 @@ BATCH_SIZE = 64
 class LstmClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
-                 weight: float,
-                 vocab) -> None:
+                 weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Dropout(0.2),
-            torch.nn.Linear(512, 16),
-            torch.nn.BatchNorm1d(16),
+            torch.nn.Linear(300, 16),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(16),
         ).cuda()
@@ -87,9 +84,8 @@ class LstmClassifier(Model):
 
 class FinalClassifier(Model):
     def __init__(self,
-                 vocab: Vocabulary,
                  models) -> None:
-        super().__init__(vocab)
+        super().__init__(None)
         self.models = models
 
         for model in self.models:
@@ -121,13 +117,13 @@ class FinalClassifier(Model):
     def forward(self,
                 meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        def apply_model(model, idx):
-            result = model(meaning, (label == idx).int())['logits'].flatten()
+        def apply_model(model):
+            result = model.decision(meaning)
             return result
 
-
-        results = [apply_model(model, idx) for idx, model in enumerate(self.models)]
+        results = [apply_model(model) for model in self.models]
         combined = torch.stack(results, 1)
+        combined = combined.reshape(combined.size(0), -1)
         logits = self.decision(combined)
 
         # In AllenNLP, the output of forward() is a dictionary.
@@ -160,7 +156,7 @@ class FinalClassifier(Model):
         return results
 
 
-def get_one_vs_all_model(positive_label, vocab):
+def get_one_vs_all_model(positive_label):
     best_performance = None
     best_weight = None
     best_model = None
@@ -171,7 +167,7 @@ def get_one_vs_all_model(positive_label, vocab):
         train_dataset = reader.read('train')
         dev_dataset = reader.read('val')
 
-        model = LstmClassifier(reader, weight, vocab).cuda()
+        model = LstmClassifier(reader, weight).cuda()
 
         optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-6)
 
@@ -182,7 +178,7 @@ def get_one_vs_all_model(positive_label, vocab):
                           iterator=iterator,
                           train_dataset=train_dataset,
                           validation_dataset=dev_dataset,
-                          patience=25,
+                          patience=100,
                           cuda_device=0,
                           validation_metric='+f1_measure',
                           num_epochs=1000)
@@ -198,16 +194,16 @@ def get_one_vs_all_model(positive_label, vocab):
     print("With weight ", best_weight)
     return best_model
 
-def get_final_classifier(models, vocab):
+def get_final_classifier(models):
     print("Train final classifier ")
     reader = DeepHumorDatasetReader()
 
     train_dataset = reader.read('train')
     dev_dataset = reader.read('val')
 
-    final_model = FinalClassifier(vocab=vocab, models=models)
+    final_model = FinalClassifier(models=models)
 
-    optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=1e-5)
+    optimizer = optim.Adam(final_model.parameters(), lr=1e-6, weight_decay=1e-5)
 
     iterator = BasicIterator(batch_size=BATCH_SIZE)
 
@@ -227,16 +223,8 @@ def get_final_classifier(models, vocab):
 
 def main():
     # apply models and train final classiier
-
-    reader = DeepHumorDatasetReader()
-
-    train_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/train_set.p')
-    dev_dataset = reader.read('C:/Users/rfischer/Development/DeepHumor/export/original_export/validation_set.p')
-
-    vocab = Vocabulary.from_instances(train_dataset + dev_dataset, min_count={'tokens': 3})
-
-    models = list([get_one_vs_all_model(i, vocab) for i in range(0, 7)])
-    final_model = get_final_classifier(models=models, vocab=vocab)
+    models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
+    final_model = get_final_classifier(models=models)
 
 
 

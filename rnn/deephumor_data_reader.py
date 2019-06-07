@@ -1,7 +1,7 @@
 import os
 import pickle
 
-import nltk
+import spacy
 import torch
 from typing import Iterator, List, Dict
 
@@ -17,6 +17,7 @@ from allennlp.modules import Elmo
 # small
 from allennlp.modules.elmo import batch_to_ids
 from sklearn.preprocessing import StandardScaler
+nlp = spacy.load('en_core_web_lg')
 
 options_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
                 '/2x1024_128_2048cnn_1xhighway/elmo_2x1024_128_2048cnn_1xhighway_options.json')
@@ -46,10 +47,26 @@ class DeepHumorDatasetReader(DatasetReader):
 
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+        if not os.path.exists('word_embedding.p'):
+            def tokenize(x):
+                doc = nlp(x)
+                new = []
+                for token in doc:
+                    if 'NN' in token.tag_ and not token.is_oov:
+                        new.append(token.vector)
+                new = np.array(new)
+                if len(new) > 0:
+                    return new.mean(axis=0)
+                else:
+                    return np.zeros(300)
 
-        train_punchlines = self.train_df['punchline'].apply(nltk.word_tokenize)
-        validation_punchlines = self.validation_df['punchline'].apply(nltk.word_tokenize)
-
+            punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
+            punchlines = np.vstack(punchlines['punchline'].apply(tokenize).values)
+            self.feature_vectors = torch.tensor(punchlines)
+            pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
+        else:
+            self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
+        """
         if not os.path.exists('word_embedding.p'):
             print("get elmo vectors")
             elmo = Elmo(options_file, weight_file, 2, dropout=0)
@@ -60,17 +77,18 @@ class DeepHumorDatasetReader(DatasetReader):
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
+        """
 
-        scaler = StandardScaler()
+        #scaler = StandardScaler()
 
         self.train_feature_vec = self.feature_vectors[:len(self.train_df), :]
         self.train_feature_vec = self.train_feature_vec.detach().cpu().numpy()
-        self.train_feature_vec = scaler.fit_transform(self.train_feature_vec)
+        #self.train_feature_vec = scaler.fit_transform(self.train_feature_vec)
         self.train_label_vec = (np.array(self.train_df[['funniness']]).flatten() - 1).astype(int)
 
         self.validation_feature_vec = self.feature_vectors[len(self.train_df):, :]
         self.validation_feature_vec = self.validation_feature_vec.detach().cpu().numpy()
-        self.validation_feature_vec = scaler.transform(self.validation_feature_vec)
+        #self.validation_feature_vec = scaler.transform(self.validation_feature_vec)
         self.validation_label_vec = (np.array(self.validation_df[['funniness']]).flatten() - 1).astype(int)
 
         self.positive_label = positive_label
