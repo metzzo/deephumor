@@ -31,13 +31,14 @@ class LstmClassifier(Model):
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(300, 16),
+            torch.nn.Linear(300, 48),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(16),
+            torch.nn.BatchNorm1d(48),
         ).cuda()
 
         self.final_decision = torch.nn.Sequential(
-            torch.nn.Linear(16, 1),
+            torch.nn.Linear(48, 1),
+            torch.nn.ReLU(),
         ).cuda()
 
         self.accuracy = CategoricalAccuracy()
@@ -92,19 +93,19 @@ class FinalClassifier(Model):
             for param in model.parameters():
                 param.requires_grad = False
 
-        self.loss_function = torch.nn.CrossEntropyLoss()
+        self.loss_function = torch.nn.L1Loss()
 
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(7 * 16, 64),
+            torch.nn.Dropout(0.5),
+            torch.nn.Linear(7 * 48, 64),
             torch.nn.BatchNorm1d(64),
             torch.nn.ReLU(),
-            torch.nn.Linear(64, 64),
-            torch.nn.BatchNorm1d(64),
-            torch.nn.ReLU(),
+            torch.nn.Dropout(0.1),
             torch.nn.Linear(
                 in_features=64,
-                out_features=7
-            )
+                out_features=1
+            ),
+            torch.nn.ReLU()
         ).cuda()
 
         self.accuracy = CategoricalAccuracy()
@@ -130,22 +131,23 @@ class FinalClassifier(Model):
         # Your output dictionary must contain a "loss" key for your model to be trained.
         output = {"logits": logits}
         if label is not None:
-            _, predicted = torch.max(logits, 1)
+            predicted = (logits * 6).float()
+            label = label.reshape(-1, 1).float()
+            #self.accuracy(logits, label)
+            #for f1 in self.f1_measures:
+            #    f1(logits, label)
 
-            self.accuracy(logits, label)
-            for f1 in self.f1_measures:
-                f1(logits, label)
-
-            output["loss"] = self.loss_function(logits, label)
+            output["loss"] = self.loss_function(logits, label / 6.0)
             self.mae(predicted, label)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         results = {
-            'accuracy': self.accuracy.get_metric(reset),
+            #'accuracy': self.accuracy.get_metric(reset),
             'mae': self.mae.get_metric(reset),
         }
+        """
         for index, f1 in enumerate(self.f1_measures):
             precision, recall, f1_measure = f1.get_metric(reset)
             results.update({
@@ -153,6 +155,7 @@ class FinalClassifier(Model):
                 #'{}_recall'.format(index + 1): recall,
                 '{}_f1_measure'.format(index + 1): f1_measure
             })
+        """
         return results
 
 
@@ -160,7 +163,7 @@ def get_one_vs_all_model(positive_label):
     best_performance = None
     best_weight = None
     best_model = None
-    for weight in [2.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
+    for weight in [1.5, 2.0, 2.5, 3.0, 3.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
         print("Train one vs all for label ", positive_label)
         reader = DeepHumorDatasetReader(positive_label=positive_label)
 
@@ -181,7 +184,7 @@ def get_one_vs_all_model(positive_label):
                           patience=100,
                           cuda_device=0,
                           validation_metric='+f1_measure',
-                          num_epochs=1000)
+                          num_epochs=10000)
 
 
         results = trainer.train()
@@ -203,7 +206,7 @@ def get_final_classifier(models):
 
     final_model = FinalClassifier(models=models)
 
-    optimizer = optim.Adam(final_model.parameters(), lr=1e-6, weight_decay=1e-5)
+    optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=0.00001)
 
     iterator = BasicIterator(batch_size=BATCH_SIZE)
 
@@ -214,7 +217,7 @@ def get_final_classifier(models):
                       validation_dataset=dev_dataset,
                       patience=25,
                       cuda_device=0,
-                      num_epochs=500)
+                      num_epochs=10000)
 
     results = trainer.train()
     print("Final result", str(results))
