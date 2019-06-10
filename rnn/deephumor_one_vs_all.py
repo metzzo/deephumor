@@ -51,7 +51,6 @@ class LstmClassifier(Model):
         self.loss_function = BCEWithLogitsLoss(
             pos_weight=torch.tensor(weight)
         )
-
         self.threshold = torch.tensor([0.5] * BATCH_SIZE).cuda()
 
     def forward(self,
