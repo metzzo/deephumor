@@ -1,3 +1,4 @@
+import datetime
 import pickle
 from typing import Dict
 
@@ -34,7 +35,7 @@ class LstmClassifier(Model):
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(4262 - 300, 48),
+            torch.nn.Linear(4262, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
@@ -240,6 +241,11 @@ def main():
     # apply models and train final classiier
     models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
     final_model = get_final_classifier(models=models)
+
+    torch.save({
+        "final_model": final_model,
+        "models": models,
+    }, "model_{}.pth".format(str(datetime.datetime.now())))
 
 
 
