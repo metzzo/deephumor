@@ -34,7 +34,7 @@ class LstmClassifier(Model):
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(4262, 48),
+            torch.nn.Linear(4262 - 300, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()

@@ -68,7 +68,7 @@ class DeepHumorDatasetReader(DatasetReader):
             raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
             punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
             tfidf_punchlines = vectorizer.fit_transform(raw_punchlines['punchline']).toarray()
-            punchlines = np.hstack([punchlines, tfidf_punchlines])
+            punchlines = tfidf_punchlines # np.hstack([punchlines, tfidf_punchlines])
 
             self.feature_vectors = torch.tensor(punchlines)
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
