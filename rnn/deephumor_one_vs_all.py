@@ -1,3 +1,4 @@
+import pickle
 from typing import Dict
 
 import numpy as np
@@ -15,9 +16,11 @@ from allennlp.modules.token_embedders import Embedding, ElmoTokenEmbedder
 from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import CategoricalAccuracy, F1Measure
 from allennlp.training.trainer import Trainer
+from sklearn.dummy import DummyRegressor
+from sklearn.metrics import mean_absolute_error
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
-from rnn import DeepHumorDatasetReader, MeanAbsoluteError
+from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAIN_PATH
 
 EMBEDDING_DIM = 256
 HIDDEN_DIM = 128
@@ -31,7 +34,7 @@ class LstmClassifier(Model):
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(300, 48),
+            torch.nn.Linear(4262, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
@@ -163,7 +166,7 @@ def get_one_vs_all_model(positive_label):
     best_performance = None
     best_weight = None
     best_model = None
-    for weight in [1.5, 2.0, 2.5, 3.0, 3.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
+    for weight in [2.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
         print("Train one vs all for label ", positive_label)
         reader = DeepHumorDatasetReader(positive_label=positive_label)
 
@@ -224,6 +227,15 @@ def get_final_classifier(models):
 
     return final_model
 
+def get_dummy_performance():
+    validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+    train_df = pickle.load(open(TRAIN_PATH, "rb"))
+
+    regressor = DummyRegressor()
+    regressor.fit(None, train_df['funniness'])
+    predicted = regressor.predict(validation_df['punchline'])
+    print("Dummy MAE", mean_absolute_error(validation_df['funniness'], predicted))
+
 def main():
     # apply models and train final classiier
     models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
@@ -233,4 +245,5 @@ def main():
 
 
 if __name__ == '__main__':
+    get_dummy_performance()
     main()

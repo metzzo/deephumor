@@ -16,6 +16,7 @@ from allennlp.modules import Elmo
 
 # small
 from allennlp.modules.elmo import batch_to_ids
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
 nlp = spacy.load('en_core_web_lg')
 
@@ -48,20 +49,27 @@ class DeepHumorDatasetReader(DatasetReader):
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
         if not os.path.exists('word_embedding.p'):
+            vocabulary = set()
             def tokenize(x):
                 doc = nlp(x)
                 new = []
                 for token in doc:
-                    if 'NN' in token.tag_ and not token.is_oov:
-                        new.append(token.vector)
+                    if 'NN' in token.tag_:
+                        vocabulary.add(token.text)
+                        if not token.is_oov:
+                            new.append(token.vector)
                 new = np.array(new)
                 if len(new) > 0:
                     return new.mean(axis=0)
                 else:
                     return np.zeros(300)
+            vectorizer = TfidfVectorizer(vocabulary=vocabulary)
 
-            punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
-            punchlines = np.vstack(punchlines['punchline'].apply(tokenize).values)
+            raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
+            punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
+            tfidf_punchlines = vectorizer.fit_transform(raw_punchlines['punchline']).toarray()
+            punchlines = np.hstack([punchlines, tfidf_punchlines])
+
             self.feature_vectors = torch.tensor(punchlines)
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
