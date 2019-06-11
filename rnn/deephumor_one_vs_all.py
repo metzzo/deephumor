@@ -26,31 +26,13 @@ from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAI
 
 BATCH_SIZE = 64
 
-
-class Preprocessor(nn.Module):
-    def __init__(self):
-        super().__init__()
-
-        self.net = torch.nn.Sequential(
-            torch.nn.Linear(4262, 1024),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(1024),
-        ).cuda()
-
-    def forward(self, input):
-        return self.net(input)
-
-
 class OneVRestClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
-                 weight: float,
-                 preprocessor) -> None:
+                 weight: float) -> None:
         super().__init__(None)
-        self.preprocessor = preprocessor
-
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(1024, 48),
+            torch.nn.Linear(1024 + 256, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
@@ -59,6 +41,18 @@ class OneVRestClassifier(Model):
             torch.nn.Linear(48, 1),
             torch.nn.ReLU(),
         ).cuda()
+
+        self.tfidf_decision = torch.nn.Sequential(
+            torch.nn.Linear(3962, 1024),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(1024),
+        )
+
+        self.spacy_decision = torch.nn.Sequential(
+            torch.nn.Linear(300, 256),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(256),
+        )
 
         self.accuracy = CategoricalAccuracy()
         self.f1_measure = F1Measure(1)
@@ -69,9 +63,15 @@ class OneVRestClassifier(Model):
         self.threshold = torch.tensor([0.5] * BATCH_SIZE).cuda()
 
     def forward(self,
-                meaning,
+                tfidf_meaning,
+                spacy_meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        logits = self.final_decision(self.decision(self.preprocessor(meaning)))
+        tfidf_meaning = self.tfidf_decision(tfidf_meaning)
+        spacy_meaning = self.spacy_decision(spacy_meaning)
+
+        combined = torch.cat([tfidf_meaning, spacy_meaning], 1)
+
+        logits = self.final_decision(self.decision(combined))
 
         output = {"logits": logits}
         if label is not None:
@@ -103,17 +103,21 @@ class OneVRestClassifier(Model):
 
 class FinalClassifier(Model):
     def __init__(self,
-                 models,
-                 preprocessor) -> None:
+                 models) -> None:
         super().__init__(None)
         self.models = models
-        self.preprocessor = preprocessor
 
         for model in self.models:
             for param in model.parameters():
                 param.requires_grad = False
 
         self.loss_function = torch.nn.L1Loss()
+
+        self.prepare = torch.nn.Sequential(
+            torch.nn.Linear(48, 48),
+            torch.nn.BatchNorm1d(48),
+            torch.nn.ReLU(),
+        ).cuda()
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
@@ -136,13 +140,18 @@ class FinalClassifier(Model):
     # Instances are fed to forward after batching.
     # Fields are passed through arguments with the same name.
     def forward(self,
-                meaning,
+                tfidf_meaning,
+                spacy_meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        def apply_model(model):
-            result = model.decision(self.preprocessor(meaning))
+        def apply_model(model, tfidf_meaning, spacy_meaning):
+            tfidf_meaning = model.tfidf_decision(tfidf_meaning)
+            spacy_meaning = model.spacy_decision(spacy_meaning)
+
+            combined = torch.cat([tfidf_meaning, spacy_meaning], 1)
+            result = model.decision(combined)
             return result
 
-        results = [apply_model(model) for model in self.models]
+        results = [apply_model(model, tfidf_meaning, spacy_meaning) for model in self.models]
         combined = torch.stack(results, 1)
         combined = combined.reshape(combined.size(0), -1)
         logits = self.decision(combined)
@@ -179,7 +188,7 @@ class FinalClassifier(Model):
         return results
 
 
-def get_one_vs_all_model(positive_label, preprocessor):
+def get_one_vs_all_model(positive_label):
     best_performance = None
     best_weight = None
     best_model = None
@@ -190,7 +199,7 @@ def get_one_vs_all_model(positive_label, preprocessor):
         train_dataset = reader.read('train')
         dev_dataset = reader.read('val')
 
-        model = OneVRestClassifier(reader, weight, preprocessor).cuda()
+        model = OneVRestClassifier(reader, weight).cuda()
 
         optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-6)
 
@@ -217,14 +226,14 @@ def get_one_vs_all_model(positive_label, preprocessor):
     print("With weight ", best_weight)
     return best_model
 
-def get_final_classifier(models, preprocessor):
+def get_final_classifier(models):
     print("Train final classifier ")
     reader = DeepHumorDatasetReader()
 
     train_dataset = reader.read('train')
     dev_dataset = reader.read('val')
 
-    final_model = FinalClassifier(models=models, preprocessor=preprocessor)
+    final_model = FinalClassifier(models=models)
 
     optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=0.00001)
 
@@ -255,10 +264,8 @@ def get_dummy_performance():
 
 def main():
     # apply models and train final classiier
-    preprocessor = Preprocessor()
-
-    models = list([get_one_vs_all_model(i, preprocessor) for i in [6, 5, 4, 3, 2, 1, 0]])
-    final_model = get_final_classifier(models=models, preprocessor=preprocessor)
+    models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
+    final_model = get_final_classifier(models=models)
 
     torch.save({
         "final_model": final_model,

@@ -90,12 +90,12 @@ class DeepHumorDatasetReader(DatasetReader):
             vectorizer = TfidfVectorizer(vocabulary=vocabulary)
 
             raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
-            punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
-            tfidf_punchlines = vectorizer.fit_transform(raw_punchlines['punchline']).toarray()
+            self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
+            vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
+            self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
-            punchlines = np.hstack([punchlines, tfidf_punchlines])
+            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines])
 
-            self.feature_vectors = torch.tensor(punchlines)
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
@@ -112,16 +112,10 @@ class DeepHumorDatasetReader(DatasetReader):
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
         """
 
-        #scaler = StandardScaler()
-
         self.train_feature_vec = self.feature_vectors[:len(self.train_df), :]
-        self.train_feature_vec = self.train_feature_vec.detach().cpu().numpy()
-        #self.train_feature_vec = scaler.fit_transform(self.train_feature_vec)
         self.train_label_vec = (np.array(self.train_df[['funniness']]).flatten() - 1).astype(int)
 
         self.validation_feature_vec = self.feature_vectors[len(self.train_df):, :]
-        self.validation_feature_vec = self.validation_feature_vec.detach().cpu().numpy()
-        #self.validation_feature_vec = scaler.transform(self.validation_feature_vec)
         self.validation_label_vec = (np.array(self.validation_df[['funniness']]).flatten() - 1).astype(int)
 
         self.positive_label = positive_label
@@ -137,9 +131,11 @@ class DeepHumorDatasetReader(DatasetReader):
         self.train_feature_vec, self.train_label_vec = ros.fit_resample(self.train_feature_vec, self.train_label_vec)
 
     def text_to_instance(self, feature, target=None) -> Instance:
-        meaning_field = ArrayField(feature)
+        spacy_meaning_field = ArrayField(feature[:300])
+        tfidf_meaning_field = ArrayField(feature[300:])
         fields = {
-            "meaning": meaning_field,
+            "spacy_meaning": spacy_meaning_field,
+            "tfidf_meaning": tfidf_meaning_field,
         }
 
         if target is not None:
