@@ -28,6 +28,13 @@ from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAI
 BATCH_SIZE = 64
 
 
+def init_weights(m):
+    if type(m) == nn.Linear:
+        n = m.in_features
+        y = 1.0 / np.sqrt(n)
+        m.weight.data.uniform_(-y, y)
+        m.bias.data.fill_(0)
+
 def subsets(s):
     for cardinality in range(len(s) + 1):
         yield from combinations(s, cardinality)
@@ -56,6 +63,7 @@ class OneVRestClassifier(Model):
             pos_weight=torch.tensor(weight)
         )
         self.threshold = torch.tensor([0.5] * BATCH_SIZE).cuda()
+
 
     def forward(self,
                 spacy_meaning,
@@ -108,18 +116,27 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(len(self.classes) * 16, 256),
-            torch.nn.BatchNorm1d(256),
+            torch.nn.Linear(len(self.classes) * 8, 64),
+            torch.nn.BatchNorm1d(64),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.5),
             torch.nn.Linear(
-                in_features=256,
+                in_features=64,
                 out_features=1
             ),
             torch.nn.ReLU()
         ).cuda()
 
         self.mae = MeanAbsoluteError()
+
+        self.decision.apply(init_weights)
+        self.prepare = {}
+        for model in models:
+            self.prepare[model] = torch.nn.Sequential(
+                torch.nn.Linear(16, 8),
+                torch.nn.BatchNorm1d(8),
+                torch.nn.ReLU(),
+            ).cuda()
 
 
     # Instances are fed to forward after batching.
@@ -133,6 +150,7 @@ class FinalClassifier(Model):
 
         def apply_model(model):
             result = model.decision(meaning)
+            result = self.prepare[model](result)
             return result
 
         results = [apply_model(model) for model in self.models]
@@ -207,7 +225,7 @@ def get_final_classifier(models, classes):
 
     final_model = FinalClassifier(models=models, classes=classes)
 
-    optimizer = optim.Adam(final_model.parameters(), lr=0.01, weight_decay=0.001)
+    optimizer = optim.Adam(final_model.parameters(), lr=0.001, weight_decay=0.001)
 
     iterator = BasicIterator(batch_size=256)
 
