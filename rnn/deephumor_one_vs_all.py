@@ -19,6 +19,7 @@ from allennlp.training.metrics import CategoricalAccuracy, F1Measure
 from allennlp.training.trainer import Trainer
 from sklearn.dummy import DummyRegressor
 from sklearn.metrics import mean_absolute_error
+from torch import nn
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
 from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAIN_PATH
@@ -26,13 +27,30 @@ from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAI
 BATCH_SIZE = 64
 
 
-class LstmClassifier(Model):
+class Preprocessor(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(4262, 1024),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(1024),
+        ).cuda()
+
+    def forward(self, input):
+        return self.net(input)
+
+
+class OneVRestClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
-                 weight: float) -> None:
+                 weight: float,
+                 preprocessor) -> None:
         super().__init__(None)
+        self.preprocessor = preprocessor
+
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(1024 + 300, 48),
+            torch.nn.Linear(1024, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
@@ -53,7 +71,7 @@ class LstmClassifier(Model):
     def forward(self,
                 meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        logits = self.final_decision(self.decision(meaning))
+        logits = self.final_decision(self.decision(self.preprocessor(meaning)))
 
         output = {"logits": logits}
         if label is not None:
@@ -85,9 +103,11 @@ class LstmClassifier(Model):
 
 class FinalClassifier(Model):
     def __init__(self,
-                 models) -> None:
+                 models,
+                 preprocessor) -> None:
         super().__init__(None)
         self.models = models
+        self.preprocessor = preprocessor
 
         for model in self.models:
             for param in model.parameters():
@@ -119,7 +139,7 @@ class FinalClassifier(Model):
                 meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
         def apply_model(model):
-            result = model.decision(meaning)
+            result = model.decision(self.preprocessor(meaning))
             return result
 
         results = [apply_model(model) for model in self.models]
@@ -159,7 +179,7 @@ class FinalClassifier(Model):
         return results
 
 
-def get_one_vs_all_model(positive_label):
+def get_one_vs_all_model(positive_label, preprocessor):
     best_performance = None
     best_weight = None
     best_model = None
@@ -170,7 +190,7 @@ def get_one_vs_all_model(positive_label):
         train_dataset = reader.read('train')
         dev_dataset = reader.read('val')
 
-        model = LstmClassifier(reader, weight).cuda()
+        model = OneVRestClassifier(reader, weight, preprocessor).cuda()
 
         optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-6)
 
@@ -197,14 +217,14 @@ def get_one_vs_all_model(positive_label):
     print("With weight ", best_weight)
     return best_model
 
-def get_final_classifier(models):
+def get_final_classifier(models, preprocessor):
     print("Train final classifier ")
     reader = DeepHumorDatasetReader()
 
     train_dataset = reader.read('train')
     dev_dataset = reader.read('val')
 
-    final_model = FinalClassifier(models=models)
+    final_model = FinalClassifier(models=models, preprocessor=preprocessor)
 
     optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=0.00001)
 
@@ -235,8 +255,10 @@ def get_dummy_performance():
 
 def main():
     # apply models and train final classiier
-    models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
-    final_model = get_final_classifier(models=models)
+    preprocessor = Preprocessor()
+
+    models = list([get_one_vs_all_model(i, preprocessor) for i in [6, 5, 4, 3, 2, 1, 0]])
+    final_model = get_final_classifier(models=models, preprocessor=preprocessor)
 
     torch.save({
         "final_model": final_model,

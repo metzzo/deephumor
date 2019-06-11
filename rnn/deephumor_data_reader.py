@@ -93,10 +93,6 @@ class DeepHumorDatasetReader(DatasetReader):
             punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
             tfidf_punchlines = vectorizer.fit_transform(raw_punchlines['punchline']).toarray()
 
-            pca = PCA(n_components=1024)
-            pca.fit(tfidf_punchlines[:len(self.train_df)])
-            tfidf_punchlines = pca.transform(tfidf_punchlines)
-
             punchlines = np.hstack([punchlines, tfidf_punchlines])
 
             self.feature_vectors = torch.tensor(punchlines)
