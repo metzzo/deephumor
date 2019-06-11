@@ -26,13 +26,14 @@ from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAI
 
 BATCH_SIZE = 64
 
+
 class OneVRestClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(1024 + 256, 48),
+            torch.nn.Linear(4262 + 512, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
@@ -41,18 +42,6 @@ class OneVRestClassifier(Model):
             torch.nn.Linear(48, 1),
             torch.nn.ReLU(),
         ).cuda()
-
-        self.tfidf_decision = torch.nn.Sequential(
-            torch.nn.Linear(3962, 1024),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(1024),
-        )
-
-        self.spacy_decision = torch.nn.Sequential(
-            torch.nn.Linear(300, 256),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(256),
-        )
 
         self.accuracy = CategoricalAccuracy()
         self.f1_measure = F1Measure(1)
@@ -63,15 +52,11 @@ class OneVRestClassifier(Model):
         self.threshold = torch.tensor([0.5] * BATCH_SIZE).cuda()
 
     def forward(self,
-                tfidf_meaning,
                 spacy_meaning,
+                tfidf_meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        tfidf_meaning = self.tfidf_decision(tfidf_meaning)
-        spacy_meaning = self.spacy_decision(spacy_meaning)
-
-        combined = torch.cat([tfidf_meaning, spacy_meaning], 1)
-
-        logits = self.final_decision(self.decision(combined))
+        meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
+        logits = self.final_decision(self.decision(meaning))
 
         output = {"logits": logits}
         if label is not None:
@@ -113,12 +98,6 @@ class FinalClassifier(Model):
 
         self.loss_function = torch.nn.L1Loss()
 
-        self.prepare = torch.nn.Sequential(
-            torch.nn.Linear(48, 48),
-            torch.nn.BatchNorm1d(48),
-            torch.nn.ReLU(),
-        ).cuda()
-
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
             torch.nn.Linear(7 * 48, 64),
@@ -140,18 +119,17 @@ class FinalClassifier(Model):
     # Instances are fed to forward after batching.
     # Fields are passed through arguments with the same name.
     def forward(self,
-                tfidf_meaning,
                 spacy_meaning,
+                tfidf_meaning,
                 label: torch.Tensor = None) -> torch.Tensor:
-        def apply_model(model, tfidf_meaning, spacy_meaning):
-            tfidf_meaning = model.tfidf_decision(tfidf_meaning)
-            spacy_meaning = model.spacy_decision(spacy_meaning)
 
-            combined = torch.cat([tfidf_meaning, spacy_meaning], 1)
-            result = model.decision(combined)
+        meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
+
+        def apply_model(model):
+            result = model.decision(meaning)
             return result
 
-        results = [apply_model(model, tfidf_meaning, spacy_meaning) for model in self.models]
+        results = [apply_model(model) for model in self.models]
         combined = torch.stack(results, 1)
         combined = combined.reshape(combined.size(0), -1)
         logits = self.decision(combined)

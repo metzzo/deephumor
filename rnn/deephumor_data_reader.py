@@ -51,28 +51,14 @@ class DeepHumorDatasetReader(DatasetReader):
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
         if not os.path.exists('word_embedding.p'):
             vocabulary = set()
-            """
             elmo = Elmo(options_file, weight_file, 2, dropout=0)
 
-            def tokenize(x):
-                doc = nlp(x)
-                new = []
-                for token in doc:
-                    if 'NN' in token.tag_:
-                        vocabulary.add(token.text)
-                        if not token.is_oov:
-                            new.append(token.vector)
-                new = np.array(new)
-
-                character_ids = batch_to_ids(list(x))
+            def elmo_tokenize(x):
+                character_ids = batch_to_ids([list(x)])
                 embeddings = elmo(character_ids)
                 elmo_feature_vectors = torch.cat(embeddings['elmo_representations'], dim=2)
+                return elmo_feature_vectors[0].mean(dim=0).detach().cpu().numpy()
 
-                if len(new) > 0:
-                    return new.mean(axis=0)
-                else:
-                    return np.zeros(300)
-            """
             def tokenize(x):
                 doc = nlp(x)
                 new = []
@@ -91,26 +77,15 @@ class DeepHumorDatasetReader(DatasetReader):
 
             raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
             self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
+            self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
             vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
-            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines])
+            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines, self.elmo_punchlines])
 
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
-        """
-        if not os.path.exists('word_embedding.p'):
-            print("get elmo vectors")
-            elmo = Elmo(options_file, weight_file, 2, dropout=0)
-            character_ids = batch_to_ids(list(train_punchlines) + list(validation_punchlines))
-            embeddings = elmo(character_ids)
-            self.feature_vectors = torch.cat(embeddings['elmo_representations'], dim=2)
-            self.feature_vectors = self.feature_vectors.mean(dim=1)
-            pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
-        else:
-            self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
-        """
 
         self.train_feature_vec = self.feature_vectors[:len(self.train_df), :]
         self.train_label_vec = (np.array(self.train_df[['funniness']]).flatten() - 1).astype(int)
