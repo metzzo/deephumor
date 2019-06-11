@@ -1,5 +1,6 @@
 import datetime
 import pickle
+from itertools import combinations
 from typing import Dict
 
 import numpy as np
@@ -27,19 +28,24 @@ from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAI
 BATCH_SIZE = 64
 
 
+def subsets(s):
+    for cardinality in range(len(s) + 1):
+        yield from combinations(s, cardinality)
+
+
 class OneVRestClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(4262 + 512, 48),
+            torch.nn.Linear(4262, 16),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(48),
+            torch.nn.BatchNorm1d(16),
         ).cuda()
 
         self.final_decision = torch.nn.Sequential(
-            torch.nn.Linear(48, 1),
+            torch.nn.Linear(16, 1),
             torch.nn.ReLU(),
         ).cuda()
 
@@ -88,9 +94,11 @@ class OneVRestClassifier(Model):
 
 class FinalClassifier(Model):
     def __init__(self,
-                 models) -> None:
+                 models,
+                 classes) -> None:
         super().__init__(None)
         self.models = models
+        self.classes = classes
 
         for model in self.models:
             for param in model.parameters():
@@ -100,7 +108,7 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(7 * 48, 64),
+            torch.nn.Linear(len(self.classes) * 16, 64),
             torch.nn.BatchNorm1d(64),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.1),
@@ -166,13 +174,14 @@ class FinalClassifier(Model):
         return results
 
 
-def get_one_vs_all_model(positive_label):
+def get_one_vs_all_model(positive_labels):
     best_performance = None
     best_weight = None
     best_model = None
+    str_labels = ' '.format(positive_labels)
     for weight in [2.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
-        print("Train one vs all for label ", positive_label)
-        reader = DeepHumorDatasetReader(positive_label=positive_label)
+        print("Train one vs all for label ", str(str_labels))
+        reader = DeepHumorDatasetReader(positive_labels=positive_labels)
 
         train_dataset = reader.read('train')
         dev_dataset = reader.read('val')
@@ -200,18 +209,18 @@ def get_one_vs_all_model(positive_label):
             best_performance = performance
             best_model = model
             best_weight = weight
-    print("Result for ", positive_label, str(results))
+    print("Result for ", str_labels, str(results))
     print("With weight ", best_weight)
     return best_model
 
-def get_final_classifier(models):
+def get_final_classifier(models, classes):
     print("Train final classifier ")
     reader = DeepHumorDatasetReader()
 
     train_dataset = reader.read('train')
     dev_dataset = reader.read('val')
 
-    final_model = FinalClassifier(models=models)
+    final_model = FinalClassifier(models=models, classes=classes)
 
     optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=0.00001)
 
@@ -242,8 +251,37 @@ def get_dummy_performance():
 
 def main():
     # apply models and train final classiier
-    models = list([get_one_vs_all_model(i) for i in [6, 5, 4, 3, 2, 1, 0]])
-    final_model = get_final_classifier(models=models)
+    #classes = [6, 5, 4, 3, 2, 1, 0]
+    #subset_classes = list(filter(lambda x: len(x) < len(classes) and len(x) > 1, subsets(classes)))
+    subset_classes = [
+        [0],
+        [1],
+        [2],
+        [3],
+        [4],
+        [5],
+        [6],
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [5, 6],
+    ]
+    """
+    
+        [0, 1, 2],
+        [1, 2, 3],
+        [2, 3, 4],
+        [3, 4, 5],
+        [4, 5, 6],
+        [0, 1, 2, 3],
+        [1, 2, 3, 4],
+        [2, 3, 4, 5],
+        [3, 4, 5, 6],
+    """
+    models = list([get_one_vs_all_model(cl) for cl in subset_classes])
+
+    final_model = get_final_classifier(models=models, classes=subset_classes)
 
     torch.save({
         "final_model": final_model,

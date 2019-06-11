@@ -44,7 +44,7 @@ def get_df_distribution(df):
 
 @DatasetReader.register('deephumor-dataset')
 class DeepHumorDatasetReader(DatasetReader):
-    def __init__(self, lazy=False, positive_label=None) -> None:
+    def __init__(self, lazy=False, positive_labels=None) -> None:
         super().__init__(lazy=lazy)
 
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
@@ -77,11 +77,11 @@ class DeepHumorDatasetReader(DatasetReader):
 
             raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
             self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
-            self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
+            #self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
             vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
-            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines, self.elmo_punchlines])
+            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines, ]) # self.elmo_punchlines
 
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
@@ -93,9 +93,9 @@ class DeepHumorDatasetReader(DatasetReader):
         self.validation_feature_vec = self.feature_vectors[len(self.train_df):, :]
         self.validation_label_vec = (np.array(self.validation_df[['funniness']]).flatten() - 1).astype(int)
 
-        self.positive_label = positive_label
-        if self.positive_label is not None:
-            func = np.vectorize(lambda x: 1 if x == self.positive_label else 0)
+        self.positive_labels = positive_labels
+        if self.positive_labels is not None:
+            func = np.vectorize(lambda x: 1 if x in self.positive_labels else 0)
             self.train_label_vec = func(self.train_label_vec)
             self.validation_label_vec = func(self.validation_label_vec)
 
