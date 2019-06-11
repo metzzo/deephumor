@@ -116,12 +116,12 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(len(self.classes) * 8, 64),
-            torch.nn.BatchNorm1d(64),
+            torch.nn.Linear(len(self.classes) * 8, 32),
+            torch.nn.BatchNorm1d(32),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.5),
             torch.nn.Linear(
-                in_features=64,
+                in_features=32,
                 out_features=1
             ),
             torch.nn.ReLU()
@@ -133,10 +133,12 @@ class FinalClassifier(Model):
         self.prepare = {}
         for model in models:
             self.prepare[model] = torch.nn.Sequential(
+                torch.nn.Dropout(0.5),
                 torch.nn.Linear(16, 8),
                 torch.nn.BatchNorm1d(8),
                 torch.nn.ReLU(),
             ).cuda()
+            self.prepare[model].apply(init_weights)
 
 
     # Instances are fed to forward after batching.
