@@ -116,7 +116,7 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(len(self.classes) * 8, 32),
+            torch.nn.Linear(len(self.classes) * 8 + 8, 32),
             torch.nn.BatchNorm1d(32),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.5),
@@ -140,6 +140,13 @@ class FinalClassifier(Model):
             ).cuda()
             self.prepare[model].apply(init_weights)
 
+        self.meaning_preprocess = torch.nn.Sequential(
+            torch.nn.Linear(4262, 8),
+            torch.nn.Dropout(0.5),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm1d(8),
+        ).cuda()
+
 
     # Instances are fed to forward after batching.
     # Fields are passed through arguments with the same name.
@@ -155,7 +162,15 @@ class FinalClassifier(Model):
             result = self.prepare[model](result)
             return result
 
+        def apply_meaning():
+            result = self.meaning_preprocess(meaning)
+            #result = self.prepare[model](result)
+            return result
+
         results = [apply_model(model) for model in self.models]
+
+        results.append(apply_meaning())
+
         combined = torch.stack(results, 1)
         combined = combined.reshape(combined.size(0), -1)
         logits = self.decision(combined)
