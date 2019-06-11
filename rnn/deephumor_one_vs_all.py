@@ -108,19 +108,17 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(len(self.classes) * 16, 64),
-            torch.nn.BatchNorm1d(64),
+            torch.nn.Linear(len(self.classes) * 16, 256),
+            torch.nn.BatchNorm1d(256),
             torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
+            torch.nn.Dropout(0.5),
             torch.nn.Linear(
-                in_features=64,
+                in_features=256,
                 out_features=1
             ),
             torch.nn.ReLU()
         ).cuda()
 
-        self.accuracy = CategoricalAccuracy()
-        self.f1_measures = [F1Measure(positive_label=i) for i in range(0, 7)]
         self.mae = MeanAbsoluteError()
 
 
@@ -148,9 +146,6 @@ class FinalClassifier(Model):
         if label is not None:
             predicted = (logits * 6).float()
             label = label.reshape(-1, 1).float()
-            #self.accuracy(logits, label)
-            #for f1 in self.f1_measures:
-            #    f1(logits, label)
 
             output["loss"] = self.loss_function(logits, label / 6.0)
             self.mae(predicted, label)
@@ -159,18 +154,8 @@ class FinalClassifier(Model):
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         results = {
-            #'accuracy': self.accuracy.get_metric(reset),
             'mae': self.mae.get_metric(reset),
         }
-        """
-        for index, f1 in enumerate(self.f1_measures):
-            precision, recall, f1_measure = f1.get_metric(reset)
-            results.update({
-                #'{}_precision'.format(index + 1): precision,
-                #'{}_recall'.format(index + 1): recall,
-                '{}_f1_measure'.format(index + 1): f1_measure
-            })
-        """
         return results
 
 
@@ -222,9 +207,9 @@ def get_final_classifier(models, classes):
 
     final_model = FinalClassifier(models=models, classes=classes)
 
-    optimizer = optim.Adam(final_model.parameters(), lr=1e-5, weight_decay=0.00001)
+    optimizer = optim.Adam(final_model.parameters(), lr=0.01, weight_decay=0.001)
 
-    iterator = BasicIterator(batch_size=BATCH_SIZE)
+    iterator = BasicIterator(batch_size=256)
 
     trainer = Trainer(model=final_model,
                       optimizer=optimizer,
@@ -279,7 +264,9 @@ def main():
         [2, 3, 4, 5],
         [3, 4, 5, 6],
     """
-    models = list([get_one_vs_all_model(cl) for cl in subset_classes])
+    #models = list([get_one_vs_all_model(cl) for cl in subset_classes])
+    #torch.save(models, open('models.p', "wb"))
+    models = torch.load(open('models.p', "rb"))
 
     final_model = get_final_classifier(models=models, classes=subset_classes)
 
