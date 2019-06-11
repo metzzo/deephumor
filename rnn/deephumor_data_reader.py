@@ -50,6 +50,9 @@ class DeepHumorDatasetReader(DatasetReader):
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
         if not os.path.exists('word_embedding.p'):
             vocabulary = set()
+            """
+            elmo = Elmo(options_file, weight_file, 2, dropout=0)
+
             def tokenize(x):
                 doc = nlp(x)
                 new = []
@@ -59,6 +62,27 @@ class DeepHumorDatasetReader(DatasetReader):
                         if not token.is_oov:
                             new.append(token.vector)
                 new = np.array(new)
+
+                character_ids = batch_to_ids(list(x))
+                embeddings = elmo(character_ids)
+                elmo_feature_vectors = torch.cat(embeddings['elmo_representations'], dim=2)
+
+                if len(new) > 0:
+                    return new.mean(axis=0)
+                else:
+                    return np.zeros(300)
+            """
+            def tokenize(x):
+                doc = nlp(x)
+                new = []
+                for token in doc:
+                    if 'NN' in token.tag_:
+                        if not token.is_oov:
+                            new.append(token.vector)
+                        else:
+                            vocabulary.add(token.text)
+                new = np.array(new)
+
                 if len(new) > 0:
                     return new.mean(axis=0)
                 else:
@@ -69,6 +93,10 @@ class DeepHumorDatasetReader(DatasetReader):
             punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
             tfidf_punchlines = vectorizer.fit_transform(raw_punchlines['punchline']).toarray()
             punchlines = np.hstack([punchlines, tfidf_punchlines])
+            
+            self.feature_vectors = torch.tensor(punchlines)
+
+            pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
 
             self.feature_vectors = torch.tensor(punchlines)
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)

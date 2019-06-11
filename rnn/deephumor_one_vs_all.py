@@ -23,19 +23,16 @@ from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
 from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAIN_PATH
 
-EMBEDDING_DIM = 256
-HIDDEN_DIM = 128
 BATCH_SIZE = 64
 
-# Model in AllenNLP represents a model that is trained.
-@Model.register("lstm_classifier")
+
 class LstmClassifier(Model):
     def __init__(self,
                  reader: DeepHumorDatasetReader,
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(4262, 48),
+            torch.nn.Linear(1010, 48),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(48),
         ).cuda()
