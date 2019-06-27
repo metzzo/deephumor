@@ -6,6 +6,7 @@ import torch
 from typing import Iterator, List, Dict
 
 import pandas as pd
+from PIL import Image
 from allennlp.data import Instance
 from allennlp.data.dataset_readers import DatasetReader
 from allennlp.data.fields import TextField, LabelField, MetadataField, ArrayField
@@ -29,6 +30,7 @@ weight_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
 TRAIN_PATH = "/home/rfischer/Documents/DeepHumor/train_set.p"
 VALIDATION_PATH = "/home/rfischer/Documents/DeepHumor/validation_set.p"
 
+IMAGES_PATH = '../../data/original_export/'
 
 def get_df_distribution(df):
     groups = df.groupby(by='funniness').groups
@@ -49,6 +51,7 @@ class DeepHumorDatasetReader(DatasetReader):
 
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+        self.transform = None
         if not os.path.exists('word_embedding.p'):
             vocabulary = set()
             elmo = Elmo(options_file, weight_file, 2, dropout=0)
@@ -81,17 +84,31 @@ class DeepHumorDatasetReader(DatasetReader):
             vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
-            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines, ]) # self.elmo_punchlines
+            self.feature_vectors = np.hstack([
+                self.spacy_punchlines,
+                self.tfidf_punchlines,
+            ]) # self.elmo_punchlines
 
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
 
+
         self.train_feature_vec = self.feature_vectors[:len(self.train_df), :]
+        self.train_feature_vec = np.hstack([
+            self.train_feature_vec,
+            np.array(range(0, len(self.train_feature_vec))).reshape(-1, 1)
+        ])
         self.train_label_vec = (np.array(self.train_df[['funniness']]).flatten() - 1).astype(int)
+        self.train_filenames = self.train_df['filename'].values.flatten()
 
         self.validation_feature_vec = self.feature_vectors[len(self.train_df):, :]
+        self.validation_feature_vec = np.hstack([
+            self.validation_feature_vec,
+            np.array(range(0, len(self.validation_feature_vec))).reshape(-1, 1)
+        ])
         self.validation_label_vec = (np.array(self.validation_df[['funniness']]).flatten() - 1).astype(int)
+        self.validation_filenames = self.validation_df['filename'].values.flatten()
 
         self.positive_labels = positive_labels
         if self.positive_labels is not None:
@@ -105,12 +122,15 @@ class DeepHumorDatasetReader(DatasetReader):
         ros = RandomOverSampler(random_state=0)
         self.train_feature_vec, self.train_label_vec = ros.fit_resample(self.train_feature_vec, self.train_label_vec)
 
-    def text_to_instance(self, feature, target=None) -> Instance:
+
+    def text_to_instance(self, feature, filename, target=None) -> Instance:
         spacy_meaning_field = ArrayField(feature[:300])
         tfidf_meaning_field = ArrayField(feature[300:])
+        image = ArrayField(self.load_image(filename))
         fields = {
             "spacy_meaning": spacy_meaning_field,
             "tfidf_meaning": tfidf_meaning_field,
+            "image": image
         }
 
         if target is not None:
@@ -123,12 +143,27 @@ class DeepHumorDatasetReader(DatasetReader):
         if file_path == 'train':
             feature_vec = self.train_feature_vec
             label_vec = self.train_label_vec
+            filenames = self.train_filenames
         else:
             feature_vec = self.validation_feature_vec
             label_vec = self.validation_label_vec
+            filenames = self.validation_filenames
 
         for i in range(0, len(feature_vec)):
             funniness = int(label_vec[i])
             feature = feature_vec[i]
+            filename = filenames[int(feature[-1])]
+            feature = feature[:-1]
 
-            yield self.text_to_instance(feature, funniness)
+            yield self.text_to_instance(
+                feature=feature,
+                filename=filename,
+                target=funniness,
+            )
+
+    def load_image(self, img_name):
+        img_name = os.path.join(IMAGES_PATH, img_name)
+        image = Image.open(img_name)
+        if self.transform is not None:
+            image = self.transform(image)
+        return np.array(image)

@@ -51,6 +51,17 @@ class OneVRestClassifier(Model):
             torch.nn.BatchNorm1d(16),
         ).cuda()
 
+        self.image_downsample = torch.nn.Sequential(
+            torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(8),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2),
+            torch.nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(16),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+
         self.final_decision = torch.nn.Sequential(
             torch.nn.Linear(16, 1),
             torch.nn.ReLU(),
@@ -116,7 +127,7 @@ class FinalClassifier(Model):
 
         self.decision = torch.nn.Sequential(
             torch.nn.Dropout(0.5),
-            torch.nn.Linear(len(self.classes) * 8 + 8, 32),
+            torch.nn.Linear(16, 32),
             torch.nn.BatchNorm1d(32),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.5),
@@ -134,18 +145,11 @@ class FinalClassifier(Model):
         for model in models:
             self.prepare[model] = torch.nn.Sequential(
                 torch.nn.Dropout(0.5),
-                torch.nn.Linear(16, 8),
-                torch.nn.BatchNorm1d(8),
+                torch.nn.Linear(16, 16),
+                torch.nn.BatchNorm1d(16),
                 torch.nn.ReLU(),
             ).cuda()
             self.prepare[model].apply(init_weights)
-
-        self.meaning_preprocess = torch.nn.Sequential(
-            torch.nn.Linear(4262, 8),
-            torch.nn.Dropout(0.5),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm1d(8),
-        ).cuda()
 
 
     # Instances are fed to forward after batching.
@@ -153,6 +157,7 @@ class FinalClassifier(Model):
     def forward(self,
                 spacy_meaning,
                 tfidf_meaning,
+                image,
                 label: torch.Tensor = None) -> torch.Tensor:
 
         meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
@@ -162,17 +167,11 @@ class FinalClassifier(Model):
             result = self.prepare[model](result)
             return result
 
-        def apply_meaning():
-            result = self.meaning_preprocess(meaning)
-            #result = self.prepare[model](result)
-            return result
-
         results = [apply_model(model) for model in self.models]
 
-        results.append(apply_meaning())
-
         combined = torch.stack(results, 1)
-        combined = combined.reshape(combined.size(0), -1)
+        #combined = combined.reshape(combined.size(0), -1)
+        combined = torch.mean(combined, dim=1)
         logits = self.decision(combined)
 
         # In AllenNLP, the output of forward() is a dictionary.
