@@ -52,36 +52,34 @@ class OneVRestClassifier(Model):
         ).cuda()
 
         self.image_downsample = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=1, out_channels=2, kernel_size=5, padding=1),
+            torch.nn.Conv2d(in_channels=1, out_channels=4, kernel_size=5, padding=2),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(2),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Dropout(0.25),
-            # 128 * 128:
-            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
-            torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(2),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Dropout(0.25),
+            torch.nn.BatchNorm2d(4),
+            torch.nn.MaxPool2d(kernel_size=6, stride=4, padding=1),
+            #torch.nn.Dropout(0.25),
+
             # 64 * 64:
-            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
+            torch.nn.Conv2d(in_channels=4, out_channels=8, kernel_size=3, padding=1),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(2),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Dropout(0.25),
-            # 32*32:
-            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
+            torch.nn.BatchNorm2d(8),
+            torch.nn.MaxPool2d(kernel_size=6, stride=4, padding=1),
+            #torch.nn.Dropout(0.25),
+
+            # 16 * 16
+            torch.nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(2),
-            torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Dropout(0.25),
-            # 16*16
+            torch.nn.BatchNorm2d(16),
+            torch.nn.MaxPool2d(kernel_size=6, stride=4, padding=1),
+            #torch.nn.Dropout(0.25),
+
+            # 4*4
+            torch.nn.AvgPool2d(kernel_size=4, stride=1, padding=0)
         )
 
         self.image_decision = torch.nn.Sequential(
-            torch.nn.Linear(2 * 15 * 15, 16),
-            torch.nn.BatchNorm1d(16),
-            torch.nn.ReLU(),
+            torch.nn.Linear(16, 16),
+            #torch.nn.BatchNorm1d(16),
+            #torch.nn.ReLU(),
         ).cuda()
 
         self.both_decision = torch.nn.Sequential(
@@ -208,7 +206,9 @@ class FinalClassifier(Model):
                 image=image,
                 with_final_decision=False,
             )
-            return result['logits']
+            result = result['logits']
+            result = self.prepare[model](result)
+            return result
 
         results = [apply_model(model) for model in self.models]
 
