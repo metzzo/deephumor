@@ -1,12 +1,14 @@
 import os
 import pickle
 
+from scipy import stats
+
 import spacy
 import torch
 from typing import Iterator, List, Dict
 
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageOps
 from allennlp.data import Instance
 from allennlp.data.dataset_readers import DatasetReader
 from allennlp.data.fields import TextField, LabelField, MetadataField, ArrayField
@@ -20,6 +22,8 @@ from allennlp.modules.elmo import batch_to_ids
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
+from torchvision import transforms
+
 nlp = spacy.load('en_core_web_lg')
 
 options_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
@@ -51,7 +55,10 @@ class DeepHumorDatasetReader(DatasetReader):
 
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
-        self.transform = None
+        self.transform = transforms.Compose([
+            transforms.RandomCrop(size=(256, 256)),
+            transforms.Grayscale()
+        ])
         if not os.path.exists('word_embedding.p'):
             vocabulary = set()
             elmo = Elmo(options_file, weight_file, 2, dropout=0)
@@ -121,6 +128,8 @@ class DeepHumorDatasetReader(DatasetReader):
         from imblearn.over_sampling import RandomOverSampler
         ros = RandomOverSampler(random_state=0)
         self.train_feature_vec, self.train_label_vec = ros.fit_resample(self.train_feature_vec, self.train_label_vec)
+        if positive_labels is not None:
+            self.validation_feature_vec, self.validation_label_vec = ros.fit_resample(self.validation_feature_vec, self.validation_label_vec)
 
 
     def text_to_instance(self, feature, filename, target=None) -> Instance:
@@ -164,6 +173,10 @@ class DeepHumorDatasetReader(DatasetReader):
     def load_image(self, img_name):
         img_name = os.path.join(IMAGES_PATH, img_name)
         image = Image.open(img_name)
+        image = ImageOps.fit(image, (300, 300), method=Image.BILINEAR)
         if self.transform is not None:
             image = self.transform(image)
-        return np.array(image)
+        image = np.array(image)
+        image = stats.zscore(image)
+
+        return image

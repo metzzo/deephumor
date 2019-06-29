@@ -52,18 +52,47 @@ class OneVRestClassifier(Model):
         ).cuda()
 
         self.image_downsample = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3),
+            torch.nn.Conv2d(in_channels=1, out_channels=2, kernel_size=5, padding=1),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(8),
+            torch.nn.BatchNorm2d(2),
             torch.nn.MaxPool2d(kernel_size=2, stride=2),
-            torch.nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3),
+            torch.nn.Dropout(0.25),
+            # 128 * 128:
+            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
             torch.nn.ReLU(),
-            torch.nn.BatchNorm2d(16),
+            torch.nn.BatchNorm2d(2),
             torch.nn.MaxPool2d(kernel_size=2, stride=2),
+            torch.nn.Dropout(0.25),
+            # 64 * 64:
+            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(2),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2),
+            torch.nn.Dropout(0.25),
+            # 32*32:
+            torch.nn.Conv2d(in_channels=2, out_channels=2, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(2),
+            torch.nn.MaxPool2d(kernel_size=2, stride=2),
+            torch.nn.Dropout(0.25),
+            # 16*16
         )
+
+        self.image_decision = torch.nn.Sequential(
+            torch.nn.Linear(2 * 15 * 15, 16),
+            torch.nn.BatchNorm1d(16),
+            torch.nn.ReLU(),
+        ).cuda()
+
+        self.both_decision = torch.nn.Sequential(
+            torch.nn.Linear(16 + 16, 16),
+            torch.nn.BatchNorm1d(16),
+            torch.nn.ReLU(),
+        ).cuda()
 
         self.final_decision = torch.nn.Sequential(
             torch.nn.Linear(16, 1),
+            torch.nn.BatchNorm1d(1),
             torch.nn.ReLU(),
         ).cuda()
 
@@ -79,9 +108,21 @@ class OneVRestClassifier(Model):
     def forward(self,
                 spacy_meaning,
                 tfidf_meaning,
-                label: torch.Tensor = None) -> torch.Tensor:
-        meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
-        logits = self.final_decision(self.decision(meaning))
+                image,
+                label: torch.Tensor = None,
+                with_final_decision=True) -> torch.Tensor:
+        image = image.reshape(image.size(0), 1, image.size(1), image.size(2))
+        image_meaning = self.image_downsample(image).reshape(image.size(0), -1)
+        image_meaning = self.image_decision(image_meaning)
+
+        text_meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
+        text_meaning = self.decision(text_meaning)
+
+        both_meaning = torch.cat([text_meaning, image_meaning], dim=1)
+
+        logits = self.both_decision(both_meaning)
+        if with_final_decision:
+            logits = self.final_decision(logits)
 
         output = {"logits": logits}
         if label is not None:
@@ -160,12 +201,14 @@ class FinalClassifier(Model):
                 image,
                 label: torch.Tensor = None) -> torch.Tensor:
 
-        meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
-
         def apply_model(model):
-            result = model.decision(meaning)
-            result = self.prepare[model](result)
-            return result
+            result = model(
+                spacy_meaning=spacy_meaning,
+                tfidf_meaning=tfidf_meaning,
+                image=image,
+                with_final_decision=False,
+            )
+            return result['logits']
 
         results = [apply_model(model) for model in self.models]
 
@@ -280,11 +323,11 @@ def main():
         [4],
         [5],
         [6],
-        [0, 1],
-        [1, 2],
-        [2, 3],
-        [3, 4],
-        [5, 6],
+        #[0, 1],
+        #[1, 2],
+        #[2, 3],
+        #[3, 4],
+        #[5, 6],
     ]
     """
     
@@ -298,9 +341,9 @@ def main():
         [2, 3, 4, 5],
         [3, 4, 5, 6],
     """
-    #models = list([get_one_vs_all_model(cl) for cl in subset_classes])
-    #torch.save(models, open('models.p', "wb"))
-    models = torch.load(open('models.p', "rb"))
+    models = list([get_one_vs_all_model(cl) for cl in subset_classes])
+    torch.save(models, open('models.p', "wb"))
+    #models = torch.load(open('models.p', "rb"))
 
     final_model = get_final_classifier(models=models, classes=subset_classes)
 
