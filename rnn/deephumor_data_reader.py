@@ -86,9 +86,10 @@ class DeepHumorDatasetReader(DatasetReader):
             vectorizer = TfidfVectorizer(vocabulary=vocabulary)
 
             raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
+            vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
+
             self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
             #self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
-            vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
             self.feature_vectors = np.hstack([
