@@ -13,7 +13,7 @@ import os
 
 from cnn_experiments.base_model import BaseCNNModel
 from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
-from rnn import TRAIN_PATH, IMAGES_PATH
+from rnn import TRAIN_PATH, IMAGES_PATH, VALIDATION_PATH
 
 
 def to_img(x):
@@ -43,6 +43,7 @@ class AutoEncoder(nn.Module):
             nn.Tanh()
         )
 
+
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)
@@ -54,7 +55,11 @@ img_transform = [
     transforms.ToTensor(),
     transforms.Normalize((0.5,), (0.5,)),
 ]
-
+val_img_transform = [
+    transforms.Resize(size=(256, 256)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,)),
+]
 
 class AutoEncoderModel(BaseCNNModel):
     def get_network_class(self):
@@ -65,6 +70,20 @@ class AutoEncoderModel(BaseCNNModel):
         img = ImageOps.fit(img, (300, 300), method=Image.BILINEAR)
         return img
 
+model = None
+
+def encode_img(img):
+    global model
+    global val_img_transform
+
+    if model is None:
+        model = AutoEncoder().cuda()
+        model.load_state_dict(torch.load('conv_autoencoder.pth'))
+        model.eval()
+
+    return model.encoder(img)
+
+
 
 def main():
     num_epochs = 100
@@ -72,14 +91,17 @@ def main():
     learning_rate = 1e-3
 
     dataloader = DataLoader(CartoonCNNDataset(file_path=TRAIN_PATH, model=AutoEncoderModel(), trafo=img_transform), batch_size=batch_size, shuffle=True)
-
-
+    val_dataloader = DataLoader(CartoonCNNDataset(file_path=VALIDATION_PATH, model=AutoEncoderModel(), trafo=val_img_transform), batch_size=batch_size, shuffle=True)
 
     model = AutoEncoder().cuda()
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
                                  weight_decay=1e-5)
-
+    old_loss = None
+    best_model = None
+    output = None
+    loss = None
+    not_better = 0
     for epoch in range(num_epochs):
         for data in dataloader:
             _, img, _ = data
@@ -92,13 +114,37 @@ def main():
             loss.backward()
             optimizer.step()
         # ===================log========================
-        print('epoch [{}/{}], loss:{:.4f}'
+        print('train epoch [{}/{}], loss:{:.4f}'
               .format(epoch+1, num_epochs, loss.item()))
-        if epoch % 10 == 0:
-            pic = to_img(output.cpu().data)
-            save_image(pic, './dc_img/image_{}.png'.format(epoch))
+        cur_loss = 0
+        loss_count = 0
+        for data in val_dataloader:
+            _, img, _ = data
+            img = torch.tensor(img).cuda()
+            # ===================forward=====================
+            output = model(img)
+            loss = criterion(output, img)
+            cur_loss += loss.item()
+            loss_count += 1
 
-    torch.save(model.state_dict(), './conv_autoencoder.pth')
+        loss = cur_loss / loss_count
+        print('val loss:{:.4f}'
+              .format(loss))
+        if old_loss is None or loss < old_loss:
+            print("Better model!")
+            best_model = model.state_dict()
+            old_loss = loss
+            not_better = 0
+        else:
+            not_better += 1
+            if not_better > 10:
+                break
+
+    model.load_state_dict(best_model)
+    pic = to_img(output.cpu().data)
+    save_image(pic, './dc_img/image_final.png')
+
+    torch.save(best_model, './conv_autoencoder.pth')
 
 if __name__ == '__main__':
     main()

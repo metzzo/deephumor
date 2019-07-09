@@ -24,6 +24,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
 from torchvision import transforms
 
+
 nlp = spacy.load('en_core_web_lg')
 
 options_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
@@ -132,6 +133,8 @@ class DeepHumorDatasetReader(DatasetReader):
         if positive_labels is not None:
             self.validation_feature_vec, self.validation_label_vec = ros.fit_resample(self.validation_feature_vec, self.validation_label_vec)
 
+        from rnn.auto_encoder import val_img_transform
+        self.val_img_transform = transforms.Compose(val_img_transform)
 
     def text_to_instance(self, feature, filename, target=None) -> Instance:
         spacy_meaning_field = ArrayField(feature[:300])
@@ -174,6 +177,7 @@ class DeepHumorDatasetReader(DatasetReader):
     def load_image(self, img_name):
         img_name = os.path.join(IMAGES_PATH, img_name)
         image = Image.open(img_name)
+        """
         image = ImageOps.fit(image, (300, 300), method=Image.BILINEAR)
         if self.transform is not None:
             image = self.transform(image)
@@ -181,3 +185,5 @@ class DeepHumorDatasetReader(DatasetReader):
         image = stats.zscore(image)
 
         return image
+        """
+        return self.val_img_transform(image).numpy()

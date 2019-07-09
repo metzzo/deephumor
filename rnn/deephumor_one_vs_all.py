@@ -77,9 +77,9 @@ class OneVRestClassifier(Model):
         )
 
         self.image_decision = torch.nn.Sequential(
-            torch.nn.Linear(16, 16),
-            #torch.nn.BatchNorm1d(16),
-            #torch.nn.ReLU(),
+            torch.nn.Linear(3528, 16),
+            torch.nn.BatchNorm1d(16),
+            torch.nn.ReLU(),
         ).cuda()
 
         self.both_decision = torch.nn.Sequential(
@@ -109,8 +109,9 @@ class OneVRestClassifier(Model):
                 image,
                 label: torch.Tensor = None,
                 with_final_decision=True) -> torch.Tensor:
-        image = image.reshape(image.size(0), 1, image.size(1), image.size(2))
-        image_meaning = self.image_downsample(image).reshape(image.size(0), -1)
+        from rnn.auto_encoder import encode_img
+        image_meaning = encode_img(img=image)
+        image_meaning = image_meaning.reshape(image_meaning.size(0), -1)
         image_meaning = self.image_decision(image_meaning)
 
         text_meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
