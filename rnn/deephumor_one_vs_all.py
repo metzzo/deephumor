@@ -76,8 +76,21 @@ class OneVRestClassifier(Model):
             torch.nn.AvgPool2d(kernel_size=4, stride=1, padding=0)
         )
 
+        self.image_conv = torch.nn.Sequential(
+            torch.nn.Conv2d(in_channels=8, out_channels=8, kernel_size=5, padding=2),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(8),
+            torch.nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+
+            torch.nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, padding=1),
+            torch.nn.ReLU(),
+            torch.nn.BatchNorm2d(8),
+
+            torch.nn.AvgPool2d(kernel_size=3, stride=1)
+        )
+
         self.image_decision = torch.nn.Sequential(
-            torch.nn.Linear(3528, 16),
+            torch.nn.Linear(8 * 9 * 9, 16),
             torch.nn.BatchNorm1d(16),
             torch.nn.ReLU(),
         ).cuda()
@@ -110,16 +123,17 @@ class OneVRestClassifier(Model):
                 label: torch.Tensor = None,
                 with_final_decision=True) -> torch.Tensor:
         from rnn.auto_encoder import encode_img
-        image_meaning = encode_img(img=image)
+        image_meaning = self.image_conv(encode_img(img=image))
+
         image_meaning = image_meaning.reshape(image_meaning.size(0), -1)
-        image_meaning = self.image_decision(image_meaning)
+        logits = self.image_decision(image_meaning)
 
-        text_meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
-        text_meaning = self.decision(text_meaning)
+        #text_meaning = torch.cat([spacy_meaning, tfidf_meaning], dim=1)
+        #text_meaning = self.decision(text_meaning)
 
-        both_meaning = torch.cat([text_meaning, image_meaning], dim=1)
+        #both_meaning = torch.cat([text_meaning, image_meaning], dim=1)
 
-        logits = self.both_decision(both_meaning)
+        #logits = self.both_decision(both_meaning)
         if with_final_decision:
             logits = self.final_decision(logits)
 
@@ -148,7 +162,8 @@ class OneVRestClassifier(Model):
         return {'accuracy': self.accuracy.get_metric(reset),
                 'precision': precision,
                 'recall': recall,
-                'f1_measure': f1_measure}
+                'f1_measure': f1_measure,
+                '_validation': not self.training}
 
 
 class FinalClassifier(Model):
@@ -242,7 +257,7 @@ def get_one_vs_all_model(positive_labels):
     best_weight = None
     best_model = None
     str_labels = ' '.format(positive_labels)
-    for weight in [2.5]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
+    for weight in [1.0]:#[1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.25, 3.5, 4.0]:
         print("Train one vs all for label ", str(str_labels))
         reader = DeepHumorDatasetReader(positive_labels=positive_labels)
 
@@ -260,7 +275,7 @@ def get_one_vs_all_model(positive_labels):
                           iterator=iterator,
                           train_dataset=train_dataset,
                           validation_dataset=dev_dataset,
-                          patience=100,
+                          patience=50,
                           cuda_device=0,
                           validation_metric='+f1_measure',
                           num_epochs=10000)
