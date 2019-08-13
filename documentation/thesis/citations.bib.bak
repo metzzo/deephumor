@@ -1,0 +1,312 @@
+@inproceedings{Yang2015HumorRA,
+  title={Humor Recognition and Humor Anchor Extraction},
+  author={Diyi Yang and Alon Lavie and Chris Dyer and Eduard H. Hovy},
+  booktitle={EMNLP},
+  year={2015}
+}
+@inproceedings{Bamman2015ContextualizedSD,
+  title={Contextualized Sarcasm Detection on Twitter},
+  author={David Bamman and Noah A. Smith},
+  booktitle={ICWSM},
+  year={2015}
+}
+@INPROCEEDINGS{HumoristBot, 
+author={A. Augello and G. Saccone and S. Gaglio and G. Pilato}, 
+booktitle={2008 International Conference on Complex, Intelligent and Software Intensive Systems}, 
+title={Humorist Bot: Bringing Computational Humour in a Chat-Bot System}, 
+year={2008}, 
+volume={}, 
+number={}, 
+pages={703-708}, 
+keywords={electronic messaging;user interfaces;ALICE framework;Humorist Bot;Yahoo! Messenger client;chat-bot system;computational humour;conversational agent;face expression;humoristic expressions;humorous sentences;Avatars;Competitive intelligence;Computational intelligence;Embedded computing;Face detection;Humans;Intelligent agent;Pattern matching;Software systems;Usability;Computational Humor;Conversational Agents}, 
+doi={10.1109/CISIS.2008.117}, 
+ISSN={}, 
+month={March}
+}
+@article{LEARN2LAUGH,
+author = {Mihalcea Rada and Strapparava Carlo},
+title = {LEARNING TO LAUGH (AUTOMATICALLY): COMPUTATIONAL MODELS FOR HUMOR RECOGNITION},
+journal = {Computational Intelligence},
+volume = {22},
+number = {2},
+pages = {126-142},
+keywords = {computational humor, humor recognition, sentiment analysis, one‐liners},
+doi = {10.1111/j.1467-8640.2006.00278.x},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8640.2006.00278.x},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8640.2006.00278.x},
+abstract = {Humor is one of the most interesting and puzzling aspects of human behavior. Despite the attention it has received in fields such as philosophy, linguistics, and psychology, there have been only few attempts to create computational models for humor recognition or generation. In this article, we bring empirical evidence that computational approaches can be successfully applied to the task of humor recognition. Through experiments performed on very large data sets, we show that automatic classification techniques can be effectively used to distinguish between humorous and non‐humorous texts, with significant improvements observed over a priori known baselines.}
+}
+@Article{Druzhkov2016,
+author="Druzhkov, P. N.
+and Kustikova, V. D.",
+title="A survey of deep learning methods and software tools for image classification and object detection",
+journal="Pattern Recognition and Image Analysis",
+year="2016",
+month="Jan",
+day="01",
+volume="26",
+number="1",
+pages="9--15",
+abstract="Deep learning methods for image classification and object detection are overviewed. In particular we consider such deep models as autoencoders, restricted Boltzmann machines and convolutional neural networks. Existing software packages for deep learning problems are compared.",
+issn="1555-6212",
+doi="10.1134/S1054661816010065",
+url="https://doi.org/10.1134/S1054661816010065"
+}
+@article{reviewRNN,
+  author    = {Zachary Chase Lipton},
+  title     = {A Critical Review of Recurrent Neural Networks for Sequence Learning},
+  journal   = {CoRR},
+  volume    = {abs/1506.00019},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1506.00019},
+  archivePrefix = {arXiv},
+  eprint    = {1506.00019},
+  timestamp = {Wed, 07 Jun 2017 14:40:13 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/Lipton15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@Article{Cichy2016,
+author={Cichy, Radoslaw Martin
+and Khosla, Aditya
+and Pantazis, Dimitrios
+and Torralba, Antonio
+and Oliva, Aude},
+title={Comparison of deep neural networks to spatio-temporal cortical dynamics of human visual object recognition reveals hierarchical correspondence},
+journal={Scientific Reports},
+year={2016},
+month={Jun},
+day={10},
+publisher={The Author(s) SN  -},
+volume={6},
+pages={27755 EP  -},
+note={Article},
+url={http://dx.doi.org/10.1038/srep27755}
+}
+@INPROCEEDINGS{dogsvscats, 
+author={D. Ciregan and U. Meier and J. Schmidhuber}, 
+booktitle={2012 IEEE Conference on Computer Vision and Pattern Recognition}, 
+title={Multi-column deep neural networks for image classification}, 
+year={2012}, 
+volume={}, 
+number={}, 
+pages={3642-3649}, 
+keywords={graphics processing units;handwritten character recognition;image classification;image recognition;learning (artificial intelligence);neural nets;MNIST handwriting benchmark;artificial neural network architectures;computer vision;convolutional winner-take-all neurons;fast training;graphics cards;handwritten digits recognition;human performance;image classification;machine learning;multicolumn deep neural networks;retina;sparsely connected neural layers;traffic sign recognition benchmark;traffic signs;visual cortex;Benchmark testing;Computer architecture;Error analysis;Graphics processing unit;Neurons;Training}, 
+doi={10.1109/CVPR.2012.6248110}, 
+ISSN={1063-6919}, 
+month={June},}
+
+@inproceedings{Bertero2016DeepLO,
+  title={Deep Learning of Audio and Language Features for Humor Prediction},
+  author={Dario Bertero and Pascale Fung},
+  booktitle={LREC},
+  year={2016}
+}
+@Article{Hand2001,
+author="Hand, David J.
+and Till, Robert J.",
+title="A Simple Generalisation of the Area Under the ROC Curve for Multiple Class Classification Problems",
+journal="Machine Learning",
+year="2001",
+month="Nov",
+day="01",
+volume="45",
+number="2",
+pages="171--186",
+abstract="The area under the ROC curve, or the equivalent Gini index, is a widely used measure of performance of supervised classification rules. It has the attractive property that it side-steps the need to specify the costs of the different kinds of misclassification. However, the simple form is only applicable to the case of two classes. We extend the definition to the case of more than two classes by averaging pairwise comparisons. This measure reduces to the standard form in the two class case. We compare its properties with the standard measure of proportion correct and an alternative definition of proportion correct based on pairwise comparison of classes for a simple artificial case and illustrate its application on eight data sets. On the data sets we examined, the measures produced similar, but not identical results, reflecting the different aspects of performance that they were measuring. Like the area under the ROC curve, the measure we propose is useful in those many situations where it is impossible to give costs for the different kinds of misclassification.",
+issn="1573-0565",
+doi="10.1023/A:1010920819831",
+url="https://doi.org/10.1023/A:1010920819831"
+}
+
+
+@inproceedings{Powers2008EvaluationFP,
+  title={Evaluation: From Precision, Recall and F-Factor to ROC, Informedness, Markedness and Correlation},
+  author={David M. W. Powers},
+  year={2008}
+}
+
+@misc{cnnimg,
+  author = {Ingo Lütkebohle},
+  title = {{BWorld Robot Control Software}},
+  howpublished = "\url{https://medium.com/@Aj.Cheng/convolutional-neural-network-d9f69e473feb}",
+  year = {2008}, 
+  note = "[Online; accessed 19-July-2008]"
+}
+
+@article{gan,
+  author    = {Tim Salimans and
+               Ian J. Goodfellow and
+               Wojciech Zaremba and
+               Vicki Cheung and
+               Alec Radford and
+               Xi Chen},
+  title     = {Improved Techniques for Training GANs},
+  journal   = {CoRR},
+  volume    = {abs/1606.03498},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1606.03498},
+  archivePrefix = {arXiv},
+  eprint    = {1606.03498},
+  timestamp = {Wed, 07 Jun 2017 14:40:52 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/SalimansGZCRC16},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@book{bishop,
+ author = {Bishop, Christopher M.},
+ title = {Pattern Recognition and Machine Learning (Information Science and Statistics)},
+ year = {2006},
+ isbn = {0387310738},
+ publisher = {Springer-Verlag},
+ address = {Berlin, Heidelberg}
+} 
+
+@article{seigelmann:computation,
+  added-at = {2008-03-11T14:52:34.000+0100},
+  annote = {discussed in NN Meeting 5/12/95},
+  author = {Siegelmann, Hava},
+  biburl = {https://www.bibsonomy.org/bibtex/28a51ecfb019f55bdff8a00958f755fe6/idsia},
+  citeulike-article-id = {2379039},
+  interhash = {6ba904b76cbecc153f9bf9018488d0c7},
+  intrahash = {8a51ecfb019f55bdff8a00958f755fe6},
+  journal = {Science},
+  keywords = {nn},
+  pages = {545--548},
+  priority = {2},
+  timestamp = {2008-03-11T14:59:18.000+0100},
+  title = {Computation Beyond the {T}uring Limit},
+  volume = 268,
+  year = 1995
+}
+
+
+@article{googlespeech,
+title	= {Neural Speech Recognizer: Acoustic-to-Word LSTM Model for Large Vocabulary Speech Recognition},
+author	= {Hagen Soltau and Hank Liao and Hasim Sak},
+year	= {2016},
+note	= {https://arxiv.org/abs/1610.09975},
+journal	= {ArXiv e-prints}
+}
+
+@article{vanishinggradient,
+  author    = {Razvan Pascanu and
+               Tomas Mikolov and
+               Yoshua Bengio},
+  title     = {Understanding the exploding gradient problem},
+  journal   = {CoRR},
+  volume    = {abs/1211.5063},
+  year      = {2012},
+  url       = {http://arxiv.org/abs/1211.5063},
+  archivePrefix = {arXiv},
+  eprint    = {1211.5063},
+  timestamp = {Wed, 07 Jun 2017 14:40:40 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1211-5063},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{hochreiter,
+ author = {Hochreiter, Sepp and Schmidhuber, J\"{u}rgen},
+ title = {Long Short-Term Memory},
+ journal = {Neural Comput.},
+ issue_date = {November 15, 1997},
+ volume = {9},
+ number = {8},
+ month = nov,
+ year = {1997},
+ issn = {0899-7667},
+ pages = {1735--1780},
+ numpages = {46},
+ url = {http://dx.doi.org/10.1162/neco.1997.9.8.1735},
+ doi = {10.1162/neco.1997.9.8.1735},
+ acmid = {1246450},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+}
+
+@article{wordembedding,
+  author    = {Tomas Mikolov and
+               Kai Chen and
+               Greg Corrado and
+               Jeffrey Dean},
+  title     = {Efficient Estimation of Word Representations in Vector Space},
+  journal   = {CoRR},
+  volume    = {abs/1301.3781},
+  year      = {2013},
+  url       = {http://arxiv.org/abs/1301.3781},
+  archivePrefix = {arXiv},
+  eprint    = {1301.3781},
+  timestamp = {Wed, 07 Jun 2017 14:42:25 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1301-3781},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{pennington2014glove,
+  author = {Jeffrey Pennington and Richard Socher and Christopher D. Manning},
+  booktitle = {Empirical Methods in Natural Language Processing (EMNLP)},
+  title = {GloVe: Global Vectors for Word Representation},
+  year = {2014},
+  pages = {1532--1543},
+  url = {http://www.aclweb.org/anthology/D14-1162},
+}
+
+@article{lstmvariants,
+  author    = {Klaus Greff and
+               Rupesh Kumar Srivastava and
+               Jan Koutn{\'{\i}}k and
+               Bas R. Steunebrink and
+               J{\"{u}}rgen Schmidhuber},
+  title     = {{LSTM:} {A} Search Space Odyssey},
+  journal   = {CoRR},
+  volume    = {abs/1503.04069},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1503.04069},
+  archivePrefix = {arXiv},
+  eprint    = {1503.04069},
+  timestamp = {Wed, 07 Jun 2017 14:42:57 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/GreffSKSS15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{gru,
+  author    = {Rahul Dey and
+               Fathi M. Salem},
+  title     = {Gate-Variants of Gated Recurrent Unit {(GRU)} Neural Networks},
+  journal   = {CoRR},
+  volume    = {abs/1701.05923},
+  year      = {2017},
+  url       = {http://arxiv.org/abs/1701.05923},
+  archivePrefix = {arXiv},
+  eprint    = {1701.05923},
+  timestamp = {Wed, 07 Jun 2017 14:42:56 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/DeyS17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{gan2,
+ author = {Goodfellow, Ian J. and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+ title = {Generative Adversarial Nets},
+ booktitle = {Proceedings of the 27th International Conference on Neural Information Processing Systems - Volume 2},
+ series = {NIPS'14},
+ year = {2014},
+ location = {Montreal, Canada},
+ pages = {2672--2680},
+ numpages = {9},
+ url = {http://dl.acm.org/citation.cfm?id=2969033.2969125},
+ acmid = {2969125},
+ publisher = {MIT Press},
+ address = {Cambridge, MA, USA},
+} 
+
+@article{cnnnontech,
+  author    = {Felix Altenberger and
+               Claus Lenz},
+  title     = {A Non-Technical Survey on Deep Convolutional Neural Network Architectures},
+  journal   = {CoRR},
+  volume    = {abs/1803.02129},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1803.02129},
+  archivePrefix = {arXiv},
+  eprint    = {1803.02129},
+  timestamp = {Tue, 10 Apr 2018 20:50:05 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1803-02129},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
