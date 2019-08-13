@@ -16,3 +16,11 @@ conda config --add channels conda-forge
 conda config --add channels phygbu
 
 conda activate C:\Users\rfischer\Miniconda3\envs\DeepHumor
+
+
+## Folders
+
+/rnn contains the experiments related to the text based models
+/pipeline contains the experiments related to the CNN based models
+/documentation contains the documentation assets
+/annotator contains the annotator app written to annotate the cartoons
