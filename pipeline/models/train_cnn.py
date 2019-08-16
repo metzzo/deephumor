@@ -16,6 +16,7 @@ def train_cnn_model(
         scheduler,
         training_dataset,
         validation_dataset,
+        test_dataset,
         batch_size,
         device,
         num_epochs=25):
@@ -28,6 +29,7 @@ def train_cnn_model(
     dataloaders = {
         "train": DataLoader(dataset=training_dataset, batch_size=batch_size, shuffle=True, num_workers=0),
         "val": DataLoader(dataset=validation_dataset, batch_size=batch_size, shuffle=True, num_workers=0),
+        "test": DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True, num_workers=0),
     }
 
     evaluations = {
@@ -39,13 +41,15 @@ def train_cnn_model(
         ).add_evaluations(model.validation_evaluations),
     }
 
-    target_path = os.path.abspath("./../models/{0}_cnn_model.pth".format(
+    target_path = os.path.abspath("../../models/{0}_cnn_model.pth".format(
         str(datetime.datetime.today()).replace('-', '').replace(':', '').replace(' ', '_')
     ))
     since = time.time()
 
     best_network_wts = copy.deepcopy(network.state_dict())
     best_acc = 0.0
+
+    patience = 0
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
@@ -94,9 +98,17 @@ def train_cnn_model(
         # deep copy the network
         epoch_acc = evaluations['val'].accuracy_evaluation.accuracy
         if epoch_acc > best_acc:
+            print("New Best!")
             best_acc = epoch_acc
             best_network_wts = copy.deepcopy(network.state_dict())
             torch.save(network.state_dict(), target_path)
+            patience = 0
+        else:
+            patience += 1
+
+        if patience > 25:
+            print("ran out of patience")
+            break
 
         print()
 
@@ -107,5 +119,30 @@ def train_cnn_model(
 
     # load best model weights
     network.load_state_dict(best_network_wts)
+
+    # do test evaluation
+    evaluations['val'].reset()
+    network.eval()  # Set network to evaluate mode
+
+    # Iterate over data.
+    for data in dataloaders['test']:
+        inputs, labels = model.get_input_and_label(data)
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward
+        outputs = network(inputs)
+        labels = model.get_labels(labels=labels)
+
+        preds = model.get_predictions(outputs=outputs)
+
+        # statistics
+        evaluations['val'].add_entry(predictions=preds, actual_label=labels, loss=loss.item())
+
+    print('{0} evaluation:\n {1}'.format(
+        'test', str(evaluations['val'])))
 
     return network

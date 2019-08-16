@@ -10,7 +10,6 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from torch.utils.data import DataLoader, WeightedRandomSampler
 import numpy as np
 
-from datamanagement.cartoon_lstm_dataset import n_letters
 from evaluation.accuracy_evaluation import AccuracyEvaluation
 from evaluation.loss_evaluation import LossEvaluation
 from evaluation.overall_evaluation import OverallEvaluation
