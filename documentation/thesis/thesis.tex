@@ -291,20 +291,78 @@ The punchline of a cartoon will be converted into text strings. Humans are able 
 To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
 \fi
 
-\chapter{Relation to Master Study}
-The master study Artificial Intelligence and Game Engineering has several courses that cover the topic of machine- and deep learning:
+\chapter{Evaluation}
+
+This chapter aims to evaluate the performance of the implemented architectures. in general the results show that this problem is a very hard one and no architecture was able to deliver results better than the baseline. \\
+
+The available data is split into three sub sets:
 
 \begin{itemize}
-\item 183.663, VU, Deep  Learning  for  Visual  Computing
-\item 184.702, VU, Machine Learning
-\item 188.501, VU, Similarity Modeling 1
-\item 188.498, VU, Similarity Modeling 2
-\item 188.980, VU, Advanced Information Retrieval
-\item 186.143, UE, Informationsvisualisierung 
-\item 186.141, VO, Informationsvisualisierung 
+\item Training Set: 40\%
+\item Validation Data: 20\%
+\item Test Data: 20\%
 \end{itemize}
 
-This topic fits therefore very well into the curriculum.
+All results listed are from the validation set, since no result has significant improvements compared to the baseline which would justify retraining the models on the test set.
+If a trained model does not generalize enough for the validation set, then is very unlikely the trained model will generalize for the test set.
+
+\section{Architectures}
+The following architectures will be evaluated.
+
+\subsection{Baseline}
+
+Three baseline strategies were picked: 
+
+\begin{itemize}
+
+\item Most Frequent Funniness
+\item Average Funniness
+\item Random Funniness
+
+\end{itemize}
+
+As expected, for the mean absolute error metric the average performed best, while for accuracy the most frequent class has the best score.
+
+\subsection{Simple CNN}
+The simple CNN architecture overfits very quickly. The performance approximates the baseline in the classification setting, but does not even reach the baseline in the regression setting.
+
+\subsection{Transfer Learning of Pretrained ResNet18}
+When applying transfer learning of a previously pretrained ResNet18 model overfitting is not as big of a problem, but instead it is underfitting. This is one of the few instances where the model performs better than the baseline in the classification setting. But the improvement is very slim and not significant.
+
+\subsection{Object Detection}
+
+The results of the object detection method were initially promising, but detailed inspection showed that the performance was not
+
+\subsection{ELMo Pretrained Model}
+TODO
+
+\subsection{TODO}
+TODO
+
+
+\section{Overview}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c||} 
+ \hline
+ Architecture & Mean Absolute Error & Accuracy \\ [0.5ex] 
+ \hline\hline
+ Baseline Most Frequent & 2.14 & 25.20\% \\ 
+ Baseline Average & 1.53 & 13.94\% \\
+ Baseline Random & 2.16 & 12.06\% \\
+ Simple CNN (Classification) & TODO & TODO \\
+ Simple CNN (Regression) & TODO & TODO \\
+ Transfer Learning of Pretrained ResNet18 (Classification) & TODO & TODO \\
+ Transfer Learning of Pretrained ResNet18 (Regression) & TODO & TODO \\
+ Simple CNN (Regression) & TODO & TODO \\
+ 88 & 788 & 6344 \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Table to test captions and labels}
+\label{table:1}
+\end{table}
+
 
 %\chapter{Introduction}
 %\todo{Enter your text here.}
