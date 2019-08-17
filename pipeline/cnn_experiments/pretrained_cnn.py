@@ -14,6 +14,9 @@ from evaluation.accuracy_evaluation import AccuracyEvaluation
 import numpy as np
 import cv2
 
+from evaluation.mae_evaluation import MAEEvaluation
+
+
 def auto_canny(image, sigma=0.7):
     # compute the median of the single channel pixel intensities
     v = np.median(image)
@@ -68,17 +71,16 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
         def __init__(self):
             super(PretrainedCNNCartoonCNNModel.Network, self).__init__()
 
-            self.model_conv = torchvision.models.resnet18()
-
+            self.model_conv = torchvision.models.resnet18(pretrained=True)
             for param in self.model_conv.layer1.parameters():
                 param.requires_grad = False
             for param in self.model_conv.layer2.parameters():
                 param.requires_grad = False
             for param in self.model_conv.layer3.parameters():
                 param.requires_grad = False
-            for param in self.model_conv.layer4.parameters():
-                param.requires_grad = False
-            self.model_conv.fc = nn.Linear(512, 100)
+
+            num_ftrs = self.model_conv.fc.in_features
+            self.model_conv.fc = nn.Linear(num_ftrs, 100)
             self.fc2 = nn.Linear(100, 8)
 
         def forward(self, x):
@@ -86,8 +88,9 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
             x = self.fc2(x)
             return x
 
-        def load_state_dict(self, state_dict, strict=True):
-            return self.model_conv.load_state_dict(state_dict=state_dict['state_dict'], strict=strict)
+
+        #def load_state_dict(self, state_dict, strict=True):
+        #    return self.model_conv.load_state_dict(state_dict=state_dict['state_dict'], strict=strict)
 
     def get_predictions(self, outputs):
         return torch.max(outputs, 1)[1]
@@ -102,20 +105,24 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
 
     def get_train_transformation(self):
         return [
-            transforms.Lambda(edge_detection_impl),
+            transforms.RandomResizedCrop(224, scale=(0.08, 1.0), ratio=(0.75, 1.3333333333333333), interpolation=2),
+            transforms.RandomRotation(16),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
 
     def get_validation_transformation(self):
-        return [
-            transforms.Lambda(edge_detection_impl),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
-        ]
+        USE_TRAIN_TRAFO = True
+        if USE_TRAIN_TRAFO:
+            return self.get_train_transformation()
+        else:
+            return [
+                transforms.Resize(224),
+                torchvision.transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            ]
 
     def load_image(self, img_name):
         return super(PretrainedCNNCartoonCNNModel, self).load_image(img_name=img_name).convert('RGB')
@@ -126,11 +133,6 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
 
     def get_input_and_label(self, data):
         _, image, labels = data
-        """labels = labels.double()
-        s = torch.from_numpy(np.random.normal(0, 0.5, len(labels)))
-        labels += s
-        labels = labels.round().long()
-        labels = torch.clamp(labels, 1, 7)"""
 
         return image, labels
     @property
@@ -139,6 +141,6 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
 
     @property
     def validation_evaluations(self):
-        return super(PretrainedCNNCartoonCNNModel, self).validation_evaluations + [AccuracyEvaluation]
+        return super(PretrainedCNNCartoonCNNModel, self).validation_evaluations + [AccuracyEvaluation, MAEEvaluation]
 
 

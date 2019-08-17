@@ -1,6 +1,8 @@
 import argparse
 
+import numpy
 import torch
+from numpy import random
 
 from evaluation.memory_profile import print_memory
 from models.predict_cnn import setup_predict_cnn
@@ -17,9 +19,14 @@ def main():
     from processing.preprocess import setup_preprocess
     from train_cnn import setup_train_cnn
 
+    random.seed(42)
+    numpy.random.seed(42)
     torch.manual_seed(42)
+    torch.cuda.manual_seed(42)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
-    use_cuda = torch.cuda.is_available()
+    use_cuda = False #torch.cuda.is_available()
     print("Uses CUDA: {0}".format(use_cuda))
     device = torch.device("cuda:0" if use_cuda else "cpu")
     if use_cuda:
