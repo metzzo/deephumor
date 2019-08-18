@@ -303,11 +303,11 @@ The available data is split into three sub sets:
 \item Test Data: 20\%
 \end{itemize}
 
-All results listed are from the validation set, since no result has significant improvements compared to the baseline which would justify retraining the models on the test set.
-If a trained model does not generalize enough for the validation set, then is very unlikely the trained model will generalize for the test set.
+The two main metrics chosen are mean absolute error (MAE) and accuracy. The MAE is being used because it does not penalize cases which are near misses as much. If the model predicts a funniness of 5, while the real funniness is 6 it is not as bad as it would have predicted a 1.
+
 
 \section{Architectures}
-The following architectures will be evaluated.
+Several architectures have been implemented and are evaluated in the following.
 
 \subsection{Baseline}
 
@@ -315,29 +315,42 @@ Three baseline strategies were picked:
 
 \begin{itemize}
 
-\item Most Frequent Funniness
-\item Average Funniness
-\item Random Funniness
+\item Most Frequent Funniness: Picks the most frequent label in the dataset
+\item Average Funniness: Returns the average funniness of the dataset
+\item Random Funniness: Returns a random funniness picked uniformly
 
 \end{itemize}
 
-As expected, for the mean absolute error metric the average performed best, while for accuracy the most frequent class has the best score.
+For the mean absolute error metric the average performed best, while for accuracy the most frequent class has the best score.
 
 \subsection{Simple CNN}
-The simple CNN architecture overfits very quickly. The performance approximates the baseline in the classification setting, but does not even reach the baseline in the regression setting.
+The simple CNN architecture overfits very quickly. The accuracy is very similar to the most frequent baseline, which indicates that the model probably just learns to return the most frequent class.
 
 \subsection{Transfer Learning of Pretrained ResNet18}
-When applying transfer learning of a previously pretrained ResNet18 model overfitting is not as big of a problem, but instead it is underfitting. This is one of the few instances where the model performs better than the baseline in the classification setting. But the improvement is very slim and not significant.
+Noteworthy about this approach is that also enabling the data augmentation in the training phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model does not generalize enough for the "not" augmented training samples.
 
-\subsection{Object Detection}
+\subsection{Transfer Learned Object Detection}
 
-The results of the object detection method were initially promising, but detailed inspection showed that the performance was not
+The result of the object detection approach are neglectable. Since the performance did not contain any noteworthy patterns it was not even implemented far enough to have any performance metrics. The predicted objects for each frame were essentially random.
 
 \subsection{ELMo Pretrained Model}
 TODO
 
-\subsection{TODO}
+\subsection{AutoML Model}
+This model performed surprisingly well, even though it does not use any Deep Learning. TODO
+
+\subsection{Two Stage Model}
 TODO
+
+\subsection{Two Stage Model with Cartoons}
+TODO
+
+\subsection{Two Stage Model with Autoencoder for Cartoons}
+TODO
+
+\subsection{Evaluation Conclusion}
+
+In general the conclusion is that no model really learns to generalize the humour. There is no significant improvement compared to the baseline. TODO
 
 
 \section{Overview}
@@ -351,10 +364,9 @@ TODO
  Baseline Most Frequent & 2.14 & 25.20\% \\ 
  Baseline Average & 1.53 & 13.94\% \\
  Baseline Random & 2.16 & 12.06\% \\
- Simple CNN (Classification) & TODO & TODO \\
- Simple CNN (Regression) & TODO & TODO \\
- Transfer Learning of Pretrained ResNet18 (Classification) & TODO & TODO \\
- Transfer Learning of Pretrained ResNet18 (Regression) & TODO & TODO \\
+ Simple CNN & TODO & TODO \\
+ Transfer Learning of Pretrained ResNet18 & TODO & TODO \\
+ Transfer Learning of Pretrained ResNet18 (enabling augmentation) & TODO & TODO \\
  Simple CNN (Regression) & TODO & TODO \\
  88 & 788 & 6344 \\ [1ex] 
  \hline
