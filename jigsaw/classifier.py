@@ -6,7 +6,7 @@ from allennlp.models import Model
 from allennlp.modules import Seq2VecEncoder, Embedding
 from allennlp.modules.text_field_embedders import TextFieldEmbedder, BasicTextFieldEmbedder
 from allennlp.nn.util import get_text_field_mask
-from allennlp.training.metrics import CategoricalAccuracy, F1Measure
+from allennlp.training.metrics import CategoricalAccuracy, F1Measure, MeanAbsoluteError
 
 
 @Model.register('jigsaw-lstm')
@@ -46,6 +46,7 @@ class LstmClassifier(Model):
         #self.f1_measure = F1Measure(positive_label=1)
 
         self.loss_function = torch.nn.CrossEntropyLoss()
+        self.mae = MeanAbsoluteError()
 
     def forward(self,
                 tokens: Dict[str, torch.Tensor],
@@ -69,6 +70,8 @@ class LstmClassifier(Model):
             self.accuracy(logits, label)
             #self.f1_measure(logits, label)
             output["loss"] = self.loss_function(logits, label)
+            _, predicted = torch.max(logits, 1)
+            self.mae(predicted, label)
 
         return output
 
@@ -76,6 +79,7 @@ class LstmClassifier(Model):
         #precision, recall, f1_measure = self.f1_measure.get_metric(reset)
         return {
             'accuracy': self.accuracy.get_metric(reset),
+            'mae': self.mae.get_metric(reset),
             #'precision': precision,
             #'recall': recall,
             #'f1_measure': f1_measure
