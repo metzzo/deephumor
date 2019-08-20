@@ -339,5 +339,5 @@ def main():
 
 if __name__ == '__main__':
     get_dummy_performance()
-    #main()
-    run_test()
+    main()
+    #run_test()

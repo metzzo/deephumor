@@ -75,15 +75,19 @@ class DeepHumorDatasetReader(DatasetReader):
                     return new.mean(axis=0)
                 else:
                     return np.zeros(300)
+
             vectorizer = TfidfVectorizer(vocabulary=vocabulary)
 
-            raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline'], self.test_df['punchline']]).reset_index()
+            raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
             self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
-            #self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
+            # self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
             vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
-            self.feature_vectors = np.hstack([self.spacy_punchlines, self.tfidf_punchlines, ]) # self.elmo_punchlines
+            self.feature_vectors = np.hstack([
+                self.spacy_punchlines,
+                self.tfidf_punchlines,
+            ])  # self.elmo_punchlines
 
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
