@@ -34,6 +34,7 @@ weight_file = ('https://s3-us-west-2.amazonaws.com/allennlp/models/elmo'
 
 TRAIN_PATH = "/home/rfischer/Documents/DeepHumor/train_set.p"
 VALIDATION_PATH = "/home/rfischer/Documents/DeepHumor/validation_set.p"
+TEST_PATH = "/home/rfischer/Documents/DeepHumor/test_set.p"
 
 IMAGES_PATH = '../../data/original_export/'
 
@@ -56,6 +57,7 @@ class DeepHumorDatasetReader(DatasetReader):
 
         self.train_df = pickle.load(open(TRAIN_PATH, "rb"))
         self.validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+        self.test_df = pickle.load(open(TEST_PATH, "rb"))
         self.transform = transforms.Compose([
             transforms.RandomCrop(size=(256, 256)),
             transforms.Grayscale()
@@ -84,24 +86,24 @@ class DeepHumorDatasetReader(DatasetReader):
                     return new.mean(axis=0)
                 else:
                     return np.zeros(300)
+
             vectorizer = TfidfVectorizer(vocabulary=vocabulary)
 
-            raw_punchlines = pd.concat([self.train_df['punchline'], self.validation_df['punchline']]).reset_index()
-            vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
-
+            raw_punchlines = pd.concat(
+                [self.train_df['punchline'], self.validation_df['punchline'], self.test_df['punchline']]).reset_index()
             self.spacy_punchlines = np.vstack(raw_punchlines['punchline'].apply(tokenize).values)
-            #self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
+            # self.elmo_punchlines = np.vstack(raw_punchlines['punchline'].apply(elmo_tokenize).values)
+            vectorizer.fit(raw_punchlines['punchline'][:len(self.train_df)])
             self.tfidf_punchlines = vectorizer.transform(raw_punchlines['punchline']).toarray()
 
             self.feature_vectors = np.hstack([
                 self.spacy_punchlines,
                 self.tfidf_punchlines,
-            ]) # self.elmo_punchlines
+            ])  # self.elmo_punchlines
 
             pickle.dump(self.feature_vectors, open('word_embedding.p', "wb"), protocol=4)
         else:
             self.feature_vectors = pickle.load(open('word_embedding.p', "rb"))
-
 
         self.train_feature_vec = self.feature_vectors[:len(self.train_df), :]
         self.train_feature_vec = np.hstack([
@@ -111,7 +113,8 @@ class DeepHumorDatasetReader(DatasetReader):
         self.train_label_vec = (np.array(self.train_df[['funniness']]).flatten() - 1).astype(int)
         self.train_filenames = self.train_df['filename'].values.flatten()
 
-        self.validation_feature_vec = self.feature_vectors[len(self.train_df):, :]
+        self.validation_feature_vec = self.feature_vectors[
+                                      len(self.train_df):len(self.train_df) + len(self.validation_df), :]
         self.validation_feature_vec = np.hstack([
             self.validation_feature_vec,
             np.array(range(0, len(self.validation_feature_vec))).reshape(-1, 1)
@@ -119,11 +122,20 @@ class DeepHumorDatasetReader(DatasetReader):
         self.validation_label_vec = (np.array(self.validation_df[['funniness']]).flatten() - 1).astype(int)
         self.validation_filenames = self.validation_df['filename'].values.flatten()
 
+        self.test_feature_vec = self.feature_vectors[len(self.train_df) + len(self.validation_df):, :]
+        self.test_feature_vec = np.hstack([
+            self.test_feature_vec,
+            np.array(range(0, len(self.test_feature_vec))).reshape(-1, 1)
+        ])
+        self.test_label_vec = (np.array(self.test_df[['funniness']]).flatten() - 1).astype(int)
+        self.test_filenames = self.test_df['filename'].values.flatten()
+
         self.positive_labels = positive_labels
         if self.positive_labels is not None:
             func = np.vectorize(lambda x: 1 if x in self.positive_labels else 0)
             self.train_label_vec = func(self.train_label_vec)
             self.validation_label_vec = func(self.validation_label_vec)
+            self.test_label_vec = func(self.test_label_vec)
 
         # oversampling the train df
 
@@ -153,10 +165,15 @@ class DeepHumorDatasetReader(DatasetReader):
         return Instance(fields)
 
     def _read(self, file_path: str) -> Iterator[Instance]:
+
         if file_path == 'train':
             feature_vec = self.train_feature_vec
             label_vec = self.train_label_vec
             filenames = self.train_filenames
+        elif file_path == 'test':
+            feature_vec = self.test_feature_vec
+            label_vec = self.test_label_vec
+            filenames = self.test_filenames
         else:
             feature_vec = self.validation_feature_vec
             label_vec = self.validation_label_vec

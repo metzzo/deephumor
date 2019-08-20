@@ -16,14 +16,14 @@ from allennlp.modules.seq2vec_encoders import Seq2VecEncoder, PytorchSeq2VecWrap
 from allennlp.modules.text_field_embedders import TextFieldEmbedder, BasicTextFieldEmbedder
 from allennlp.modules.token_embedders import Embedding, ElmoTokenEmbedder
 from allennlp.nn.util import get_text_field_mask
-from allennlp.training.metrics import CategoricalAccuracy, F1Measure
+from allennlp.training.metrics import CategoricalAccuracy, F1Measure, MeanAbsoluteError
 from allennlp.training.trainer import Trainer
 from sklearn.dummy import DummyRegressor
 from sklearn.metrics import mean_absolute_error
 from torch import nn
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
-from rnn import DeepHumorDatasetReader, MeanAbsoluteError, VALIDATION_PATH, TRAIN_PATH
+from rnn import DeepHumorDatasetReader, VALIDATION_PATH, TRAIN_PATH, TEST_PATH
 
 BATCH_SIZE = 64
 
@@ -194,6 +194,7 @@ class FinalClassifier(Model):
         ).cuda()
 
         self.mae = MeanAbsoluteError()
+        self.accuracy = CategoricalAccuracy()
 
         self.decision.apply(init_weights)
         self.prepare = {}
@@ -241,13 +242,27 @@ class FinalClassifier(Model):
             label = label.reshape(-1, 1).float()
 
             output["loss"] = self.loss_function(logits, label / 6.0)
+
+
+            onehot = torch.FloatTensor(predicted.size(0), 7)
+
+            # In your for loop
+            onehot.zero_()
+            onehot.scatter_(1, torch.clamp((predicted + 0.5), max=6).long().cpu(), 1)
+
+            output["loss"] = self.loss_function(logits, label / 6.0)
             self.mae(predicted, label)
+            if not hasattr(self, 'accuracy'):
+                self.accuracy = CategoricalAccuracy()
+            self.accuracy(onehot.int(), label.flatten().int())
+
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         results = {
             'mae': self.mae.get_metric(reset),
+            'accuracy': self.accuracy.get_metric(reset),
         }
         return results
 
@@ -319,13 +334,43 @@ def get_final_classifier(models, classes):
     return final_model
 
 def get_dummy_performance():
-    validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+    validation_df = pickle.load(open(TEST_PATH, "rb"))
     train_df = pickle.load(open(TRAIN_PATH, "rb"))
 
     regressor = DummyRegressor()
     regressor.fit(None, train_df['funniness'])
     predicted = regressor.predict(validation_df['punchline'])
     print("Dummy MAE", mean_absolute_error(validation_df['funniness'], predicted))
+
+def run_test():
+    saved = torch.load(
+        open('two_stage_autoencoder.pth', "rb")
+    )
+
+    final_model = saved['final_model']
+
+    reader = DeepHumorDatasetReader()
+
+    train_dataset = reader.read('train')
+    dev_dataset = reader.read('test')
+
+    optimizer = optim.Adam(final_model.parameters(), lr=0.0, weight_decay=0.001)
+
+    iterator = BasicIterator(batch_size=256)
+
+    trainer = Trainer(model=final_model,
+                      optimizer=optimizer,
+                      iterator=iterator,
+                      train_dataset=train_dataset,
+                      validation_dataset=dev_dataset,
+                      patience=25,
+                      cuda_device=0,
+                      num_epochs=1)
+
+    results = trainer.train()
+    print("Final result", str(results))
+
+    return final_model
 
 def main():
     # apply models and train final classiier
@@ -373,4 +418,5 @@ def main():
 
 if __name__ == '__main__':
     get_dummy_performance()
-    main()
+    #main()
+    run_test()
