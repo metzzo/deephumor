@@ -24,6 +24,10 @@
 \usepackage{todonotes} % Provides tooltip-like todo notes.
 \usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
 \usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+
+\newcommand{\cmark}{\ding{51}}%
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Robert Fischer} % The author name without titles.
@@ -293,7 +297,9 @@ To solve this problem Word Embeddings can be computed. These place words into a 
 
 \chapter{Evaluation}
 
-This chapter aims to evaluate the performance of the implemented architectures. in general the results show that this problem is a very hard one and no architecture was able to deliver results better than the baseline. \\
+This chapter aims to evaluate the performance of the implemented architectures. in
+general the results show that this problem is a very hard one, as, according to the
+gathered metrics, no trained model can understand the underlying structure and humour. \\
 
 The available data is split into three sub sets:
 
@@ -303,76 +309,161 @@ The available data is split into three sub sets:
 \item Test Data: 20\%
 \end{itemize}
 
-The two main metrics chosen are mean absolute error (MAE) and accuracy. The MAE is being used because it does not penalize cases which are near misses as much. If the model predicts a funniness of 5, while the real funniness is 6 it is not as bad as it would have predicted a 1.
+The two main metrics chosen are mean absolute error (MAE) and accuracy. The MAE
+is being used because it does not penalize cases which are near misses as much. If the
+model predicts a funniness of 5, while the real funniness is 6 it is not as bad as it would
+have predicted a 1.
+The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
+Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
+information regarding the build set up and necessary environment please refer to the
+GitHub Repository
+The hyperparameters were chosen based on best practice, trial’n error and previous
+experience with deep neural network training. The search space is far too vast to
+exhaustively search for the best setting.
 
 
 \section{Architectures}
-Several architectures have been implemented and are evaluated in the following.
+Several architectures have been implemented and are evaluated in the following sections.
+
 
 \subsection{Baseline}
 
-Three baseline strategies were picked: 
+Four baseline strategies have been selected: 
 
 \begin{itemize}
 
-\item Most Frequent Funniness: Picks the most frequent label in the dataset
-\item Average Funniness: Returns the average funniness of the dataset
-\item Random Funniness: Returns a random funniness picked uniformly
+\item Most Frequent Baseline: Picks the most frequent label in the dataset.
+\item Average Baseline: Returns the average funniness of the dataset. For the accuracy metric the average is rounded using round to nearest integer.
+\item Random Baseline: Returns a random funniness picked uniformly from one to seven.
+\item Stratified Baseline: Returns a funniness sampled from the distribution of the
+training set.
 
 \end{itemize}
 
-For the mean absolute error metric the average performed best, while for accuracy the most frequent class has the best score.
+For the mean absolute error metric the average performed best, while for the accuracy
+score the most frequent class has the best score.
 
 \subsection{Simple CNN}
-The simple CNN architecture overfits very quickly. The accuracy is very similar to the most frequent baseline, which indicates that the model probably just learns to return the most frequent class.
+The simple CNN architecture overfits very quickly. The accuracy and MAE sores are
+very similar to the most frequent baseline, which indicates that the model most likely
+learns to return the most frequent class, instead of generalizing the humour.
 
 \subsection{Transfer Learning of Pretrained ResNet18}
-Noteworthy about this approach is that also enabling the data augmentation in the training phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model does not generalize enough for the "not" augmented training samples.
+Noteworthy about this approach is that also enabling the data augmentation in the
+training phase makes this approach better than the baseline. The exact reason is not
+obvious, but indicates that the model does not generalize enough for the
+training samples which are not augmented.
+
+The data augmented version of this experiment unexpectedly achieved the best results
+during testing phase.
 
 \subsection{Transfer Learned Object Detection}
 
-The result of the object detection approach are neglectable. Since the performance did not contain any noteworthy patterns it was not even implemented far enough to have any performance metrics. The predicted objects for each frame were essentially random.
+The result of the object detection approach are incomparable to the other results, as it was not implemented far enough to return any labels. Since initial tests for a simplified image classification task, it was not further developed, as the predicted objects for each object were essentially
+random.
 
 \subsection{ELMo Pretrained Model}
-TODO
+
+Based on the pretrained ELMo model this model initially looked the most promising, as it
+achieved the highest validation accuracy. Unfortunately this was only due to overfitting,
+as during test phase the performance dropped.
+
+One problem of this approach may be, that many insider jokes of Gary Larson's humour are lost.
+
+Most likely a problem of this approach is that many insider jokes are lost, due to the fact
+that the pretrained vocabulary of the ELMo model does not contain many of them, so
+they can not be used by our model.
 
 \subsection{AutoML Model}
-This model performed surprisingly well, even though it does not use any Deep Learning. TODO
+Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set
+revealed overfitting. The ELMo feature representation performed worse in both settings.
+Since the TFIDF feature representation would not have relied on a pre-trained vocabulary
+it would not have suffered by the problem of domain specific words.
+
+For this experiment the library hyperopt-sklearn was used, as it accomplishes state-ofthe-art of AutoML.
 
 \subsection{Two Stage Model}
-TODO
+The Two Stage Models did not achieve significantly improved results, as it was not able
+to beat the baseline. The idea of trying to avoid overfitting by splitting the big tasks into
+smaller sub networks which only have a binary decision to make did not work as expected.
 
-\subsection{Two Stage Model with Cartoons}
-TODO
+Combining the visual and textual information also did not work as hoped. The MAE
+score is on par with the baseline, while still beating it at the accuracy score - so it is
+technically better. The improvement is not strong enough, that to say that it really
+understands humour.
 
-\subsection{Two Stage Model with Autoencoder for Cartoons}
-TODO
+One problem identified was the fact, that the images contained much more data and
+also much more noise. Do the idea was to use a deep autoencoder, which reduced the
+feature size of the images significantly. But against our expectation it did not improve
+the results compared to previous attempts.
 
 \subsection{Evaluation Conclusion}
 
-In general the conclusion is that no model really learns to generalize the humour. There is no significant improvement compared to the baseline. TODO
+In general the conclusion is that no model really learns to generalize the humour of
+Gary Larson. There is no significant improvement compared to the baselines available.
+But the ground work has been started and one thing is for certain: Even in the age of
+deep learning there are challenges in the field of Artificial Intelligence which need proper
+research and are hard.
+31.2. Results
+The exact causes for this underwhelming performance is not easy to work out. One
+obvious explanation could be that the dataset might be too small. But then again, which
+dataset is big enough?
+One could also argue that the methodology is maybe flawed. Letting a human rate a
+cartoon is very subjective and depends on many factors. Maybe an additional experiment
+worth exploring would be, after some time passes, to let the same human rate the cartoons
+again and check what performance the human would get. If the human is not able to
+reproduce similar results, then the entire methodology might be flawed.
 
 
-\section{Overview}
+\section{Results}
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{||c c c||} 
- \hline
- Architecture & Mean Absolute Error & Accuracy \\ [0.5ex] 
- \hline\hline
- Baseline Most Frequent & 2.14 & 25.20\% \\ 
- Baseline Average & 1.53 & 13.94\% \\
- Baseline Random & 2.16 & 12.06\% \\
- Simple CNN & TODO & TODO \\
- Transfer Learning of Pretrained ResNet18 & TODO & TODO \\
- Transfer Learning of Pretrained ResNet18 (enabling augmentation) & TODO & TODO \\
- Simple CNN (Regression) & TODO & TODO \\
- 88 & 788 & 6344 \\ [1ex] 
- \hline
+The following sections show the achieved performance for each experiment of the validation
+and test phase.
+
+
+\subsection{Validation Results}
+
+\begin{table}[h]
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Experiment}                                                                       & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   MAE\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   Accuracy\end{tabular}} & \textbf{Text} & \textbf{Visual} \\ \hline
+Baseline Most Frequent                                                                    & 2.14                                                                & 25.20\%                                                                  &               &                 \\
+Baseline Average                                                                          & 1.53                                                                & 13.94\%                                                                  &               &                 \\
+Baseline Random                                                                           & 2.33                                                                & 13.81\%                                                                  &               &                 \\
+Baseline Stratified                                                                       & 2.03                                                                & 16.62\%                                                                  &               &                 \\
+Simple CNN                                                                                & 2.14                                                                & 25.20\%                                                                  &               & \cmark               \\
+Tranfer Learning CNN                                                                      & 1.88                                                                & 25.53\%                                                                  &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Tranfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.97                                                                & 23.73\%                                                                  &               & \cmark               \\
+ELMo                                                                                      & 1.81                                                                & 26.81\%                                                                  & \cmark             &                 \\
+AutoML Model with ELMo Vectors                                                            & 2                                                                   & 25.87\%                                                                  & \cmark             &                 \\
+\begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.05                                                                & 26.76\%                                                                  & \cmark             &                 \\
+Two Stage Model                                                                           & 1.52                                                                & 18.10\%                                                                  & \cmark             & \\
+Two Stage Model with Cartoons                                                             & 1.55                                                                & 15.68\%                                                                  & \cmark             & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.62                                                                & 15.82\%                                                                  & \cmark             & \cmark               \\ \hline
 \end{tabular}
-\caption{Table to test captions and labels}
-\label{table:1}
+\end{table}
+
+\subsection{Test Results}
+
+\begin{table}[h]
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Experiment}                                                                       & \textbf{Test MAE} & \textbf{Test Accuracy} & \textbf{Text} & \textbf{Visual} \\ \hline
+Baseline Most Frequent                                                                    & 2.26              & 24.50\%                &               &                 \\
+Baseline Average                                                                          & 1.57              & 11.65\%                &               &                 \\
+Baseline Random                                                                           & 2.17              & 13.65\%                &               &                 \\
+Baseline Stratified                                                                       & 2.22              & 14.46\%                &               &                 \\
+Simple CNN                                                                                & 2.26              & 24.50\%                &               & \cmark               \\
+Tranfer Learning CNN                                                                      & 1.96              & 24.90\%                &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Tranfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.94              & 26.91\%                &               & \cmark               \\
+ELMo                                                                                      & 1.84              & 25.70\%                & \cmark             &                 \\
+AutoML Model with ELMo Vectors                                                            & 2.12              & 24.50\%                & \cmark             &                 \\
+\begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.23              & 24.90\%                & \cmark             &                 \\
+Two Stage Model                                                                           & 1.6               & 18.80\%                & \cmark             &                 \\
+Two Stage Model with Cartoons                                                             & 1.57              & 16.06\%                & \cmark             & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.58              & 14.46\%                &\cmark             & \cmark              \\
+\hline
+\end{tabular}
 \end{table}
 
 
