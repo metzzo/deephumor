@@ -401,18 +401,18 @@ the results compared to previous attempts.
 
 In general the conclusion is that no model really learns to generalize the humour of
 Gary Larson. There is no significant improvement compared to the baselines available.
-But the ground work has been started and one thing is for certain: Even in the age of
-deep learning there are challenges in the field of Artificial Intelligence which need proper
-research and are hard.
-31.2. Results
-The exact causes for this underwhelming performance is not easy to work out. One
-obvious explanation could be that the dataset might be too small. But then again, which
-dataset is big enough?
-One could also argue that the methodology is maybe flawed. Letting a human rate a
-cartoon is very subjective and depends on many factors. Maybe an additional experiment
-worth exploring would be, after some time passes, to let the same human rate the cartoons
-again and check what performance the human would get. If the human is not able to
-reproduce similar results, then the entire methodology might be flawed.
+Further research into this direction could reveal significant insights into the human humour, as current methods are not capable to achieve significant results.
+
+Potential causes can not be attributed to exactly one issue. One reason is certainly, that the problem space is not sufficiently described by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (e.g.: CIFAR 10 data set) than humour classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
+
+One could also argue that the problem itself is flawed. Letting a human rate a
+cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for doing the rating. It could be that these factors outweigh the true humour, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed. After some time after the initial ratings have been done, the same person rates them again. If and how the results are reproducible could then be evaluated by comparing the results of the new rating versus the old ratings. If the results are much different, this would mean that the problem itself is flawed.
+
+\section{Detailed Analysis}
+
+In the following a more detailed analysis of the two best results according to the test set is done.
+
+TODO: show confusion matrix
 
 
 \section{Results}
@@ -432,12 +432,12 @@ Baseline Average                                                                
 Baseline Random                                                                           & 2.33                                                                & 13.81\%                                                                  &               &                 \\
 Baseline Stratified                                                                       & 2.03                                                                & 16.62\%                                                                  &               &                 \\
 Simple CNN                                                                                & 2.14                                                                & 25.20\%                                                                  &               & \cmark               \\
-Tranfer Learning CNN                                                                      & 1.88                                                                & 25.53\%                                                                  &               & \cmark               \\
-\begin{tabular}[c]{@{}l@{}}Tranfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.97                                                                & 23.73\%                                                                  &               & \cmark               \\
-ELMo                                                                                      & 1.81                                                                & 26.81\%                                                                  & \cmark             &                 \\
+Transfer Learning CNN                                                                      & 1.88                                                                & 25.53\%                                                                  &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.97                                                                & 23.73\%                                                                  &               & \cmark               \\
+ELMo                                                                                      & 1.81                                                                & \textbf{26.81\%}                                                                  & \cmark             &                 \\
 AutoML Model with ELMo Vectors                                                            & 2                                                                   & 25.87\%                                                                  & \cmark             &                 \\
 \begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.05                                                                & 26.76\%                                                                  & \cmark             &                 \\
-Two Stage Model                                                                           & 1.52                                                                & 18.10\%                                                                  & \cmark             & \\
+Two Stage Model                                                                           & \textbf{1.52}                                                                & 18.10\%                                                                  & \cmark             & \\
 Two Stage Model with Cartoons                                                             & 1.55                                                                & 15.68\%                                                                  & \cmark             & \cmark               \\
 \begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.62                                                                & 15.82\%                                                                  & \cmark             & \cmark               \\ \hline
 \end{tabular}
@@ -450,17 +450,17 @@ Two Stage Model with Cartoons                                                   
 \hline
 \textbf{Experiment}                                                                       & \textbf{Test MAE} & \textbf{Test Accuracy} & \textbf{Text} & \textbf{Visual} \\ \hline
 Baseline Most Frequent                                                                    & 2.26              & 24.50\%                &               &                 \\
-Baseline Average                                                                          & 1.57              & 11.65\%                &               &                 \\
+Baseline Average                                                                          & \textbf{1.57}              & 11.65\%                &               &                 \\
 Baseline Random                                                                           & 2.17              & 13.65\%                &               &                 \\
 Baseline Stratified                                                                       & 2.22              & 14.46\%                &               &                 \\
 Simple CNN                                                                                & 2.26              & 24.50\%                &               & \cmark               \\
-Tranfer Learning CNN                                                                      & 1.96              & 24.90\%                &               & \cmark               \\
-\begin{tabular}[c]{@{}l@{}}Tranfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.94              & 26.91\%                &               & \cmark               \\
+Transfer Learning CNN                                                                      & 1.96              & 24.90\%                &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.94              & \textbf{26.91\%}                &               & \cmark               \\
 ELMo                                                                                      & 1.84              & 25.70\%                & \cmark             &                 \\
 AutoML Model with ELMo Vectors                                                            & 2.12              & 24.50\%                & \cmark             &                 \\
 \begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.23              & 24.90\%                & \cmark             &                 \\
 Two Stage Model                                                                           & 1.6               & 18.80\%                & \cmark             &                 \\
-Two Stage Model with Cartoons                                                             & 1.57              & 16.06\%                & \cmark             & \cmark               \\
+Two Stage Model with Cartoons                                                             & \textbf{1.57}              & 16.06\%                & \cmark             & \cmark               \\
 \begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.58              & 14.46\%                &\cmark             & \cmark              \\
 \hline
 \end{tabular}
