@@ -113,7 +113,7 @@ class PretrainedCNNCartoonCNNModel(BaseCNNModel):
         ]
 
     def get_validation_transformation(self):
-        USE_TRAIN_TRAFO = True
+        USE_TRAIN_TRAFO = False
         if USE_TRAIN_TRAFO:
             return self.get_train_transformation()
         else:

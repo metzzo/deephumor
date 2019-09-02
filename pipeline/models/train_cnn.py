@@ -21,9 +21,14 @@ def train_cnn_model(
         batch_size,
         device,
         num_epochs=25):
+    import time
+
+    start = time.time()
+
     network = model.network
     network.to(device)
-    LOAD_MODEL = '/home/rfischer/Documents/DeepHumor/deephumor/final_models/transfer_learning.pth'
+    #LOAD_MODEL = '/home/rfischer/Documents/DeepHumor/deephumor/final_models/transfer_learning.pth'
+    LOAD_MODEL = False
 
     optimizer = optimizer(params=model.optimization_parameters)
     scheduler = scheduler(optimizer=optimizer)
@@ -112,11 +117,14 @@ def train_cnn_model(
             else:
                 patience += 1
 
-            if patience > 25:
+            if patience > 4:
                 print("ran out of patience")
                 break
 
             print()
+
+        end = time.time()
+        print("Time of training ", end - start)
 
         time_elapsed = time.time() - since
         print('Training complete in {:.0f}m {:.0f}s'.format(
