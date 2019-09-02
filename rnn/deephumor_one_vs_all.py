@@ -18,8 +18,8 @@ from allennlp.modules.token_embedders import Embedding, ElmoTokenEmbedder
 from allennlp.nn.util import get_text_field_mask
 from allennlp.training.metrics import CategoricalAccuracy, F1Measure, MeanAbsoluteError
 from allennlp.training.trainer import Trainer
-from sklearn.dummy import DummyRegressor
-from sklearn.metrics import mean_absolute_error
+from sklearn.dummy import DummyRegressor, DummyClassifier
+from sklearn.metrics import mean_absolute_error, accuracy_score
 from torch import nn
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
@@ -337,10 +337,13 @@ def get_dummy_performance():
     validation_df = pickle.load(open(TEST_PATH, "rb"))
     train_df = pickle.load(open(TRAIN_PATH, "rb"))
 
-    regressor = DummyRegressor()
-    regressor.fit(None, train_df['funniness'])
-    predicted = regressor.predict(validation_df['punchline'])
+    #clf = DummyClassifier(strategy='uniform')
+    clf = DummyRegressor()
+    clf.fit(None, train_df['funniness'])
+    predicted = clf.predict(validation_df['punchline'])
+    predicted = np.round(predicted).astype(int)
     print("Dummy MAE", mean_absolute_error(validation_df['funniness'], predicted))
+    print("Dummy Accuracy", accuracy_score(validation_df['funniness'], predicted))
 
 def run_test():
     saved = torch.load(
@@ -419,4 +422,4 @@ def main():
 if __name__ == '__main__':
     get_dummy_performance()
     #main()
-    run_test()
+    #run_test()
