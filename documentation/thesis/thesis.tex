@@ -136,6 +136,7 @@
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
+\iffalse
 \chapter{Problem Definition}
 
 \begin{figure}[ht]
@@ -295,6 +296,8 @@ The punchline of a cartoon will be converted into text strings. Humans are able 
 To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
 \fi
 
+\fi
+
 \chapter{Evaluation}
 
 This chapter aims to evaluate the performance of the implemented architectures. in
@@ -321,6 +324,20 @@ The hyperparameters were chosen based on best practice, trial’n error and prev
 experience with deep neural network training. The search space is far too vast to
 exhaustively search for the best setting.
 
+\section{Dataset Analysis}
+The dataset consists of around 2500 cartoons. Each sample consists of the following properties:
+\begin{itemize}
+\item cartoon image
+\item punchline text
+\item boolean field which holds the information whether the annotator understands the cartoon
+\item funniness of the cartoon from 1 to 7, where 1 is not funny at all and 7 is very hilarious.
+\end{itemize}
+
+The annotation was performed by Robert Fischer over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly, as well as the punchline was transcribed from the image into text format. This stepped was aided by OCR, but heavy manual adjustments had to be applied. Additionally cartoons with bad quality, as well as duplicates were also removed.
+
+The second step was to annotate the funniness of the cartoons. There was the problem of humour fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions per session. Each annotation session lasted 30 minutes at maximum, but even shorter sessions were preferred. This was due to the sheer size of the dataset and the necessity that it had to be annotated by the same person a very time consuming task.
+
+TODO
 
 \section{Architectures}
 Several architectures have been implemented and are evaluated in the following sections.
@@ -397,6 +414,13 @@ also much more noise. Do the idea was to use a deep autoencoder, which reduced t
 feature size of the images significantly. But against our expectation it did not improve
 the results compared to previous attempts.
 
+\subsection{Autoencoder}
+
+The goal of the auto encoder using the deep convolutional architecture is to reduce the dimensionality of the images.
+
+TODO
+
+
 \subsection{Evaluation Conclusion}
 
 In general the conclusion is that no model really learns to generalize the humour of
@@ -410,9 +434,15 @@ cartoon is very subjective and likely depends on many factors. For example: Curr
 
 \section{Detailed Analysis}
 
-In the following a more detailed analysis of the two best results according to the test set is done.
 
-TODO: show confusion matrix
+\subsection{Qualitative Analysis}
+Six cartoons from different annotations have been randomly picked.
+
+TODO
+
+
+\subsection{Confusion Matrix}
+TODO
 
 
 \section{Results}
@@ -466,6 +496,33 @@ Two Stage Model with Cartoons                                                   
 \end{tabular}
 \end{table}
 
+\subsection{Training Duration}
+
+The following shows the training durations of each experiment on the configuration listed above.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|} 
+\hline
+Experiment                                    & Train Duration  \\ 
+\hline
+Baseline Most Frequent                        & \textless{}1s   \\
+Baseline Average                              & \textless{}1s   \\
+Baseline Random                               & \textless{}1s   \\
+Baseline Stratified                           & \textless{}1s   \\
+Simple CNN                                    & 7m 50s          \\
+Tranfer Learning CNN                          & 15m 45s         \\
+Tranfer Learning CNN (with data augmentation) & 9m 52s          \\
+ELMo                                          & 4m 39s          \\
+AutoML Model with ELMo Vectors                & 29m 7s          \\
+AutoML Model with TFIDF Vectors               & 24m 20s         \\
+Two Stage Model                               & 8m 42s          \\
+Two Stage Model with Cartoons                 & 39m 42s         \\
+Autoencoder                                   & 32m 34s         \\
+Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
+\hline
+\end{tabular}
+\end{table}
 
 %\chapter{Introduction}
 %\todo{Enter your text here.}
