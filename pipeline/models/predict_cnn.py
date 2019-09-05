@@ -36,7 +36,7 @@ def setup_predict_cnn(parser: argparse.ArgumentParser, group):
         dataloader = DataLoader(
             dataset=validation_ds,
             batch_size=32,
-            shuffle=True,
+            shuffle=False,
             num_workers=0
         )
         evaluation = OverallEvaluation(

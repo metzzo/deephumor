@@ -86,6 +86,10 @@ def encode_img(img):
 
 
 def main():
+    import time
+
+    start = time.time()
+
     num_epochs = 100
     batch_size = 128
     learning_rate = 1e-3
@@ -102,6 +106,11 @@ def main():
     output = None
     loss = None
     not_better = 0
+
+    best_model = torch.load(
+        open('./conv_autoencoder.pth', "rb")
+    )
+    """
     for epoch in range(num_epochs):
         for data in dataloader:
             _, img, _ = data
@@ -140,11 +149,32 @@ def main():
             if not_better > 10:
                 break
 
+
+    end = time.time()
+    print("Train duration", end - start)
+    """
+
     model.load_state_dict(best_model)
+
+    dataloader = DataLoader(CartoonCNNDataset(file_path=TRAIN_PATH, model=AutoEncoderModel(), trafo=img_transform), batch_size=6, shuffle=True)
+
+    img = None
+    for data in dataloader:
+        _, img, _ = data
+        img = torch.tensor(img).cuda()
+        break
+
+    img = torch.tensor(img).cuda()
+    # ===================forward=====================
+    output = model(img)
+
     pic = to_img(output.cpu().data)
     save_image(pic, './dc_img/image_final.png')
 
-    torch.save(best_model, './conv_autoencoder.pth')
+    pic = to_img(img.cpu().data)
+    save_image(pic, './dc_img/image_prev.png')
+
+    #torch.save(best_model, './conv_autoencoder.pth')
 
 if __name__ == '__main__':
     main()

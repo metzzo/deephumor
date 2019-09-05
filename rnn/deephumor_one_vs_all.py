@@ -405,11 +405,16 @@ def main():
         [2, 3, 4, 5],
         [3, 4, 5, 6],
     """
+    import time
+
+    start = time.time()
     models = list([get_one_vs_all_model(cl) for cl in subset_classes])
-    torch.save(models, open('models.p', "wb"))
+    #torch.save(models, open('models.p', "wb"))
     #models = torch.load(open('models.p', "rb"))
 
     final_model = get_final_classifier(models=models, classes=subset_classes)
+    end = time.time()
+    print("Train duration", end - start)
 
     torch.save({
         "final_model": final_model,
@@ -421,5 +426,5 @@ def main():
 
 if __name__ == '__main__':
     get_dummy_performance()
-    #main()
+    main()
     #run_test()

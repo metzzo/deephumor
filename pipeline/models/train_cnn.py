@@ -10,6 +10,9 @@ from evaluation.overall_evaluation import OverallEvaluation
 
 import pandas as pd
 
+from random_seed import set_random_seed
+
+
 def train_cnn_model(
         model,
         criterion,
@@ -27,13 +30,13 @@ def train_cnn_model(
 
     network = model.network
     network.to(device)
-    #LOAD_MODEL = '/home/rfischer/Documents/DeepHumor/deephumor/final_models/transfer_learning.pth'
-    LOAD_MODEL = False
+    LOAD_MODEL = '/home/rfischer/Documents/DeepHumor/deephumor/final_models/transfer_learning.pth'
+    #LOAD_MODEL = False
 
     optimizer = optimizer(params=model.optimization_parameters)
     scheduler = scheduler(optimizer=optimizer)
 
-    train_dl = DataLoader(dataset=training_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
+    train_dl = DataLoader(dataset=training_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     val_dl = DataLoader(dataset=validation_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     test_dl = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     dataloaders = {
@@ -136,7 +139,7 @@ def train_cnn_model(
     else:
         #network.load_state_dict({"state_dict": torch.load(LOAD_MODEL)})
         network.load_state_dict(torch.load(LOAD_MODEL))
-
+    set_random_seed(42)
     # do test evaluation
     network.eval()  # Set network to evaluate mode
     for phase in ['val', 'test']:

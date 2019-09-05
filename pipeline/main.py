@@ -19,13 +19,6 @@ def main():
     from processing.preprocess import setup_preprocess
     from train_cnn import setup_train_cnn
 
-    random.seed(42)
-    numpy.random.seed(42)
-    torch.manual_seed(42)
-    torch.cuda.manual_seed(42)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
     use_cuda = False #torch.cuda.is_available()
     print("Uses CUDA: {0}".format(use_cuda))
     device = torch.device("cuda:0" if use_cuda else "cpu")
@@ -33,14 +26,14 @@ def main():
         torch.cuda.empty_cache()
 
     operations = [
-        setup_preprocess,
+        #setup_preprocess,
         setup_train_cnn,
-        setup_pickle_to_csv,
-        setup_create_debug_set,
-        setup_prepare_mnist,
-        setup_create_tuberlin,
-        setup_predict_cnn,
-        setup_train_lstm,
+        #setup_pickle_to_csv,
+        #setup_create_debug_set,
+        #setup_prepare_mnist,
+        #setup_create_tuberlin,
+        #setup_predict_cnn,
+        #setup_train_lstm,
     ]
 
     parser = argparse.ArgumentParser()

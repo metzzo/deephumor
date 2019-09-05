@@ -46,7 +46,7 @@ class OneVRestClassifier(Model):
                  weight: float) -> None:
         super().__init__(None)
         self.decision = torch.nn.Sequential(
-            torch.nn.Linear(4524, 16),
+            torch.nn.Linear(4262, 16),
             torch.nn.ReLU(),
             torch.nn.BatchNorm1d(16),
         ).cuda()
@@ -325,11 +325,16 @@ def main():
         [3, 4, 5, 6],
     """
 
+    import time
+
+    start = time.time()
     models = list([get_one_vs_all_model(cl) for cl in subset_classes])
     #torch.save(models, open('models.p', "wb"))
     #models = torch.load(open('models.p', "rb"))
 
     final_model = get_final_classifier(models=models, classes=subset_classes)
+    end = time.time()
+    print("Train duration", end - start)
 
     torch.save({
         "final_model": final_model,

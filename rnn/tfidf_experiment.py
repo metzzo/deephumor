@@ -1,5 +1,6 @@
 import datetime
 import pickle
+import time
 
 import nltk
 import pandas as pd
@@ -30,7 +31,6 @@ def main():
     train_df = pickle.load(open(TRAIN_PATH, "rb"))
     validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
 
-    """
     train_punchlines = train_df['punchline'].apply(nltk.word_tokenize)
     validation_punchlines = validation_df['punchline'].apply(nltk.word_tokenize)
 
@@ -62,14 +62,18 @@ def main():
     validation_category = np.array(validation_df[['funniness']]).flatten()
     """
 
+
     vectorizer = TfidfVectorizer()
     train_punchline = vectorizer.fit_transform(train_df['punchline']).toarray()
     train_category = np.array(train_df[['funniness']]).flatten()
 
     validation_punchline = vectorizer.transform(validation_df['punchline']).toarray()
     validation_category = np.array(validation_df[['funniness']]).flatten()
-
     """
+
+    import time
+
+    start = time.time()
     clf = HyperoptEstimator(
         classifier=svc('my_clf'),
         max_evals=50,
@@ -77,8 +81,10 @@ def main():
         seed=42,
     )
     clf.fit(X=train_punchline, y=train_category)
+    end = time.time()
+    print("Train duration", end - start)
+
     print(clf.score(validation_punchline, validation_category))
-    """
 
     clf = pickle.load( open('tfidf/automl_tfidf.p', 'rb'))
 
