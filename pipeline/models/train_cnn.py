@@ -6,11 +6,17 @@ import copy
 import torch
 from torch.utils.data import DataLoader
 
+from confusion_matrix import plot_confusion_matrix_from_data
 from evaluation.overall_evaluation import OverallEvaluation
 
 import pandas as pd
 
 from random_seed import set_random_seed
+
+
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 def train_cnn_model(
@@ -140,14 +146,21 @@ def train_cnn_model(
         #network.load_state_dict({"state_dict": torch.load(LOAD_MODEL)})
         network.load_state_dict(torch.load(LOAD_MODEL))
     set_random_seed(42)
+
+
     # do test evaluation
     network.eval()  # Set network to evaluate mode
     for phase in ['val', 'test']:
+        relevant_activations = {}
         evaluations['val'].reset()
         # Iterate over data.
 
         all_predictions = []
         all_labels = []
+
+        f, axes = plt.subplots(7, 1, figsize=(7, 7))
+        sns.despine(left=True)
+
         for data in dataloaders[phase]:
             inputs, labels = model.get_input_and_label(data)
             inputs = inputs.to(device)
@@ -155,6 +168,28 @@ def train_cnn_model(
 
             # forward
             outputs = network(inputs)
+            if len(relevant_activations) < 7:
+                cid, _, _ = data
+                for j in range(inputs.size(0) - 1):
+                    label = int(labels[j].cpu().detach().numpy())
+                    if label not in relevant_activations:
+                        output = torch.nn.functional.softmax(outputs[j]).cpu().detach().numpy()
+                        cur_id = cid[j]
+
+                        output = pd.DataFrame(data={
+                            key: output[key] for key in range(1, 8)
+                        }, index=['data']).T
+                        output.reset_index(level=0, inplace=True)
+
+                        sns.barplot(x='data', y='index', data=output, color="b", ax=axes[label - 1], orient = 'h')
+                        sns.despine(left=True, bottom=True)
+
+                        print(label, " ", output, " ", cur_id)
+
+                        relevant_activations[label] = 42
+            else:
+                break
+
             labels = model.get_labels(labels=labels)
             preds = model.get_predictions(outputs=outputs)
             #print(inputs)
@@ -164,6 +199,7 @@ def train_cnn_model(
 
             all_predictions += list(preds.cpu().numpy())
             all_labels += list(labels.cpu().numpy())
+        plt.show()
 
         df = pd.DataFrame(data={
             "predictions": all_predictions,
@@ -173,5 +209,21 @@ def train_cnn_model(
 
         print('{0} evaluation:\n {1}'.format(
             phase, str(evaluations['val'])))
+        """
+        plot_confusion_matrix_from_data(
+            y_test=all_labels,
+            predictions=all_predictions,
+            columns=[
+                'funniness 1',
+                'funniness 2',
+                'funniness 3',
+                'funniness 4',
+                'funniness 5',
+                'funniness 6',
+                'funniness 7',
+            ],
+            title='{} confusion matrix'.format('Validation' if phase=='val' else 'Test')
+        )
+        """
 
     return network
