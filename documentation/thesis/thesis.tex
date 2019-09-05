@@ -416,21 +416,26 @@ the results compared to previous attempts.
 
 \subsection{Autoencoder}
 
-The goal of the auto encoder using the deep convolutional architecture is to reduce the dimensionality of the images.
+The goal of the auto encoder using the deep convolutional architecture is to reduce the dimensionality of the images, while still maintaining the important characteristics of the original cartoons. 
 
-TODO
+Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important information which could be crucial for understanding humour. For example the facial expressions are lost, as well as many other high frequency details. For example the native american lying on the floor is not recognizable anymore. 
 
+These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs the worst.
 
-\subsection{Evaluation Conclusion}
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder_original.png}
+	\caption{Original Cartoons}
+	\label{fig:autoencoderimageoriginal}
+\end{figure}
 
-In general the conclusion is that no model really learns to generalize the humour of
-Gary Larson. There is no significant improvement compared to the baselines available.
-Further research into this direction could reveal significant insights into the human humour, as current methods are not capable to achieve significant results.
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder_final.png}
+	\caption{Results after applying encoder and decoder}
+	\label{fig:autoencoderresults}
+\end{figure}
 
-Potential causes can not be attributed to exactly one issue. One reason is certainly, that the problem space is not sufficiently described by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (e.g.: CIFAR 10 data set) than humour classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
-
-One could also argue that the problem itself is flawed. Letting a human rate a
-cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for doing the rating. It could be that these factors outweigh the true humour, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed. After some time after the initial ratings have been done, the same person rates them again. If and how the results are reproducible could then be evaluated by comparing the results of the new rating versus the old ratings. If the results are much different, this would mean that the problem itself is flawed.
 
 \section{Detailed Analysis}
 
@@ -442,8 +447,23 @@ TODO
 
 
 \subsection{Confusion Matrix}
-TODO
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_test.png}
+	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the test split}
+	\label{fig:confusionmatrixtransferlearningtest}
+\end{figure}
 
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_val.png}
+	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the validation split}
+	\label{fig:confusionmatrixtransferlearningval}
+\end{figure}
+
+One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted at all by the classifier. This motivated the design of the two stage model where the first stage trained a neural network for each class. The task for this neural is to determine whether the given sample belongs to the funniness class it belongs to or not. The second stage uses these results and outputs a final prediction.
+
+TODO: COnfusion matrix for two stage model
 
 \section{Results}
 
@@ -463,7 +483,7 @@ Baseline Random                                                                 
 Baseline Stratified                                                                       & 2.03                                                                & 16.62\%                                                                  &               &                 \\
 Simple CNN                                                                                & 2.14                                                                & 25.20\%                                                                  &               & \cmark               \\
 Transfer Learning CNN                                                                      & 1.88                                                                & 25.53\%                                                                  &               & \cmark               \\
-\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.97                                                                & 23.73\%                                                                  &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.96                                                                & 23.86\%                                                                  &               & \cmark               \\
 ELMo                                                                                      & 1.81                                                                & \textbf{26.81\%}                                                                  & \cmark             &                 \\
 AutoML Model with ELMo Vectors                                                            & 2                                                                   & 25.87\%                                                                  & \cmark             &                 \\
 \begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.05                                                                & 26.76\%                                                                  & \cmark             &                 \\
@@ -485,7 +505,7 @@ Baseline Random                                                                 
 Baseline Stratified                                                                       & 2.22              & 14.46\%                &               &                 \\
 Simple CNN                                                                                & 2.26              & 24.50\%                &               & \cmark               \\
 Transfer Learning CNN                                                                      & 1.96              & 24.90\%                &               & \cmark               \\
-\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 1.94              & \textbf{26.91\%}                &               & \cmark               \\
+\begin{tabular}[c]{@{}l@{}}Transfer Learning CNN (with\\   data augmentation)\end{tabular} & 2.01              & \textbf{26.10\%}                &               & \cmark               \\
 ELMo                                                                                      & 1.84              & 25.70\%                & \cmark             &                 \\
 AutoML Model with ELMo Vectors                                                            & 2.12              & 24.50\%                & \cmark             &                 \\
 \begin{tabular}[c]{@{}l@{}}AutoML Model with TFIDF\\   Vectors\end{tabular}               & 2.23              & 24.90\%                & \cmark             &                 \\
@@ -498,13 +518,13 @@ Two Stage Model with Cartoons                                                   
 
 \subsection{Training Duration}
 
-The following shows the training durations of each experiment on the configuration listed above.
+The following shows the training durations of each experiment on the configurations listed above. 
 
 \begin{table}
 \centering
 \begin{tabular}{|l|l|} 
 \hline
-Experiment                                    & Train Duration  \\ 
+\textbf{Experiment}                                    & \textbf{Train Duration}  \\ 
 \hline
 Baseline Most Frequent                        & \textless{}1s   \\
 Baseline Average                              & \textless{}1s   \\
@@ -523,6 +543,17 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 \hline
 \end{tabular}
 \end{table}
+
+\section{Evaluation Conclusion}
+
+In general the conclusion is that no model really learns to generalize the humour of
+Gary Larson. There is no significant improvement compared to the baselines available.
+Further research into this direction could reveal significant insights into the human humour, as current methods are not capable to achieve significant results.
+
+Potential causes can not be attributed to exactly one issue. One reason is certainly, that the problem space is not sufficiently described by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (e.g.: CIFAR 10 data set) than humour classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
+
+One could also argue that the problem itself is flawed. Letting a human rate a
+cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for doing the rating. It could be that these factors outweigh the true humour, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed. After some time after the initial ratings have been done, the same person rates them again. If and how the results are reproducible could then be evaluated by comparing the results of the new rating versus the old ratings. If the results are much different, this would mean that the problem itself is flawed.
 
 %\chapter{Introduction}
 %\todo{Enter your text here.}
