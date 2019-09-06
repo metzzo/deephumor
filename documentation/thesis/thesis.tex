@@ -136,167 +136,6 @@
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
-\iffalse
-\chapter{Problem Definition}
-
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=0.5\textwidth]{graphics/example_cartoon.png}
-	\caption{Cartoon by Gary Larson}
-	\label{fig:fig1}
-\end{figure}
-
-The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see Figure \ref{fig:fig1}). This is done by applying several Deep Learning techniques. \\
-
-
-Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}, research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well and similarly recurrent neural networks have been improving the state-of-the-art in several natural language processing disciplines \cite{reviewRNN}. \\
-
-\textbf {Cartoon Classification:} \quad Convolutional neural networks are mostly applied to real world pictures, because most problems of computer vision are in this domain. The question remains whether they are also capable of analyzing cartoons and if there are ways on how to improve CNNs for this type of images. An experiment of regular image classification will be adapted for Gary Larson's cartoons. The traditional image classification task using the CIFAR-10 data set, where categorizing images into ten classes (cat, dog, airplane, etc.) will be adapted for his cartoons. Classification should range from animal cartoons, culture dish cartoons to harder categories, such as cartoons that contain a depiction of god. The original task is already solved with convolutional neural networks, the question remains if the same is true for Gary Larson's cartoons \cite{dogsvscats}. \\
-
-\textbf {Humor Classification:} \quad Often cartoons by Gary Larson also contain a punchline, which will be extracted using existing optical image recognition solutions. The extracted text has to be considered when trying to understand humor. Here recurrent neural networks (RNN), especially Long Short-Term Memory (LSTM) networks, will be applied \cite{hochreiter}. The main problem of these networks, is that they have the tendency to overfit to the training data \cite[page 4]{reviewRNN}, which is a major challenge to be overcome. \\
-
-Another goal is to evaluate the resulting neural networks. Hidden inside them, there might be some interesting insights about human humor, especially since deep neural networks are inspired by the human brain and function similarly \cite{Cichy2016}. Maybe some neural network layers will have their own dedicated function, or there will be a cow-detection neuron inside the network? These and related questions will be investigated in the present thesis.
-
-\chapter{Expected Results}
-
-The main outcome of this thesis is a machine learning pipeline which is able to classify a cartoon by funniness. This pipeline consists of a pre-processing phase, training phase and testing phase. A similar pipeline for the cartoon classification task will also be developed, but will be adapted to multilabel classification. Classes include different types of animals (cats, dogs, horses, etc.), different settings (culture dish, stone age, outer space, etc.) and more semantically challenging classes (contains god appearance, contains marriage conflict, etc.). \\
-
-Secondly, the model will be evaluated rigorously and the hope is to find some new insights into the neural structure of human humor. For example, if this thesis shows the existence of a neuron which fires if and only if a cow is visible, this could imply, that the human brain also has neurons that function similarly \cite{Cichy2016}. The existence of layers that serve certain functions might also be worth investigating. \\
-
-If the network performs well in the test phase, then this is a very strong indicator, that the deep neural networks are actually able to learn the human humor. This would open many new research possibilities. \\
-
-Another important result is an annotated ground truth, which will be used to train the classifiers. The annotation contains a rating by funniness as well as a cartoon classification (e.g.: animal appearances, theme cartoons, etc.). This ground truth may be applied for future research as well, such as comparing humor between Gary Larson and other authors.
-
-\chapter{Methodology and Approach}
-\section {Literature Research}
-First the available literature will be researched. The goal is to have a broad understanding and knowledge of state-of-the-art in machine learning, deep neural network architectures, human humor and human perception. \\
-
-\section {Pre-Processing}
-In this step the ground truth will be created: A data set of several thousand cartoons exists, but these cartoons need to be pre-processed in such a way that a neural network can be trained on this data set. The punchlines have to be extracted, the pictures need to be normalized and bad examples filtered. Additionally manual labelling of cartoons is necessary. For the humor classification the funniness of a cartoon has to be annotated with a numerical value and for the cartoon classification task a binary n-tuple that describes which type of cartoon is illustrated. \\
-
-\section {Humor Classification}
-Given this data set, based on previous classifications, the goal is to predict how funny a previously unseen cartoon is. This is done by training multiple machine learning classifiers. Important to note is the fact, that humor is subjective, so the generated model might only be applicable for individuals. \\
-
-For the visual component of a cartoon, a convolutional neural network will be trained, as they have been applied very successfully in various image classification tasks \cite{dogsvscats}. If and how deep neural networks have to be adapted to work with cartoons will be researched during the thesis. Possibly a generative adversarial approach may be implemented  \cite{gan2}\cite{gan}.  \\
-
-A punchline analysis will be implemented using recurrent neural networks and other natural language processing techniques. Prime candidate are Long Short-Term Memory networks. Here several variations exist with widely different topologies and architectures \cite{lstmvariants}. The goal is to find the best performing network for the given task. Other techniques may be considered as well, such as Gated Recurrent Units \cite{gru}.
-
-Finally both neural networks are merged together using another, possibly more traditional, machine learning classifier. \\
-
-\section {Cartoon Classification}
-
-Similar to the humor classification approach, a deep neural network that classifies cartoons by different categories will be trained. The question remains how to handle cartoons properly using deep neural networks, additionally data augmenting techniques might be implemented to avoid overfitting. \\
-
-Gary Larson has many reoccurring themes, such as different settings (culture dish, stone age, outer space, etc.), reoccurring animals (dogs, cats, horses, etc.) or other phenomena (god appearing, marriage conflict, etc.). This makes training a deep neural network which is able to classify these categories an interesting task. On the quest to the best classifier, different convolutional neural networks will be applied, possibly combined with a generative adversarial architecture \cite{gan2}\cite{gan}.
-
-\section {Evaluation}
-
-During the evaluation, the trained models are applied to the test set (a set of previously unknown data). The humor classification task has one out of many choices per cartoon, hence it is considered a multiclass classification task, on the other hand the cartoon classification task has many out of many choices per cartoon (since a cartoon can contain for example a cat and a dog), hence it is considered a multilabel multiclass classification task. \\
-
-Evaluation will be mostly based on a confusion matrix in order to calculate an average F-score \cite{Powers2008EvaluationFP}. If the classes are not evenly distributed special considerations are necessary. Additionally ROC curves may be also used for evaluation \cite{Hand2001}. 
-
-\chapter{State of the Art}
-
-\section{Related Work}
-At the time of writing this proposal there has been little research in the area of computational humor using deep learning. Deep Learning of Audio and Language Features for Humor Prediction \cite{Bertero2016DeepLO} is the only notable paper in this area, which uses deep learning for punchline detection based on dialogue and audio of a US sitcom. This approach ignores the visual component entirely and also does not use Long Short-Term Memory networks.
-
-For image classification various types of convolutional neural networks are state-of-the-art \cite{dogsvscats}. Recurrent Long Short-Term Memory networks are being used very successfully for many natural language processing tasks and other domains, such as speech recognition \cite{reviewRNN}\cite{googlespeech}. In fact recurrent neural networks are so powerful they are even turing complete \cite{seigelmann:computation}.
-
-Previous approaches of computational humor include sarcasm \cite{Bamman2015ContextualizedSD}, joke detection \cite{Yang2015HumorRA} or rule-based humor \cite{HumoristBot}. All of these attempts treated humor as isolated chunks of text, while also ignoring the visual component entirely.
-
-\section{Neural Networks}
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=0.5\textwidth]{graphics/simple_neural_network.png}
-	\caption{Fully Connected Feed Forward Neural Network}
-	\label{fig:feedforward}
-\end{figure}
-
-A neural network generally consists of multiple neurons, layers and connections. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network, with one input layer, one output layer and three hidden layers. Training the neural network is usually achieved by applying the gradient descent algorithm \cite{bishop}.
-
-\pagebreak
-\section{Convolutional Neural Networks}
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
-	\caption{Visual representation of a convolutional neural network}
-	\label{fig:convolutional}
-\end{figure}
-
-Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are pooling and convolutional layers \cite{Druzhkov2016}\cite{cnnnontech}. Figure \ref{fig:convolutional} illustrates a high level view of the cartoon classification process by a CNN.
-
-\section{Recurrent Neural Networks}
-
-Recurrent Neural Networks allow neural networks to be applied on sequences, by containing cycles in the topology of the network. Usually a RNN consists of multiple units, such as Long Short-Term Memory units \cite{hochreiter}, Gates recurrent units \cite{gru}, etc. The focus of this thesis will primarily be on LSTM networks, since they are well known and avoid the vanishing gradient problem \cite {vanishinggradient}.
-
-
-\iffalse
-\section{Neural Networks}
-
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=0.5\textwidth]{graphics/simple_neural_network.png}
-	\caption{Fully Connected Feed Forward Neural Network}
-	\label{fig:feedforward}
-\end{figure}
-
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
-
-The following neural network introduction is based on Pattern Recognition and Machine Learning by Christopher M. Bishop \cite{bishop}. \\ 
-
-A neural network can be seen as a series of functional transformations. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
-\begin{equation}
-a_j = \sum_{i=1}^{D} w_{ji}^{(1)} + w_{j0}^{(1)}
-\end{equation}
-
-where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$:
-\begin{equation}
-z_j = h(a_j)
-\end{equation}
-where depending on the problem different activation functions are applied, for example $h(x) = tanh(x)$ or $h(x) = \sigma(x)$ where
-\begin{equation}
-\sigma(x) = \dfrac {1} {1 + e^{-x}}
-\end{equation}
-for the first hidden layer the following values are linearly combined:
-\begin{equation}
-a_k = \sum_{i=1}^{M} w_{kj}^{(2)} + w_{k0}^{(2)}
-\end{equation}
-
-where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for all hidden layers. The final result for the output layer is usually obtained by applying a softmax activation function. \\
-
-The neural network is usually trained by applying a gradient descent optimization. For more information regarding this algorithm Machine Learning by Christopher M. Bishop is recommended \cite{bishop}. 
-
-\subsection{Convolutional Neural Networks}
-The following is summarizing several papers \cite{dogsvscats}\cite{Druzhkov2016}\cite{cnnnontech}.
-
-Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are pooling and convolutional layers. \\
-
-Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (e.g.: edges). Also in contrast to fully connected layers: The kernel is shared among the neurons (Parameter Sharing), since the recognized features should not depend on their position in the input image. \\
-
-Pooling layers are applied after convolutional layers. Their goal is to reduce the complexity of CNNs. Pooling neurons are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is Max Pooling, where the result is the maximum value of all incoming connections. \\
-
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. \\
-
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
-	\caption{Visual representation of a convolutional neural network}
-	\label{fig:feedforward}
-\end{figure}
-\pagebreak
-\subsection{Recurrent Neural Networks}
-Recurrent Neural Networks allow neural networks to be applied on sequences, by containing cycles in the topology of the network. Usually a RNN consists of multiple units, such as Long Short-Term Memory units, Gates recurrent units \cite{gru}, etc. The focus of this thesis will primarily be on LSTM networks. \\
-
-Each architecture has different benefits and applicable domains. Even among LSTM networks there is lots of variation. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, which avoids the vanishing gradient problem \cite {vanishinggradient}.\\
-
-The most simple LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}. \\
-
-The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
-
-To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
-\fi
-
-\fi
 
 \chapter{Evaluation}
 
@@ -333,11 +172,123 @@ The dataset consists of around 2500 cartoons. Each sample consists of the follow
 \item funniness of the cartoon from 1 to 7, where 1 is not funny at all and 7 is very hilarious.
 \end{itemize}
 
-The annotation was performed by Robert Fischer over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly, as well as the punchline was transcribed from the image into text format. This stepped was aided by OCR, but heavy manual adjustments had to be applied. Additionally cartoons with bad quality, as well as duplicates were also removed.
+Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly, as well as the punchline was transcribed from the image into text format. This stepped was aided by OCR, but heavy manual adjustments had to be applied. Additionally cartoons with bad quality, as well as duplicates were also removed.
 
 The second step was to annotate the funniness of the cartoons. There was the problem of humour fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions per session. Each annotation session lasted 30 minutes at maximum, but even shorter sessions were preferred. This was due to the sheer size of the dataset and the necessity that it had to be annotated by the same person a very time consuming task.
 
-TODO
+A dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution.
+
+To verify that the distribution of the annotations has not changed over the course of annotation refer to figure [\ref{fig:boxplottime}]. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
+
+\begin{figure}
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/average_funniness_over_time}
+	\caption{Box plots of the average funniness over time}
+	\label{fig:boxplottime}
+\end{figure}
+
+A word count analysis showed that there are significant difference in the frequency of certain words. These words seem to contain certain connections to a cartoon theme. For example one of the most frequent words for funniness class 7 is "Thag" which is a common name for cartoons set in the stone age. A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure [\ref{fig:wordocc1}], [\ref{fig:wordocc2}], [\ref{fig:phraseocc1}] and [\ref{fig:phraseocc2}].
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_1}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_2}
+\end{subfigure}
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_3}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_4}
+\end{subfigure}
+
+
+\caption{Most frequent nouns per class 1, 2, 3 and 4.}
+\label{fig:wordocc1}
+
+\end{figure}
+
+\begin{figure}[h]
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_5}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_6}
+\end{subfigure}
+
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/word_occurence/funniness_7}
+\end{subfigure}
+
+\caption{Most frequent nouns per class 5, 6 and 7.}
+\label{fig:wordocc2}
+
+\end{figure}
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_1}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_2}
+\end{subfigure}
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_3}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_4}
+\end{subfigure}
+
+
+\caption{Most frequent phrases per class 1, 2, 3 and 4.}
+\label{fig:phraseocc1}
+
+\end{figure}
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_5}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_6}
+\end{subfigure}
+
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=1.0\textwidth]{graphics/phrases/funniness_7}
+\end{subfigure}
+
+\caption{Most frequent phrases per class 5, 6 and 7.}
+\label{fig:phraseocc2}
+
+\end{figure}
+
 
 \section{Architectures}
 Several architectures have been implemented and are evaluated in the following sections.
@@ -439,22 +390,87 @@ These details seem to be very important for the funniness classification task an
 
 \section{Detailed Analysis}
 
+Sampling for each class a cartoon and examining the output layer of the trained neural network reveals some insight about the model. In general the results show, that the classifier never assigns high confidence into the predictions. No classification assigns a probability higher than 40\%.
 
-\subsection{Qualitative Analysis}
-Six cartoons from different annotations have been randomly picked.
+When examining the distribution across the different predictions over the different samples it seems that the general distribution does not change significantly. Some deviations are present, for example when comparing the probabilities for funniness 2.
 
-TODO
+In general it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are very high. Compare figure [\ref{fig:figdistr1}] and figure [\ref{fig:figdistr2}] with figure [\ref{fig:labeldistr}].
 
 
-\subsection{Confusion Matrix}
-\begin{figure}[ht]
+
+\begin{figure}[h!]
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_1_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_1}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_2_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_2}
+\end{subfigure}
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_3_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_3}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_4_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_4}
+\end{subfigure}
+
+\caption{For the classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned each category for the cartoon above.}
+
+\label{fig:figdistr1}
+
+\end{figure}
+
+
+\begin{figure}
+\centering
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_5_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_5}
+\end{subfigure}\quad
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_6_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_6}
+\end{subfigure}
+
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_7_cartoon} \\
+\includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_7}
+\end{subfigure}\quad
+\caption{Continued for the classes 5, 6 and 7.}
+\label{fig:figdistr2}
+
+\end{figure}
+
+\begin{figure}
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/label_distribution.png}
+	\caption{The label distribution of the training set}
+	\label{fig:labeldistr}
+\end{figure}
+
+
+\subsubsection{Confusion Matrix}
+\begin{figure}
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_test.png}
 	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the test split}
 	\label{fig:confusionmatrixtransferlearningtest}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_val.png}
 	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the validation split}
@@ -465,15 +481,26 @@ One can clearly see that for both the validation and test split the model learne
 
 TODO: COnfusion matrix for two stage model
 
+\section{Additional Experiments}
+Honourable mention of experiments performed but did not make the cut for an analysis, in no particular order:
+
+\begin{enumerate}
+\item \textbf{LSTM / GRU}: Overfitting showed to be a big problem early on
+\item \textbf{Wasserstein Loss instead of Cross Entropy Loss}: Idea was to penalize near misses less also in the classification setting
+\item \textbf{Applying a discrete cosine transformation (DCT)}: Since convolutions are not well suited for line drawings the idea was to apply a DCT. 
+\end{enumerate}
+
 \section{Results}
 
 The following sections show the achieved performance for each experiment of the validation
-and test phase.
+and test phase. Additionally the training runtime is also listed.
 
 
 \subsection{Validation Results}
 
-\begin{table}[h]
+For a detailed table of validation performance of selected models, please refer to figure [\ref{fig:valperformance}]. The ELMo based model achieved on this subset the highest accuracy, while the Two Stage Model achieved the best Mean Absolute Error. Both models only use the text data and discard the visual information entirely.
+
+\begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Experiment}                                                                       & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   MAE\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   Accuracy\end{tabular}} & \textbf{Text} & \textbf{Visual} \\ \hline
@@ -491,11 +518,15 @@ Two Stage Model                                                                 
 Two Stage Model with Cartoons                                                             & 1.55                                                                & 15.68\%                                                                  & \cmark             & \cmark               \\
 \begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.62                                                                & 15.82\%                                                                  & \cmark             & \cmark               \\ \hline
 \end{tabular}
-\end{table}
+\caption{Model performances on the validation set.}
+\label{fig:valperformance}
+\end{figure}
 
 \subsection{Test Results}
 
-\begin{table}[h]
+The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: The model which maximizes the accuracy measure is now using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model with cartoon data seems to generalize slightly better.
+
+\begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Experiment}                                                                       & \textbf{Test MAE} & \textbf{Test Accuracy} & \textbf{Text} & \textbf{Visual} \\ \hline
@@ -514,13 +545,15 @@ Two Stage Model with Cartoons                                                   
 \begin{tabular}[c]{@{}l@{}}Two Stage Model with\\   Autoencoded Cartoons\end{tabular}     & 1.58              & 14.46\%                &\cmark             & \cmark              \\
 \hline
 \end{tabular}
-\end{table}
+\caption{Model performances on the test set.}
+\label{fig:testperformance}
+\end{figure}
 
 \subsection{Training Duration}
 
-The following shows the training durations of each experiment on the configurations listed above. 
+Figure [\ref{trainingruntime}] shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser for the text representation compared to the representation of images.
 
-\begin{table}
+\begin{figure}
 \centering
 \begin{tabular}{|l|l|} 
 \hline
@@ -542,7 +575,9 @@ Autoencoder                                   & 32m 34s         \\
 Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 \hline
 \end{tabular}
-\end{table}
+\caption{Training runtime of each experiment}
+\label{trainingruntime}
+\end{figure}
 
 \section{Evaluation Conclusion}
 
