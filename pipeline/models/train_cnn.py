@@ -1,9 +1,14 @@
 import datetime
+import shutil
+
+import matplotlib
 import os
 import time
 import copy
 
 import torch
+from PIL import Image, ImageFont
+from numpy import random
 from torch.utils.data import DataLoader
 
 from confusion_matrix import plot_confusion_matrix_from_data
@@ -49,6 +54,10 @@ def train_cnn_model(
         "train": train_dl,
         "val": val_dl,
         "test": test_dl,
+    }
+    datasets = {
+        "val": validation_dataset,
+        "test": test_dataset,
     }
 
     evaluations = {
@@ -150,6 +159,15 @@ def train_cnn_model(
 
     # do test evaluation
     network.eval()  # Set network to evaluate mode
+
+    DETAIL_DIR = '../../detail/'
+    shutil.rmtree(DETAIL_DIR)
+    os.mkdir(DETAIL_DIR)
+    from PIL import Image
+    from PIL import ImageFont
+    from PIL import ImageDraw
+    font = ImageFont.truetype("../../font.ttf", 24)
+
     for phase in ['val', 'test']:
         relevant_activations = {}
         evaluations['val'].reset()
@@ -158,9 +176,9 @@ def train_cnn_model(
         all_predictions = []
         all_labels = []
 
-        f, axes = plt.subplots(7, 1, figsize=(7, 7))
-        sns.despine(left=True)
+        #f, axes = plt.subplots(7, 2, figsize=(128, 128), sharex=True)
 
+        import matplotlib.image as image
         for data in dataloaders[phase]:
             inputs, labels = model.get_input_and_label(data)
             inputs = inputs.to(device)
@@ -169,24 +187,81 @@ def train_cnn_model(
             # forward
             outputs = network(inputs)
             if len(relevant_activations) < 7:
-                cid, _, _ = data
-                for j in range(inputs.size(0) - 1):
-                    label = int(labels[j].cpu().detach().numpy())
-                    if label not in relevant_activations:
-                        output = torch.nn.functional.softmax(outputs[j]).cpu().detach().numpy()
-                        cur_id = cid[j]
+                if phase == 'test':
+                    cid, _, _ = data
+                    for j in range(inputs.size(0) - 1):
+                        label = int(labels[j].cpu().detach().numpy())
+                        if label not in relevant_activations:
+                            output = torch.nn.functional.softmax(outputs[j]).cpu().detach().numpy()
+                            cur_id = int(cid[j])
 
-                        output = pd.DataFrame(data={
-                            key: output[key] for key in range(1, 8)
-                        }, index=['data']).T
-                        output.reset_index(level=0, inplace=True)
+                            output = pd.DataFrame(data={
+                                key: output[key] for key in range(1, 8)
+                            }, index=['data']).T
+                            output.reset_index(level=0, inplace=True)
+                            output.rename(columns={"index": "Funniness", "data": "Probability"}, inplace=True)
+                            matplotlib.pyplot.xlim(0.0, 1.0)
 
-                        sns.barplot(x='data', y='index', data=output, color="b", ax=axes[label - 1], orient = 'h')
-                        sns.despine(left=True, bottom=True)
+                            title = '{} for Image {}'.format('Validation' if phase == 'val' else 'Test', label)
+                            clean_title = title.replace(' ', '_')
+                            f = {'family': 'serif', 'serif': ['computer modern roman']}
+                            plt.rc('font', **f)
+                            #sns.set(rc={'figure.figsize': (11.7, 8.27)})
+                            with sns.plotting_context(font_scale=1.5):
+                                ax = sns.barplot(
+                                    x='Probability',
+                                    y='Funniness',
+                                    data=output,
+                                    color="b",
+                                    ci=None,
+                                    orient='h',
+                                    dodge=False
 
-                        print(label, " ", output, " ", cur_id)
+                                )
+                                ax.set_title('True Funniness {}'.format(label), fontsize=18)
+                                ax.set_xlabel('Probability', fontsize=18)
+                                ax.set_ylabel('Funniness', fontsize=18)
+                                ax.tick_params(labelsize=16)
 
-                        relevant_activations[label] = 42
+                                ds = datasets[phase]
+                                row = ds.df.iloc[cur_id]
+                                filename = os.path.join(ds.root_dir, row['filename'])
+                                punchline = row['punchline'].replace('\\n', ' ')
+                                print("punchline", punchline)
+                                #plt.show()
+                                plt.tight_layout()
+                                plt.savefig(os.path.join(DETAIL_DIR, clean_title + '.png'))
+
+                            img = Image.open(filename)
+                            draw = ImageDraw.Draw(img)
+
+                            import textwrap
+                            lines = textwrap.wrap(punchline, width=40)
+
+                            w = img.width
+                            h = img.height - len(lines) * font.getsize('|')[1] - 10
+
+                            draw.rectangle(((0, h - 10), (w, img.height + 10)), fill='white')
+
+                            y_text = h
+                            for line in lines:
+                                width, height = font.getsize(line)
+                                draw.text(((w - width) / 2, y_text), line, font=font)
+                                y_text += height
+
+                            img.save(os.path.join(DETAIL_DIR, clean_title + '_cartoon.jpg'))
+
+                            #shutil.copyfile(filename, os.path.join(DETAIL_DIR, clean_title + '_cartoon.jpg'))
+
+                            #img = np.asarray(Image.open(filename).convert("L"))
+                            #img = image.imread(filename)
+                            #axes[label - 1, 0].axis('off')
+                            #plt.figure(figsize=(20, 2))
+                            #axes[label - 1, 0].imshow(random.rand(8, 90), cmap='gray', aspect='auto', interpolation='nearest')
+
+                            #print(label, " ", output, " ", cur_id)
+
+                            relevant_activations[label] = 42
             else:
                 break
 
