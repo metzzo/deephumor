@@ -115,6 +115,8 @@ class DeepHumorDatasetReader(DatasetReader):
         ros = RandomOverSampler(random_state=0)
         self.train_feature_vec, self.train_label_vec = ros.fit_resample(self.train_feature_vec, self.train_label_vec)
 
+        self.restrict_classes = None
+
     def text_to_instance(self, feature, target=None) -> Instance:
         spacy_meaning_field = ArrayField(feature[:300])
         tfidf_meaning_field = ArrayField(feature[300:])
@@ -144,4 +146,5 @@ class DeepHumorDatasetReader(DatasetReader):
             funniness = int(label_vec[i])
             feature = feature_vec[i]
 
-            yield self.text_to_instance(feature, funniness)
+            if funniness == self.restrict_classes or self.restrict_classes is None:
+                yield self.text_to_instance(feature, funniness)

@@ -1,5 +1,6 @@
 import datetime
 import pickle
+import time
 from itertools import combinations
 from typing import Dict
 
@@ -23,7 +24,7 @@ from sklearn.metrics import mean_absolute_error
 from torch import nn
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 
-from rnn.onlytext import DeepHumorDatasetReader, VALIDATION_PATH, TRAIN_PATH
+from rnn.onlytext import DeepHumorDatasetReader, VALIDATION_PATH, TRAIN_PATH, TEST_PATH
 
 BATCH_SIZE = 64
 
@@ -255,18 +256,24 @@ def get_final_classifier(models, classes):
     return final_model
 
 def get_dummy_performance():
-    validation_df = pickle.load(open(VALIDATION_PATH, "rb"))
+    validation_df = pickle.load(open(TEST_PATH, "rb"))
     train_df = pickle.load(open(TRAIN_PATH, "rb"))
+
+
 
     regressor = DummyRegressor()
     regressor.fit(None, train_df['funniness'])
-    predicted = regressor.predict(validation_df['punchline'])
-    print("Dummy MAE", mean_absolute_error(validation_df['funniness'], predicted))
+
+    for i in range(1, 8):
+        subset = validation_df[validation_df['funniness'] == i]
+
+        predicted = regressor.predict(subset['punchline'])
+        print("MAE for", i, ':', mean_absolute_error(subset['funniness'], predicted))
 
 
 def run_test():
     saved = torch.load(
-        open('two_stage.pth', "rb")
+        open('/home/rfischer/Documents/DeepHumor/deephumor/final_models/two_stage.pth', "rb")
     )
 
     final_model = saved['final_model']
@@ -287,10 +294,43 @@ def run_test():
                       validation_dataset=dev_dataset,
                       patience=25,
                       cuda_device=0,
+                      should_log_learning_rate=False,
+                      should_log_parameter_statistics=False,
+                      log_batch_size_period=False,
                       num_epochs=1)
 
     results = trainer.train()
     print("Final result", str(results))
+    time.sleep(1)
+
+    for i in range(0, 7):
+        print()
+        print()
+        print("Restrict classes to", i)
+        time.sleep(1)
+
+        reader = DeepHumorDatasetReader()
+        reader.restrict_classes = i
+
+        dev_dataset = reader.read('test')
+        optimizer = optim.Adam(final_model.parameters(), lr=0.0, weight_decay=0.001)
+
+        iterator = BasicIterator(batch_size=256)
+
+        trainer = Trainer(model=final_model,
+                          optimizer=optimizer,
+                          iterator=iterator,
+                          train_dataset=train_dataset,
+                          validation_dataset=dev_dataset,
+                          patience=25,
+                          cuda_device=0,
+                          should_log_learning_rate=False,
+                          should_log_parameter_statistics=False,
+                          log_batch_size_period=False,
+                          num_epochs=1)
+
+        results = trainer.train()
+        print(results)
 
     return final_model
 
@@ -344,5 +384,5 @@ def main():
 
 if __name__ == '__main__':
     get_dummy_performance()
-    main()
+    #main()
     #run_test()
