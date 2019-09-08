@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{dogsvscats}
+D.~Ciregan, U.~Meier, and J.~Schmidhuber.
+\newblock Multi-column deep neural networks for image classification.
+\newblock In {\em 2012 IEEE Conference on Computer Vision and Pattern
+  Recognition}, pages 3642--3649, June 2012.
+
+\bibitem{deephumorrepo}
+R.~Fischer.
+\newblock Deep humor github repository.
+\newblock \url{https://github.com/metzzo/deephumor}, 2019.
+
+\end{thebibliography}

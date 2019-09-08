@@ -49,6 +49,8 @@
 \nonzeroparskip             % Create space between paragraphs (optional).
 \setlength{\parindent}{0pt} % Remove paragraph identation (optional).
 
+\newcounter{DefCounter}
+
 \makeindex      % Use an optional index.
 \makeglossaries % Use an optional glossary.
 %\glstocfalse   % Remove the glossaries from the table of contents.
@@ -139,44 +141,51 @@
 
 \chapter{Evaluation}
 
-This chapter aims to evaluate the performance of the implemented architectures. in
-general the results show that this problem is a very hard one, as, according to the
-gathered metrics, no trained model can understand the underlying structure and humour. \\
+This chapter aims to evaluate the performance of the implemented architectures. In
+general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
 
-The available data is split into three sub sets:
+The cartoon data set is split into three sub sets:
 
 \begin{itemize}
-\item Training Set: 40\%
-\item Validation Data: 20\%
-\item Test Data: 20\%
+\item Training Set: 1492 samples (70\%)
+\item Validation Data: 746 samples (20\%)
+\item Test Data: 249 samples (10\%)
 \end{itemize}
 
-The two main metrics chosen are mean absolute error (MAE) and accuracy. The MAE
-is being used because it does not penalize cases which are near misses as much. If the
-model predicts a funniness of 5, while the real funniness is 6 it is not as bad as it would
-have predicted a 1.
+Two evaluation metrics were chosen to determine the performance of each model: Mean absolute error (MAE) and accuracy.
+
+\newtheorem{mae}[DefCounter]{Definition}
+
+\begin{mae}
+$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
+\end{mae}
+
+\newtheorem{accuracy}[DefCounter]{Definition}
+\begin{accuracy}
+$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
+\end{accuracy}
+
+The MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
+
+The Accuracy is chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
+
 The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
 Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
-information regarding the build set up and necessary environment please refer to the
-GitHub Repository
-The hyperparameters were chosen based on best practice, trial’n error and previous
-experience with deep neural network training. The search space is far too vast to
-exhaustively search for the best setting.
+information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
+
+The hyperparameters were chosen based on best practice and previous
+experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
 
 \section{Dataset Analysis}
-The dataset consists of around 2500 cartoons. Each sample consists of the following properties:
-\begin{itemize}
-\item cartoon image
-\item punchline text
-\item boolean field which holds the information whether the annotator understands the cartoon
-\item funniness of the cartoon from 1 to 7, where 1 is not funny at all and 7 is very hilarious.
-\end{itemize}
+The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
-Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly, as well as the punchline was transcribed from the image into text format. This stepped was aided by OCR, but heavy manual adjustments had to be applied. Additionally cartoons with bad quality, as well as duplicates were also removed.
+Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR, but many manual adjustments had to be applied as well. Additionally cartoons with bad quality, as well as duplicates were also removed.
 
-The second step was to annotate the funniness of the cartoons. There was the problem of humour fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions per session. Each annotation session lasted 30 minutes at maximum, but even shorter sessions were preferred. This was due to the sheer size of the dataset and the necessity that it had to be annotated by the same person a very time consuming task.
+The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
-A dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution.
+Due to the subjectiveness of human humor the annotations were performed by one person. This could allow the model to extract the humor of the person annotating the cartoons.
+
+A dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
 To verify that the distribution of the annotations has not changed over the course of annotation refer to figure [\ref{fig:boxplottime}]. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
 
@@ -308,19 +317,13 @@ training set.
 
 \end{itemize}
 
-For the mean absolute error metric the average performed best, while for the accuracy
-score the most frequent class has the best score.
+For the mean absolute error metric the average performed best, while for the accuracy score the most frequent class has the best score.
 
 \subsection{Simple CNN}
-The simple CNN architecture overfits very quickly. The accuracy and MAE sores are
-very similar to the most frequent baseline, which indicates that the model most likely
-learns to return the most frequent class, instead of generalizing the humour.
+The simple CNN architecture overfits very quickly. The accuracy and MAE scores are very similar to the most frequent baseline, which indicates that the model most likely learns to return the most frequent class.
 
 \subsection{Transfer Learning of Pretrained ResNet18}
-Noteworthy about this approach is that also enabling the data augmentation in the
-training phase makes this approach better than the baseline. The exact reason is not
-obvious, but indicates that the model does not generalize enough for the
-training samples which are not augmented.
+Noteworthy about this approach is that also enabling the data augmentation in the testing/validation phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model expects the cartoons to be augmented.
 
 The data augmented version of this experiment unexpectedly achieved the best results during testing phase.
 
@@ -408,13 +411,12 @@ In general it seems that the model often ignores the input data and instead lear
 	\label{fig:confusionmatrixtransferlearningval}
 \end{figure}
 
-One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted at all by the classifier. This motivated the design of the two stage model where the first stage trained a neural network for each class. The task for this neural is to determine whether the given sample belongs to the funniness class it belongs to or not. The second stage uses these results and outputs a final prediction.
+One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted at all by the classifier. This motivated the design of the two stage model, where specific models are trained for each funniness class.
 
 
 \subsection{Transfer Learned Object Detection}
 
-The result of the object detection approach are incomparable to the other results, as it was not implemented far enough to return any labels. Since initial tests for a simplified image classification task, it was not further developed, as the predicted objects for each object were essentially
-random.
+The result of the object detection approach are incomparable to the other results, as it was not implemented far enough to return any labels. It was not further developed, as the predicted objects for each object were essentially random.
 
 \subsection{ELMo Pretrained Model}
 
@@ -422,11 +424,9 @@ Based on the pretrained ELMo model this model initially looked the most promisin
 achieved the highest validation accuracy. Unfortunately this was only due to overfitting,
 as during test phase the performance dropped.
 
-One problem of this approach may be, that many insider jokes of Gary Larson's humour are lost.
-
 Most likely a problem of this approach is that many insider jokes are lost, due to the fact
 that the pretrained vocabulary of the ELMo model does not contain many of them, so
-they can not be used by our model.
+they can not be used by our model. For example the word "Thag" which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary and therefore ignored.
 
 \subsection{AutoML Model}
 Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set
@@ -437,16 +437,15 @@ it would not have suffered by the problem of domain specific words.
 For this experiment the library hyperopt-sklearn was used, as it accomplishes state-ofthe-art of AutoML.
 
 \subsection{Two Stage Model}
-The Two Stage Models did not achieve significantly improved results, as it was not able to beat the baseline. The idea of trying to avoid overfitting by splitting the big tasks into smaller sub networks which only have a binary decision to make did not work as expected.
+The Two Stage Models is not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness did not work as expected.
 
-Combining the visual and textual information also did not work as hoped. The MAE
-score is on par with the baseline, while still beating it at the accuracy score - so it is
-technically better. The improvement is not strong enough, that to say that it really
-understands humour.
+Combining the visual and text information did improve the results, but not significantly. The MAE
+score is on par with the baseline, while still beating it at the accuracy score. This improvement is still very weak.
+understands humor.
 
 One problem identified was the fact, that the images contained much more data compared to the punchlines. To tackle this problem, the idea was to use a deep autoencoder. This reduces the feature size of the images significantly. But against our expectation it did not improve the results compared to previous attempts.
 
-When comparing the MAE of the Two stage model (figure [\ref{twostagemae}]) an interesting phenomena can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different.
+When comparing the MAE of the Two stage model (figure [\ref{twostagemae}]) an interesting phenomena can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different. This means that the model does not simply return the average funniness, but does something else.
 
 \begin{figure}
 \centering
@@ -513,9 +512,9 @@ It seems that the first stage is not effective in doing so. For funniness 3, 4, 
 
 The goal of the auto encoder using the deep convolutional architecture is to reduce the dimensionality of the images, while still maintaining the important characteristics of the original cartoons. 
 
-Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important information which could be crucial for understanding humour. For example the facial expressions are lost, as well as many other high frequency details. For example the native american lying on the floor is not recognizable anymore. 
+Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important semantic information which could be crucial for understanding humor. For example the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore. 
 
-These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs the worst.
+These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs worse.
 
 \begin{figure}
 	\centering
@@ -532,11 +531,12 @@ These details seem to be very important for the funniness classification task an
 \end{figure}
 
 \section{Additional Experiments}
-Honourable mention of experiments performed but did not make the cut for an analysis, in no particular order:
+A list of experiments performed but did not make the cut for a more detailed analysis:
 
 \begin{itemize}
 \item \textbf{LSTM / GRU}: Overfitting was a big problem early on
-\item \textbf{Wasserstein Loss instead of Cross Entropy Loss}: Idea was to penalize near misses less compared to big misses, similar to the regression L1 loss.
+\item \textbf{Wasserstein Loss instead of Cross Entropy Loss}: Idea was to penalize near misses less.
+\item \textbf{L1 Loss}: Model as a regression task. Model was not even able to approximate the Average Baseline using this approach
 \item \textbf{Applying a discrete cosine transformation (DCT)}: Since convolutions are not well suited for line drawings the idea was to apply a DCT beforehand. 
 \item \textbf{Advanced Two Stage Model}: Add different binary classifiers in the first stage.
 \item \textbf{Loss Weighting of Two Stage Model}: Try different penalties for different kind of errors in the first stage. For example add more penalty for true positives compared to false negatives.
@@ -578,7 +578,7 @@ Two Stage Model with Cartoons                                                   
 
 \subsection{Test Results}
 
-The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: The model which maximizes the accuracy measure is now using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model with cartoon data seems to generalize slightly better.
+The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: The model which maximizes the accuracy measure is now using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model without cartoon data seems to generalize slightly better.
 
 \begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
@@ -605,7 +605,7 @@ Two Stage Model with Cartoons                                                   
 
 \subsection{Training Duration}
 
-Figure [\ref{trainingruntime}] shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser for the text representation compared to the representation of images.
+Figure [\ref{trainingruntime}] shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser compared to the representation of images.
 
 \begin{figure}
 \centering
@@ -635,14 +635,14 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 
 \section{Evaluation Conclusion}
 
-In general the conclusion is that no model really learns to generalize the humour of
+In general the conclusion is that no model really learns to generalize the humor of
 Gary Larson. There is no significant improvement compared to the baselines available.
-Further research into this direction could reveal significant insights into the human humour, as current methods are not capable to achieve significant results.
+Further research into this direction could reveal significant insights into the human humor, as current methods are not capable to achieve significant results.
 
-Potential causes can not be attributed to exactly one issue. One reason is certainly, that the problem space is not sufficiently described by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (For example.: CIFAR 10 data set) than humour classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
+Potential causes can not be attributed to exactly one issue. One reason is most certainly, that the problem space is not sufficiently grasped by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (For example: CIFAR 10 data set \cite{dogsvscats}) than humor classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
 
 One could also argue that the problem itself is flawed. Letting a human rate a
-cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for doing the rating. It could be that these factors outweigh the true humour, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed. After some time after the initial ratings have been done, the same person rates them again. If and how the results are reproducible could then be evaluated by comparing the results of the new rating versus the old ratings. If the results are much different, this would mean that the problem itself is flawed.
+cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for performing the annotation. It could be that these factors outweigh the true humor, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed: After some time after the initial ratings have been performed, the same person rates the cartoons again. If the ratings are not even reproducible by the same annotator, then it seems to be impossible for a deep learning based model.
 
 %\chapter{Introduction}
 %\todo{Enter your text here.}
@@ -671,6 +671,6 @@ cartoon is very subjective and likely depends on many factors. For example: Curr
 
 % Add a bibliography.
 \bibliographystyle{abbrv}
-\bibliography{citations.bib}
+\bibliography{citations}
 
 \end{document}
