@@ -434,7 +434,7 @@ revealed overfitting. The ELMo feature representation performed worse in both se
 Since the TFIDF feature representation would not have relied on a pre-trained vocabulary
 it would not have suffered by the problem of domain specific words.
 
-For this experiment the library hyperopt-sklearn was used, as it accomplishes state-ofthe-art of AutoML.
+For this experiment the library hyperopt-sklearn \cite{hyperopt} was used, as it accomplishes state-of-the-art AutoML performance.
 
 \subsection{Two Stage Model}
 The Two Stage Models is not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness did not work as expected.
@@ -461,7 +461,7 @@ Baseline Average    & 2.21			& 1.21			& 0.21			& 0.79			& 1.79			& 2.79			& 3.79
 \label{twostagemae}
 \end{figure}
 
-A confusion matrix of each classifier in the first stage reveals whether this approach could be effective. If all classifiers have a reasonable accuracy the second decision stage has a chance of predicting the correct class. Otherwise the second decision would not be able to beat the average baseline.
+A confusion matrix of each classifier in the first stage reveals whether this approach could be effective. If all classifiers have a reasonable accuracy the second decision stage has a higher chance of predicting the correct class. If the first stage only returns noise the second stage would not be able to beat the average baseline.
 
 It seems that the first stage is not effective in doing so. For funniness 3, 4, 5, 6 and 7 there is no true negative, which means that the model for this class only learns to always return 1.
 
