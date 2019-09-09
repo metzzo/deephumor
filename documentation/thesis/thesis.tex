@@ -138,6 +138,33 @@
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
+\chapter{Introduction}
+
+\section{Motivation}
+\todo{Ihr Text hier.}
+
+\section{Aim}
+\todo{Ihr Text hier.}
+
+\section{Methodology}
+\todo{Ihr Text hier.}
+
+\chapter{Background}
+\todo{Ihr Text hier.}
+
+\section{Related work}
+
+\todo{Ihr Text hier.}
+
+\chapter{Design}
+
+In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined.
+
+\todo{Ihr Text hier.}
+
+\chapter{Implementation}
+
+\todo{Ihr Text hier.}
 
 \chapter{Evaluation}
 
@@ -633,16 +660,14 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 \label{trainingruntime}
 \end{figure}
 
-\section{Evaluation Conclusion}
+\chapter {Conclusion}
 
-In general the conclusion is that no model really learns to generalize the humor of
-Gary Larson. There is no significant improvement compared to the baselines available.
-Further research into this direction could reveal significant insights into the human humor, as current methods are not capable to achieve significant results.
+In general no model really learns to generalize the humor of Gary Larson. There has been no significant improvement compared to the baselines. Further research could reveal significant insights on how human humor works.
 
 Potential causes can not be attributed to exactly one issue. One reason is most certainly, that the problem space is not sufficiently grasped by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (For example: CIFAR 10 data set \cite{dogsvscats}) than humor classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
 
 One could also argue that the problem itself is flawed. Letting a human rate a
-cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for performing the annotation. It could be that these factors outweigh the true humor, which makes it impossible to reproduce the original ratings. To answer these questions an additional experiment could be performed: After some time after the initial ratings have been performed, the same person rates the cartoons again. If the ratings are not even reproducible by the same annotator, then it seems to be impossible for a deep learning based model.
+cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for performing the annotation. It could be that these factors outweigh the true humor, which makes it impossible to reproduce the original ratings. To answer this question an additional experiment could be performed: After some time after the initial ratings were performed, the same person rates the cartoons again. If the ratings are not reproducible by the same annotator, then it seems to be impossible for a deep learning based model.
 
 %\chapter{Introduction}
 %\todo{Enter your text here.}
@@ -653,10 +678,11 @@ cartoon is very subjective and likely depends on many factors. For example: Curr
 \backmatter
 
 % Use an optional list of figures.
-% \listoffigures % Starred version, i.e., \listoffigures*, removes the toc entry.
+\listoffigures % Starred version, i.e., \listoffigures*, removes the toc entry.
 
 % Use an optional list of tables.
 % \cleardoublepage % Start list of tables on the next empty right hand page.
+
 % \listoftables % Starred version, i.e., \listoftables*, removes the toc entry.
 
 % Use an optional list of alogrithms.
