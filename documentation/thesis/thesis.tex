@@ -140,79 +140,104 @@
 
 \chapter{Introduction}
 
-\section{Motivation}
-\todo{Ihr Text hier.}
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{graphics/example_cartoon.png}
+	\caption{Cartoon by Gary Larson}
+	\label{fig:fig1}
+\end{figure}
 
-\section{Aim}
-\todo{Ihr Text hier.}
+The goal of this chapter is to introduce the reader into the topic of deep learning and computational humor. The motivation of why this work has been done is outlined. As well as how the motivation will be achieved with an explanation of the methodology applied.
+
+\section{Motivation}
+
+Deep learning is part of machine learning, which itself is an approach to artificial intelligence. The idea of deep learning	is to break a complex task into smaller subtasks hierarchically and let the computer learn by experience - without major human intervention. This is commonly done with neural networks which have many layers, which are commonly called deep neural networks \cite{Goodfellow-et-al-2016}.
+
+For example: For a human to write an algorithm that reliably detects whether an image contains a dog or a cat has shown to be impossible for many years. But through convolutional neural networks this is relatively easily achievable, given there is a sufficiently large dataset of images with cats and dogs \cite{dogsvscats}. Convolutional neural networks are deep neural networks which are optimized for images \cite{cnnimg}.
+
+Despite deep learning being a relatively new field of study there have been many advancements using this technique. In the field of self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt} the state-of-the-art has been pushed towards, previously thought, unbelievable limits.
+
+Extending this success story of deep learning into the field of computational humor is the main motivation of this work.
+
+\section{Aim} \label{aim}
+The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see figure \ref{fig:fig1}). This will be done by applying several deep learning techniques.
+
+One goal of this work is to create a dataset for computational humor. Gary Larson has created many cartoons each with an image and most with a punchline below. These are annotated with a funniness rating.
+
+The questions this work tries to answer, are the following:
+
+\begin{itemize}
+\item Which neural network architecture is best suited for predicting the funniness?
+\item Does it beat simple baselines?
+\item If it beats the baseline, does it really generalize the humor, or does it take cheap shortcuts?
+\item Is both visual and text input the best idea for predicting the funniness? Or are they alone better?
+\end{itemize}
+
+On a higher level this thesis tries to open the field of computational humor for deep learning.
 
 \section{Methodology}
-\todo{Ihr Text hier.}
+
+The methodology of approaching humor using deep learning is very important and listed below.
+
+\subsection {Literature Research}
+
+Firstly a detailed literature research was performed. Goal was to get a grasp of the state-of-the-art of deep learning in the field of computational humor, image classification, natural language processing and human humor.
+
+
+\subsection {Dataset Acquisition}
+In this step the ground truth was created: A data set of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared in such a way they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
+
+To make this process easier an annotation tool was created, which made this process more efficient.
+
+\subsection{Development: Design, Implementation and Evaluation}
+
+This step was iteratively done, in order to adapt to problems which occurred during implementation.
+
+\begin{enumerate}
+
+\item An architecture candidate was picked and designed. This was based on prior knowledge and previous literature research.
+\item This architecture was implemented and trained.
+\item The resulting model was evaluated. Problems were determined and possible solutions analyzed.
+
+\end{enumerate}
+
+At first the focus was on visual-only models. Then the focus was on text-only models. Finally there were several approaches on combining both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
+
+The architecture candidates ranged from relatively simple convolutional neural networks to models which contain of many sub-models with an autoencoder. For more information please refer to chapter \ref{design}.
+
+During development the trained models were applied on the validation set. The performance of the model were determined by two metrics: Accuracy and mean absolute error. 
+
+\subsection{Final Evaluation}
+
+Finally the most interesting models were picked and a more detailed evaluation was performed. This evaluation was done on completely new data for the model - the test set. This was done to get the true performance of the model and shows whether the model overfits. The goal of this phase was to find answers to the questions listed in section \ref{aim}.
+
+The final conclusion was based on the findings of the final evaluation. Furthermore a  conclusion and possible future work was worked out.
+
 
 \chapter{Background}
 \todo{Ihr Text hier.}
 
 \section{Related work}
 
+Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}. Research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well. Similarly deep learning enabled modern language embeddings such as ELMo \cite{elmo} and BERT \cite{bert} to achieve state-of-the-art results on various natural language processing tasks. Given these advances there is a possibility that humor may be more tractable using deep learning compared to other methods.
 \todo{Ihr Text hier.}
 
-\chapter{Design}
+
+\chapter{Design} \label{design}
 
 In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined.
 
-\todo{Ihr Text hier.}
 
-\chapter{Implementation}
-
-\todo{Ihr Text hier.}
-
-\chapter{Evaluation}
-
-This chapter aims to evaluate the performance of the implemented architectures. In
-general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
-
-The cartoon data set is split into three sub sets:
-
-\begin{itemize}
-\item Training Set: 1492 samples (70\%)
-\item Validation Data: 746 samples (20\%)
-\item Test Data: 249 samples (10\%)
-\end{itemize}
-
-Two evaluation metrics were chosen to determine the performance of each model: Mean absolute error (MAE) and accuracy.
-
-\newtheorem{mae}[DefCounter]{Definition}
-
-\begin{mae}
-$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
-\end{mae}
-
-\newtheorem{accuracy}[DefCounter]{Definition}
-\begin{accuracy}
-$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
-\end{accuracy}
-
-The MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
-
-The Accuracy is chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
-
-The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
-Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
-information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
-
-The hyperparameters were chosen based on best practice and previous
-experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
-
-\section{Dataset Analysis}
+\section{Dataset Acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
 Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR, but many manual adjustments had to be applied as well. Additionally cartoons with bad quality, as well as duplicates were also removed.
 
 The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
-Due to the subjectiveness of human humor the annotations were performed by one person. This could allow the model to extract the humor of the person annotating the cartoons.
+\section{Dataset Analysis}
 
-A dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
+The dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
 To verify that the distribution of the annotations has not changed over the course of annotation refer to figure [\ref{fig:boxplottime}]. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
 
@@ -325,6 +350,91 @@ A word count analysis showed that there are significant difference in the freque
 
 \end{figure}
 
+\section{Task modelling}
+
+The task at hand (predicting the funniness of a cartoon) can be modelled in two ways: 
+\begin{itemize}
+\item Classification: Each cartoon funniness belongs to a distinct class
+\item Regression: Each cartoon funniness is a sample of a continuous space
+\end{itemize}
+
+The main difference when modelling a task as a regression task versus a classification task is the final output layer and the loss used. When modelling a task as a classification problem the final layer is generally one-hot-encoded. In contrast for a regression problem the final layer is a single value. \\
+
+Another important decision to be made is which loss function to be used. For this problem mainly cross entropy loss for classification and L1 loss for regression has been used \cite{crossentropyloss} \cite{lossfunctions}.
+
+\section{Simple CNN}
+
+The initial approach was to use an off-the-shelf Convolutional Neural Network (CNN) design. This neural network architecture has proven to be very effective for various image classification tasks \cite{dogsvscats}.
+\todo{continue}
+
+\section{Transfer Learning CNN}
+\todo{continue}
+
+\section{ELMo}
+\todo{continue}
+
+\section{AutoML}
+\todo{continue}
+
+\section{Two Stage Model}
+\todo{continue}
+
+\section{Additional Experiments}
+A list of experiments performed but did not make the cut for a more detailed analysis:
+
+\begin{itemize}
+\item \textbf{LSTM / GRU}: Overfitting was a big problem early on
+\item \textbf{Wasserstein Loss instead of Cross Entropy Loss}: Idea was to penalize near misses less.
+\item \textbf{L1 Loss}: Model as a regression task. Model was not even able to approximate the Average Baseline using this approach
+\item \textbf{Applying a discrete cosine transformation (DCT)}: Since convolutions are not well suited for line drawings the idea was to apply a DCT beforehand. 
+\item \textbf{Advanced Two Stage Model}: Add different binary classifiers in the first stage.
+\item \textbf{Loss Weighting of Two Stage Model}: Try different penalties for different kind of errors in the first stage. For example add more penalty for true positives compared to false negatives.
+\item \textbf{Preprocessing of cartoons}: Apply different filters on cartoons. For example: Canny edge detection.
+\item \textbf{Word vector combinations}: Many different word vector combinations of TFIDF, SpaCy and ELMo. 
+\end{itemize}
+
+\chapter{Implementation}
+
+\todo{Ihr Text hier.}
+
+\chapter{Evaluation}
+
+This chapter aims to evaluate the performance of the implemented architectures. In
+general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
+
+The cartoon data set is split into three sub sets:
+
+\begin{itemize}
+\item Training Set: 1492 samples (70\%)
+\item Validation Data: 746 samples (20\%)
+\item Test Data: 249 samples (10\%)
+\end{itemize}
+
+Two evaluation metrics were chosen to determine the performance of each model: Mean absolute error (MAE) and accuracy.
+
+\newtheorem{mae}[DefCounter]{Definition}
+
+\begin{mae}
+$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
+\end{mae}
+
+\newtheorem{accuracy}[DefCounter]{Definition}
+\begin{accuracy}
+$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
+\end{accuracy}
+
+The MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
+
+The Accuracy is chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
+
+The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
+Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
+information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
+
+The hyperparameters were chosen based on best practice and previous
+experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
+
+Due to the subjectiveness of human humor the annotations were performed by one person. This could allow the model to extract the humor of the person annotating the cartoons.
 
 \section{Architectures}
 Several architectures have been implemented and are evaluated in the following sections.
@@ -556,20 +666,6 @@ These details seem to be very important for the funniness classification task an
 	\caption{Results after applying encoder and decoder}
 	\label{fig:autoencoderresults}
 \end{figure}
-
-\section{Additional Experiments}
-A list of experiments performed but did not make the cut for a more detailed analysis:
-
-\begin{itemize}
-\item \textbf{LSTM / GRU}: Overfitting was a big problem early on
-\item \textbf{Wasserstein Loss instead of Cross Entropy Loss}: Idea was to penalize near misses less.
-\item \textbf{L1 Loss}: Model as a regression task. Model was not even able to approximate the Average Baseline using this approach
-\item \textbf{Applying a discrete cosine transformation (DCT)}: Since convolutions are not well suited for line drawings the idea was to apply a DCT beforehand. 
-\item \textbf{Advanced Two Stage Model}: Add different binary classifiers in the first stage.
-\item \textbf{Loss Weighting of Two Stage Model}: Try different penalties for different kind of errors in the first stage. For example add more penalty for true positives compared to false negatives.
-\item \textbf{Preprocessing of cartoons}: Apply different filters on cartoons. For example: Canny edge detection.
-\item \textbf{Word vector combinations}: Many different word vector combinations of TFIDF, SpaCy and ELMo. 
-\end{itemize}
 
 \section{Results}
 

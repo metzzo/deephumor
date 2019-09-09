@@ -1,9 +1,20 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{hyperopt}
 Hyperpt-sklearn github repository.
 \newblock \url{https://github.com/hyperopt/hyperopt-sklearn/}, 2019.
 \newblock [Online; accessed 09-08-2019].
+
+\bibitem{HumoristBot}
+A.~Augello, G.~Saccone, S.~Gaglio, and G.~Pilato.
+\newblock Humorist bot: Bringing computational humour in a chat-bot system.
+\newblock In {\em 2008 International Conference on Complex, Intelligent and
+  Software Intensive Systems}, pages 703--708, March 2008.
+
+\bibitem{Bamman2015ContextualizedSD}
+D.~Bamman and N.~A. Smith.
+\newblock Contextualized sarcasm detection on twitter.
+\newblock In {\em ICWSM}, 2015.
 
 \bibitem{dogsvscats}
 D.~Ciregan, U.~Meier, and J.~Schmidhuber.
@@ -11,10 +22,77 @@ D.~Ciregan, U.~Meier, and J.~Schmidhuber.
 \newblock In {\em 2012 IEEE Conference on Computer Vision and Pattern
   Recognition}, pages 3642--3649, June 2012.
 
+\bibitem{crossentropyloss}
+P.-T. {de Boer}, D.~Kroese, S.~Mannor, and R.~Rubinstein.
+\newblock A tutorial on the cross-entropy method.
+\newblock {\em Annals of operations research}, 134(1):19--67, 1 2005.
+
+\bibitem{bert}
+J.~Devlin, M.~Chang, K.~Lee, and K.~Toutanova.
+\newblock {BERT:} pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em CoRR}, abs/1810.04805, 2018.
+
+\bibitem{Druzhkov2016}
+P.~N. Druzhkov and V.~D. Kustikova.
+\newblock A survey of deep learning methods and software tools for image
+  classification and object detection.
+\newblock {\em Pattern Recognition and Image Analysis}, 26(1):9--15, Jan 2016.
+
 \bibitem{deephumorrepo}
 R.~Fischer.
 \newblock Deep humor github repository.
 \newblock \url{https://github.com/metzzo/deephumor}, 2019.
 \newblock [Online; accessed 09-08-2019].
+
+\bibitem{elmo}
+M.~Gardner, J.~Grus, M.~Neumann, O.~Tafjord, P.~Dasigi, N.~F. Liu, M.~E.
+  Peters, M.~Schmitz, and L.~Zettlemoyer.
+\newblock Allennlp: {A} deep semantic natural language processing platform.
+\newblock {\em CoRR}, abs/1803.07640, 2018.
+
+\bibitem{Goodfellow-et-al-2016}
+I.~Goodfellow, Y.~Bengio, and A.~Courville.
+\newblock {\em Deep Learning}.
+\newblock MIT Press, 2016.
+\newblock \url{http://www.deeplearningbook.org}.
+
+\bibitem{selfdriving}
+B.~Huval, T.~Wang, S.~Tandon, J.~Kiske, W.~Song, J.~Pazhayampallil,
+  M.~Andriluka, P.~Rajpurkar, T.~Migimatsu, R.~Cheng{-}Yue, F.~A. Mujica,
+  A.~Coates, and A.~Y. Ng.
+\newblock An empirical evaluation of deep learning on highway driving.
+\newblock {\em CoRR}, abs/1504.01716, 2015.
+
+\bibitem{lossfunctions}
+K.~Janocha and W.~M. Czarnecki.
+\newblock On loss functions for deep neural networks in classification.
+\newblock {\em CoRR}, abs/1702.05659, 2017.
+
+\bibitem{cnnimg}
+I.~Lütkebohle.
+\newblock {BWorld Robot Control Software}.
+\newblock \url{ }, 2019.
+\newblock [Online; accessed 09-09-2019].
+
+\bibitem{nmt}
+Y.~Wu, M.~Schuster, Z.~Chen, Q.~V. Le, M.~Norouzi, W.~Macherey, M.~Krikun,
+  Y.~Cao, Q.~Gao, K.~Macherey, J.~Klingner, A.~Shah, M.~Johnson, X.~Liu,
+  L.~Kaiser, S.~Gouws, Y.~Kato, T.~Kudo, H.~Kazawa, K.~Stevens, G.~Kurian,
+  N.~Patil, W.~Wang, C.~Young, J.~Smith, J.~Riesa, A.~Rudnick, O.~Vinyals,
+  G.~Corrado, M.~Hughes, and J.~Dean.
+\newblock Google's neural machine translation system: Bridging the gap between
+  human and machine translation.
+\newblock {\em CoRR}, abs/1609.08144, 2016.
+
+\bibitem{speech}
+W.~Xiong, L.~Wu, F.~Alleva, J.~Droppo, X.~Huang, and A.~Stolcke.
+\newblock The microsoft 2017 conversational speech recognition system.
+\newblock {\em CoRR}, abs/1708.06073, 2017.
+
+\bibitem{Yang2015HumorRA}
+D.~Yang, A.~Lavie, C.~Dyer, and E.~H. Hovy.
+\newblock Humor recognition and humor anchor extraction.
+\newblock In {\em EMNLP}, 2015.
 
 \end{thebibliography}

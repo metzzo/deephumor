@@ -1,0 +1,55 @@
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\contentsline {chapter}{Kurzfassung}{vi}{chapter*.6}% 
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\contentsline {chapter}{Abstract}{vii}{chapter*.8}% 
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\contentsline {chapter}{Contents}{viii}{section*.10}% 
+\contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Motivation}{2}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Aim}{2}{section.1.2}% 
+\contentsline {section}{\numberline {1.3}Methodology}{3}{section.1.3}% 
+\contentsline {subsection}{\numberline {1.3.1}Literature Research}{3}{subsection.1.3.1}% 
+\contentsline {subsection}{\numberline {1.3.2}Dataset Acquisition}{3}{subsection.1.3.2}% 
+\contentsline {subsection}{\numberline {1.3.3}Development: Design, Implementation and Evaluation}{3}{subsection.1.3.3}% 
+\contentsline {subsection}{\numberline {1.3.4}Final Evaluation}{4}{subsection.1.3.4}% 
+\contentsline {chapter}{\chapternumberline {2}Background}{5}{chapter.2}% 
+\contentsline {section}{\numberline {2.1}Related work}{5}{section.2.1}% 
+\contentsline {chapter}{\chapternumberline {3}Design}{6}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}Dataset Acquisition}{6}{section.3.1}% 
+\contentsline {section}{\numberline {3.2}Dataset Analysis}{6}{section.3.2}% 
+\contentsline {section}{\numberline {3.3}Task modelling}{7}{section.3.3}% 
+\contentsline {section}{\numberline {3.4}Simple CNN}{11}{section.3.4}% 
+\contentsline {section}{\numberline {3.5}Transfer Learning CNN}{12}{section.3.5}% 
+\contentsline {section}{\numberline {3.6}ELMo}{12}{section.3.6}% 
+\contentsline {section}{\numberline {3.7}AutoML}{12}{section.3.7}% 
+\contentsline {section}{\numberline {3.8}Two Stage Model}{12}{section.3.8}% 
+\contentsline {section}{\numberline {3.9}Additional Experiments}{12}{section.3.9}% 
+\contentsline {chapter}{\chapternumberline {4}Implementation}{13}{chapter.4}% 
+\contentsline {chapter}{\chapternumberline {5}Evaluation}{14}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Architectures}{15}{section.5.1}% 
+\contentsline {subsection}{\numberline {5.1.1}Baseline}{15}{subsection.5.1.1}% 
+\contentsline {subsection}{\numberline {5.1.2}Simple CNN}{15}{subsection.5.1.2}% 
+\contentsline {subsection}{\numberline {5.1.3}Transfer Learning of Pretrained ResNet18}{15}{subsection.5.1.3}% 
+\contentsline {subsubsection}{Confusion Matrix}{16}{section*.28}% 
+\contentsline {subsection}{\numberline {5.1.4}Transfer Learned Object Detection}{16}{subsection.5.1.4}% 
+\contentsline {subsection}{\numberline {5.1.5}ELMo Pretrained Model}{16}{subsection.5.1.5}% 
+\contentsline {subsection}{\numberline {5.1.6}AutoML Model}{16}{subsection.5.1.6}% 
+\contentsline {subsection}{\numberline {5.1.7}Two Stage Model}{19}{subsection.5.1.7}% 
+\contentsline {subsection}{\numberline {5.1.8}Autoencoder}{22}{subsection.5.1.8}% 
+\contentsline {section}{\numberline {5.2}Results}{22}{section.5.2}% 
+\contentsline {subsection}{\numberline {5.2.1}Validation Results}{24}{subsection.5.2.1}% 
+\contentsline {subsection}{\numberline {5.2.2}Test Results}{24}{subsection.5.2.2}% 
+\contentsline {subsection}{\numberline {5.2.3}Training Duration}{24}{subsection.5.2.3}% 
+\contentsline {chapter}{\chapternumberline {6}Conclusion}{28}{chapter.6}% 
+\contentsline {chapter}{List of Figures}{29}{section*.38}% 
+\contentsline {chapter}{Bibliography}{30}{chapter*.39}% 

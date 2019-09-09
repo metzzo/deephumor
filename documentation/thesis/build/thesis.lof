@@ -1,0 +1,39 @@
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\babel@toc {naustrian}{}
+\babel@toc {naustrian}{}
+\addvspace {10pt}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\addvspace {10pt}
+\babel@toc {naustrian}{}
+\babel@toc {english}{}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Cartoon by Gary Larson\relax }}{1}{figure.caption.11}% 
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Box plots of the average funniness over time\relax }}{7}{figure.caption.14}% 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Most frequent nouns per class 1, 2, 3 and 4.\relax }}{8}{figure.caption.15}% 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Most frequent nouns per class 5, 6 and 7.\relax }}{9}{figure.caption.16}% 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Most frequent phrases per class 1, 2, 3 and 4.\relax }}{10}{figure.caption.17}% 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Most frequent phrases per class 5, 6 and 7.\relax }}{11}{figure.caption.18}% 
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces For the classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned each category for the cartoon above.\relax }}{17}{figure.caption.25}% 
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Continued for the classes 5, 6 and 7.\relax }}{18}{figure.caption.26}% 
+\contentsline {figure}{\numberline {5.3}{\ignorespaces The label distribution of the training set\relax }}{19}{figure.caption.27}% 
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Confusion Matrix of the transfer learning CNN (with data augmentation) on the test split\relax }}{20}{figure.caption.29}% 
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Confusion Matrix of the transfer learning CNN (with data augmentation) on the validation split\relax }}{21}{figure.caption.30}% 
+\contentsline {figure}{\numberline {5.6}{\ignorespaces MAE per class\relax }}{22}{figure.caption.31}% 
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Confusion Matrices for first stage.\relax }}{23}{figure.caption.32}% 
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Original Cartoons\relax }}{24}{figure.caption.33}% 
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Results after applying encoder and decoder\relax }}{25}{figure.caption.34}% 
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Model performances on the validation set.\relax }}{25}{figure.caption.35}% 
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Model performances on the test set.\relax }}{26}{figure.caption.36}% 
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Training runtime of each experiment\relax }}{27}{figure.caption.37}% 
+\addvspace {10pt}
