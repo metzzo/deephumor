@@ -147,7 +147,7 @@
 	\label{fig:fig1}
 \end{figure}
 
-The goal of this chapter is to introduce the reader into the topic of deep learning and computational humor. The motivation of why this work has been done is outlined. As well as how the motivation will be achieved with an explanation of the methodology applied.
+The goal of this chapter is to introduce the reader into the topic of deep learning and computational humor. The motivation of this work, what the aims of this work are and as well as what methodology was applied.
 
 \section{Motivation}
 
@@ -201,7 +201,7 @@ This step was iteratively done, in order to adapt to problems which occurred dur
 
 \end{enumerate}
 
-At first the focus was on visual-only models. Then the focus was on text-only models. Finally there were several approaches on combining both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
+At first the focus was on visual-only models. Then the focus shifted towards text-only models. Finally there were several approaches on combining both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
 
 The architecture candidates ranged from relatively simple convolutional neural networks to models which contain of many sub-models with an autoencoder. For more information please refer to chapter \ref{design}.
 
@@ -215,9 +215,81 @@ The final conclusion was based on the findings of the final evaluation. Furtherm
 
 
 \chapter{Background}
-\todo{Ihr Text hier.}
+
+As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis.
+
+\section{Computational Humor}
+definition of computational humor; language understanding; traditional approaches; WordNet 
+
+Papers: 
+
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
+
+
+https://www.ijcai.org/Proceedings/03/Papers/009.pdf
+
+\section{Machine Learning}
+ai vs ML
+
+definition of ML; modes of ML (supervised vs unsupervised vs semisupervised)
+
+optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
+
+Normalisierung/Standardisierung
+
+was sind Features
+
+Was sind Hyperparamater (vs. Parameter)
+
+Train vs Validation vs Test Split (Holdout Methode) und verschiedene Varianten des richtigen Trainings
+
+\section{Neural Networks}
+Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
+
+Activation Funktion
+
+Evtl. Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
+
+Training von neuronalen netzwerken (evtl Backpropagation näher erläutern) => Batching
+
+Deep Neural Networks
+
+Convolutional Neural Networks
+
+Autoencoder
+
+Recurrent Neural Networks kurz erwähnen
+
+\section{Natural Language Processing}
+Definition
+
+Traditionelles NLP (gist: Features extrahieren => SVM trainineren)
+
+Word Embedding (Word2Vec, SpaCy)
+
+Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
+
+\section{Transfer Learning}
+
+Definition \& erklären
+
+Transfer Learning in Image Bereich (state-of-the-art => ResNet18 pretrained)
+
+Transfer Learning in Text Bereich (state-of-the-art => ELMo)
+
+Herausforderungen von Transfer Learning
+
+
+\section{AutoML}
+Definition
+
+Wozu?
+
+Methoden zu AutoML
 
 \section{Related work}
+
+Den Text aus dem Proposal übernehmen und die einzelnen Paper noch genauer beschreiben:
 
 Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}. Research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well. Similarly deep learning enabled modern language embeddings such as ELMo \cite{elmo} and BERT \cite{bert} to achieve state-of-the-art results on various natural language processing tasks. Given these advances there is a possibility that humor may be more tractable using deep learning compared to other methods.
 \todo{Ihr Text hier.}
@@ -365,19 +437,54 @@ Another important decision to be made is which loss function to be used. For thi
 \section{Simple CNN}
 
 The initial approach was to use an off-the-shelf Convolutional Neural Network (CNN) design. This neural network architecture has proven to be very effective for various image classification tasks \cite{dogsvscats}.
-\todo{continue}
+
+Wie wurde die größe des Input Layers definiert
+
+Visuelle Illustration des finalen Netzwerks
 
 \section{Transfer Learning CNN}
-\todo{continue}
+
+Welche Architektur wurde verwendet (ResNet18). Wieso? => Weil bereits erfolgreich für andere Tasks und bereits bei PyTorch dabei
+
+Was wurde transferiert? Freezing von Parametern?
+
+Visuelle Illustration des finalen Netzwerks
+
+\subsection{Transfer Learned Object Detection}
+
+Idee (Object Detection Model an stark transformiertem Datenset trainieren und hoffen dass es auf Gary Larson transferierbar ist => Dadurch Featurevektor von Cartoon erhalten)
+
+Evtl. Beispiel zeigen wie so ein Featurevektor eines Cartoons aussehen könnte
+
+Graphische Darstellung
+
+Annotieren eines Validationdatensets um performance zu überprüfen
 
 \section{ELMo}
-\todo{continue}
+Zuerst LSTM/GRU und dann sentence embedding probiert.
+
+ELMo vs BERT? Wieso ELMo
+
+Visuelle Illustration des finalen Netzwerks
 
 \section{AutoML}
-\todo{continue}
+Wieso AutoML
+
+Verschiedene Features (TFIDF, SpaCy, ELMo, TFIDF + SpaCy, TFIDF + ELMo)
 
 \section{Two Stage Model}
-\todo{continue}
+
+1. Stage: 1 vs rest classifier erklären
+
+2. Stage: Finale Regression erklären
+
+Kombinieren von visual + text erklären
+
+Klassen Imbalance durch 
+
+Autoencoder Ansatz
+
+Visuelle Illustration des finalen Netzwerks
 
 \section{Additional Experiments}
 A list of experiments performed but did not make the cut for a more detailed analysis:
@@ -393,9 +500,31 @@ A list of experiments performed but did not make the cut for a more detailed ana
 \item \textbf{Word vector combinations}: Many different word vector combinations of TFIDF, SpaCy and ELMo. 
 \end{itemize}
 
+Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. worden sind.
+
 \chapter{Implementation}
 
-\todo{Ihr Text hier.}
+Wahl der Libraries: PyTorch, pandas, sklearn, Python, etc.
+
+Annotierungsapplikation erklären. Hat es sich gelohnt?
+
+Architektur (Command Line via parameter steuerbar)
+
+Wie wurden die neuronalen netzwerke gedebuggt bei Fehlern: Am meisten hilffreich war als ich die bilder durch ziffern ersetzt habe die die das label enthielten.
+
+Welche Probleme sind aufgetreten: Fehlerhafter Split zwischen Training/Test/Validation
+
+für visuellen teil:
+
+Datenmanagement: Klassendiagram und erklärung
+
+Evaluationsystem: Klassendiagramm und erklärung
+
+Reproduzierbarkeit?
+
+Für textteil: AllenNLP verwendet. Erklärung des Frameworks 
+
+Conclusio der Implementierung: Kein Overengineering. Effektives Code wieder verwenden schwer mit Machine Learning
 
 \chapter{Evaluation}
 
