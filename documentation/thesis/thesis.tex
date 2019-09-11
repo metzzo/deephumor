@@ -209,7 +209,7 @@ During development the trained models were applied on the validation set. The pe
 
 \subsection{Final Evaluation}
 
-Finally the most interesting models were picked and a more detailed evaluation was performed. This evaluation was done on completely new data for the model - the test set. This was done to get the true performance of the model and shows whether the model overfits. The goal of this phase was to find answers to the questions listed in section \ref{aim}.
+Finally the most interesting models were picked and a more detailed evaluation was performed. This evaluation was done on completely new data for the model - the test set. This was done to get the true performance of the model and shows whether the model overfits. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
 
 The final conclusion was based on the findings of the final evaluation. Furthermore a  conclusion and possible future work was worked out.
 
@@ -228,10 +228,23 @@ https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
 
 https://www.ijcai.org/Proceedings/03/Papers/009.pdf
 
-\section{Machine Learning}
-ai vs ML
+\section{Machine Learning and Artificial Intelligence}
+ The field of AI tries to reproduce (human) intelligence using computers. Since it is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain subtasks of what is considered to require intelligence, also known as weak AI. For example in the beginning of AI research playing chess was considered to be a very difficult task which required intelligence. Now chess engines are able to beat every human player. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks we get closer to strong AI, or even beyond.
 
-definition of ML; modes of ML (supervised vs unsupervised vs semisupervised)
+% https://de.wikipedia.org/wiki/K%C3%BCnstliche_Intelligenz#Starke_und_schwache_KI
+
+Machine Learning (ML) is a field of Artificial Intelligence (AI). Given a set of training samples. In Machine Learning an ML-algorithm finds a model such that the learned model generalizes as good as possible. This model can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters. For example neural networks are parametric. In contrast in a non-parametric model the function itself is constructed by the machine learning algorithm. An example for this type of model would be k-Nearest Neighbor. Since the focus of this work are neural network we will discuss parametric models in detail.
+
+More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples.
+
+The goal of machine learning is basically to approximate a function from data. Depending on what data is available different strategies need to be used. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can usually be relatively easily solved using an optimization algorithm (for example: gradient descent). More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$.
+
+If labels are not available then unsupervised machine learning is typically applied. One example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
+
+
+% ai vs ML
+
+%definition of ML; modes of ML (supervised vs unsupervised vs semisupervised)
 
 optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
 
@@ -240,6 +253,8 @@ Normalisierung/Standardisierung
 was sind Features
 
 Was sind Hyperparamater (vs. Parameter)
+
+Evtl. Ein Venn Diagramm das AI und ML in Relation zueinander setzt
 
 Train vs Validation vs Test Split (Holdout Methode) und verschiedene Varianten des richtigen Trainings
 
@@ -250,7 +265,7 @@ Activation Funktion
 
 Evtl. Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
 
-Training von neuronalen netzwerken (evtl Backpropagation näher erläutern) => Batching
+Training von neuronalen netzwerken: Gradient Descent (evtl Backpropagation näher erläutern) => Batching
 
 Deep Neural Networks
 

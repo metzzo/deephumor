@@ -1,3 +1,10 @@
+Gotchas:
+
+in TexMaker: https://tex.stackexchange.com/questions/85075/bibtex-error-in-texmaker-i-couldnt-open-file-name-test-bb-aux
+
+
+
+
                        vutinfth LaTeX2e document class
                            Academic thesis template
 
