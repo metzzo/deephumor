@@ -219,7 +219,9 @@ The final conclusion was based on the findings of the final evaluation. Furtherm
 As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis.
 
 \section{Machine Learning and Artificial Intelligence}
- The field of AI tries to reproduce (human) intelligence using computers. Since it is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain subtasks of what is considered to require intelligence, also known as weak AI. For example in the beginning of AI research playing chess was considered to be a very difficult task which required intelligence. Now chess engines are able to beat every human player. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks we get closer to strong AI, or even beyond.
+The field of AI tries to reproduce (human) intelligence using computers. Since it is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain subtasks of what is considered to require intelligence, also known as weak AI. For example in the beginning of AI research playing chess was considered to be a very difficult task which required intelligence. Now chess engines are able to beat every human player. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks we get closer to strong AI, or even beyond.
+
+\todo{Venn Diagramm das AI und ML in Relation zueinander setzt}
 
 % https://de.wikipedia.org/wiki/K%C3%BCnstliche_Intelligenz#Starke_und_schwache_KI
 
@@ -233,25 +235,44 @@ The goal of machine learning is basically to approximate a function from data. D
 
 If labels are not available then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
 
-The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \citep{bishop}. Each pixel of an image can be used as features for a machine learning task.
+The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue values of each pixel as a feature. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
 
+Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. To be able to tell if the model really does overfit the best practice is the following:
 
+\begin{enumerate}
+\item Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set. The split ratio depends on the specific task.
+\item Train the model on the train split.
+\item Check performance of the trained model on the validation split.
+\item Adjust hyper parameters such that the model generalizes better for the validation set
+\item Repeat step 2, 3 and 4 until some halting criterion (for example, if the performance does not improve anymore).
+\item Check final performance on the test set of the best trained model
+\end{enumerate}
+Note the validation/test split is only needed if there are hyperparameters which get tweaked multiple times.
+Due to the lack of standardization, sometimes the validation set is actually the test set and the test set is actually the validation set.
+If this process is not adhered to it is called data leakage and it is especially dangerous if some data from the test set leaks into the training or validation set. 
+This method is called the Holdout method. 
 
-% ai vs ML
+\todo{Schematische Darstellung von holdout Methode}
 
-%definition of ML; modes of ML (supervised vs unsupervised vs semisupervised)
+Another method is called Cross-validation: Here the data is randomly split into n partitions. Then the n models are trained for each partition, where the partition is the test set and the remaining data is used for training. If the model performs well on each partition then the model generalizes well.
+
+\begin{enumerate}
+\item Take the data set $\boldsymbol{X}$ and split into n partitions
+\item For each partition $\boldsymbol{P}$:
+\item |\quad Train the model on $\boldsymbol{X} \setminus \boldsymbol{P}$
+\item |\quad Calculate performance on $\boldsymbol{P}$
+\item Final performance evaluation. Commonly used is the average performance with variance.
+\end{enumerate}
+
+\todo{Schematische Darstellung von Cross validation}
+
+Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. TODO
+
+TODO:
 
 optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
 
-Normalisierung/Standardisierung
-
-was sind Features
-
-Was sind Hyperparamater (vs. Parameter)
-
-Evtl. Ein Venn Diagramm das AI und ML in Relation zueinander setzt
-
-Train vs Validation vs Test Split (Holdout Methode) und verschiedene Varianten des richtigen Trainings
+Klassifikation vs Regression
 
 \section{Neural Networks}
 Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
