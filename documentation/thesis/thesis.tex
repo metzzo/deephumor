@@ -218,16 +218,6 @@ The final conclusion was based on the findings of the final evaluation. Furtherm
 
 As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis.
 
-\section{Computational Humor}
-definition of computational humor; language understanding; traditional approaches; WordNet 
-
-Papers: 
-
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
-
-
-https://www.ijcai.org/Proceedings/03/Papers/009.pdf
-
 \section{Machine Learning and Artificial Intelligence}
  The field of AI tries to reproduce (human) intelligence using computers. Since it is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain subtasks of what is considered to require intelligence, also known as weak AI. For example in the beginning of AI research playing chess was considered to be a very difficult task which required intelligence. Now chess engines are able to beat every human player. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks we get closer to strong AI, or even beyond.
 
@@ -235,11 +225,16 @@ https://www.ijcai.org/Proceedings/03/Papers/009.pdf
 
 Machine Learning (ML) is a field of Artificial Intelligence (AI). Given a set of training samples. In Machine Learning an ML-algorithm finds a model such that the learned model generalizes as good as possible. This model can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters. For example neural networks are parametric. In contrast in a non-parametric model the function itself is constructed by the machine learning algorithm. An example for this type of model would be k-Nearest Neighbor. Since the focus of this work are neural network we will discuss parametric models in detail.
 
-More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples.
+More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human or a heuristic. In contrast a model parameter can be estimated from the data.
+
+% https://www.amazon.com/Applied-Predictive-Modeling-Max-Kuhn/dp/1461468485/ref=as_li_ss_tl?keywords=Applied+Predictive+Modeling&qid=1558557110&s=gateway&sr=8-1&linkCode=sl1&tag=inspiredalgor-20&linkId=a257735169b3234cc2247d40137cf238&language=en_US
 
 The goal of machine learning is basically to approximate a function from data. Depending on what data is available different strategies need to be used. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can usually be relatively easily solved using an optimization algorithm (for example: gradient descent). More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$.
 
-If labels are not available then unsupervised machine learning is typically applied. One example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
+If labels are not available then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
+
+The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \citep{bishop}. Each pixel of an image can be used as features for a machine learning task.
+
 
 
 % ai vs ML
@@ -301,6 +296,16 @@ Definition
 Wozu?
 
 Methoden zu AutoML
+
+\section{Computational Humor}
+definition of computational humor; language understanding; traditional approaches; WordNet 
+
+Papers: 
+
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
+
+
+https://www.ijcai.org/Proceedings/03/Papers/009.pdf
 
 \section{Related work}
 
