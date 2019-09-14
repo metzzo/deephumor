@@ -31,7 +31,7 @@
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Robert Fischer} % The author name without titles.
-\newcommand{\thesistitle}{Deep Learning of Humor from Gary Larson's Cartoons} % The title of the thesis. The English version should be used, if it exists.
+\newcommand{\thesistitle}{Modeling Humor using Deep Learning of Gary Larson's Cartoons} % The title of the thesis. The English version should be used, if it exists.
 
 % Set PDF document properties
 \hypersetup{
@@ -77,7 +77,7 @@
 \setaddress{Stauraczgasse 8/13 \\ 1050 Wien \\ Österreich}
 \setregnumber{01425684}
 \setdate{14}{05}{2018} % Set date with 3 arguments: {day}{month}{year}.
-\settitle{\thesistitle}{Deep Learning of Humor from Gary Larson's Cartoons} % Sets English and German version of the title (both can be English or German). If your title contains commas, enclose it with additional curvy brackets (i.e., {{your title}}) or define it as a macro as done with \thesistitle.
+\settitle{\thesistitle}{Modeling Humor using Deep Learning of Gary Larson's Cartoons} % Sets English and German version of the title (both can be English or German). If your title contains commas, enclose it with additional curvy brackets (i.e., {{your title}}) or define it as a macro as done with \thesistitle.
 \setsubtitle{}{} % Sets English and German version of the subtitle (both can be English or German).
 
 % Select the thesis type: bachelor / master / doctor / phd-school.
@@ -155,14 +155,14 @@ Deep learning is part of machine learning, which itself is an approach to artifi
 
 For example: For a human to write an algorithm that reliably detects whether an image contains a dog or a cat has shown to be impossible for many years. But through convolutional neural networks this is relatively easily achievable, given there is a sufficiently large dataset of images with cats and dogs \cite{dogsvscats}. Convolutional neural networks are deep neural networks which are optimized for images \cite{cnnimg}.
 
-Despite deep learning being a relatively new field of study there have been many advancements using this technique. In the field of self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt} the state-of-the-art has been pushed towards, previously thought, unbelievable limits.
+Despite deep learning being a relatively new field of study there have been many advancements using this technique. In the field of self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt} the state-of-the-art has leaped forward to previously deemed impossible limits.
 
 Extending this success story of deep learning into the field of computational humor is the main motivation of this work.
 
 \section{Aim} \label{aim}
-The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see figure \ref{fig:fig1}). This will be done by applying several deep learning techniques.
+The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see figure \ref{fig:fig1}). This will be achieved by applying several deep learning techniques.
 
-One goal of this work is to create a dataset for computational humor. Gary Larson has created many cartoons each with an image and most with a punchline below. These are annotated with a funniness rating.
+This work is aiming to create a dataset for computational humor. Gary Larson has created many cartoons each with an image and most with a punchline. These are annotated with a funniness rating.
 
 The questions this work tries to answer, are the following:
 
@@ -187,7 +187,7 @@ Firstly a detailed literature research was performed. Goal was to get a grasp of
 \subsection {Dataset Acquisition}
 In this step the ground truth was created: A data set of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared in such a way they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
 
-To make this process easier an annotation tool was created, which made this process more efficient.
+To make this process easier an annotation tool was created. This was a web application which allowed easy preparation of cartoons.
 
 \subsection{Development: Design, Implementation and Evaluation}
 
@@ -227,17 +227,19 @@ The field of AI tries to reproduce (human) intelligence using computers. Since i
 
 Machine Learning (ML) is a field of Artificial Intelligence (AI). Given a set of training samples. In Machine Learning an ML-algorithm finds a model such that the learned model generalizes as good as possible. This model can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters. For example neural networks are parametric. In contrast in a non-parametric model the function itself is constructed by the machine learning algorithm. An example for this type of model would be k-Nearest Neighbor. Since the focus of this work are neural network we will discuss parametric models in detail.
 
-More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human or a heuristic. In contrast a model parameter can be estimated from the data.
+More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human or a heuristic. In contrast, given the previously defined hyperparameters model parameters can be estimated from the data
 
 % https://www.amazon.com/Applied-Predictive-Modeling-Max-Kuhn/dp/1461468485/ref=as_li_ss_tl?keywords=Applied+Predictive+Modeling&qid=1558557110&s=gateway&sr=8-1&linkCode=sl1&tag=inspiredalgor-20&linkId=a257735169b3234cc2247d40137cf238&language=en_US
 
 The goal of machine learning is basically to approximate a function from data. Depending on what data is available different strategies need to be used. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can usually be relatively easily solved using an optimization algorithm (for example: gradient descent). More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$.
 
+The task is called differently, depending on the possible values of $\boldsymbol{t}$. If $\boldsymbol{t}$ can take continuous values it is called a regression task. The algorithm which is used to train the model is called a regressor. If $\boldsymbol{t}$ is categorical and can only take finite values, then it is called a classification task. The algorithm which is used to train is called a classifier. An example for a regression task is stockmarket prediction, and an example for a classification task is spam detection. Important to note is, that often regression task can be modelled as classification task and vice versa. Instead of predicting the stock market directly, one can instead predict classes of <50, 51-100, 101-200, 200< and use the average value of each bucket as the predicted stockmarket. The right approach is highly task dependent.
+
 If labels are not available then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
 
-The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue values of each pixel as a feature. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
+The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue channel values of each pixel as a feature. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
 
-Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. To be able to tell if the model really does overfit the best practice is the following:
+Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all, getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. The following method could be employed to detect overfitting:
 
 \begin{enumerate}
 \item Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set. The split ratio depends on the specific task.
@@ -247,14 +249,14 @@ Important for the model $\boldsymbol{y}$ is how well it generalizes for new data
 \item Repeat step 2, 3 and 4 until some halting criterion (for example, if the performance does not improve anymore).
 \item Check final performance on the test set of the best trained model
 \end{enumerate}
-Note the validation/test split is only needed if there are hyperparameters which get tweaked multiple times.
+Note the validation/test split is only needed if there are hyperparameters which are being tweaked multiple times.
 Due to the lack of standardization, sometimes the validation set is actually the test set and the test set is actually the validation set.
 If this process is not adhered to it is called data leakage and it is especially dangerous if some data from the test set leaks into the training or validation set. 
 This method is called the Holdout method. 
 
 \todo{Schematische Darstellung von holdout Methode}
 
-Another method is called Cross-validation: Here the data is randomly split into n partitions. Then the n models are trained for each partition, where the partition is the test set and the remaining data is used for training. If the model performs well on each partition then the model generalizes well.
+Another method is called Cross-validation: Here the data is randomly split into $n$ partitions. Then the $n$ models are trained for each partition, where the partition is the test set and the remaining data is used for training. If the model performs well on each partition, then it is considered that the model generalizes well.
 
 \begin{enumerate}
 \item Take the data set $\boldsymbol{X}$ and split into n partitions
@@ -266,20 +268,37 @@ Another method is called Cross-validation: Here the data is randomly split into 
 
 \todo{Schematische Darstellung von Cross validation}
 
-Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. TODO
+Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. For this thesis the Mean absolute error (MAE) and the accuracy were determined to be suited.
+
+\newtheorem{mae}[DefCounter]{Definition}
+
+\begin{mae}
+$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
+\end{mae}
+
+\newtheorem{accuracy}[DefCounter]{Definition}
+\begin{accuracy}
+$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
+\end{accuracy}
+
+MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
+
+Accuracy has been chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
+
+
 
 TODO:
 
+
 optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
 
-Klassifikation vs Regression
 
 \section{Neural Networks}
 Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
 
 Activation Funktion
 
-Evtl. Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
+Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
 
 Training von neuronalen netzwerken: Gradient Descent (evtl Backpropagation näher erläutern) => Batching
 
@@ -289,7 +308,7 @@ Convolutional Neural Networks
 
 Autoencoder
 
-Recurrent Neural Networks kurz erwähnen
+Recurrent Neural Networks
 
 \section{Natural Language Processing}
 Definition
@@ -319,12 +338,19 @@ Wozu?
 Methoden zu AutoML
 
 \section{Computational Humor}
-definition of computational humor; language understanding; traditional approaches; WordNet 
+definition of computational humor
 
-Papers: 
+Problematik von Humor für Computer erklären
+
+language understanding
+
+traditional approaches of computational humor
+
+WordNet 
+
+Stichprobenartig Papers wiedergeben, zB: 
 
 https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
-
 
 https://www.ijcai.org/Proceedings/03/Papers/009.pdf
 
@@ -357,7 +383,7 @@ To verify that the distribution of the annotations has not changed over the cour
 \begin{figure}
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/average_funniness_over_time}
-	\caption{Box plots of the average funniness over time}
+	\caption{Box plots of the average funniness over time in the training split.}
 	\label{fig:boxplottime}
 \end{figure}
 
@@ -579,23 +605,6 @@ The cartoon data set is split into three sub sets:
 \item Validation Data: 746 samples (20\%)
 \item Test Data: 249 samples (10\%)
 \end{itemize}
-
-Two evaluation metrics were chosen to determine the performance of each model: Mean absolute error (MAE) and accuracy.
-
-\newtheorem{mae}[DefCounter]{Definition}
-
-\begin{mae}
-$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
-\end{mae}
-
-\newtheorem{accuracy}[DefCounter]{Definition}
-\begin{accuracy}
-$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
-\end{accuracy}
-
-The MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
-
-The Accuracy is chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
 
 The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
 Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
