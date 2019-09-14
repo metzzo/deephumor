@@ -296,6 +296,70 @@ optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Fores
 \section{Neural Networks}
 Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
 
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/simple_neural_network.png}
+	\caption{Fully Connected Feed Forward Neural Network}
+	\label{fig:feedforward}
+\end{figure}
+
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
+
+A neural network can be seen as a series of functional transformations. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
+\begin{equation}
+a_j = \sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}
+\end{equation}
+
+where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$:
+\begin{equation}
+z_j = h(a_j)
+\end{equation}
+where depending on the problem different activation functions are applied, for example $h(x) = tanh(x)$ or $h(x) = \sigma(x)$ where
+\begin{equation}
+\sigma(x) = \dfrac {1} {1 + e^{-x}}
+\end{equation}
+for the first hidden layer the following values are linearly combined:
+\begin{equation}
+a_k = \sum_{i=1}^{M} w_{kj}^{(2)} + w_{k0}^{(2)}
+\end{equation}
+
+where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for all hidden layers. The final result for the output layer is usually obtained by applying a softmax activation function. \\
+
+The neural network is usually trained by applying a gradient descent optimization. TODO
+
+\subsubsection{Convolutional Neural Networks}
+The following is summarizing several papers \cite{dogsvscats}\cite{Druzhkov2016}\cite{cnnnontech}.
+
+Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are pooling and convolutional layers. \\
+
+Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (e.g.: edges). Also in contrast to fully connected layers: The kernel is shared among the neurons (Parameter Sharing), since the recognized features should not depend on their position in the input image. \\
+
+Pooling layers are applied after convolutional layers. Their goal is to reduce the complexity of CNNs. Pooling neurons are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is Max Pooling, where the result is the maximum value of all incoming connections. \\
+
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. \\
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
+	\caption{Visual representation of a convolutional neural network}
+	\label{fig:feedforward}
+\end{figure}
+\pagebreak
+
+\subsubsection{Recurrent Neural Networks}
+Recurrent Neural Networks allow neural networks to be applied on sequences, by containing cycles in the topology of the network. Usually a RNN consists of multiple units, such as Long Short-Term Memory units, Gates recurrent units \cite{gru}, etc. The focus of this thesis will primarily be on LSTM networks. \\
+
+Each architecture has different benefits and applicable domains. Even among LSTM networks there is lots of variation. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, which avoids the vanishing gradient problem \cite {vanishinggradient}.\\
+
+The most simple LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}. \\
+
+The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
+
+To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
+
+
+TODO:
+
 Activation Funktion
 
 Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
@@ -612,8 +676,6 @@ information regarding the build set up and necessary environment please refer to
 
 The hyperparameters were chosen based on best practice and previous
 experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
-
-Due to the subjectiveness of human humor the annotations were performed by one person. This could allow the model to extract the humor of the person annotating the cartoons.
 
 \section{Architectures}
 Several architectures have been implemented and are evaluated in the following sections.
