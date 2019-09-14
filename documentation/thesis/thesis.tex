@@ -294,7 +294,6 @@ optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Fores
 
 
 \section{Neural Networks}
-Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
 
 \begin{figure}[ht]
 	\centering
@@ -303,7 +302,9 @@ Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definitio
 	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. A neural network generally consists of multiple neurons, layers and connections. \\
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a simple fully connected feedforward neural network. 
+
+A neural network generally consists of multiple neurons, layers and connections. The general inspiration for them is the human brain which also consists of similar building blocks. \\
 
 A neural network can be seen as a series of functional transformations. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
 \begin{equation}
@@ -314,10 +315,21 @@ where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{
 \begin{equation}
 z_j = h(a_j)
 \end{equation}
-where depending on the problem different activation functions are applied, for example $h(x) = tanh(x)$ or $h(x) = \sigma(x)$ where
+where depending on the problem different activation functions are applied. Common functions are
+\begin{itemize}
+\item Tanh function:
 \begin{equation}
-\sigma(x) = \dfrac {1} {1 + e^{-x}}
+h(x) = tanh(x)
 \end{equation}
+\item Sigmoid Function:
+\begin{equation}
+h(x) = \dfrac {1} {1 + e^{-x}}
+\end{equation}
+\item ReLU:
+TODO
+\end{itemize}
+
+
 for the first hidden layer the following values are linearly combined:
 \begin{equation}
 a_k = \sum_{i=1}^{M} w_{kj}^{(2)} + w_{k0}^{(2)}
@@ -360,7 +372,11 @@ To solve this problem Word Embeddings can be computed. These place words into a 
 
 TODO:
 
+Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
+
 Activation Funktion
+
+Loss Function
 
 Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
 
