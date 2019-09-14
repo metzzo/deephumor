@@ -295,6 +295,10 @@ optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Fores
 
 \section{Neural Networks}
 
+A perceptron is a binary classifier and uses a linear function to perform the classification. In its base form it can distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is not able to learn many classes of problems. For example a simple XOR operation can not be learned by a perceptron. This motivated the use of multi layer perceptrons, since they are in tehory able to approximate every function.
+
+Historically Perceptrons are the basis for feed forward neural networks. Feedforward neural networks can be considered as multiple layers of perceptrons connected: Multi layer perceptron.
+
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=0.75\textwidth]{graphics/simple_neural_network.png}
@@ -306,7 +310,7 @@ Part of the reason why neural networks are so powerful, especially deep neural n
 
 A neural network generally consists of multiple neurons, layers and connections. The general inspiration for them is the human brain which also consists of similar building blocks. \\
 
-A neural network can be seen as a series of functional transformations. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
+From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
 \begin{equation}
 a_j = \sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}
 \end{equation}
@@ -325,17 +329,23 @@ h(x) = tanh(x)
 \begin{equation}
 h(x) = \dfrac {1} {1 + e^{-x}}
 \end{equation}
-\item ReLU:
-TODO
+\item ReLU: Very often used in deep learning
+\begin{equation}
+h(x) = max(0, x)
+\end{equation}
+\item SoftMax: Does not take a single input, but multiple inputs. Can be used to transform any inputs into a probability distribution.
+\begin{equation}
+h(\boldsymbol{x}) = \dfrac{e^{x_i}}{\sum_{k=1}^{M} e^{x_k}}
+\end{equation}
 \end{itemize}
 
 
 for the first hidden layer the following values are linearly combined:
 \begin{equation}
-a_k = \sum_{i=1}^{M} w_{kj}^{(2)} + w_{k0}^{(2)}
+a_k = \sum_{i=1}^{M} w_{kj}^{(2)}z_j + w_{k0}^{(2)}
 \end{equation}
 
-where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for all hidden layers. The final result for the output layer is usually obtained by applying a softmax activation function. \\
+where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for the remaining hidden layers. The final result for classification tasks is usually obtained by applying a softmax activation function of the last layer's output.
 
 The neural network is usually trained by applying a gradient descent optimization. TODO
 
@@ -372,9 +382,9 @@ To solve this problem Word Embeddings can be computed. These place words into a 
 
 TODO:
 
-Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
+%Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
 
-Activation Funktion
+% Activation Funktion
 
 Loss Function
 
