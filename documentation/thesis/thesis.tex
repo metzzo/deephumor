@@ -365,8 +365,6 @@ y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\l
 
 Evaluating \ref{forwardcalculation} is called forward propagation.
 
-Training of neural networks takes advantage of the fact that it is a function composition of differentiable functions. This allows the use of a technique called gradient descent.
-
 For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
 
 The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks.
@@ -379,7 +377,7 @@ y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes:
 
 \begin{equation}
-L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{x_k}, \boldsymbol{w})
+L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
 \end{equation}
 
 For regression tasks the L1 loss can be used:
@@ -389,7 +387,32 @@ L(\boldsymbol{w}) = \dfrac{1}{N} \sum_{n=1}^N |x_n - y_n| \text{ where }
 y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 \end{equation}
 
-The neural network is usually trained by applying a gradient descent optimization. TODO
+The goal of training neural network is to minimize the loss of the model:
+
+\begin{equation}
+\text{arg min}\quad L(\boldsymbol{w})
+\end{equation}
+
+Training takes advantage of the fact that it is a function composition of differentiable functions. This allows the use of a technique called gradient descent. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function. A halting criterion could be number of iterations, diminishing or no improvements over time or reaching some predefined threshold.
+
+A pseudo code for gradient descent:
+
+\begin{enumerate}
+\item Compute gradient: $\boldsymbol{w}' = \bigtriangledown	L(\boldsymbol{w})$
+\item Update weights: $\boldsymbol{w} := \boldsymbol{w} - \alpha \boldsymbol{w}'$
+\item Repeat steps 1 and 2 until halting criterion is met
+
+\end{enumerate}
+
+$\alpha > 0$ is a hyperparameter and called the learning rate. 
+
+This naive approach has problems, which can be mitigated by different measures:
+
+Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets more shallow. This makes the gradient descent algorithm to be less prone for local minima and usually makes it converging faster to the desired optimum.
+
+Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem.
+
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well to many parameters. Therefore a technique called backpropagation is commonly used. [TODO]
 
 \subsubsection{Convolutional Neural Networks}
 The following is summarizing several papers \cite{dogsvscats}\cite{Druzhkov2016}\cite{cnnnontech}.
@@ -428,11 +451,13 @@ TODO:
 
 % Activation Funktion
 
-Loss Function
+% Loss Function
+
+% Training von neuronalen netzwerken: Gradient Descent (evtl Backpropagation näher erläutern) => Batching
+
 
 Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
 
-Training von neuronalen netzwerken: Gradient Descent (evtl Backpropagation näher erläutern) => Batching
 
 Deep Neural Networks
 
@@ -441,6 +466,8 @@ Convolutional Neural Networks
 Autoencoder
 
 Recurrent Neural Networks
+
+Wenn noch Platz: Backpropagation erklären
 
 \section{Natural Language Processing}
 Definition
