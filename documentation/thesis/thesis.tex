@@ -440,6 +440,8 @@ Finally a dropout layers can be used. The idea is similar to regularization: The
 
 Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error.
 
+The design of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
+
 \subsubsection{Convolutional Neural Networks}
 
 Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are usually several pooling and convolutional layers.
@@ -480,16 +482,11 @@ An autoencoder is a deep neural network which learns a compact representation of
 
 %Wenn noch Platz: Backpropagation erklären
 
-\section{Natural Language Processing}
-Definition
-
-Traditionelles NLP (gist: Features extrahieren => SVM trainineren)
-
-Word Embedding (Word2Vec, SpaCy)
-
-Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
-
 \section{Transfer Learning} \label{transferlearning}
+
+The more complex a task is, the more labelled data deep learning needs. This is not only expensive, but sometimes not possible. Gary Larson for example has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
+
+This is where transfer learning shines. Instead of training a completely new model for each problem task, the idea is to use TODO
 
 Definition \& erklären
 
@@ -498,6 +495,15 @@ Transfer Learning in Image Bereich (state-of-the-art => ResNet18 pretrained)
 Transfer Learning in Text Bereich (state-of-the-art => ELMo)
 
 Herausforderungen von Transfer Learning
+
+\section{Natural Language Processing}
+Definition
+
+Traditionelles NLP (gist: Features extrahieren => SVM trainineren)
+
+Word Embedding (Word2Vec, SpaCy)
+
+Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
 
 
 \section{AutoML}
