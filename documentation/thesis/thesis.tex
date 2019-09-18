@@ -27,6 +27,8 @@
 \usepackage{amssymb}% http://ctan.org/pkg/amssymb
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 \newcommand{\cmark}{\ding{51}}%
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
@@ -268,7 +270,7 @@ Another method is called Cross-validation: Here the data is randomly split into 
 
 \todo{Schematische Darstellung von Cross validation}
 
-Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. For this thesis the Mean absolute error (MAE) and the accuracy were determined to be suited.
+Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited.
 
 \newtheorem{mae}[DefCounter]{Definition}
 
@@ -287,10 +289,8 @@ Accuracy has been chosen because it is very easy to understand and is commonly u
 
 
 
-TODO:
-
-
-optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
+%TODO:
+%optional verschiedene einfache ML Systeme erwähnen (Decision Tree, Random Forest, Naive Bayes, KNN etc.) => Wahrscheinich je nach dem wieviel Inhalt noch notwendig ist
 
 
 \section{Neural Networks}
@@ -351,7 +351,7 @@ a_k = \sum_{i=1}^{M} w_{kj}^{(2)}z_j + w_{k0}^{(2)}
 
 where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for the remaining hidden layers. The final result for classification tasks is usually obtained by applying a softmax activation function of the last layer's output.
 
-Combining these transformations together for a simple two layer network results in the following equation:
+Combining these transformations together for a relatively simple two layer network results in the following equation:
 
 \begin{equation}
 y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\left(\sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}\right) + w_{k0}^{(2)}\right)
@@ -364,6 +364,8 @@ y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\l
 \end{equation}
 
 Evaluating \ref{forwardcalculation} is called forward propagation.
+
+If a neural network is used with multiple layers, where each layer applies some form of higher level feature extraction compared to the earlier layers it is called deep learning. Such neural network is also called deep neural network.
 
 For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
 
@@ -406,24 +408,47 @@ A pseudo code for gradient descent:
 
 $\alpha > 0$ is a hyperparameter and called the learning rate. 
 
-This naive approach has problems, which can be mitigated by different measures:
+
+\subsubsection{Neural Network Tips \& Tricks}
+The naive implementation of gradient descent has problems, which can be mitigated by different measures:
 
 Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets more shallow. This makes the gradient descent algorithm to be less prone for local minima and usually makes it converging faster to the desired optimum.
 
 Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem.
 
-Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well to many parameters. Therefore a technique called backpropagation is commonly used. [TODO]
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. [TODO]
+
+One problem of every machine learning algorithm, and especially for neural networks is the problem of overfitting. There are different measures available to counteract overfitting.
+
+The main three approaches we will discuss here are: Regularization, Data augmentation, early stopping and Dropout layers. 
+
+The idea of data augmentation is to synthetically increase the size of the dataset by applying several transformations on the original data. All transformations must not alter the original label of the sample. For examples, image data usually allows many different kind of filters and transformations to be applied. Common operations are random crop, random rotation and add synthetic noise.
+
+Regularization tries to avoid overfitting by penalizing	high weights of neurons. This avoid certain inputs from dominating outputs and nudges the network to make use of all inputs. This can easily be achieved by adapting the loss function slightly:
+
+\begin{equation}
+L_{reg}(\boldsymbol{w}) = \dfrac{\delta}{2}\norm{\boldsymbol{w}}^2 + L(\boldsymbol{w})
+\end{equation}
+
+where $\delta$ is called weight decay and usually $0.000001 \leq \delta \leq 0.0001$.
+
+Another simple technique is early stopping. The idea is simple: Remember the best performing model $y_{val}$ on the validation set, instead of the final model $y$ after gradient descent terminated. After training has finished return $y_{val}$ instead of $y$.
+
+Finally a dropout layers can be used. The idea is similar to regularization: The network should not overly rely on certain inputs. A dropout layer turns off neurons with a certain probability. This forces the network to generalize better. Usually in CNNs dropout layers are placed at the end of the network before the last fully connected layer.
+
+\todo{Schematische Darstellungg von Dropout}
+
+Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error.
 
 \subsubsection{Convolutional Neural Networks}
-The following is summarizing several papers \cite{dogsvscats}\cite{Druzhkov2016}\cite{cnnnontech}.
 
-Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are pooling and convolutional layers. \\
+Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are usually several pooling and convolutional layers.
 
-Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (e.g.: edges). Also in contrast to fully connected layers: The kernel is shared among the neurons (Parameter Sharing), since the recognized features should not depend on their position in the input image. \\
+Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (for example edges). This pattern is called a kernel. The kernel is shared among the input neurons (Parameter Sharing). This introduces translation invariance, which means that it matters less if a feature occurs at the center or on the edges of an images. Additionally to increase the capacity, usually multiple convolutions with learned kernels are applied per layer. This is called the depth of a layer.
 
-Pooling layers are applied after convolutional layers. Their goal is to reduce the complexity of CNNs. Pooling neurons are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is Max Pooling, where the result is the maximum value of all incoming connections. \\
+Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data. Local pooling layers are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). Another form of pooling is global pooling, where the entire data is pooled at once, this is usually employed at the end of the convolutional part of a CNN.
 
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. \\
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
 
 \begin{figure}[ht]
 	\centering
@@ -434,40 +459,26 @@ Fully connected layers are usually the last layers of a CNN, their task is to pe
 \pagebreak
 
 \subsubsection{Recurrent Neural Networks}
-Recurrent Neural Networks allow neural networks to be applied on sequences, by containing cycles in the topology of the network. Usually a RNN consists of multiple units, such as Long Short-Term Memory units, Gates recurrent units \cite{gru}, etc. The focus of this thesis will primarily be on LSTM networks. \\
+Recurrent Neural Networks allow neural networks to be applied on sequences, by allowing cycles in the topology of the network. Usually a recurrent neural network (RNN) consists of multiple units, such as Long Short-Term Memory (LSTM) units or gated recurrent units (GRU) \cite{gru}.
 
-Each architecture has different benefits and applicable domains. Even among LSTM networks there is lots of variation. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, which avoids the vanishing gradient problem \cite {vanishinggradient}.\\
+Each architecture has different benefits and applicable domains. Even among LSTM networks there are many variations. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, as it avoids the vanishing/exploding gradient problem of regular RNNs \cite {vanishinggradient}.
 
-The most simple LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}. \\
+The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}.
 
-The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
+\todo{Schematische Darstellung einer LSTM Zelle}
 
-To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
+\subsubsection{Autoencoder}
 
+An autoencoder is a deep neural network which learns a compact representation of data similar to principal component analysis in an unsupervised way. An autoencoder consists of two parts: The encoder and decoder. The encoder performs a dimensionality reduction from a high dimensional data to a low dimensional representation. The decoder on the other hand tries to reconstruct the original data from the low dimensional representation.
 
-TODO:
-
-%Grundlagen Perceptron und dann zu Multilayer Perceptron überleiten => Definition Neural Network
-
-% Activation Funktion
-
-% Loss Function
-
-% Training von neuronalen netzwerken: Gradient Descent (evtl Backpropagation näher erläutern) => Batching
+\todo{Schematische Darstellung eines Autoencoders}
 
 
-Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
+%TODO:
 
+%Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
 
-Deep Neural Networks
-
-Convolutional Neural Networks
-
-Autoencoder
-
-Recurrent Neural Networks
-
-Wenn noch Platz: Backpropagation erklären
+%Wenn noch Platz: Backpropagation erklären
 
 \section{Natural Language Processing}
 Definition
@@ -478,7 +489,7 @@ Word Embedding (Word2Vec, SpaCy)
 
 Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
 
-\section{Transfer Learning}
+\section{Transfer Learning} \label{transferlearning}
 
 Definition \& erklären
 
@@ -687,6 +698,13 @@ Graphische Darstellung
 Annotieren eines Validationdatensets um performance zu überprüfen
 
 \section{ELMo}
+
+\if false
+The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
+
+To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
+\fi
+
 Zuerst LSTM/GRU und dann sentence embedding probiert.
 
 ELMo vs BERT? Wieso ELMo
@@ -1011,7 +1029,7 @@ and test phase. Additionally the training runtime is also listed.
 
 \subsection{Validation Results}
 
-For a detailed table of validation performance of selected models, please refer to figure [\ref{fig:valperformance}]. The ELMo based model achieved on this subset the highest accuracy, while the Two Stage Model achieved the best Mean Absolute Error. Both models only use the text data and discard the visual information entirely.
+For a detailed table of validation performance of selected models, please refer to figure [\ref{fig:valperformance}]. The ELMo based model achieved on this subset the highest accuracy, while the Two Stage Model achieved the best mean Absolute Error. Both models only use the text data and discard the visual information entirely.
 
 \begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
