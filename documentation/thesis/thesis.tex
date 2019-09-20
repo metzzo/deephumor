@@ -511,14 +511,14 @@ This is where vector space models are often applied. The idea is to represent ea
 
 There is the concept of positive similarity, denoted using the $\otimes$ operator. And there is the concept of negative similarity, denoted using the $\overline{\otimes}$ \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures. Commonly used is the cosine similarity. While similarities based on distance are negative similarity measures, for example the euclidean distance. CNNs and other neural network architectures are based on positive similarity, as they perform a convolution which applies the dot product across the data.
 
-These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and SpaCy embeddings. One problems of these embeddings are, that they mostly ignore the context of the word. The word bank has different meanings, depending on if the current topic is about rivers or about money. This problem is what the most successful embeddings to date tackle: They consider the context of the word (sentence) to obtain a better vector representation.
+These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and GloVe embeddings. One problems of these embeddings are, that they mostly ignore the context of the word. The word bank has different meanings, depending on if the current topic is about rivers or about money. This problem is what the most successful embeddings to date tackle: They consider the context of the word (sentence) to obtain a better vector representation.
 
 In the following sections the embeddings which were used during in this thesis are discussed.
 
 \subsubsection{TFIDF}
 TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval where  TODO
 
-\subsubsection{SpaCy}
+\subsubsection{GloVe}
 TODO
 
 \subsubsection{ELMo}
@@ -756,7 +756,7 @@ Visuelle Illustration des finalen Netzwerks
 \section{AutoML}
 Wieso AutoML
 
-Verschiedene Features (TFIDF, SpaCy, ELMo, TFIDF + SpaCy, TFIDF + ELMo)
+Verschiedene Features (TFIDF, Glove, ELMo, TFIDF + Glove, TFIDF + ELMo)
 
 \section{Two Stage Model}
 
@@ -783,7 +783,7 @@ A list of experiments performed but did not make the cut for a more detailed ana
 \item \textbf{Advanced Two Stage Model}: Add different binary classifiers in the first stage.
 \item \textbf{Loss Weighting of Two Stage Model}: Try different penalties for different kind of errors in the first stage. For example add more penalty for true positives compared to false negatives.
 \item \textbf{Preprocessing of cartoons}: Apply different filters on cartoons. For example: Canny edge detection.
-\item \textbf{Word vector combinations}: Many different word vector combinations of TFIDF, SpaCy and ELMo. 
+\item \textbf{Word vector combinations}: Many different word vector combinations of TFIDF, GloVe and ELMo. 
 \end{itemize}
 
 Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. worden sind.
