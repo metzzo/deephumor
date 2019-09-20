@@ -516,7 +516,23 @@ These vector representations are also called word embeddings. There are many dif
 In the following sections the embeddings which were used during in this thesis are discussed.
 
 \subsubsection{TFIDF}
-TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval where  TODO
+TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval, where the goal was to weight words by their importance for a document and for a query. The TFIDF consists of two frequencies multiplies: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document. The idea being, that the more often a word occurs, the more important it is in describing the document.
+
+The problem with this is that certain words occur almost always very frequently (stop words). For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also multiplied. This weight describes the importance of a word compared to all other documents. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
+
+There exist many different formulas which entail this idea. In this thesis the following TFIDF equations were used:
+
+\begin{equation}
+\text{idf}(t) = \text{log} \left(\dfrac{n}{\text{df}(t)} \right) + 1
+\end{equation}
+\begin{equation}
+\text{tfidf}(t, D) = \text{tf}(t, D)idf(t)
+\end{equation}
+
+
+where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occurrences of term $t$ in document $D$ and $\text{df}(t)$ the number of documents containing term $t$.
+
+The advantage of TFIDF is, that is very easy to understand and does not need any lengthy training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model, which has a fixed vocabulary.
 
 \subsubsection{GloVe}
 TODO
