@@ -301,7 +301,7 @@ Historically Perceptrons are the basis for feed forward neural networks. They ca
 
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=9\textwidth]{graphics/simple_neural_network.png}
+  	\includegraphics[width=1\textwidth]{graphics/simple_neural_network.png}
 	\caption{Fully Connected Feed Forward Neural Network}
 	\label{fig:feedforward}
 \end{figure}
@@ -365,8 +365,6 @@ y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\l
 
 Evaluating \ref{forwardcalculation} is called forward propagation.
 
-If a neural network is used with multiple layers, where each layer applies some form of higher level feature extraction compared to the earlier layers it is called deep learning. Such neural network is also called deep neural network.
-
 For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
 
 The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks.
@@ -406,10 +404,10 @@ A pseudo code for gradient descent:
 
 \end{enumerate}
 
-$\alpha > 0$ is a hyperparameter and called the learning rate. 
+$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to make the learning rate decay during training.
 
 
-\subsubsection{Neural Network Tips \& Tricks}
+\subsubsection{Applying neural networks}
 The naive implementation of gradient descent has problems, which can be mitigated by different measures:
 
 Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets more shallow. This makes the gradient descent algorithm to be less prone for local minima and usually makes it converging faster to the desired optimum.
@@ -442,7 +440,19 @@ Due to the sheer amount of hyperparameter and possible approaches, successfully 
 
 The design of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
 
-\subsubsection{Convolutional Neural Networks}
+\subsubsection{Deep Learning}
+
+If a neural network is used with multiple layers, where each layer applies some form of higher level feature extraction compared to the earlier layers it is called deep learning. Such neural network is also called a deep neural network.
+
+An advantage of deep neural network is that they scale very well with the size of the dataset and with the amount of computation available. As the computational power increases and the size of the datasets as well, the performance of models deep learning may enable also increases.
+
+Multiple layers in neural networks have been existing for many years, but just in relative short time this field gained a lot of traction. There are two main reasons for this: General purpose programming of graphics cards and clever neural network architectures.
+
+One big problem of training deep neural networks is, that it is very computationally expensive. Backpropagation reduces the required power significantly, but for models with many million parameters it is still infeasible to train them on weak hardware. An advantage of training neural networks is that it can be highly parallelized. This in combination with the fact that graphics cards started to be programmable caused a significant leap in feasible neural network architectures.
+
+Another innovation necessary for the breakthrough of deep neural networks was the introduction of clever architectures. Through convolutional layers the number of parameters trained decreases significantly, compared to a multi layer perceptron with the same number of layers.
+
+\subsubsection{Convolutional Neural Networks} \label{mlcnn}
 
 Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are usually several pooling and convolutional layers.
 
@@ -460,6 +470,9 @@ Fully connected layers are usually the last layers of a CNN, their task is to pe
 \end{figure}
 \pagebreak
 
+\todo {Graphische Darstellung eines Convolution Layers}
+\todo {Graphische Darstellung eines Max Pooling Layers}
+
 \subsubsection{Recurrent Neural Networks}
 Recurrent Neural Networks allow neural networks to be applied on sequences, by allowing cycles in the topology of the network. Usually a recurrent neural network (RNN) consists of multiple units, such as Long Short-Term Memory (LSTM) units or gated recurrent units (GRU) \cite{gru}.
 
@@ -467,13 +480,14 @@ Each architecture has different benefits and applicable domains. Even among LSTM
 
 The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}.
 
-\todo{Schematische Darstellung einer LSTM Zelle}
+\todo {Schematische Darstellung eines simplen RNNs}
+\todo {Schematische Darstellung einer LSTM Zelle}
 
 \subsubsection{Autoencoder}
 
 An autoencoder is a deep neural network which learns a compact representation of data similar to principal component analysis in an unsupervised way. An autoencoder consists of two parts: The encoder and decoder. The encoder performs a dimensionality reduction from a high dimensional data to a low dimensional representation. The decoder on the other hand tries to reconstruct the original data from the low dimensional representation.
 
-\todo{Schematische Darstellung eines Autoencoders}
+\todo {Schematische Darstellung eines Autoencoders}
 
 
 %TODO:
@@ -482,29 +496,51 @@ An autoencoder is a deep neural network which learns a compact representation of
 
 %Wenn noch Platz: Backpropagation erklären
 
+\section{Natural Language Processing}
+Natural Language Processing (NLP) is a subfield of artificial intelligence and linguistics where the goal is to build computer programs which are able to understand human language. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition.
+
+Early NLP tried to achieve its goal by building traditional parsers, similar to what compilers to for programming languages. The problem was that these techniques are inadequate for human languages, due to their ambiguity.
+
+Another common approach has been to apply traditional machine learning for NLP. The idea here is to extract certain features of a dataset of text and using these features train a classical machine learning model using, for example, a support vector machine.
+
+The current state-of-the-art results in NLP are achieved by applying deep learning to this field. An advantage of many text domains, is that there is lots of data available. This is a big advantage especially for unsupervised methods, as no difficult labelling must be performed.
+
+For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from text. A trivial approach would be giving each word a unique identification number. The problem with this approach is that one loses the entire semantic information about the words. The words king and queen are more similar than king and house. Keeping this information is crucial for successful natural language processing.
+
+This is where vector space models are often applied. The idea is to represent each word in a high dimensional vector space, where a certain similarity measure holds.
+
+There is the concept of positive similarity, denoted using the $\otimes$ operator. And there is the concept of negative similarity, denoted using the $\overline{\otimes}$ \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures. Commonly used is the cosine similarity. While similarities based on distance are negative similarity measures, for example the euclidean distance. CNNs and other neural network architectures are based on positive similarity, as they perform a convolution which applies the dot product across the data.
+
+These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and SpaCy embeddings. One problems of these embeddings are, that they mostly ignore the context of the word. The word bank has different meanings, depending on if the current topic is about rivers or about money. This problem is what the most successful embeddings to date tackle: They consider the context of the word (sentence) to obtain a better vector representation.
+
+In the following sections the embeddings which were used during in this thesis are discussed.
+
+\subsubsection{TFIDF}
+TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval where  TODO
+
+\subsubsection{SpaCy}
+TODO
+
+\subsubsection{ELMo}
+TODO
+
+
+% TODO
+%Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
+
+
 \section{Transfer Learning} \label{transferlearning}
 
-The more complex a task is, the more labelled data deep learning needs. This is not only expensive, but sometimes not possible. Gary Larson for example has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
+Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
 
-This is where transfer learning shines. Instead of training a completely new model for each problem task, the idea is to use TODO
+This is why transfer learning is applied: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model can be trained on an already existing big dataset and the fine tuning does not need as big of a dataset. The finetuning in the context of deep neural networks is often done by fixating the weights of neurons in certain layers during training. Usually these layers perform more general feature extraction, which is better applicable to other domains.
 
-Definition \& erklären
+For example there are already very big datasets for image classification tasks. Training a good performing classifier on these datasets has already been done numerous times. Especially CNNs have an architecture very suited for transfer learning: As mentioned in [\ref{mlcnn}], there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending on how similar the domain is less training is needed for the new domain. This paper used a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons.
 
-Transfer Learning in Image Bereich (state-of-the-art => ResNet18 pretrained)
+For natural language processing a similar breakthrough compared to the CNN architectures probably happened just recently with new word embedding techniques, such as ELMo and BERT. What true potential these techniques have has yet to be shown. Importantly these word embeddings transfer well for a broad range of tasks [TODO] while reaching state-of-the-art performance. 
 
-Transfer Learning in Text Bereich (state-of-the-art => ELMo)
-
-Herausforderungen von Transfer Learning
-
-\section{Natural Language Processing}
-Definition
-
-Traditionelles NLP (gist: Features extrahieren => SVM trainineren)
-
-Word Embedding (Word2Vec, SpaCy)
-
-Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
-
+% TODO:
+%Herausforderungen von Transfer Learning
 
 \section{AutoML}
 Definition
