@@ -534,12 +534,21 @@ where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occur
 
 The advantage of TFIDF is, that is very easy to understand and does not need any lengthy training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model, which has a fixed vocabulary.
 
-\subsubsection{GloVe}
-TODO
+\subsubsection{GloVe \cite{glovepage}}
+The basis for training GloVe is a word to word matrix which denotes the frequency of words occurring together in the training data. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurring with another word.
 
-\subsubsection{ELMo}
-TODO
+For a more detailed explanation please refer to the introductory paper \cite{glovepage}.
 
+\subsubsection{ELMo \cite{elmo}}
+Previous models have very limited sense of context, especially had each word the same word vector associated regardless of the context. ELMo assigns word embeddings depending on context.
+
+The basis for ELMo is training a language model. A language model enables to predict the next word given a sequence of prior words. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
+
+ELMo models this language model using a 2-layer bidirectional LSTM using residual connections, which allow deep models to train more efficiently. However the words still must be converted into a vector representation. This is achieved by first converting the words into a character embedding and then apply convolutional layer with max-pooling.
+
+The novel idea of ELMo is not how it is trained, but how the trained language model is being used: Getting the final word embedding of a word is done by combining the different hidden states into a unified vector representation.
+
+This is a short summary of a very complex architecture. For more details referring to \cite{elmo} is recommended.
 
 % TODO
 %Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
@@ -559,9 +568,18 @@ For natural language processing a similar breakthrough compared to the CNN archi
 %Herausforderungen von Transfer Learning
 
 \section{AutoML}
-Definition
+AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human.
 
-Wozu?
+A machine learning pipeline consists of many labour intensive tasks, such as:
+
+\begin{itemize}
+\item Data pre-processing
+\item Feature engineering
+\item Feature selection
+\item Hyperparameter selection
+\end{itemize}
+
+AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations and grid/random search is also often not feasible. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
 
 Methoden zu AutoML
 
