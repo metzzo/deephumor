@@ -29,6 +29,21 @@
 
 \newcommand{\cmark}{\ding{51}}%
 
+\newenvironment{dedication}
+  {%\clearpage           % we want a new page          %% I commented this
+   \thispagestyle{empty}% no header and footer
+   \vspace*{\stretch{1}}% some space at the top
+   \itshape             % the text is in italics
+   \raggedleft          % flush to the right margin
+  }
+  {\par % end the paragraph
+   \vspace{\stretch{3}} % space at bottom is three times that at the top
+   \clearpage           % finish off the page
+  }
+
+%\setcounter{tocdepth}{3}
+%\setcounter{secnumdepth}{3}
+
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Robert Fischer} % The author name without titles.
 \newcommand{\thesistitle}{Deep Learning of Humor from Gary Larson's Cartoons} % The title of the thesis. The English version should be used, if it exists.
@@ -133,36 +148,30 @@
 \selectlanguage{english}
 
 % Add a table of contents (toc).
-\tableofcontents % Starred version, i.e., \tableofcontents*, removes the self-entry.
+\tableofcontents* % Starred version, i.e., \tableofcontents*, removes the self-entry.
 
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
-\chapter{Introduction}
-
+\begin{dedication}
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=0.5\textwidth]{graphics/example_cartoon.png}
+  	\includegraphics[width=0.75\textwidth]{graphics/example_cartoon.png}
+	\captionsetup{labelformat=empty}
 	\caption{Cartoon by Gary Larson}
 	\label{fig:fig1}
 \end{figure}
+\end{dedication}
+
+\chapter{Introduction}
 
 The goal of this chapter is to introduce the reader into the topic of deep learning and computational humor. The motivation of this work, what the aims of this work are and as well as what methodology was applied.
 
-\section{Motivation}
-
-Deep learning is part of machine learning, which itself is an approach to artificial intelligence. The idea of deep learning	is to break a complex task into smaller subtasks hierarchically and let the computer learn by experience - without major human intervention. This is commonly done with neural networks which have many layers, which are commonly called deep neural networks \cite{Goodfellow-et-al-2016}.
-
-For example: For a human to write an algorithm that reliably detects whether an image contains a dog or a cat has shown to be impossible for many years. But through convolutional neural networks this is relatively easily achievable, given there is a sufficiently large dataset of images with cats and dogs \cite{dogsvscats}. Convolutional neural networks are deep neural networks which are optimized for images \cite{cnnimg}.
-
-Despite deep learning being a relatively new field of study there have been many advancements using this technique. In the field of self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt} the state-of-the-art has been pushed towards, previously thought, unbelievable limits.
-
-Extending this success story of deep learning into the field of computational humor is the main motivation of this work.
 
 \section{Aim} \label{aim}
-The main goal of this diploma thesis is to research whether computers are capable of understanding human humor by learning Gary Larson's cartoons (see figure \ref{fig:fig1}). This will be done by applying several deep learning techniques.
+The main goal of this diploma thesis was to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks and architectures. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The aim was to find the best neural network architecture for predicting the funniness of a cartoon.
 
-One goal of this work is to create a dataset for computational humor. Gary Larson has created many cartoons each with an image and most with a punchline below. These are annotated with a funniness rating.
+Based on Gary Larson's cartoons a new data set for computational humor was created, which could help further research in this area.
 
 The questions this work tries to answer, are the following:
 
@@ -173,25 +182,22 @@ The questions this work tries to answer, are the following:
 \item Is both visual and text input the best idea for predicting the funniness? Or are they alone better?
 \end{itemize}
 
-On a higher level this thesis tries to open the field of computational humor for deep learning.
+On a higher level this thesis tries to open the field of computational humor for deep learning by applying on a novel dataset.
+
+\section{Motivation}
+
+Based on the recent success of deep learning in several fields, such as self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt}, one could expect similar success in computational humor using Gary Larson's cartoons.
+
+This thesis shows, that humor is still a hard problem and current deep learning architectures are not yet capable of generalizing humor in the chosen context of this thesis.
+
 
 \section{Methodology}
 
-The methodology of approaching humor using deep learning is very important and listed below.
+Firstly a detailed literature research was performed. Goal was to get a grasp of the state-of-the-art of deep learning in the field of computational humor, image classification, natural language processing and humor in general.
 
-\subsection {Literature Research}
+Next was the data acquisition, in which the ground truth was created: A data set of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared in such a way they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
 
-Firstly a detailed literature research was performed. Goal was to get a grasp of the state-of-the-art of deep learning in the field of computational humor, image classification, natural language processing and human humor.
-
-
-\subsection {Dataset Acquisition}
-In this step the ground truth was created: A data set of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared in such a way they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
-
-To make this process easier an annotation tool was created, which made this process more efficient.
-
-\subsection{Development: Design, Implementation and Evaluation}
-
-This step was iteratively done, in order to adapt to problems which occurred during implementation.
+The following steps were done iteratively. This allowed to adapt to the challenges which occur during the course of this research:
 
 \begin{enumerate}
 
@@ -203,15 +209,10 @@ This step was iteratively done, in order to adapt to problems which occurred dur
 
 At first the focus was on visual-only models. Then the focus shifted towards text-only models. Finally there were several approaches on combining both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
 
-The architecture candidates ranged from relatively simple convolutional neural networks to models which contain of many sub-models with an autoencoder. For more information please refer to chapter \ref{design}.
+Finally a detailed evaluation was performed. The most interesting models were picked and analyzed thoroughly. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
 
-During development the trained models were applied on the validation set. The performance of the model were determined by two metrics: Accuracy and mean absolute error. 
-
-\subsection{Final Evaluation}
-
-Finally the most interesting models were picked and a more detailed evaluation was performed. This evaluation was done on completely new data for the model - the test set. This was done to get the true performance of the model and shows whether the model overfits. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
-
-The final conclusion was based on the findings of the final evaluation. Furthermore a  conclusion and possible future work was worked out.
+\section{Overview over thesis}
+TODO
 
 
 \chapter{Background}
@@ -314,6 +315,8 @@ Previous approaches of computational humor mainly focused on written text \cite{
 
 In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined.
 
+\section{Overview}
+TODO
 
 \section{Dataset Acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
