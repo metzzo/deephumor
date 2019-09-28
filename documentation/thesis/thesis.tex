@@ -169,7 +169,7 @@ The goal of this chapter is to introduce the reader into the topic of deep learn
 
 
 \section{Aim} \label{aim}
-The main goal of this diploma thesis was to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks and architectures. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The aim was to find the best neural network architecture for predicting the funniness of a cartoon.
+The main goal of this diploma thesis was to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The aim was to find the best neural network architecture for predicting the funniness of a cartoon.
 
 Based on Gary Larson's cartoons a new data set for computational humor was created, which could help further research in this area.
 
@@ -212,7 +212,17 @@ At first the focus was on visual-only models. Then the focus shifted towards tex
 Finally a detailed evaluation was performed. The most interesting models were picked and analyzed thoroughly. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
 
 \section{Overview over thesis}
-TODO
+This section gives a short overview over the contents of this thesis.
+
+Chapter 2 (Background) contains the background necessary for this thesis. Topics covered are computational humor, machine learning, artificial intelligence, neural networks, natural language processing, automated machine learning and an overview of related work.
+
+Chapter 3 (Design) covers the design process of this thesis. Beginning with the visual component of Gary Larson's cartoons using convolutional neural networks and then continuing with the punchlines using LSTMs and word embeddings. Finally a combination of both the visual and the text domains in a combined architecture.
+
+Chapter 4 (Implementation) focuses on the implementation aspects of the previously described neural network architectures. The reader gets an overview of the technology chosen and how the architectures were implemented.
+
+Chapter 5 (Evaluation) gives the reader an insight into the final results obtained by selected interesting architectures, compared to the baselines. The inner working of the models is also examined, outlining their mistakes using confusion matrices and other techniques.
+
+Chapter 6 (Conclusion) finalizes this thesis with lessons learned during the course of the development of this work. 
 
 
 \chapter{Background}
