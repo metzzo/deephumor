@@ -165,7 +165,7 @@
 
 \chapter{Introduction}
 
-The goal of this chapter is to introduce the reader into the topic of deep learning and computational humor. The motivation of this work, what the aims of this work are and as well as what methodology was applied.
+This chapter introduces the reader into the topics of this thesis: The motivation and aim of this work and as well as the applied methodology.
 
 
 \section{Aim} \label{aim}
@@ -216,7 +216,7 @@ This section gives a short overview over the contents of this thesis.
 
 Chapter 2 (Background) contains the background necessary for this thesis. Topics covered are computational humor, machine learning, artificial intelligence, neural networks, natural language processing, automated machine learning and an overview of related work.
 
-Chapter 3 (Design) covers the design process of this thesis. Beginning with the visual component of Gary Larson's cartoons using convolutional neural networks and then continuing with the punchlines using LSTMs and word embeddings. Finally a combination of both the visual and the text domains in a combined architecture.
+Chapter 3 (Design) covers the design process of this thesis. Beginning with the visual component of Gary Larson's cartoons using convolutional neural networks and then continuing with the punchlines using LSTMs and word embeddings. Finally a combination of both the visual and the text domains in a combined architecture has been designed.
 
 Chapter 4 (Implementation) focuses on the implementation aspects of the previously described neural network architectures. The reader gets an overview of the technology chosen and how the architectures were implemented.
 
@@ -675,7 +675,7 @@ Seiten: 1.5
 \end{itemize}
 
 \subsection{TFIDF}
-Seiten: 0.5
+Seiten: 0.75
 
 \begin{itemize}
 \item Definition von TFIDF. 
@@ -799,7 +799,6 @@ Seiten: 0.5
 \item Exponentieller Suchraum => Wende AI Technik an um Hyperparameter zu tunen
 \item Was kann alles durch AutoML optimiert werden (Hyperparameter, Data processing, etc.)
 \end{itemize}
-Definition
 
 \if false
 
@@ -821,14 +820,17 @@ AutoML tries to automate all or a subset of these tasks. A human can only try se
 \fi
 
 \section{Computational Humor}
-definition of computational humor; language understanding; traditional approaches; WordNet 
-
-Papers: 
-
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822
-
-
-https://www.ijcai.org/Proceedings/03/Papers/009.pdf
+Seiten: 2
+\begin{itemize}
+\item Bedeutung von Humor (laut Oxford Dictionary)
+\item Ursprung von Humor erläutern: Superiority Theory, Incongruity Theory, Humor als Spiel.
+\item Computational Humor => kombiniert AI, Computational Linguistics
+\item Problem von Humor: Subjektiv
+\item Generativer Computational Humor: zB Witze erzeugen
+\item Klassifizierender Computational Humor: zB Witze erkennen
+\item Problem von Computational Humor: Language Understanding.
+\item Ansätze für Computational Humor: Anwenden der Incongruity Theory und was die Probleme waren (https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822)
+\end{itemize}
 
 \if false
 
@@ -852,12 +854,74 @@ Another problem was their heavy reliance on ontologies, such as WordNet and Verb
 
 \fi
 
+% 20 Seiten
+
 \section{Related work}
 
-Den Text aus dem Proposal übernehmen und die einzelnen Paper noch genauer beschreiben:
 
-Previous approaches of computational humor mainly focused on written text \cite{Yang2015HumorRA}\cite{Bamman2015ContextualizedSD}\cite{HumoristBot}. Research of humor using deep learning is still in its infancy. With the advent of deep learning and convolutional neural networks (=CNN) in recent years \cite{Druzhkov2016}, images may now be taken into consideration as well. Similarly deep learning enabled modern language embeddings such as ELMo \cite{elmo} and BERT \cite{bert} to achieve state-of-the-art results on various natural language processing tasks. Given these advances there is a possibility that humor may be more tractable using deep learning compared to other methods.
-\todo{Ihr Text hier.}
+\subsection{Computational Humor using Traditional Methods}
+
+\subsubsection{Humor Recognition and Humor Anchor Extraction}
+Traditioneller Ansatz von Humor erkennung.
+
+\cite{Yang2015HumorRA}
+
+Seiten: 0.5
+
+\subsubsection{Contextualized Sarcasm Detection on Twitter}
+Sarkasmus Erkennung mit Machine Learning Techniken
+
+\cite{Bamman2015ContextualizedSD}
+
+Seiten: 0.5
+
+\subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System}
+
+Traditioneller Ansatz in einem generativem Setting
+
+\cite{HumoristBot}
+
+Seiten: 0.5
+
+\subsection{Computational Humor using Deep Learning}
+
+\subsubsection{Deep Learning of Audio and Language Features for Humor Prediction}
+
+Deep Learning von Humor in Audiovisueller Domäne
+
+Seiten: 1.0
+
+\cite{Bertero2016DeepLO}
+
+\subsubsection{A long short-term memory framework for predicting humor in dialogues}
+
+Deep learning von Humor in Text Domäne
+
+\cite{bertero2016long}
+
+Seiten: 1.0
+
+\subsubsection{Convolutional neural network for humor recognition}
+
+Humor recognition in visueller Domäne
+
+\cite{chen2017convolutional}
+
+Seiten: 0.5
+
+\subsubsection{Humor recognition using deep learning}
+
+Deeo Learning von Humor 
+
+\cite{chen2018humor}
+
+\subsubsection{Overview of HAHA at IberLEF 2019: Humor analysis based on human annotation}
+
+Sehr ähnlicher Ansatz zu dieser DPA: Funniness Score Prediction.
+
+\cite{chiruzzo2019overview}
+
+Seiten: 1.0
 
 
 \chapter{Design} \label{design}
@@ -865,17 +929,25 @@ Previous approaches of computational humor mainly focused on written text \cite{
 In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined.
 
 \section{Overview}
-TODO
 
+Hier wäre eine Übersicht über das Design aus einer Metaebene.
 
-\section{Dataset Acquisition}
+Seiten: 0.25
+
+\section{Dataset}
+
+Erläutern dass am Anfang das Datenset erstellt werden musste.
+
+Seiten: 0.25
+
+\subsection{Dataset Acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
 Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR, but many manual adjustments had to be applied as well. Additionally cartoons with bad quality, as well as duplicates were also removed.
 
 The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
-\section{Dataset Analysis}
+\subsection{Dataset Analysis}
 
 The dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
@@ -990,45 +1062,67 @@ A word count analysis showed that there are significant difference in the freque
 
 \end{figure}
 
-\section{Task modelling}
+\section{Visual domain}
 
-The task at hand (predicting the funniness of a cartoon) can be modelled in two ways: 
+Erläutern wie am Anfang die visuelle Domäne berücksichtigt wurde
+
+Seiten: 0.25
+
+\subsection{Simple CNN}
+
+Seiten: 1
+
 \begin{itemize}
-\item Classification: Each cartoon funniness belongs to a distinct class
-\item Regression: Each cartoon funniness is a sample of a continuous space
+\item Wie wurde die größe des Input Layers definiert: Verschiedene Kombinationen probiert. Skalierung mit Aspektratio der Cartoons. 
+\item Visuelle Illustration des finalen Netzwerks
+\item Einmal als Regressionstask und einmal als Klassifikationstask modelliert => Klassifikation funktionierte besser
+\item Verschiedene Anzahl an Layer und Größe an Layer probiert
 \end{itemize}
 
-The main difference when modelling a task as a regression task versus a classification task is the final output layer and the loss used. When modelling a task as a classification problem the final layer is generally one-hot-encoded. In contrast for a regression problem the final layer is a single value. \\
+\subsection{Transfer Learning CNN}
 
-Another important decision to be made is which loss function to be used. For this problem mainly cross entropy loss for classification and L1 loss for regression has been used \cite{crossentropyloss} \cite{lossfunctions}.
+Seiten: 1
 
-\section{Simple CNN}
+\begin{itemize}
+\item Architektur (ResNet18) verwendet und auf Cartoons angewandt
+\item Welche Parameter wurden transferiert? Einmal wurde kompletter Convolutional Teil transferiert, einmal wurde letzter Block auch trainierbar geschaltet und einmal wurde der fully connected teil ebenfalls übernommen.
+\item Visuelle Illustration des gewählten besten Netzwerks
 
-The initial approach was to use an off-the-shelf Convolutional Neural Network (CNN) design. This neural network architecture has proven to be very effective for various image classification tasks \cite{dogsvscats}.
+\end{itemize}
 
-Wie wurde die größe des Input Layers definiert
-
-Visuelle Illustration des finalen Netzwerks
-
-\section{Transfer Learning CNN}
-
-Welche Architektur wurde verwendet (ResNet18). Wieso? => Weil bereits erfolgreich für andere Tasks und bereits bei PyTorch dabei
-
-Was wurde transferiert? Freezing von Parametern?
-
-Visuelle Illustration des finalen Netzwerks
 
 \subsection{Transfer Learned Object Detection}
 
-Idee (Object Detection Model an stark transformiertem Datenset trainieren und hoffen dass es auf Gary Larson transferierbar ist => Dadurch Featurevektor von Cartoon erhalten)
+Seiten: 1.5
 
-Evtl. Beispiel zeigen wie so ein Featurevektor eines Cartoons aussehen könnte
+\begin{itemize}
+\item Initiale Idee erklären: Cartoons durch Feature Vektor der vorhandenen Objekte erklären
+\item Beispiel eines solchen Featurevektors bringen
+\item Zuerst soll Image Classification der einzelnen Objekte funktionieren
+\item Woher bekommt man ein solches Datenset? Idee: Existierendes Cifar100 (datenset mit 100 bildkategorien) durch image preprocessing (doppelte kantenerkennung) in selbe Bilddomain bringen und dort trainieren
+\item Beim Anwenden des Datensets (1x Kantenerkennung auf Gary Larsons Cartoons) extrem schlechte Performance: Keine Muster erkennbar
+\item Dadurch lassen sich die Cartoons nicht als featurevektor repräsentieren
+\item Ueber 100 Objekte von Gary Larsons Cartoons wurden dafür extra annotiert => Keine Muster erkennbar
+\item Graphische Darstellung wie Objekte in selber Domäne hätten sein können (Hai Bild)
+\end{itemize}
 
-Graphische Darstellung
+\section{Text domain}
 
-Annotieren eines Validationdatensets um performance zu überprüfen
+Erläutern wie danach nur die Text Domain berücksichtigt wurde.
 
-\section{ELMo}
+Seiten: 0.25
+
+\subsection{ELMo}
+
+Seiten: 1.0
+
+\begin{itemize}
+\item Gewählte ELMo Ansätze erklären
+\item Zuerst wurde LSTM/GRU probiert. Problem: Overfitting
+\item Danach wurde simpler Classifier mit Sentence Embedding angewandt (Sentence Embedding ist ein Vektor für den gesamten Satz statt pro Wort)
+\item ELMo vs BERT: Warum wurde ELMo verwendet. Grund: Einfache Verwendung mit gewähltem Framework AllenNLP und performance war vergleichbar bei vielen NLP Tasks
+\item Visuelle Illustration des gewählten Netzwerks
+\end{itemize}
 
 \if false
 The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
@@ -1036,30 +1130,38 @@ The punchline of a cartoon will be converted into text strings. Humans are able 
 To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
 \fi
 
-Zuerst LSTM/GRU und dann sentence embedding probiert.
+\subsection{AutoML}
 
-ELMo vs BERT? Wieso ELMo
+Seiten: 1
 
-Visuelle Illustration des finalen Netzwerks
+\begin{itemize}
+\item AutoML Ansatz erklären
+\item Wieso angewandt? Vielleicht findet Computer Hyperparameter besser
+\item Vielleicht funktioniert zB eine SVM besser für gewählten Task
+\item Wie wurde Feature Vektor erstellt? => TFIDF, GloVe, ELMo, TFIDF + GloVe, TFIDF + ELMo
+\end{itemize}
 
-\section{AutoML}
-Wieso AutoML
+\section{Visual and text domain combined}
 
-Verschiedene Features (TFIDF, Glove, ELMo, TFIDF + Glove, TFIDF + ELMo)
+Erläutern wie danach beide Domänen zusammen berücksichtgt wurden.
 
-\section{Two Stage Model}
+\subsection{Two Stage Model}
 
-1. Stage: 1 vs rest classifier erklären
+Seiten: 2
 
-2. Stage: Finale Regression erklären
+\begin{itemize}
 
-Kombinieren von visual + text erklären
+\item Probleme der vorigen Ansätze erläutern: Fokus wurde zu sehr auf die häufigsten Klassen gelegt. Die seltenen Funniness Klassen wurden nie vorhergesagt
+\item Lösung: Für jede Funniness Stufe ein eigenes model trainieren und ein finales Model nehmen, welches basierend auf den vorigen Stufen die finale Prediction durchführt
+\item 1 vs Rest Classifier erklären
+\item Finale Regression erklären.
+\item Modulares System erlaubte auch einfaches Kombinieren von text und Bild
+\item Oversampling wurde ebenfalls verwendet
+\item Autoencoder wurde auch verwendet (Cartoon Bilder dimension reduzieren)
+\item Visuelle Illustration erklären
+\item Klassengewichtung in 1 vs Rest Classifier
 
-Klassen Imbalance durch 
-
-Autoencoder Ansatz
-
-Visuelle Illustration des finalen Netzwerks
+\end{itemize}
 
 \section{Additional Experiments}
 A list of experiments performed but did not make the cut for a more detailed analysis:
@@ -1080,27 +1182,62 @@ Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. 
 
 \chapter{Implementation}
 
-Wahl der Libraries: PyTorch, pandas, sklearn, Python, etc.
+Erläuterung des Implementierungsvorgangs
 
-Annotierungsapplikation erklären. Hat es sich gelohnt?
+Seiten: 0.25
 
-Architektur (Command Line via parameter steuerbar)
+\section{Technical Foundation}
 
-Wie wurden die neuronalen netzwerke gedebuggt bei Fehlern: Am meisten hilffreich war als ich die bilder durch ziffern ersetzt habe die die das label enthielten.
+Seiten: 2
 
-Welche Probleme sind aufgetreten: Fehlerhafter Split zwischen Training/Test/Validation
+\begin{itemize}
 
-für visuellen teil:
+\item Wahl der Library und Frameworks erläutern: PyTorch, pandas, sklearn, Python, AllenNLP
+\item Entwicklungsumgebung und Reproduzierbarkeit (git, Fixierter Random Seed, deterministischer Modus von PyTorch)
+\item Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen
+\item Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe
 
-Datenmanagement: Klassendiagram und erklärung
+\end{itemize}
 
-Evaluationsystem: Klassendiagramm und erklärung
+\section{Annotation Tool}
 
-Reproduzierbarkeit?
+Seiten: 1
 
-Für textteil: AllenNLP verwendet. Erklärung des Frameworks 
+\begin{itemize}
+\item Wieso wurde eine Annotierungsapplikation implementiert?
+\item Hat es sich gelohnt? Wie lange Zeit wurde durchschnittlich pro Annotierung gebraucht vs. wie lange hätte es mit Excel gedauert? Entwicklungsdauer des Annotierungstool?
+\item Technik vom Annotierungstool (Python, Django)
+\item Bild vom Annotierungstool
+\end{itemize}
 
-Conclusio der Implementierung: Kein Overengineering. Effektives Code wieder verwenden schwer mit Machine Learning
+
+\section{Debugging of models}
+
+Seiten: 1.5
+
+\begin{itemize}
+\item Wie wurde sichergestellt dass Netzwerke funktionierten? 
+\item Einerseits indem die Outputs überprüft wurden (kommt NaN raus oder nur 0?)
+\item Cartoon Bilder und Text wurde durch Bilder ersetzt die die entsprechende Klasse des ursprünglichen Cartoons enthielten => Sofort sehr gute Werte
+\item Problem war auch, dass einmal der Training/Test/Validation Split fehlerhaft war und deswegen anfangs die Werte viel zu gut waren => Sei immer skeptisch deinen Resultaten gegenüber.
+\end{itemize}
+
+
+\section{Detailed Architecture}
+
+Seiten: 2
+
+\begin{itemize}
+
+\item Detailliertes Klassendiagramm für das Datenmanagement und Erklärung
+\item Detailliertes Klassendiagram für das Evaluationssystem und Erklärung
+\item Detailliertes Klassendiagramm für das Experimentsystem und erklärung 
+\item AutoML Architektur erwähnen
+\item AllenNLP Architektur erklären
+\item Conclusio: Overengineering vermeiden, da Code Wiederverwendung sehr schwer ist. Ursprünglich war geplant die Architektur für des Convolutional Teils für den TExt Teil wieder zu verwenden. Letztendlich war es einfacher stattdessen AllenNLP zu verwenden
+
+\end{itemize}
+
 
 \chapter{Evaluation}
 
@@ -1445,7 +1582,9 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 
 
 \section{Discussion}
-TODO
+Seiten: 0.5
+
+Discussion der Ergebnisse der Evaluation.
 
 \chapter {Conclusion}
 
