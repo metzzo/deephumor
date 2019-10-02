@@ -182,13 +182,22 @@ The questions this work tries to answer, are the following:
 \item Is both visual and text input the best idea for predicting the funniness? Or are they alone better?
 \end{itemize}
 
-On a higher level this thesis tries to open the field of computational humor for deep learning by applying on a novel dataset.
+On a higher level this thesis tries to open the field of computational humor for deep learning by applying it on a novel dataset.
 
 \section{Motivation}
 
-Based on the recent success of deep learning in several fields, such as self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt}, one could expect similar success in computational humor using Gary Larson's cartoons.
+Based on the recent success of deep learning, such as self-driving cars \cite{selfdriving}, speech recognition \cite{speech}, machine translation \cite{nmt} and several other fields, one could expect similar success in computational humor using Gary Larson's cartoons. Especially natural language processing and image-related tasks have had significant improvements of the state-of-the-art through deep neural architectures.
 
-This thesis shows, that humor is still a hard problem and current deep learning architectures are not yet capable of generalizing humor in the chosen context of this thesis.
+Initially the idea was, that the trained model might have been able to extract certain patterns of humor. Gary Larson's cartoons can be grouped into several themes. For example stone age, scientist or cats versus dog are common themes he uses. A competent model could distinguish these themes and might find patterns of humor among these. Someone might find stone age themed cartoons funnier than cats versus dogs cartoons. 
+
+Important to note, is that preference is very subjective. The model must be trained by data of the same person, because otherwise the personal preference might be lost. If trained successfully it would open a whole set of new research possibilities: The study of humor of people through the lense of deep neural networks. This is especially interesting, since it has been shown that there are key similarities between how deep neural networks work and how the human brain works. \cite{Cichy2016}
+
+For example if such a model were possible, it could possibly allow a more formal comparison of humor between different authors or different people.
+The same model might be able to be transferred to the work of other authors. Depending on well this transfer works, one could argue whether the humor of these authors are similar or not, given the annotator's humor. Also the trained model themselves could contain interesting features. Possibly a functioning model could develop a cow-detecting neuron, which could reveal insights into human humor.
+
+Another key motivation was in the creation of the underlying data set: This thesis used a novel data set, where each cartoon was paired with a funniness annotation of the same person. This allows to quantitatively evaluate the humor of a single person, as the data set is comparatively large. The scope of the data set is also unique, as there is no other data set with similar cartoons available. In future the same data set could be used for other tasks. A very hard, but very interesting task would be using a generative architecture, such as generative adversarial network (GAN) to generate a funny cartoon image from a punchline. Or vice versa: Generating a funny punchline from a cartoon image. And finally generating completely new funny cartoons with fitting punchlines.\cite{gan2}\cite{gan}
+
+This thesis finally shows, that humor is still a hard problem and current deep learning architectures are not yet capable of generalizing humor in the chosen context of this thesis. Further research is still needed, especially since if successful it would enable many new research possibilities.
 
 
 \section{Methodology}
@@ -210,7 +219,7 @@ The following steps were done iteratively. This allowed to adapt to the challeng
 At first the focus was on visual-only models. Then the focus shifted towards text-only models. Finally there were several approaches on combining both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
 
 Finally a detailed evaluation was performed. The most interesting models were picked and analyzed thoroughly. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
-
+\pagebreak
 \section{Overview over thesis}
 This section gives a short overview over the contents of this thesis.
 
@@ -1583,7 +1592,7 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 
 
 \section{Discussion}
-Seiten: 0.5
+Seiten: 2
 
 Discussion der Ergebnisse der Evaluation.
 
