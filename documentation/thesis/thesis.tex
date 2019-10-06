@@ -168,7 +168,7 @@
 \chapter{Introduction}
 
 \section{Aim} \label{aim}
-This diploma thesis aims to answer whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The goal was to find the best neural network architecture for predicting the funniness of a cartoon.
+This diploma thesis aims to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The goal was to find the best neural network architecture for predicting the funniness of a cartoon.
 
 Furthermore, based on Gary Larson's cartoons a new data set for computational humor was created, which could help further research in this area.
 
@@ -225,7 +225,7 @@ The following steps were performed iteratively. This allowed to adapt to the cha
 At first the focus was on visual-only models. Then the focus shifted towards text-only models. Finally I evaluated several approaches that combine both text- and visual features into a single model. Also the architectures went from simple to more complex per iteration.
 
 Finally a detailed evaluation was performed. The most interesting models were picked and analyzed thoroughly. Goal of this phase was to find answers to the questions listed in section \ref{aim}.
-\pagebreak
+%\pagebreak
 \section{Overview over thesis}
 This section gives a short overview over the contents of this thesis.
 
@@ -245,7 +245,7 @@ Chapter 6 (Conclusion) finalizes this thesis with lessons learned during the cou
 As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis.
 
 \section{Machine Learning and Artificial Intelligence}
-
+\if false
 \subsubsection{What is AI?}
 Seiten: 1
 \begin{itemize}
@@ -297,30 +297,49 @@ Seiten: 0.5 (+0.5 falls auch F1 / MSE)
 
 \end{itemize}
 
+\fi
 
-\if false
+%\subsection{What is Artificial Intelligence?}
+The field of Artificial Intelligence (AI) tries to reproduce (human) intelligence using computers. It is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain narrow subtasks of what is considered to require intelligence. Such a system is also known as weak AI. These tasks usually entail some utility for other application domains and range from image classification, self driving cars to machine translation. For example in the beginning of AI research playing chess was considered to be a very difficult task and was thought to require intelligence. Nowadays chess engines are able to beat every human player every time. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks AI research gets closer to a strong AI. 
 
-The field of AI tries to reproduce (human) intelligence using computers. Since it is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain subtasks of what is considered to require intelligence, also known as weak AI. For example in the beginning of AI research playing chess was considered to be a very difficult task which required intelligence. Now chess engines are able to beat every human player. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks we get closer to strong AI, or even beyond.
+The next big frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure is a problem. For example this work shows that understanding humor is still very challenging.
+
+
 
 %\todo{Venn Diagramm das AI und ML in Relation zueinander setzt}
 
 % https://de.wikipedia.org/wiki/K%C3%BCnstliche_Intelligenz#Starke_und_schwache_KI
 
-Machine Learning (ML) is a field of Artificial Intelligence (AI). Given a set of training samples. In Machine Learning an ML-algorithm finds a model such that the learned model generalizes as good as possible. This model can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters. For example neural networks are parametric. In contrast in a non-parametric model the function itself is constructed by the machine learning algorithm. An example for this type of model would be k-Nearest Neighbor. Since the focus of this work are neural network we will discuss parametric models in detail.
+\subsection{Machine Learning}
 
-More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure such that it can make predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human or a heuristic. In contrast, given the previously defined hyperparameters model parameters can be estimated from the data
+Machine Learning (ML) is a subset of AI. Machine learning tries to build a model which generalizes as well as possible to previously unseen data by learning automatically from a training data set. Learning means extracting patterns from the data set by applying a machine learning algorithm. Models can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters. For example neural networks are parametric, as gradient descent adjusts the weights and biases for each neuron during training, while the general structure of the neural network is not. In contrast, for a non-parametric model the machine learning algorithm learns the function itself. An example for this type of model would be k-Nearest Neighbor.  Since the focus of this work are neural networks we will discuss parametric models in more detail.
 
-% https://www.amazon.com/Applied-Predictive-Modeling-Max-Kuhn/dp/1461468485/ref=as_li_ss_tl?keywords=Applied+Predictive+Modeling&qid=1558557110&s=gateway&sr=8-1&linkCode=sl1&tag=inspiredalgor-20&linkId=a257735169b3234cc2247d40137cf238&language=en_US
-
-The goal of machine learning is basically to approximate a function from data. Depending on what data is available different strategies need to be used. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can usually be relatively easily solved using an optimization algorithm (for example: gradient descent). More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$.
-
-The task is called differently, depending on the possible values of $\boldsymbol{t}$. If $\boldsymbol{t}$ can take continuous values it is called a regression task. The algorithm which is used to train the model is called a regressor. If $\boldsymbol{t}$ is categorical and can only take finite values, then it is called a classification task. The algorithm which is used to train is called a classifier. An example for a regression task is stockmarket prediction, and an example for a classification task is spam detection. Important to note is, that often regression task can be modelled as classification task and vice versa. Instead of predicting the stock market directly, one can instead predict classes of <50, 51-100, 101-200, 200< and use the average value of each bucket as the predicted stockmarket. The right approach is highly task dependent.
-
-If labels are not available then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If only some labels are available semi-supervised learning may be the right mode.
+More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{y}$ is a function, $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure. This model should make good predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human arbitrarily or a heuristic. A parameter conversely, can be estimated from the data, given the previously set hyperparameters.
 
 The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue channel values of each pixel as a feature. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
 
-Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all, getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. The following method could be employed to detect overfitting:
+% https://www.amazon.com/Applied-Predictive-Modeling-Max-Kuhn/dp/1461468485/ref=as_li_ss_tl?keywords=Applied+Predictive+Modeling&qid=1558557110&s=gateway&sr=8-1&linkCode=sl1&tag=inspiredalgor-20&linkId=a257735169b3234cc2247d40137cf238&language=en_US
+
+Machine learning tries to approximate a function from the selected data set. Depending on the available information, different strategies must be applied. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If there is a mixture between labelled and unlabelled data, machine learning practitioners prefer usually semi-supervised machine learning.
+
+Additionally there is a distinction between classification and regression tasks. If $\boldsymbol{t}$ is a continuous variable machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take fine values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an E-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task and vice versa. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to \ref{table:conversionregressclass} for an example. The right approach is highly task dependent.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l||l|l|l|l|}
+\hline
+Regression Value & $<50$ & $51 - 100$ & $101 - 200$ & $200<$ \\
+\hline
+Classification Class & CLASS 50      & CLASS 75 & CLASS 150 & CLASS 250 \\
+\hline
+\end{tabular}
+\caption{Example for the conversion between regression and classification tasks }
+\label{table:conversionregressclass}
+\end{table}
+
+\if false
+
+Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all, getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. The following method could be applied to detect overfitting:
 
 \begin{enumerate}
 \item Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set. The split ratio depends on the specific task.
