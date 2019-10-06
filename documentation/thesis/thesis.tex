@@ -153,6 +153,7 @@
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
+\clearpage\thispagestyle{empty}\addtocounter{page}{-1}
 \begin{dedication}
 \begin{figure}[ht]
 	\centering
@@ -162,11 +163,9 @@
 	\label{fig:fig1}
 \end{figure}
 \end{dedication}
+\clearpage
 
 \chapter{Introduction}
-
-This chapter introduces the reader into the topics of this thesis: The motivation and aim of this work and as well as the applied methodology.
-
 
 \section{Aim} \label{aim}
 The main goal of this diploma thesis was to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The aim was to find the best neural network architecture for predicting the funniness of a cartoon.
