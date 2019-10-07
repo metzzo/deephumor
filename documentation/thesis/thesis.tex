@@ -353,7 +353,7 @@ Train the model on the train split.
 
 Check performance of the trained model on the validation set.
 
-Manually adjust hyper parameters such that the model generalizes better for the validation set
+Manually adjust hyper parameters such that the model generalizes better
 }
 
 Check final performance on the test set of the best trained model
@@ -378,23 +378,42 @@ The default split ratio for the training/validation and test set is:
 \item 20\%: Test Set
 \end{enumerate}
 
-If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping.
+If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
 
 \todo{Schematische Darstellung von holdout Methode}
 
-Another method is called Cross-validation: Here the data is randomly split into $n$ partitions. Then the $n$ models are trained for each partition, where the partition is the test set and the remaining data is used for training. If the model performs well on each partition, then it is considered that the model generalizes well.
+Another method is called Cross-validation: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method. As many models are trained (depending on $n$) it can be computationally very expensive.
 
-\begin{enumerate}
-\item Take the data set $\boldsymbol{X}$ and split into n partitions
-\item For each partition $\boldsymbol{P}$:
-\item |\quad Train the model on $\boldsymbol{X} \setminus \boldsymbol{P}$
-\item |\quad Calculate performance on $\boldsymbol{P}$
-\item Final performance evaluation. Commonly used is the average performance with variance.
-\end{enumerate}
+
+\begin{algorithm}
+\caption{Cross-validation method}\label{holdoutalgo}
+Take the data set $\boldsymbol{X}$ and split randomly into two distinct sub sets: Training ($\boldsymbol{TRAIN}$) and test set ($\boldsymbol{TEST}$).
+
+\While {$\neg$some halting criterion} {
+Take the train set $\boldsymbol{TRAIN}$ and split into $n$ partitions
+
+\ForEach{partition $\boldsymbol{P}$}{
+Train the model on $\boldsymbol{TRAIN} \setminus \boldsymbol{P}$
+
+Calculate performance on $\boldsymbol{P}$
+}
+
+Calculate average performance
+
+Manually adjust hyper parameters such that the model generalizes better.
+}
+
+Check final performance on the test set $\boldsymbol{TEST}$ of the best trained model
+
+\end{algorithm}
 
 \todo{Schematische Darstellung von Cross validation}
 
-Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing the performance measure is highly task dependent. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited.
+Depending on the machine learning practitioner and task at hand, the test set is omitted during for final performance. Instead the average performance returned by cross validation is used.
+
+\subsection{Evaluation of Machine Learning models}
+TODO
+Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing a proper performance measure is highly task dependent. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited.
 
 \newtheorem{mae}[DefCounter]{Definition}
 
