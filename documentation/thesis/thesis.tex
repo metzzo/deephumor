@@ -26,6 +26,7 @@
 \usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
 \usepackage{amssymb}% http://ctan.org/pkg/amssymb
 \usepackage{pifont}% http://ctan.org/pkg/pifont
+\usepackage[noend]{algpseudocode}
 
 \newcommand{\cmark}{\ding{51}}%
 
@@ -337,22 +338,47 @@ Classification Class & CLASS 50      & CLASS 75 & CLASS 150 & CLASS 250 \\
 \label{table:conversionregressclass}
 \end{table}
 
-\if false
+\subsection{Training of Machine Learning models}
 
-Important for the model $\boldsymbol{y}$ is how well it generalizes for new data. After all, getting a $\boldsymbol{y}$ which predicts the data $\boldsymbol{X}$ perfectly is trivial. If all the model does is memorizing the target labels $\boldsymbol{t}$, then the model is always right. This is called overfitting. The following method could be applied to detect overfitting:
+The most important property of a model $\boldsymbol{y}$ is the generalization power for new unseen data. Training a model $\boldsymbol{y}$ which predicts the training data $\boldsymbol{X}$ perfectly is trivial: The machine learning algorithm could always build a lookup table which memorizes a mapping from the training samples to the target labels $\boldsymbol{t}$. If this happens, it is called overfitting.
 
+The holdout method facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data. There is always some bias towards the original data set. The better the data set characterizes the underlying problem, the better the approximation. For example, if one trains a vehicle detection model, but the data set does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance possibly indicating otherwise.
+
+\begin{algorithm}
+\caption{Holdout method}\label{holdoutalgo}
+Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set.
+
+\While {$\neg$some halting criterion} {
+Train the model on the train split.
+
+Check performance of the trained model on the validation set.
+
+Manually adjust hyper parameters such that the model generalizes better for the validation set
+}
+
+Check final performance on the test set of the best trained model
+
+\end{algorithm}
+
+Note the validation/test split is only needed if there are hyperparameters which are being tweaked iteratively.
+Due to the lack of standardization, sometimes the validation set is actually called the test set and the test set is actually the validation set.
+
+Commonly used halting criterions include:
+\begin{itemize}
+\item maximum number of iterations
+\item plateauing performance: No improvement after a previously defined number of iterations
+\item Maximum performance: The model reaches a certain performance threshold
+\item Combination of multiple halting criterions
+\end{itemize}
+
+The default split ratio for the training/validation and test set is:
 \begin{enumerate}
-\item Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set. The split ratio depends on the specific task.
-\item Train the model on the train split.
-\item Check performance of the trained model on the validation split.
-\item Adjust hyper parameters such that the model generalizes better for the validation set
-\item Repeat step 2, 3 and 4 until some halting criterion (for example, if the performance does not improve anymore).
-\item Check final performance on the test set of the best trained model
+\item 60\%: Training Set
+\item 20\%: Validation Set
+\item 20\%: Test Set
 \end{enumerate}
-Note the validation/test split is only needed if there are hyperparameters which are being tweaked multiple times.
-Due to the lack of standardization, sometimes the validation set is actually the test set and the test set is actually the validation set.
-If this process is not adhered to it is called data leakage and it is especially dangerous if some data from the test set leaks into the training or validation set. 
-This method is called the Holdout method. 
+
+If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping.
 
 \todo{Schematische Darstellung von holdout Methode}
 
@@ -384,6 +410,8 @@ $Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True
 MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
 
 Accuracy has been chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
+
+\if false
 
 
 
