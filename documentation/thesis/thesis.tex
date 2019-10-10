@@ -323,7 +323,7 @@ The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column
 
 Machine learning tries to approximate a function from the selected data set. Depending on the available information, different strategies must be applied. Typically the most convenient and preferred mode is supervised machine learning. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied. For example clustering methods allow unsupervised ML. If there is a mixture between labelled and unlabelled data, machine learning practitioners prefer usually semi-supervised machine learning.
 
-Additionally there is a distinction between classification and regression tasks. If $\boldsymbol{t}$ is a continuous variable machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take fine values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an E-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task and vice versa. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to \ref{table:conversionregressclass} for an example. The right approach is highly task dependent.
+Additionally there is a distinction between classification and regression tasks. If $\boldsymbol{t}$ is a continuous variable machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take fine values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an E-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task and vice versa. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent.
 
 \begin{table}[]
 \centering
@@ -412,23 +412,56 @@ Check final performance on the test set $\boldsymbol{TEST}$ of the best trained 
 Depending on the machine learning practitioner and task at hand, the test set is omitted during for final performance. Instead the average performance returned by cross validation is used.
 
 \subsection{Evaluation of Machine Learning models}
-TODO
-Measuring the performance of a model $\boldsymbol{y}$ is an important task. Choosing a proper performance measure is highly task dependent. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited.
 
-\newtheorem{mae}[DefCounter]{Definition}
+Measuring the performance of a model $\boldsymbol{y}$ is an important aspect of proper machine learning. Choosing the performance measure is highly task dependent. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited. Other metrics considered were F1 and mean squared error (MSE).
 
-\begin{mae}
-$MAE = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid$
-\end{mae}
-
-\newtheorem{accuracy}[DefCounter]{Definition}
-\begin{accuracy}
-$Accuracy = \frac{|True Positives| + |True Negatives|} {|True Positives| + |True Negatives| + |False Positives| + |False Negatives|}$
-\end{accuracy}
+\subsubsection{Mean absolute error and mean squared error}
+\begin{equation}
+\text{MAE} = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\mid \hat{X}_i - X_i \mid
+\end{equation}
+\begin{equation}
+\text{MSE} = \frac{1}{n}\textstyle \sum_{i=1}^n \displaystyle\left( \hat{X}_i - X_i \right)^2
+\end{equation}
+\begin{align*}
+\text{where}~\hat{X}&~\text{is the predicted sample} \\
+X&~\text{is the ground truth}
+\end{align*}
 
 MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
 
-Accuracy has been chosen because it is very easy to understand and is commonly used for classification tasks. The higher the accuracy the better.
+MSE works similarly to MAE, but errors are penalized more. The calculations for the above examples are $\left( 5 - 6 \right)^2 = 1$ and $\left( 2 - 6 \right)^2 = 16$, which is a significant difference. For a very noisy dataset where predictions MAE is usually better suited then MSE.
+
+\subsubsection{Accuracy and F1}
+
+\begin{equation}
+\text{Accuracy}=\frac{|\text{True Positives}| + |\text{True Negatives}|} {|\text{True Positives}| + |\text{True Negatives}| + |\text{False Positives}| + |\text{False Negatives}|}\\
+\end{equation}
+\begin{align*}
+\text{where}~|\text{True Positives}|&~\text{is the number of correctly classified samples of the positive class} \\
+|\text{True Negatives}|&~\text{is the number of correctly classified samples of the negative class} \\
+|\text{False Negatives}|&~\text{is the number of incorrectly classified samples of the negative class} \\
+|\text{False Positives}|&~\text{is the number of incorrectly classified samples of the positive class} \\
+\end{align*}
+
+Accuracy is easy to understand and is commonly used for classification tasks. The higher the accuracy the better. But the accuracy metric might hide important weaknesses of a model.
+
+Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
+
+F1 scores handles such cases better, by emphasizing false negatives and false positives more. It is the harmonic mean of the precision and recall score:
+
+\begin{equation}
+\text{Precision}=\frac{|\text{True Positives}|} {|\text{True Positives}| + |\text{False Positives}|}\\
+\end{equation}
+\begin{equation}
+\text{Recall}=\frac{|\text{True Positives}|} {|\text{True Positives}| + |\text{False Negatives}|}\\
+\end{equation}
+\begin{equation}
+\text{F1} = 2 * \frac{\text{Precision} * \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation}
+
+For multi class classification (more than two possible classes) a confusion matrix helps to visualize the predictions of a model. The rows of a confusion matrix are usually predicted classes and the columns the ground truth. A perfect model would show 100\% along the diagonal of the matrix, as there would be no wrong classifications.
+
+A confusion matrix usually reveals common mistakes of a model. For example if a model never predicts a class, it can be easily detected using this visualization. For an example of a confusion matrix please refer to figure \ref{fig:confusionmatrixtransferlearningtest}.
 
 \if false
 
@@ -441,7 +474,37 @@ Accuracy has been chosen because it is very easy to understand and is commonly u
 
 \section{Neural Networks}
 
-\subsection{History of neural networks}
+Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable. For example a simple XOR (\ref{XOR}) can not be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function. AN MLP consists of multiple perceptrons grouped in layers and each layer is connected with the previous layer.
+
+\begin{table}[]
+\begin{tabular}{|l|l|l|}
+\hline
+XOR & 0 & 1 \\ \hline
+0   & 0 & 1 \\ \hline
+1   & 1 & 0 \\ \hline
+\end{tabular}
+\label{xor}
+\caption{XOR function}
+\centering
+\end{table}
+
+Historically Perceptrons are the basis for feed forward neural networks. They can be considered as multiple layers of perceptrons connected (=Multi layer perceptron). The main difference between perceptrons is that neural networks are composed of only differentiable functions, which allows for a more efficient training process.
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/simple_neural_network.png}
+	\caption{Fully Connected Feed Forward Neural Network}
+	\label{fig:feedforward}
+\end{figure}
+
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
+
+A neural network generally consists of multiple neurons, layers and connections. The general inspiration for them is the human brain which also consists of similar building blocks.
+
+In the human brain neurons receive their signals through dendrites (connections in neural networks) and are then sent through the axon to other neurons. The signal strength is adjusted (activation function) such that other neurons in the brain are more stimulated. Note that key parts of the human brain are not simulated in a neural network, such as the creation and destruction of neurons and their connections. In neural networks generally the neurons are set beforehand by the machine learning practitioner. During training the weights and biases are adjusted using gradient descent, for more information refer to section \ref{nntrain}. Nevertheless neural networks (especially convolutional neural networks \cite{cnnimg}) produce similar structures also observed in the human brain.
+
+
+\if false
 Seiten: 1.5
 
 \begin{itemize}
@@ -454,104 +517,9 @@ Seiten: 1.5
 
 \end{itemize}
 
+\fi
+
 \subsection{Basics of neural networks}
-Seiten: 1.5
-\begin{itemize}
-\item Neuronale Netzwerke formal definieren: Konkatination von differenzierbaren funktionen
-\item Activationfunction angeben und kurz den Verwendungszweck erwähnen: tanh, sigmoid, Softmax, ReLU, Logistic Sigmoid
-\item Mathematische Definition eines Layers
-\item Kombinieren mehrere Layers mathematisch
-\item Simplifizierung, indem Bias als konstanten Input mit 1 "versteckt" wird
-
-\end{itemize}
-
-\subsection{Training of neural networks}
-Seiten: 1.5
-\begin{itemize}
-\item Loss erklären (Für Training benötigt)
-\item Für Klassifizierung: Cross Entropy Loss
-\item Für Regression: L1 Loss
-\item Gradient Descent erklären
-\item Simpler Pseudocode für Gradient Descent
-\item Halting Kriterium
-\item Illustration von Gradient Descent
-
-\end{itemize}
-
-\subsection{Applying neural networks}
-Seiten: 1
-\begin{itemize}
-
-\item Momentum in Gradient Descent erklären
-\item Minibatching erklären: Wieso? Effizienter Trainieren, weniger lokale extrema, schwierig richtigen wert für hyperparameter zu finden
-\item Backpropagation erwähnen, aber nicht zur sehr ins Detail
-\item Overfitting bekämpfen: Dropout, Regularisierung, Data Augmentation, Early Stopping
-\item Wie Hyperparameter tunen? Faustregeln, Erfahrung, Trial'n Error
-\item Architektur wichtig: Tiefe neuronale netzwerke sind im Allgemeinen besser als weite
-
-\end{itemize}
-
-\subsection{Deep Learning}
-Seiten: 1
-\begin{itemize}
-\item Was ist ein DNN? Unterschied zu MLPs.
-\item Geschichte von Deep Learning. Wieso nicht schon früher? (GPUs und große Datenmengen!)
-\item Wieso ist Backpropagation wichtig für DNNs? => Da mit forward propagation zu rechenaufwändig ist.
-\end{itemize}
-
-
-\subsection{Convolutional Neural Networks}
-Seiten: 1
-\begin{itemize}
-
-\item Erklärung was ein CNN ist
-\item Illustration eines CNNs
-\item Erklärung was eine Convolution ist
-\item Illustration einer COnvolution
-\item Erklärung was Max Pooling ist
-\item Illustration von Max Pooling
-\item Fully Connected Layers am Ende
-
-\end{itemize}
-
-\subsection{Recurrent Neural Networks}
-Seiten: 1
-\begin{itemize}
-
-\item RNNs erklären (NNs mit Loops)
-\item Illustration eines RNNs
-\item Problem mit RNNs: Vanishing Gradient erläutern
-\item LSTMs und GRUs referenzieren
-\item Illustration einer LSTM Zelle
-
-\end{itemize}
-
-
-\subsection{Autoencoder}
-Seiten: 0.5
-\begin{itemize}
-\item Zweck von Autoencoder erläutern (Dimensionality Reduction, ähnlich wie PCA)
-\item Illustration eines Convolutional Autoencoder
-\item Encoder/Decoder erklären.
-\end{itemize}
-
-
-\if false
-
-Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary means, that In its base form it can distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is not able to learn many classes of problems. For example a simple XOR can not be learned by a basic perceptron. This motivated the use of multi layer perceptrons, since they are in theory able to approximate any function.
-
-Historically Perceptrons are the basis for feed forward neural networks. They can be considered as multiple layers of perceptrons connected (=Multi layer perceptron). The main difference between perceptrons is that neural networks are composed of only differentiable functions, which allows for a more efficient training process.
-
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=1\textwidth]{graphics/simple_neural_network.png}
-	\caption{Fully Connected Feed Forward Neural Network}
-	\label{fig:feedforward}
-\end{figure}
-
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. 
-
-A neural network generally consists of multiple neurons, layers and connections. The general inspiration for them is the human brain which also consists of similar building blocks. \\
 
 From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
 \begin{equation}
@@ -564,11 +532,11 @@ z_j = h(a_j)
 \end{equation}
 Depending on the problem different activation functions are applied. Common functions are
 \begin{itemize}
-\item Tanh function:
+\item Tanh function: Commonly used activation function before ReLU showed mainly empirically to work better
 \begin{equation}
 h(x) = tanh(x)
 \end{equation}
-\item Sigmoid Function:
+\item Sigmoid Function: "Squashes" the input value between 0 and 1
 \begin{equation}
 h(x) = \dfrac {1} {1 + e^{-x}}
 \end{equation}
@@ -607,6 +575,92 @@ y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\l
 \end{equation}
 
 Evaluating \ref{forwardcalculation} is called forward propagation.
+
+\if false
+Seiten: 1.5
+\begin{itemize}
+\item Neuronale Netzwerke formal definieren: Konkatination von differenzierbaren funktionen
+\item Activationfunction angeben und kurz den Verwendungszweck erwähnen: tanh, sigmoid, Softmax, ReLU, Logistic Sigmoid
+\item Mathematische Definition eines Layers
+\item Kombinieren mehrere Layers mathematisch
+\item Simplifizierung, indem Bias als konstanten Input mit 1 "versteckt" wird
+
+\end{itemize}
+
+\fi
+
+\subsection{Training of neural networks} \label{nntrain}
+Seiten: 1.5
+\begin{itemize}
+\item Loss erklären (Für Training benötigt)
+\item Für Klassifizierung: Cross Entropy Loss
+\item Für Regression: L1 Loss
+\item Gradient Descent erklären
+\item Simpler Pseudocode für Gradient Descent
+\item Halting Kriterium
+\item Illustration von Gradient Descent
+
+\end{itemize}
+
+\subsection{Applying neural networks}
+Seiten: 1
+\begin{itemize}
+
+\item Momentum in Gradient Descent erklären
+\item Minibatching erklären: Wieso? Effizienter Trainieren, weniger lokale extrema, schwierig richtigen wert für hyperparameter zu finden
+\item Backpropagation erwähnen, aber nicht zur sehr ins Detail
+\item Overfitting bekämpfen: Dropout, Regularisierung, Data Augmentation, Early Stopping
+\item Wie Hyperparameter tunen? Faustregeln, Erfahrung, Trial'n Error
+\item Architektur wichtig: Tiefe neuronale netzwerke sind im Allgemeinen besser als weite
+
+\end{itemize}
+
+\subsection{Deep Learning} \label{dlbackground}
+Seiten: 1
+\begin{itemize}
+\item Was ist ein DNN? Unterschied zu MLPs.
+\item Geschichte von Deep Learning. Wieso nicht schon früher? (GPUs und große Datenmengen!)
+\item Wieso ist Backpropagation wichtig für DNNs? => Da mit forward propagation zu rechenaufwändig ist.
+\end{itemize}
+
+
+\subsection{Convolutional Neural Networks}
+Seiten: 1
+\begin{itemize}
+
+\item Erklärung was ein CNN ist
+\item Illustration eines CNNs
+\item Erklärung was eine Convolution ist
+\item Illustration einer COnvolution
+\item Erklärung was Max Pooling ist
+\item Illustration von Max Pooling
+\item Fully Connected Layers am Ende
+
+\end{itemize}
+
+\subsection{Recurrent Neural Networks} \label{lstmbackground}
+Seiten: 1
+\begin{itemize}
+
+\item RNNs erklären (NNs mit Loops)
+\item Illustration eines RNNs
+\item Problem mit RNNs: Vanishing Gradient erläutern
+\item LSTMs und GRUs referenzieren
+\item Illustration einer LSTM Zelle
+
+\end{itemize}
+
+
+\subsection{Autoencoder}
+Seiten: 0.5
+\begin{itemize}
+\item Zweck von Autoencoder erläutern (Dimensionality Reduction, ähnlich wie PCA)
+\item Illustration eines Convolutional Autoencoder
+\item Encoder/Decoder erklären.
+\end{itemize}
+
+
+\if false
 
 For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
 
