@@ -30,6 +30,8 @@
 
 \newcommand{\cmark}{\ding{51}}%
 
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 \newenvironment{dedication}
   {%\clearpage           % we want a new page          %% I commented this
    \thispagestyle{empty}% no header and footer
@@ -590,6 +592,54 @@ Seiten: 1.5
 \fi
 
 \subsection{Training of neural networks} \label{nntrain}
+
+For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
+
+The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks.
+
+\begin{equation}
+L(\boldsymbol{w}) = -\sum_{n=1}^N \left( t_n\,\text{ln}\, y_n + (1 - t_n)\,\text{ln}(1 - y_n)\right) \text{ where } 
+y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
+\end{equation}
+
+Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes:
+
+\begin{equation}
+L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
+\end{equation}
+
+For regression tasks the L1 loss can be used:
+
+\begin{equation}
+L(\boldsymbol{w}) = \dfrac{1}{N} \sum_{n=1}^N |x_n - y_n| \text{ where } 
+y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
+\end{equation}
+
+The goal of training neural network is to minimize the loss of the model:
+
+\begin{equation}
+\text{arg min}\quad L(\boldsymbol{w})
+\end{equation}
+
+Training takes advantage of the fact that it is a function composition of differentiable functions. This allows the use of a technique called gradient descent. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function. A halting criterion could be number of iterations, diminishing or no improvements over time or reaching some predefined threshold.
+
+A pseudo code for gradient descent:
+
+\begin{algorithm}
+\caption{Gradient descent pseudo code}\label{gradientedescentalgo}
+\While {$\neg$some halting criterion} {
+Compute gradient: $\boldsymbol{w}' = \bigtriangledown	L(\boldsymbol{w})$
+
+Update weights: $\boldsymbol{w} := \boldsymbol{w} - \alpha \boldsymbol{w}'$
+}
+
+\end{algorithm}
+
+$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to apply learning rate decay during training. This means that the learning rate is gradually reduced during the learning.
+
+\todo{Illustration von Gradient Descent}
+
+\if false
 Seiten: 1.5
 \begin{itemize}
 \item Loss erklären (Für Training benötigt)
@@ -601,8 +651,43 @@ Seiten: 1.5
 \item Illustration von Gradient Descent
 
 \end{itemize}
+\fi
 
 \subsection{Applying neural networks}
+
+The naive implementation of gradient descent has problems, which can be mitigated by different measures:
+
+Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets shallower. This makes the gradient descent algorithm to be less prone for local minima and usually makes it converging faster to the desired optimum.
+
+Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem.
+
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. \cite{Goodfellow-et-al-2016}
+
+In general, overfitting is a problem of neural networks (and other machine learning algorithms). The main four approaches to counteract overfitting are: Regularization, Data augmentation, early stopping and Dropout layers. 
+
+The idea of data augmentation is to synthetically increase the size of the dataset by applying transformations on the original data. All transformations must not alter the original label of the sample. For examples, image data usually allows many different kind of filters and transformations to be applied. Common operations are random crop, random rotation and add synthetic noise. This technique makes in general the trained model to generalize better. A model which is trained on a cats versus dogs image dataset with a rotation transformation applied might distinguish rotated cats and dogs better, compared to a model trained on a dataset without augmentation. On the other hand the transformations could be unnecessarily force a model to generalize: Applying a grayscale filter on the cats versus dogs dataset might make the performance even worse of the trained model.
+
+Regularization tries to avoid overfitting by penalizing	high weights of neurons. This avoid certain inputs from dominating outputs and nudges the network to make use of all inputs. This can easily be achieved by adapting the loss function slightly:
+
+\begin{equation}
+L_{reg}(\boldsymbol{w}) = \dfrac{\delta}{2}\norm{\boldsymbol{w}}^2 + L(\boldsymbol{w})
+\end{equation}
+
+where $\delta$ is called weight decay and usually $0.000001 \leq \delta \leq 0.0001$.
+
+Another simple technique is early stopping. The idea is simple: Remember the best performing model $y_{val}$ on the validation set, instead of the final model $y$ after gradient descent terminated. After training has finished return $y_{val}$ instead of $y$.
+
+A dropout layers can be used as well. The idea is similar to regularization: The network should not overly rely on certain inputs. A dropout layer turns off neurons with a certain probability. This forces the network to generalize better. Usually in CNNs dropout layers are placed at the end of the network before the last fully connected layer.
+
+Note that these techniques are not exclusive and are usually applied in combination. Usually the machine learning practitioner starts with less regularization, but if the validation set shows that the model overfits, the regularization is increased incrementally.
+
+\todo{Schematische Darstellungg von Dropout}
+
+Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error. Automated machine learning is also a very promising research field, more information is available at section \ref{transferlearning}.
+
+The architecture of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
+
+\if false
 Seiten: 1
 \begin{itemize}
 
@@ -614,6 +699,7 @@ Seiten: 1
 \item Architektur wichtig: Tiefe neuronale netzwerke sind im Allgemeinen besser als weite
 
 \end{itemize}
+\fi
 
 \subsection{Deep Learning} \label{dlbackground}
 Seiten: 1
@@ -662,80 +748,6 @@ Seiten: 0.5
 
 \if false
 
-For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
-
-The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks.
-
-\begin{equation}
-L(\boldsymbol{w}) = -\sum_{n=1}^N \left( t_n\,\text{ln}\, y_n + (1 - t_n)\,\text{ln}(1 - y_n)\right) \text{ where } 
-y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
-\end{equation}
-
-Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes:
-
-\begin{equation}
-L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
-\end{equation}
-
-For regression tasks the L1 loss can be used:
-
-\begin{equation}
-L(\boldsymbol{w}) = \dfrac{1}{N} \sum_{n=1}^N |x_n - y_n| \text{ where } 
-y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
-\end{equation}
-
-The goal of training neural network is to minimize the loss of the model:
-
-\begin{equation}
-\text{arg min}\quad L(\boldsymbol{w})
-\end{equation}
-
-Training takes advantage of the fact that it is a function composition of differentiable functions. This allows the use of a technique called gradient descent. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function. A halting criterion could be number of iterations, diminishing or no improvements over time or reaching some predefined threshold.
-
-A pseudo code for gradient descent:
-
-\begin{enumerate}
-\item Compute gradient: $\boldsymbol{w}' = \bigtriangledown	L(\boldsymbol{w})$
-\item Update weights: $\boldsymbol{w} := \boldsymbol{w} - \alpha \boldsymbol{w}'$
-\item Repeat steps 1 and 2 until halting criterion is met
-
-\end{enumerate}
-
-$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to make the learning rate decay during training.
-
-
-\subsubsection{Applying neural networks}
-The naive implementation of gradient descent has problems, which can be mitigated by different measures:
-
-Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets more shallow. This makes the gradient descent algorithm to be less prone for local minima and usually makes it converging faster to the desired optimum.
-
-Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem.
-
-Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. [TODO]
-
-One problem of every machine learning algorithm, and especially for neural networks is the problem of overfitting. There are different measures available to counteract overfitting.
-
-The main three approaches we will discuss here are: Regularization, Data augmentation, early stopping and Dropout layers. 
-
-The idea of data augmentation is to synthetically increase the size of the dataset by applying several transformations on the original data. All transformations must not alter the original label of the sample. For examples, image data usually allows many different kind of filters and transformations to be applied. Common operations are random crop, random rotation and add synthetic noise.
-
-Regularization tries to avoid overfitting by penalizing	high weights of neurons. This avoid certain inputs from dominating outputs and nudges the network to make use of all inputs. This can easily be achieved by adapting the loss function slightly:
-
-\begin{equation}
-L_{reg}(\boldsymbol{w}) = \dfrac{\delta}{2}\norm{\boldsymbol{w}}^2 + L(\boldsymbol{w})
-\end{equation}
-
-where $\delta$ is called weight decay and usually $0.000001 \leq \delta \leq 0.0001$.
-
-Another simple technique is early stopping. The idea is simple: Remember the best performing model $y_{val}$ on the validation set, instead of the final model $y$ after gradient descent terminated. After training has finished return $y_{val}$ instead of $y$.
-
-Finally a dropout layers can be used. The idea is similar to regularization: The network should not overly rely on certain inputs. A dropout layer turns off neurons with a certain probability. This forces the network to generalize better. Usually in CNNs dropout layers are placed at the end of the network before the last fully connected layer.
-
-\todo{Schematische Darstellungg von Dropout}
-
-Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error.
-
-The design of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
 
 \subsubsection{Deep Learning}
 
@@ -900,7 +912,7 @@ This is a short summary of a very complex architecture. For more details referri
 
 \fi
 
-\section{Transfer Learning}
+\section{Transfer Learning} \label{transferlearning}
 Seiten: 1
 \begin{itemize}
 \item Problem von klassischem Deep Learning (Große Datenmengen) erläutern
