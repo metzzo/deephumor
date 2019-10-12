@@ -702,15 +702,50 @@ Seiten: 1
 \fi
 
 \subsection{Deep Learning} \label{dlbackground}
+
+A neural network with multiple layers, where each layer applies increasingly higher level feature extraction is a deep neural network. The research field is called deep learning.
+
+An advantage of deep neural networks is that they scale very well with the size of the dataset and with the amount of computation power available. As the computational resources increase and the size of the datasets as well, the performance of models deep learning may enable also increases. Very big datasets enable very sophisticated and powerful models.
+
+The technique of using multiple layers in neural networks has been around for many years. Relatively recently (~2012), the field of deep learning has gained a lot of attention, since the introduction of AlexNet as this was one of the first practical deep neural network outperforming traditional methods. As the basic techniques of deep learning has been around for many years, the exorbitant computational requirements were still unsolved. Deep learning on a conventional processor is infeasible for large models. Emerging general purpose programming of graphics cards solved this problem: The training of deep neural networks can be very effectively parallelized and graphics cards excel at such tasks compared to CPUs. 
+
+Training neural networks requires to compute the gradient of a large function. The gradient can be efficiently calculated using backpropagation. Backpropagation uses the chain rule to reuse interim results, akin to dynamic programming. The following works contains a more detailed explanation of backpropagation \cite{Goodfellow-et-al-2016}.
+
+Despite the backpropagation and large datasets, controlling the number of weights and biases is still an important factor of successful deep learning models. To reduce the number of parameters a machine learning practitioner must find clever architectures. There are many types of layers, which essentially all serve to reduce the number of layers. Convolutional layers are especially suited for image related tasks, as they have a relatively small number of parameters, but work much better than a comparable fully connected layer. More about convolutional neural networks in section \ref{mlcnn}.
+
+A problem of neural networks and deep neural networks in particular is the lack of interpretability. For humans it is very difficult to make founded assertions of what the neural network actually use for its prediction. Neural networks are essentially black boxes with input on one side of the network and some prediction returned at the other side of the network. This is especially a problem of safety critical systems, such as self-driving cars. In this domain it is critical for humans to know on which basis the system has decided and whether it is sensible. Natural language processing is also prone to such "clever hans" behaviour \cite{cleverhans} where the neural network exploits statistical cues of the underlying data, instead of really understanding the task. Interpretable deep learning is an active field of research. \cite{interpretabledl}
+
+\if false
 Seiten: 1
 \begin{itemize}
 \item Was ist ein DNN? Unterschied zu MLPs.
 \item Geschichte von Deep Learning. Wieso nicht schon früher? (GPUs und große Datenmengen!)
 \item Wieso ist Backpropagation wichtig für DNNs? => Da mit forward propagation zu rechenaufwändig ist.
 \end{itemize}
+\fi
 
+\subsection{Convolutional Neural Networks} \label{mlcnn}
 
-\subsection{Convolutional Neural Networks}
+Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network. The basic layer types of CNNs are: fully connected hidden layers, convolutional layers and max-pooling layers.
+
+Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (for example: edges). This pattern is called a kernel. The kernel is shared among the input neurons (parameter sharing). This has two main advantages: It introduces translation invariance, which means that it matters less if a feature occurs at the center or on the edges of an images. Also it reduces the number of learned parameters significantly. Additionally to increase the capacity, usually multiple convolutions with learned kernels are learned per layer. This is called the depth of a layer. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes.
+
+Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance). Local pooling layers are connected to a local subset of the neurons in the previous layer. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). A less common type of pooling is average pooling. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN. Pooling does not involve learning weights, as the function applied is fixed before training. There are also problems associated with pooling, as it essentially makes the model forget information. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
+
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
+	\caption{Visual representation of a convolutional neural network}
+	\label{fig:feedforward}
+\end{figure}
+\pagebreak
+
+\todo {Graphische Darstellung eines Convolution Layers}
+\todo {Graphische Darstellung eines Max Pooling Layers}
+
+\if false
 Seiten: 1
 \begin{itemize}
 
@@ -722,7 +757,9 @@ Seiten: 1
 \item Illustration von Max Pooling
 \item Fully Connected Layers am Ende
 
+
 \end{itemize}
+\fi
 
 \subsection{Recurrent Neural Networks} \label{lstmbackground}
 Seiten: 1
@@ -747,40 +784,6 @@ Seiten: 0.5
 
 
 \if false
-
-
-\subsubsection{Deep Learning}
-
-If a neural network is used with multiple layers, where each layer applies some form of higher level feature extraction compared to the earlier layers it is called deep learning. Such neural network is also called a deep neural network.
-
-An advantage of deep neural network is that they scale very well with the size of the dataset and with the amount of computation available. As the computational power increases and the size of the datasets as well, the performance of models deep learning may enable also increases.
-
-Multiple layers in neural networks have been existing for many years, but just in relative short time this field gained a lot of traction. There are two main reasons for this: General purpose programming of graphics cards and clever neural network architectures.
-
-One big problem of training deep neural networks is, that it is very computationally expensive. Backpropagation reduces the required power significantly, but for models with many million parameters it is still infeasible to train them on weak hardware. An advantage of training neural networks is that it can be highly parallelized. This in combination with the fact that graphics cards started to be programmable caused a significant leap in feasible neural network architectures.
-
-Another innovation necessary for the breakthrough of deep neural networks was the introduction of clever architectures. Through convolutional layers the number of parameters trained decreases significantly, compared to a multi layer perceptron with the same number of layers.
-
-\subsubsection{Convolutional Neural Networks} \label{mlcnn}
-
-Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network, since it consists of multiple hidden layers, where additionally to fully connected hidden layers there are usually several pooling and convolutional layers.
-
-Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (for example edges). This pattern is called a kernel. The kernel is shared among the input neurons (Parameter Sharing). This introduces translation invariance, which means that it matters less if a feature occurs at the center or on the edges of an images. Additionally to increase the capacity, usually multiple convolutions with learned kernels are applied per layer. This is called the depth of a layer.
-
-Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data. Local pooling layers are connected to a local subset of the neurons in the previous layer, but without weights, biases or a kernel. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). Another form of pooling is global pooling, where the entire data is pooled at once, this is usually employed at the end of the convolutional part of a CNN.
-
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
-
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
-	\caption{Visual representation of a convolutional neural network}
-	\label{fig:feedforward}
-\end{figure}
-\pagebreak
-
-\todo {Graphische Darstellung eines Convolution Layers}
-\todo {Graphische Darstellung eines Max Pooling Layers}
 
 \subsubsection{Recurrent Neural Networks}
 Recurrent Neural Networks allow neural networks to be applied on sequences, by allowing cycles in the topology of the network. Usually a recurrent neural network (RNN) consists of multiple units, such as Long Short-Term Memory (LSTM) units or gated recurrent units (GRU) \cite{gru}.
