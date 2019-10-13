@@ -234,7 +234,7 @@ This section gives a short overview over the contents of this thesis.
 
 Chapter 2 (Background) contains the background necessary for this thesis. Topics covered are computational humor, machine learning, artificial intelligence, neural networks, natural language processing, automated machine learning and an overview over related work.
 
-Chapter 3 (Design) covers the iterative design process of this thesis. This process began with the visual component of Gary Larson's cartoons using convolutional neural networks. Next the design shifted towards the development of deep neural networks for punchlines using LSTMs and word embeddings. And finally this chapter outlines the combination of both domains in a single architecture.
+Chapter 3 (Design) covers the iterative design process of this thesis. This process begins with the visual component of Gary Larson's cartoons using convolutional neural networks. Next the design shifts towards the development of deep neural networks for punchlines using LSTMs and word embeddings. And finally this chapter outlines the combination of both domains in a single architecture.
 
 Chapter 4 (Implementation) focuses on the implementation aspects of the previously described neural network architectures. The reader gets an overview over the technology chosen and how the architectures were implemented.
 
@@ -431,7 +431,7 @@ X&~\text{is the ground truth}
 
 MAE is interesting because a near miss is less penalized. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
 
-MSE works similarly to MAE, but errors are penalized more. The calculations for the above examples are $\left( 5 - 6 \right)^2 = 1$ and $\left( 2 - 6 \right)^2 = 16$, which is a significant difference. For a very noisy dataset where predictions MAE is usually better suited then MSE.
+MSE works similarly to MAE, but errors are penalized more. The calculations for the above examples are $\left( 5 - 6 \right)^2 = 1$ and $\left( 2 - 6 \right)^2 = 16$, which is a significant difference. For a very noisy dataset MAE is usually better suited than MSE.
 
 \subsubsection{Accuracy and F1}
 
@@ -445,7 +445,7 @@ MSE works similarly to MAE, but errors are penalized more. The calculations for 
 |\text{False Positives}|&~\text{is the number of incorrectly classified samples of the positive class} \\
 \end{align*}
 
-Accuracy is easy to understand and is commonly used for classification tasks. The higher the accuracy the better. But the accuracy metric might hide important weaknesses of a model.
+Accuracy is easy to understand and is commonly applied in classification tasks. The higher the accuracy the better. But the accuracy metric might hide important weaknesses of a model:
 
 Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
 
@@ -479,6 +479,7 @@ A confusion matrix usually reveals common mistakes of a model. For example if a 
 Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable. For example a simple XOR (\ref{XOR}) can not be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function. AN MLP consists of multiple perceptrons grouped in layers and each layer is connected with the previous layer.
 
 \begin{table}[]
+\centering
 \begin{tabular}{|l|l|l|}
 \hline
 XOR & 0 & 1 \\ \hline
@@ -487,7 +488,6 @@ XOR & 0 & 1 \\ \hline
 \end{tabular}
 \label{xor}
 \caption{XOR function}
-\centering
 \end{table}
 
 Historically Perceptrons are the basis for feed forward neural networks. They can be considered as multiple layers of perceptrons connected (=Multi layer perceptron). The main difference between perceptrons is that neural networks are composed of only differentiable functions, which allows for a more efficient training process.
@@ -762,6 +762,21 @@ Seiten: 1
 \fi
 
 \subsection{Recurrent Neural Networks} \label{lstmbackground}
+
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}.
+
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks. A newer approach to this problem are gated recurrent units (GRUs). \cite{gru}
+
+Among LSTM/GRU cells there are many variations. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general.
+
+The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell.
+
+\todo {Schematische Darstellung eines simplen RNNs}
+\todo {Schematische Darstellung einer LSTM Zelle}
+
+
+
+\if false
 Seiten: 1
 \begin{itemize}
 
@@ -772,47 +787,54 @@ Seiten: 1
 \item Illustration einer LSTM Zelle
 
 \end{itemize}
+\fi
 
 
 \subsection{Autoencoder}
+
+An autoencoder is a deep neural network which learns a compact representation of data without supervision. This is similar to principal component analysis of traditional machine learning. An autoencoder consists of two parts: 
+
+\begin{itemize}
+\item Encoder: Performs a dimensionality reduction from a high dimensional data to a low dimensional representation
+\item Decoder: Tries to reconstruct the original data from the low dimensional representation
+\end{itemize}
+
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information.
+
+\todo {Schematische Darstellung eines Autoencoders}
+
+\if false
 Seiten: 0.5
 \begin{itemize}
 \item Zweck von Autoencoder erläutern (Dimensionality Reduction, ähnlich wie PCA)
 \item Illustration eines Convolutional Autoencoder
 \item Encoder/Decoder erklären.
 \end{itemize}
-
-
-\if false
-
-\subsubsection{Recurrent Neural Networks}
-Recurrent Neural Networks allow neural networks to be applied on sequences, by allowing cycles in the topology of the network. Usually a recurrent neural network (RNN) consists of multiple units, such as Long Short-Term Memory (LSTM) units or gated recurrent units (GRU) \cite{gru}.
-
-Each architecture has different benefits and applicable domains. Even among LSTM networks there are many variations. One of the reasons why LSTMs are so powerful compared to other architectures is due to their design, as it avoids the vanishing/exploding gradient problem of regular RNNs \cite {vanishinggradient}.
-
-The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM a self-recurrent connection is placed and the vanishing gradients are kept inside by the gates. For a more detailed architecture overview Long Short-Term Memory by Hochreiter Schmidhuber is recommended \cite{hochreiter}.
-
-\todo {Schematische Darstellung eines simplen RNNs}
-\todo {Schematische Darstellung einer LSTM Zelle}
-
-\subsubsection{Autoencoder}
-
-An autoencoder is a deep neural network which learns a compact representation of data similar to principal component analysis in an unsupervised way. An autoencoder consists of two parts: The encoder and decoder. The encoder performs a dimensionality reduction from a high dimensional data to a low dimensional representation. The decoder on the other hand tries to reconstruct the original data from the low dimensional representation.
-
-\todo {Schematische Darstellung eines Autoencoders}
-
-
-%TODO:
-
-%Grundlagen von NN Design. => Welche Hyperparameter muss man tunen und was sind sinnvolle Werte (Learning Rate, Layer, anzahl Neuronen, Weight Decay, etc.) 
-
-%Wenn noch Platz: Backpropagation erklären
-
 \fi
 
 % SUM: 13.5-14
 
 \section{Natural Language Processing}
+
+Natural Language Processing (NLP) is a subfield of artificial intelligence and linguistics where the goal is to build computer programs that are able to understand human language. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition.
+
+Early NLP tried to achieve its goal by building traditional parsers, similar to what compilers do for programming languages. Unfortunately, these techniques are inadequate for human languages, due to the ambiguity of human language. Traditional parsers cannot deal with ambiguous sentences sufficiently.
+
+Another common approach has been to apply traditional machine learning for NLP. The idea here is to extract certain features of a  text datase. Then use these features to train a classical machine learning model. The best performing machine learning algorithm for this setting are support vector machines.
+
+Deep learning currently achieves most state-of-the-art results in NLP. An advantage of many text problems, is the abundance of large datasets. This is an important advantage especially for unsupervised methods, since labelling of large corpora may be very expensive.
+
+For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from the dataset. High level features (sentence length) are usually not sufficient, therefore the sentences must be converted into useful features.
+
+A trivial approach would be to give each word a unique identification number. This works, but loses lots of important semantic information about the words. For example, the words king and queen are more similar than king and house. If the featureization assigns the ID=2 for king and the ID=42 for queen, than the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing.
+
+Vector space model solve this problem. The idea is to represent each word in a high dimensional vector space, where a similarity measure holds.
+
+There is the concept of positive and negative similarity. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ \cite{TUW-233295} operator. Similarities based on the dot product are positive similarity measures. The cosine similarity is a commonly used positive similarity measure. While similarities based on distance (for example: euclidean distance) are negative similarity measures. CNNs are based on positive similarity: They perform a convolution, which is implemented using the dot product across the data.
+
+These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and GloVe embeddings. One problems of these embeddings are, that they mostly ignore the context of the word in the sentence. The word "bank" may have different meanings, depending on the context. In the sentences "I want to sit on a bank" and "I robbed a bank" the meaning is completely changed. The word embedding ELMo considers the context and returns different word vectors depending on the sentence.
+
+\if false
 Seiten: 1.5
 \begin{itemize}
 \item Was ist NLP: Aus welchen Subdisziplinen besteht es (AI, Linguistik)
@@ -823,6 +845,8 @@ Seiten: 1.5
 \item Vector Space Model erklären
 \item Similarity (Positive vs. Negative Similarity). Bezug zu Convolution herstellen
 \end{itemize}
+
+\fi
 
 \subsection{TFIDF}
 Seiten: 0.75
@@ -856,24 +880,6 @@ Seiten: 0.5
 
 
 \if false
-
-Natural Language Processing (NLP) is a subfield of artificial intelligence and linguistics where the goal is to build computer programs which are able to understand human language. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition.
-
-Early NLP tried to achieve its goal by building traditional parsers, similar to what compilers to for programming languages. The problem was that these techniques are inadequate for human languages, due to their ambiguity.
-
-Another common approach has been to apply traditional machine learning for NLP. The idea here is to extract certain features of a dataset of text and using these features train a classical machine learning model using, for example, a support vector machine.
-
-The current state-of-the-art results in NLP are achieved by applying deep learning to this field. An advantage of many text domains, is that there is lots of data available. This is a big advantage especially for unsupervised methods, as no difficult labelling must be performed.
-
-For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from text. A trivial approach would be giving each word a unique identification number. The problem with this approach is that one loses the entire semantic information about the words. The words king and queen are more similar than king and house. Keeping this information is crucial for successful natural language processing.
-
-This is where vector space models are often applied. The idea is to represent each word in a high dimensional vector space, where a certain similarity measure holds.
-
-There is the concept of positive similarity, denoted using the $\otimes$ operator. And there is the concept of negative similarity, denoted using the $\overline{\otimes}$ \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures. Commonly used is the cosine similarity. While similarities based on distance are negative similarity measures, for example the euclidean distance. CNNs and other neural network architectures are based on positive similarity, as they perform a convolution which applies the dot product across the data.
-
-These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and GloVe embeddings. One problems of these embeddings are, that they mostly ignore the context of the word. The word bank has different meanings, depending on if the current topic is about rivers or about money. This problem is what the most successful embeddings to date tackle: They consider the context of the word (sentence) to obtain a better vector representation.
-
-In the following sections the embeddings which were used during in this thesis are discussed.
 
 \subsubsection{TFIDF}
 TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval, where the goal was to weight words by their importance for a document and for a query. The TFIDF consists of two frequencies multiplies: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document. The idea being, that the more often a word occurs, the more important it is in describing the document.
