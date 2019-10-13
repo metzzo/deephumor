@@ -849,42 +849,11 @@ Seiten: 1.5
 \fi
 
 \subsection{TFIDF}
-Seiten: 0.75
-
-\begin{itemize}
-\item Definition von TFIDF. 
-\item Intuitive Erklärung
-\item Formel
-\item Vorteile / Nachteile von TFIDF
-\end{itemize}
-
-\subsection{GloVe}
-
-Seiten: 0.25
-
-\begin{itemize}
-\item Was ist GloVE?
-\item Intuitive Erklärung
-\item Detailierte Beschreibung mit verweis auf Paper
-\end{itemize}
-
-\subsection{ELMo}
-
-Seiten: 0.5
-
-\begin{itemize}
-\item Was ist ELMo
-\item Intuitive Erklärung der Architektur (Training)
-\item Besonderheit von ELMo (nicht wie es trainiert wird, sondern wie es verwendet wird)
-\end{itemize}
 
 
-\if false
-
-\subsubsection{TFIDF}
 TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval, where the goal was to weight words by their importance for a document and for a query. The TFIDF consists of two frequencies multiplies: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document. The idea being, that the more often a word occurs, the more important it is in describing the document.
 
-The problem with this is that certain words occur almost always very frequently (stop words). For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also multiplied. This weight describes the importance of a word compared to all other documents. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
+The problem with this is that certain words occur almost always very frequently (stop words). For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also considered. This weight describes the importance of a word compared to all other documents. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
 
 There exist many different formulas which entail this idea. In this thesis the following TFIDF equations were used:
 
@@ -900,12 +869,39 @@ where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occur
 
 The advantage of TFIDF is, that is very easy to understand and does not need any lengthy training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model, which has a fixed vocabulary.
 
-\subsubsection{GloVe \cite{glovepage}}
+The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely.
+
+\if false
+Seiten: 0.75
+
+\begin{itemize}
+\item Definition von TFIDF. 
+\item Intuitive Erklärung
+\item Formel
+\item Vorteile / Nachteile von TFIDF
+\end{itemize}
+
+\fi
+
+\subsection{GloVe \cite{glovepage}}
 The basis for training GloVe is a word to word matrix which denotes the frequency of words occurring together in the training data. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurring with another word.
+
+GloVe is also a bag-of-word approach, as it uses a word to word matrix without any information about sequence.
 
 For a more detailed explanation please refer to the introductory paper \cite{glovepage}.
 
-\subsubsection{ELMo \cite{elmo}}
+\if false
+Seiten: 0.25
+
+\begin{itemize}
+\item Was ist GloVE?
+\item Intuitive Erklärung
+\item Detailierte Beschreibung mit verweis auf Paper
+\end{itemize}
+
+\fi
+
+\subsection{ELMo \cite{elmo}}
 Previous models have very limited sense of context, especially had each word the same word vector associated regardless of the context. ELMo assigns word embeddings depending on context.
 
 The basis for ELMo is training a language model. A language model enables to predict the next word given a sequence of prior words. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
@@ -914,14 +910,32 @@ ELMo models this language model using a 2-layer bidirectional LSTM using residua
 
 The novel idea of ELMo is not how it is trained, but how the trained language model is being applied: Getting the final word embedding for a word is done by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation. The combination is done by applying a weight to each state.
 
-This is a short summary of a very complex architecture. For more details referring to \cite{elmo} is recommended.
+This is a short summary of a relatively complex architecture. For more details referring to \cite{elmo} is recommended.
 
-% TODO
-%Verschiedene gängige Aufgaben aus NLP erklären (Sentiment Analysis, POS Tagging, machine translation, Paraphrase Identification etc.)
+\if false
+Seiten: 0.5
+
+\begin{itemize}
+\item Was ist ELMo
+\item Intuitive Erklärung der Architektur (Training)
+\item Besonderheit von ELMo (nicht wie es trainiert wird, sondern wie es verwendet wird)
+\end{itemize}
 
 \fi
 
+
 \section{Transfer Learning} \label{transferlearning}
+
+Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
+
+Transfer learning tackles this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model is trained on an already existing big dataset and the data set of the fine tuning can be orders of magnitudes smaller. This tuning in the context of deep neural networks is usually done by fixating the weights of neurons in certain higher layers during training. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily.
+
+For example there are already very big datasets for image classification tasks. Training a good performing classifier on these datasets has already been done numerous times. Especially CNNs have an architecture very suited for transfer learning: As mentioned in [\ref{mlcnn}], there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons.
+
+Natural language processing works similarly by transferring word embeddings between different corpora. Importantly these word embeddings transfer well for a broad range of tasks \cite{elmo} and still achieving state-of-the-art performance. 
+
+
+\if false
 Seiten: 1
 \begin{itemize}
 \item Problem von klassischem Deep Learning (Große Datenmengen) erläutern
@@ -929,34 +943,10 @@ Seiten: 1
 \item Transfer Learning mit Bildern erläutern => CNNs den Convolutional teil übernehmen und rest neu trainieren
 \item Transfer Learning mti Text erläutern => Word Embedding (zB ELMo/BERT)
 \end{itemize}
-
-\if false
-
-Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
-
-This is why transfer learning is applied: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model can be trained on an already existing big dataset and the fine tuning does not need as big of a dataset. The finetuning in the context of deep neural networks is often done by fixating the weights of neurons in certain layers during training. Usually these layers perform more general feature extraction, which is better applicable to other domains.
-
-For example there are already very big datasets for image classification tasks. Training a good performing classifier on these datasets has already been done numerous times. Especially CNNs have an architecture very suited for transfer learning: As mentioned in [\ref{mlcnn}], there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending on how similar the domain is less training is needed for the new domain. This paper used a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons.
-
-For natural language processing a similar breakthrough compared to the CNN architectures probably happened just recently with new word embedding techniques, such as ELMo and BERT. What true potential these techniques have has yet to be shown. Importantly these word embeddings transfer well for a broad range of tasks [TODO] while reaching state-of-the-art performance. 
-
-% TODO:
-%Herausforderungen von Transfer Learning
-
 \fi
 
 
 \section{AutoML}
-Seiten: 0.5
-
-\begin{itemize}
-\item Hyperparameter Tuning Problem: Großer Search Space
-\item "Traditioneller" Approach erläutern (Grid Search, Random Search, Experterfahrung)
-\item Exponentieller Suchraum => Wende AI Technik an um Hyperparameter zu tunen
-\item Was kann alles durch AutoML optimiert werden (Hyperparameter, Data processing, etc.)
-\end{itemize}
-
-\if false
 
 AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human.
 
@@ -972,23 +962,19 @@ A machine learning pipeline consists of many labour intensive tasks, such as:
 
 AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations. Grid or random search is also often not feasible, as the search space increases exponentially with the number of hyperparameters. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
 
+\if false
+Seiten: 0.5
+
+\begin{itemize}
+\item Hyperparameter Tuning Problem: Großer Search Space
+\item "Traditioneller" Approach erläutern (Grid Search, Random Search, Experterfahrung)
+\item Exponentieller Suchraum => Wende AI Technik an um Hyperparameter zu tunen
+\item Was kann alles durch AutoML optimiert werden (Hyperparameter, Data processing, etc.)
+\end{itemize}
 
 \fi
 
 \section{Computational Humor}
-Seiten: 2
-\begin{itemize}
-\item Bedeutung von Humor (laut Oxford Dictionary)
-\item Ursprung von Humor erläutern: Superiority Theory, Incongruity Theory, Humor als Spiel.
-\item Computational Humor => kombiniert AI, Computational Linguistics
-\item Problem von Humor: Subjektiv
-\item Generativer Computational Humor: zB Witze erzeugen
-\item Klassifizierender Computational Humor: zB Witze erkennen
-\item Problem von Computational Humor: Language Understanding.
-\item Ansätze für Computational Humor: Anwenden der Incongruity Theory und was die Probleme waren (https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822)
-\end{itemize}
-
-\if false
 
 According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. Humor seems the physical and psychological well-being \cite{humorhealthy}.
 
@@ -1008,6 +994,20 @@ Many early approaches of computational humor have focused on the Incongruity The
 
 Another problem was their heavy reliance on ontologies, such as WordNet and VerbNet. These are human crafted databases with concepts and their relationship with each other. The problem with these are the ambiguity of many concepts and also their limited size. For example VerbNet had only around 4500 verbs, which made it so that the computer had only a very limited understanding of the sentences \cite{comphumorsummary}	.
 
+
+\if false
+
+Seiten: 2
+\begin{itemize}
+\item Bedeutung von Humor (laut Oxford Dictionary)
+\item Ursprung von Humor erläutern: Superiority Theory, Incongruity Theory, Humor als Spiel.
+\item Computational Humor => kombiniert AI, Computational Linguistics
+\item Problem von Humor: Subjektiv
+\item Generativer Computational Humor: zB Witze erzeugen
+\item Klassifizierender Computational Humor: zB Witze erkennen
+\item Problem von Computational Humor: Language Understanding.
+\item Ansätze für Computational Humor: Anwenden der Incongruity Theory und was die Probleme waren (https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1613822)
+\end{itemize}
 \fi
 
 % 20 Seiten
