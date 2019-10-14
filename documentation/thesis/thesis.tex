@@ -948,9 +948,11 @@ Seiten: 1
 
 \section{AutoML}
 
-AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human.
+AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human. Naive automated approaches such as grid search or random search have exponential runtime with increasing number of hyperparameters.
 
-A machine learning pipeline consists of many labour intensive tasks, such as:
+Grid search is a simple approach, where a model for possible combinations of hyperparameters is trained. Similarly random search assigns random hyperparameters until some halting criterion is reached.
+
+A machine learning pipeline consists of different tasks, such as:
 
 \begin{itemize}
 \item Data pre-processing
@@ -960,7 +962,7 @@ A machine learning pipeline consists of many labour intensive tasks, such as:
 \item Hyperparameter selection
 \end{itemize}
 
-AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations. Grid or random search is also often not feasible, as the search space increases exponentially with the number of hyperparameters. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
+AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations and pre-processing steps. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
 
 \if false
 Seiten: 0.5
@@ -976,21 +978,23 @@ Seiten: 0.5
 
 \section{Computational Humor}
 
-According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. Humor seems the physical and psychological well-being \cite{humorhealthy}.
+According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}.
 
-The exact reason humans developed humor is yet to be determined. There have been many theories proposed. From the old Superiority Theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the Relief Theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. Finally the Incongruity Theory proposes, that it is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some setting, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
+Over the centuries, there have been many theories of humor been proposed. From the old Superiority Theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the Relief Theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. Finally the Incongruity Theory proposes, that humor is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
 
-Another view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play and the comparison has been made, that humor is a similar phenomena for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling can be considered as a signal to play. Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
+A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play and the comparison has been made, that humor is a similar phenomena for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling can be considered as a signal to play. 
+
+Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
 
 Computational humor combines the field of artificial intelligence and computational linguistics, with the goal of computers understanding humor. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application, as most people who have used such a system can confirm.
 
-One problem of humor is, that it is very subjective. There is no general humor, as every person finds different things funny. There are topics or types of humor that more people find funny than others. This is the reason why currently there is no unified model of humor, instead usually certain subtasks of humor are tackled. 
+One problem of humor is, that it is very subjective. There is no general humor, as every person finds different things funny. There are topics or types of humor that more people find funny than others. This is the reason why currently there is no unified computational model of humor, instead usually models for certain subtasks of computational humor are built.
 
-Common subtasks involve generative or discriminative tasks. An example for generative task would be joke generation or pun generation. Here the computer has to synthesize a joke or a pun. A discriminative task is joke recognition. Here the computer should be able to detect whether some text is a joke or not.
+Common subtasks involve generative or discriminative tasks. An example for generative task would be joke generation or pun generation. In these kind of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not.
 
-Another big problem of human humor is language understanding. To really get a joke, it is required to understand language. As mentioned in the NLP section [\ref{nlp}] there have been many different approaches over time. And it is still lots of work left and until this problem is not solved, it is questionable whether computational humor will be solved.
+Another challenge of computational humor is language understanding. To really understand a joke, the interpreter (be it human or computer) has to understand the language. As mentioned in the NLP section [\ref{nlp}] there have been many different approaches over time. And it is still research necessary. Until this problem is not sufficiently solved, it is questionable whether computational humor will reach human level.
 
-Many early approaches of computational humor have focused on the Incongruity Theory, where humor is an unexpected difference between the expected and the unexpected \cite{comphumorsummary}. The general idea was to find or produce contradictions between what a human would expect and what has been communicated. These approaches had only limited success, since the underlying language understanding was not sophisticated enough. The computer did not have a proper model of what the human would understand and therefore could not in general apply the Incongruity Theory practically.
+Many early approaches of computational humor have focused on the incongruity theory, where humor is an unexpected difference between the expected and the unexpected \cite{comphumorsummary}. The general idea was to find or produce contradictions between what a human would expect and what has been communicated. These approaches had only limited success, since the underlying language understanding was not sophisticated enough. The computer did not have a proper model of what the human would understand and therefore could not apply the Incongruity Theory successfully.
 
 Another problem was their heavy reliance on ontologies, such as WordNet and VerbNet. These are human crafted databases with concepts and their relationship with each other. The problem with these are the ambiguity of many concepts and also their limited size. For example VerbNet had only around 4500 verbs, which made it so that the computer had only a very limited understanding of the sentences \cite{comphumorsummary}	.
 
@@ -1017,12 +1021,55 @@ Seiten: 2
 
 \subsection{Computational Humor using Traditional Methods}
 
-\subsubsection{Humor Recognition and Humor Anchor Extraction}
+In the following sections we will discuss several works in the field of computational humor with traditional machine learning methods.
+
+\subsubsection{Humor Recognition and Humor Anchor Extraction \cite{Yang2015HumorRA}}
+
+This paper formalizes humor as a binary classification task between humorous and non-humorous. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
+
+The authors extract several features from the input sentences that describe some aspect of humor.
+
+\begin{enumerate}
+\item Incongruity Structure: Disconnection (maximum meaning distance of word pairs) and Repetition (Minimum meaning distance of word pairs)
+\item Ambiguity Theory: Sense combination (the higher the more possible interpretations a sentence has), Sense Farmost (largest path similarity of any word senses) and Sense Closest (smallest path similarity of any word senses)
+\item Interpersonal Effect: Negative (Positive) polarity (number of occurrences of negative (positive) words) and Weak (Strong) Subjectivity (number of occurrences of all weak (strong) subjectivity oriented words.
+\item Phonetic Style: Alliteration (number and maximum length of alliteration chains) and Rhyme (number and maximum length of rhyme chains)
+\end{enumerate}
+
+The work describes the training of a classifier based on above features. Important for the humor anchor extraction is the fact that all these features are word order independent and function also on partial sentences. Additionally to these human centric features the best performing model uses also Word2Vec features.
+
+Humor anchor extraction is about extracting the key words that enable the humor of a sentence. Removing these words would make the sentence not humorous. The paper lists the example of the sentence "I used to be a watchmaker; it is a great job and I made my own hours" with a sensible selection of anchors "watchmaker", "made" and "hours".
+
+The procedure of determining humor anchors is surprisingly simple. As the feature can be computed on any (partial) sentence the algorithm can freely remove words and still get a reasonable prediction. Also, only certain word types are considered (verbs, nouns, adverbs and adjectives). Pseudo code at \ref{humoranchorextraction} describes this algorithm on a high level.
+
+Humor anchor extraction also performs quite well. The authors performed quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reached an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
+
+\begin{algorithm}
+\caption{Humor anchor extraction}\label{humoranchorextraction}
+
+Take only verbs, nouns and adverbs of original sentence
+
+Calculate humor score
+
+\ForEach{$\text{possible anchor subset of sentence}$}{
+
+Calculate humor score of subset
+
+}
+
+Return subset with maximum decrement
+
+\end{algorithm}
+
+From a performance point of view both the humour recognition and the humor extraction seem to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
+
+\if false
 Traditioneller Ansatz von Humor erkennung.
 
 \cite{Yang2015HumorRA}
 
 Seiten: 0.5
+\fi
 
 \subsubsection{Contextualized Sarcasm Detection on Twitter}
 Sarkasmus Erkennung mit Machine Learning Techniken
