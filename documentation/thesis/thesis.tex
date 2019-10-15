@@ -1042,8 +1042,6 @@ Humor anchor extraction is about extracting the key words that enable the humor 
 
 The procedure of determining humor anchors is surprisingly simple. As the feature can be computed on any (partial) sentence the algorithm can freely remove words and still get a reasonable prediction. Also, only certain word types are considered (verbs, nouns, adverbs and adjectives). Pseudo code at \ref{humoranchorextraction} describes this algorithm on a high level.
 
-Humor anchor extraction also performs quite well. The authors performed quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reached an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
-
 \begin{algorithm}
 \caption{Humor anchor extraction}\label{humoranchorextraction}
 
@@ -1061,7 +1059,9 @@ Return subset with maximum decrement
 
 \end{algorithm}
 
-From a performance point of view both the humour recognition and the humor extraction seem to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
+From a performance point of view both the humour recognition seem to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
+
+Humor anchor extraction also performs quite well. The authors performed quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reached an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
 
 \if false
 Traditioneller Ansatz von Humor erkennung.
@@ -1069,7 +1069,7 @@ Traditioneller Ansatz von Humor erkennung.
 \cite{Yang2015HumorRA}
 
 Seiten: 0.5
-\fi
+
 
 \subsubsection{Contextualized Sarcasm Detection on Twitter}
 Sarkasmus Erkennung mit Machine Learning Techniken
@@ -1077,14 +1077,19 @@ Sarkasmus Erkennung mit Machine Learning Techniken
 \cite{Bamman2015ContextualizedSD}
 
 Seiten: 0.5
+\fi
 
-\subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System}
+\subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System \cite{HumoristBot}}
 
+This work implements humor detection and joke generation in the context of a chatbot. A chatbot is a software agent able to hold a conversation with a human. 
+
+\if false
 Traditioneller Ansatz in einem generativem Setting
 
 \cite{HumoristBot}
 
 Seiten: 0.5
+\fi
 
 \subsection{Computational Humor using Deep Learning}
 
