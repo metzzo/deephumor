@@ -27,6 +27,7 @@
 \usepackage{amssymb}% http://ctan.org/pkg/amssymb
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \usepackage[noend]{algpseudocode}
+\usepackage{listings}
 
 \newcommand{\cmark}{\ding{51}}%
 
@@ -1081,7 +1082,37 @@ Seiten: 0.5
 
 \subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System \cite{HumoristBot}}
 
-This work implements humor detection and joke generation in the context of a chatbot. A chatbot is a software agent able to hold a conversation with a human. 
+This work implements humor detection and joke generation in the context of a chatbot. A chatbot is a software agent able to hold a conversation with a human. Humorist bot is able to generate humorous anecdotes and react to the users humorous messages by adjusting its avatar. A funny message not only affects the answer of the bot, but also changes its avatar to a laughing avatar.
+
+Their chatbot uses a rather traditional AIML knowledge base with different answer sets:
+\begin{enumerate}
+\item Set for general conversation
+\item Set for humorous sentence generation
+\item Set for humorous sentence recognition
+\end{enumerate}
+
+AIML is an XML format which describes a set of possible answers that are matched using pattern matching.
+
+\lstset{language=XML}
+\begin{lstlisting}
+<category>
+    <pattern>How are you?</pattern>
+    <template>I am fine, and you?</template>
+</category>
+\end{lstlisting}
+
+The authors implemented humor detection by focusing on the following aspects of humor: 
+
+\begin{enumerate}
+\item Alliteration: based on phonetic transcription
+\item Antinomy: based on the antinomy relationships of WordNet 
+\item Adult slang: based on a set of words classified as adult slang
+\end{enumerate}
+
+They do not apply any machine learning techniques, but instead implement handcrafted rules. The authors implemented joke generation by combining several AIML rules.
+
+Evaluation shows that recognition of humor achieves an accuracy of 66\% for 100 randomly sampled humorous samples, while a sample of 100 non-humorous sentences contained 19 false-positives. The authors did not do an evaluation of the joke generation.
+
 
 \if false
 Traditioneller Ansatz in einem generativem Setting
