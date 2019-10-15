@@ -1137,6 +1137,8 @@ Interestingly their work did not use an LSTM/GRU cell, but instead a simple RNN 
 
 The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. Only one convolution layer is used, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer the authors applied a standard max pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
 
+Their corpus was split into a train/validation/test split, with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
+
 The CNN shows to be the best performing approach to this task, as it reaches an F1-score of 68.5\%. RNNs performance is relatively low, which may be contributed to overfitting. Applying a LSTM/GRU cell would be an interesting experiment for future work. The authors themselves remarked, that Long Short-Term Memory cells will be evaluated in future work.
 
 \if false
