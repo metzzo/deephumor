@@ -1153,7 +1153,22 @@ Seiten: 1.0
 
 \subsubsection{A long short-term memory framework for predicting humor in dialogues \cite{bertero2016long}}
 
-Bertero et al. apply LSTMs on the same dataset of Big Bang Theory dialogue as in their previous work. \cite{Bertero2016DeepLO} Instead of a simple RNN they use a more sophisticated LSTM architecture.
+Bertero et al. apply LSTMs on the same dataset of Big Bang Theory dialogue as in their previous work. \cite{Bertero2016DeepLO} Instead of a simple RNN they use a more sophisticated LSTM architecture. Additionally they combine the LSTM with a CNN.
+
+Their feature vector is a combination of the following:
+\begin{enumerate}
+
+\item One-hot encoded word tokens: Models the likeliness of a word of being humorous
+\item Character trigrams: Reduces impact of word stems
+\item Word2Vec: Models similarity of words and their semantic meaning
+
+\end{enumerate}
+
+First their architectures converts the high dimensional vectors into a lower dimensional representation using an embedding layer. Then they apply a convolutional layer and perform max-pooling afterwards on each feature. Further they combine these features into a single feature vector and perform a final sentence encoding layer. 
+
+Additionally, similarly to their previous work, the authors also extract high level features (structural features, POS proportions, etc.).
+
+The LSTM in combination with high level features achieves the best performance. The F-score of this approach is 62.9\%. This seems to be a worse result than best 68.5\% F-score of the previous work. But the key difference is, that the best result of the previous work relied on acoustic features and this LSTM approach is only text-based.
 
 \if false
 \cite{bertero2016long}
