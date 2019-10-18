@@ -1062,7 +1062,7 @@ Return subset with maximum decrement
 
 From a performance point of view both the humour recognition seem to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
 
-Humor anchor extraction also performs quite well. The authors performed quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reached an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
+Humor anchor extraction also performs quite well. The authors perform a quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reaches an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
 
 \if false
 Traditioneller Ansatz von Humor erkennung.
@@ -1124,6 +1124,8 @@ Seiten: 0.5
 
 \subsection{Computational Humor using Deep Learning}
 
+In the following we will discuss the application of deep learning in the domain of computational humor. 
+
 \subsubsection{Deep Learning of Audio and Language Features for Humor Prediction \cite{Bertero2016DeepLO}}
 
 The work of Bertero et al compares several machine learning techniques for predicting and detecting humor in dialogues. They use a dialogue dataset of the series "Big Bang Theory", with annotations of canned laughter. Their goal is to predict these punchlines and where the canned laughter would appear. This work compares several techniques against each other: Convolutional neural networks, recurrent neural networks and conditional random fields. The convolutional neural network use low level representations of words and acoustic frames, while the other two methods use a set of acoustic and language features:
@@ -1133,11 +1135,11 @@ The work of Bertero et al compares several machine learning techniques for predi
 \item Language features: Extraction of Lexical (unigrams, bigrams and trigrams appearing at least five times), structural and syntactic (proportions of verbs, nouns, adjectives and adverbs, sentence length and average word length), sentiment (average of positive/negative sentiment scores of SentiWordNet), Antonyms (presence of verb, noun, adjective and adverbs antonyms from WordNet compared to the previous utterance), Speaker turns (speaker identity) and Word2Vec features
 \end{enumerate}
 
-Interestingly their work did not use an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradient \cite{hochreiter}. Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards both vectors are combined into one and used as an input for the RNN cell.
+Interestingly their work is not using an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradient \cite{hochreiter}. Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards they combine both vectors are into one and use this as an input for the RNN cell.
 
-The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. Only one convolution layer is used, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer the authors applied a standard max pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
+The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. They use one convolution layer, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer, the authors apply a standard max pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
 
-Their corpus was split into a train/validation/test split, with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
+Their corpus is split into a train/validation/test split, with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
 
 The CNN shows to be the best performing approach to this task, as it reaches an F1-score of 68.5\%. RNNs performance is relatively low, which may be contributed to overfitting. Applying a LSTM/GRU cell would be an interesting experiment for future work. The authors themselves remarked, that Long Short-Term Memory cells will be evaluated in future work.
 
@@ -1149,36 +1151,50 @@ Seiten: 1.0
 \cite{Bertero2016DeepLO}
 \fi
 
-\subsubsection{A long short-term memory framework for predicting humor in dialogues}
+\subsubsection{A long short-term memory framework for predicting humor in dialogues \cite{bertero2016long}}
 
-Deep learning von Humor in Text Domäne
+Bertero et al. apply LSTMs on the same dataset of Big Bang Theory dialogue as in their previous work. \cite{Bertero2016DeepLO} Instead of a simple RNN they use a more sophisticated LSTM architecture.
 
+\if false
 \cite{bertero2016long}
 
 Seiten: 1.0
+\fi
 
-\subsubsection{Convolutional neural network for humor recognition}
+\subsubsection{Convolutional neural network for humor recognition \cite{chen2017convolutional}}
 
+The work of Chen et al uses several corpora from various sources: Pun of the Day, Short Jokes dataset, 16000 One-Liners and PTT Jokes each with a binary annotation, where 1 means the sample is humorous and 0 means it is not humorous. The authors sample negative samples from news headlines.
+
+Basis for their architecture is a convolutional neural network. First they convert the words using pre-trained GloVe embeddings. The authors use GloVe trained on Wikipedia 2014 + Gigaword 5 with a vocabulary containing 400,000 words. Then they apply a convolutional layer and tried filters of size 3 to 20 for the convolution. A regular max-pooling is applied after the convolutional layer.
+
+In order to improve performance, the authors apply Highway layers. Highway layers introduce shortcut connections with gate functions, which allows the information to flow easily through the deeper parts of the network. Additionally they also apply dropout layers.
+
+Chen et al perform 10 fold cross validation. A CNN with highway layers and a large filter size of 100 performs the best on 16000 One Liners and Pun of the Day with an F-score of 90\% for both datasets. Short jokes even reaches 92\% and PTT Jokes 94\%. 
+
+Interesting about this approach is especially that the authors achieved these result without feature selection. The deep learning model can generalize humor in the given context. The chosen experiment could probably be even improved by using new state-of-the-art word embeddings such as ELMo or BERT. \cite{elmo} \cite{bert}
+
+\if false
 Humor recognition in visueller Domäne
 
 \cite{chen2017convolutional}
 
 Seiten: 0.5
 
-\subsubsection{Humor recognition using deep learning}
 
 Deeo Learning von Humor 
 
 \cite{chen2018humor}
 
-\subsubsection{Overview of HAHA at IberLEF 2019: Humor analysis based on human annotation}
+
+
+\subsubsection{Humor recognition using deep learning}
 
 Sehr ähnlicher Ansatz zu dieser DPA: Funniness Score Prediction.
 
 \cite{chiruzzo2019overview}
 
 Seiten: 1.0
-
+\fi
 
 \chapter{Design} \label{design}
 
