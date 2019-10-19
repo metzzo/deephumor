@@ -744,7 +744,7 @@ Based on feedforward neural networks convolutional neural networks emerged. A co
 
 Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (for example: edges). This pattern is called a kernel. The kernel is shared among the input neurons (parameter sharing). This has two main advantages: It introduces translation invariance, which means that it matters less if a feature occurs at the center or on the edges of an images. Also it reduces the number of learned parameters significantly. Additionally to increase the capacity, usually multiple convolutions with learned kernels are learned per layer. This is called the depth of a layer. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes.
 
-Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance). Local pooling layers are connected to a local subset of the neurons in the previous layer. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). A less common type of pooling is average pooling. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN. Pooling does not involve learning weights, as the function applied is fixed before training. There are also problems associated with pooling, as it essentially makes the model forget information. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
+Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance). Local pooling layers are connected to a local subset of the neurons in the previous layer. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). Figure \ref{fig:maxpooling} illustrates a max-pooling operation. A less common type of pooling is average pooling. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN. Pooling does not involve learning weights, as the function applied is fixed before training. There are also problems associated with pooling, as it essentially makes the model forget information. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
 
 Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
 
@@ -756,7 +756,13 @@ Fully connected layers are usually the last layers of a CNN, their task is to pe
 \end{figure}
 
 \todo {Graphische Darstellung eines Convolution Layers}
-\todo {Graphische Darstellung eines Max Pooling Layers}
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{graphics/maxpooling.png}
+	\caption{2x2 max pooling of a simple 4x4 input layer into a 2x2 output layer}
+	\label{fig:maxpooling}
+\end{figure}
 
 \if false
 Seiten: 1
@@ -776,16 +782,27 @@ Seiten: 1
 
 \subsection{Recurrent Neural Networks} \label{lstmbackground}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}.
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/rnn.png}
+	\caption{Unrollong of a simple RNN cell over time \cite{colahlstm}}
+	\label{fig:rnn}
+\end{figure}
+
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops is performed.
 
 Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks. A newer approach to this problem are gated recurrent units (GRUs). \cite{gru}
 
 Among LSTM/GRU cells there are many variations. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general.
 
-The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell.
+The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell. For an overview of a more complicated LSTM view please refer to figure \ref{fig:lstm}.
 
-\todo {Schematische Darstellung eines simplen RNNs}
-\todo {Schematische Darstellung einer LSTM Zelle}
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/lstm.png}
+	\caption{Overview of an LSTM \cite{colahlstm}}
+	\label{fig:lstm}
+\end{figure}
 
 
 
