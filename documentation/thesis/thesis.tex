@@ -383,8 +383,6 @@ The default split ratio for the training/validation and test set is:
 
 If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
 
-\todo{Schematische Darstellung von holdout Methode}
-
 Another method is called Cross-validation: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method. As many models are trained (depending on $n$) it can be computationally very expensive.
 
 
@@ -410,9 +408,14 @@ Check final performance on the test set $\boldsymbol{TEST}$ of the best trained 
 
 \end{algorithm}
 
-\todo{Schematische Darstellung von Cross validation}
+Depending on the machine learning practitioner and task at hand, the test set is omitted during for final performance. Instead the average performance returned by cross validation is used. Figure \ref{fig:holdoutvscv} compares the splits of holdout method and cross validation.
 
-Depending on the machine learning practitioner and task at hand, the test set is omitted during for final performance. Instead the average performance returned by cross validation is used.
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/holdoutvscv.png}
+	\caption{Comparison of the splits between holdout and 5-fold cross validation}
+	\label{fig:holdoutvscv}
+\end{figure}
 
 \subsection{Evaluation of Machine Learning models}
 
@@ -636,9 +639,14 @@ Update weights: $\boldsymbol{w} := \boldsymbol{w} - \alpha \boldsymbol{w}'$
 
 \end{algorithm}
 
-$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to apply learning rate decay during training. This means that the learning rate is gradually reduced during the learning.
+$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to apply learning rate decay during training. This means that the learning rate is gradually reduced during the learning. Figure \ref{fig:gradientdescent} illustrates the process of gradient descent on a 2-dimensional function.
 
-\todo{Illustration von Gradient Descent}
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.85\textwidth]{graphics/gradientdescent.png}
+	\caption{Visual representation of gradient descent}
+	\label{fig:gradientdescent}
+\end{figure}
 
 \if false
 Seiten: 1.5
