@@ -686,11 +686,16 @@ where $\delta$ is called weight decay and usually $0.000001 \leq \delta \leq 0.0
 
 Another simple technique is early stopping. The idea is simple: Remember the best performing model $y_{val}$ on the validation set, instead of the final model $y$ after gradient descent terminated. After training has finished return $y_{val}$ instead of $y$.
 
-A dropout layers can be used as well. The idea is similar to regularization: The network should not overly rely on certain inputs. A dropout layer turns off neurons with a certain probability. This forces the network to generalize better. Usually in CNNs dropout layers are placed at the end of the network before the last fully connected layer.
+A dropout layers can be used as well. The idea is similar to regularization: The network should not overly rely on certain inputs. A dropout layer turns off neurons with a certain probability. This forces the network to generalize better. Usually in CNNs dropout layers are placed at the end of the network before the last fully connected layer. Figure \ref{fig:dropout} shows how dropout sets certain neurons to 0.
 
 Note that these techniques are not exclusive and are usually applied in combination. Usually the machine learning practitioner starts with less regularization, but if the validation set shows that the model overfits, the regularization is increased incrementally.
 
-\todo{Schematische Darstellungg von Dropout}
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.85\textwidth]{graphics/dropout.png}
+	\caption{Certain neurons are set to 0 (dropped out) in a dropout layer}
+	\label{fig:dropout}
+\end{figure}
 
 Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error. Automated machine learning is also a very promising research field, more information is available at section \ref{transferlearning}.
 
@@ -749,7 +754,6 @@ Fully connected layers are usually the last layers of a CNN, their task is to pe
 	\caption{Visual representation of a convolutional neural network}
 	\label{fig:feedforward}
 \end{figure}
-\pagebreak
 
 \todo {Graphische Darstellung eines Convolution Layers}
 \todo {Graphische Darstellung eines Max Pooling Layers}
