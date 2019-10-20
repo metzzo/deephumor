@@ -246,7 +246,7 @@ Chapter 6 (Conclusion) finalizes this thesis with lessons learned during the cou
 
 \chapter{Background}
 
-As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis.
+As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis. First an overview of artificial intelligence and and machine learning is outlined. Section \ref{nlpbackground} lays out techniques of natural language processing. Section \ref{transferlearning} gives an overview of a technique called transfer learning. The next section \ref{automlbackground} outlines automated machine learning. Based on the previous sections the research area of computational humor is outlines in section \ref{comphumorbackground}. This section finalizes with related work of traditional computational humor and deep learning based computational humor \ref{relatedworkbackground}.
 
 \section{Machine Learning and Artificial Intelligence}
 \if false
@@ -306,8 +306,7 @@ Seiten: 0.5 (+0.5 falls auch F1 / MSE)
 %\subsection{What is Artificial Intelligence?}
 The field of Artificial Intelligence (AI) tries to reproduce (human) intelligence using computers. It is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain narrow subtasks of what is considered to require intelligence. Such a system is also known as weak AI. These tasks usually entail some utility for other application domains and range from image classification, self driving cars to machine translation. For example in the beginning of AI research playing chess was considered to be a very difficult task and was thought to require intelligence. Nowadays chess engines are able to beat every human player every time. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks AI research gets closer to a strong AI. 
 
-The next big frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure is a problem. For example this work shows that understanding humor is still very challenging.
-
+The next frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure is a problem. For example this work shows that understanding humor is still very challenging.
 
 
 %\todo{Venn Diagramm das AI und ML in Relation zueinander setzt}
@@ -644,7 +643,7 @@ $\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usual
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=0.85\textwidth]{graphics/gradientdescent.png}
-	\caption{Visual representation of gradient descent}
+	\caption{Visual representation of gradient descent with momentum. Longer arrows mean steeper gradient.}
 	\label{fig:gradientdescent}
 \end{figure}
 
@@ -670,7 +669,7 @@ Usually a technique called momentum is applied. A real world analogy would be a 
 
 Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem.
 
-Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. \cite{Goodfellow-et-al-2016}
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. \cite{colahbackprop}
 
 In general, overfitting is a problem of neural networks (and other machine learning algorithms). The main four approaches to counteract overfitting are: Regularization, Data augmentation, early stopping and Dropout layers. 
 
@@ -700,6 +699,71 @@ Note that these techniques are not exclusive and are usually applied in combinat
 Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task. There are many rules of thumbs for many hyperparameters and class of problems but in the end it is in the end of the developer to use a good mixture of clever tricks, as well as trial and error. Automated machine learning is also a very promising research field, more information is available at section \ref{transferlearning}.
 
 The architecture of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
+
+\subsection{Backpropagation}
+
+Backpropagation is an alternative way of determining the gradient of a function \cite{colahbackprop}. Backpropagation makes training big neural networks tractable for modern computers. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT} Backpropagation is also known as reverse-mode differentiation.
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/computationgraph.png}
+	\caption{A computational graph with derivatives on the edges. \cite{colahbackprop}}
+	\label{fig:computationgraph}
+\end{figure}
+
+
+Another view of neural networks is the view of computational graphs. Neural networks essentially define a graph of simple computations consisting of differentiable operations. In a computational graph derivatives are placed on the edges between nodes. Figure \ref{fig:computationgraph} illustrates a computational graph.
+
+Calculating the derivative of $e$ with respect to $b$ in the graph illustrated in figure \ref{fig:computationgraph} can be calculated by summing over all paths in the computational graph:
+
+\begin{equation}
+\frac{\partial e}{\partial e} = 1 * 2 + 1  * 3
+\end{equation}
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/computationgraphsimple.png}
+	\caption{A simple computational graph \cite{colahbackprop}}
+	\label{fig:computationgraphsimple}
+\end{figure}
+
+Summing over all paths quickly explodes combinatorially, as the number of paths may increase exponentially with the size of the graph. For example applying traditional forward-mode differentiation ($\frac{\partial}{\partial X}$) the computational graph illustrated in figure \ref{fig:computationgraphsimple} would result in the following derivative:
+
+\begin{equation}
+\frac{\partial Z}{\partial X} = \alpha \delta + \alpha \epsilon + \alpha \zeta + \beta \delta + \beta \epsilon + \beta \zeta + \gamma \delta + \gamma \epsilon + \gamma \zeta
+\end{equation}
+
+which could be greatly simplified instead by using reverse-mode differentiation  ($\frac{\partial Z}{\partial}$) instead:
+
+\begin{equation}
+\frac{\partial Z}{\partial X} = (\alpha + \beta + \gamma)(\delta + \epsilon + \zeta)
+\end{equation}
+
+Reverse-mode differentiation starts at the output node and works towards the root nodes by calculating the derivative of $\frac{\partial Z}{\partial}$. Figure \ref{fig:computationgraphreverse} outlines reverse-mode differentiation on a computational graph. Additionally this process also returns a derivative with respect to the output for every node in the graph. Which is a very useful property for training neural networks.
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.75\textwidth]{graphics/computationgraphreverse.png}
+	\caption{Reverse-mode differentiation applied on computation graph \ref{fig:computationgraph} \cite{colahbackprop}}
+	\label{fig:computationgraphreverse}
+\end{figure}
+
+Reverse-mode differentiation can be summarized using the following pseudo code:
+
+\begin{algorithm}
+\caption{Reverse-mode differentiation algorithm \cite{dlvc}}
+
+\ForEach{node n} {
+
+Compute local gradient $l_c = \frac{\partial n}{\partial c}$ for each child $c$
+
+Compute $m_c = l_c  \frac{\partial e}{\partial n}$ for every child $c$
+
+Compute $\frac{\partial e}{\partial c}$ by summing over all $m_c$
+
+}
+
+\end{algorithm}
 
 \if false
 Seiten: 1
@@ -740,22 +804,24 @@ Seiten: 1
 
 \subsection{Convolutional Neural Networks} \label{mlcnn}
 
-Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network. The basic layer types of CNNs are: fully connected hidden layers, convolutional layers and max-pooling layers.
-
-Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows them to recognize certain local patterns (for example: edges). This pattern is called a kernel. The kernel is shared among the input neurons (parameter sharing). This has two main advantages: It introduces translation invariance, which means that it matters less if a feature occurs at the center or on the edges of an images. Also it reduces the number of learned parameters significantly. Additionally to increase the capacity, usually multiple convolutions with learned kernels are learned per layer. This is called the depth of a layer. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes.
-
-Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance). Local pooling layers are connected to a local subset of the neurons in the previous layer. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). Figure \ref{fig:maxpooling} illustrates a max-pooling operation. A less common type of pooling is average pooling. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN. Pooling does not involve learning weights, as the function applied is fixed before training. There are also problems associated with pooling, as it essentially makes the model forget information. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
-
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
-
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/cnn.png}
 	\caption{Visual representation of a convolutional neural network}
-	\label{fig:feedforward}
+	\label{fig:cnn}
 \end{figure}
 
-\todo {Graphische Darstellung eines Convolution Layers}
+Based on feedforward neural networks convolutional neural networks emerged. A convolutional neural network (CNN) is a deep neural network. The basic layer types of CNNs are: fully connected hidden layers, convolutional layers and max-pooling layers. Figure \ref{fig:cnn} illustrates an overview of the architecture of a convolutional neural network.
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{graphics/convolution.png}
+	\caption{3x3 convolution with stride=1 and no padding.}
+	\label{fig:convolution}
+\end{figure}
+
+Convolutional layers apply a convolution on each pixel. A convolution is a weighted sum between two functions. The first function is the input signal and the second function a filter kernel. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows the layer to recognize certain local patterns (for example: edges). The kernel is shared among the input neurons (parameter sharing). This has two main advantages: It introduces translation invariance, which means that it does not matter if a feature occurs at the center or on the edges of an images. Also it reduces the number of learned parameters significantly. Additionally to increase the capacity, multiple convolutions are applied per layer. This is called the depth of a layer. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes. The kernel has a size, which is usually $n$x$n$. To avoid the size reduction of standard convolutions, one can set the padding parameter of a convolutional layer. This increases the input data synthetically (for example by introducing a border with constant value). There is also a stride, which defines how the filter moves along the input. If the stride is fractional ($1/s$), it is also called a deconvolution or transposed convolution. This operation increases the output size.
+
 
 \begin{figure}[ht]
 	\centering
@@ -763,6 +829,10 @@ Fully connected layers are usually the last layers of a CNN, their task is to pe
 	\caption{2x2 max pooling of a simple 4x4 input layer into a 2x2 output layer}
 	\label{fig:maxpooling}
 \end{figure}
+
+Pooling layers are applied after convolutional layers. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance). Local pooling layers are connected to a local subset of the neurons in the previous layer. The input is transformed by a function. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2). Figure \ref{fig:maxpooling} illustrates a max-pooling operation. A less common type of pooling is average pooling. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN. Pooling does not involve learning weights, as the function applied is fixed before training. There are also problems associated with pooling, as it essentially makes the model forget information. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
+
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning}.
 
 \if false
 Seiten: 1
@@ -822,6 +892,13 @@ Seiten: 1
 
 \subsection{Autoencoder}
 
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder.png}
+	\caption{A fully connected autoencoder with 2 encoding and 2 decoding layers}
+	\label{fig:autoencoder}
+\end{figure}
+
 An autoencoder is a deep neural network which learns a compact representation of data without supervision. This is similar to principal component analysis of traditional machine learning. An autoencoder consists of two parts: 
 
 \begin{itemize}
@@ -829,9 +906,7 @@ An autoencoder is a deep neural network which learns a compact representation of
 \item Decoder: Tries to reconstruct the original data from the low dimensional representation
 \end{itemize}
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information.
-
-\todo {Schematische Darstellung eines Autoencoders}
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of transposed convolutions.
 
 \if false
 Seiten: 0.5
@@ -844,7 +919,7 @@ Seiten: 0.5
 
 % SUM: 13.5-14
 
-\section{Natural Language Processing}
+\section{Natural Language Processing} \label{nlpbackground}
 
 Natural Language Processing (NLP) is a subfield of artificial intelligence and linguistics where the goal is to build computer programs that are able to understand human language. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition.
 
@@ -860,7 +935,7 @@ A trivial approach would be to give each word a unique identification number. Th
 
 Vector space model solve this problem. The idea is to represent each word in a high dimensional vector space, where a similarity measure holds.
 
-There is the concept of positive and negative similarity. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ \cite{TUW-233295} operator. Similarities based on the dot product are positive similarity measures. The cosine similarity is a commonly used positive similarity measure. While similarities based on distance (for example: euclidean distance) are negative similarity measures. CNNs are based on positive similarity: They perform a convolution, which is implemented using the dot product across the data.
+There is the concept of positive and negative similarity. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ \cite{TUW-233295} operator. Similarities based on the dot product are positive similarity measures. The cosine similarity is a commonly used positive similarity measure. While similarities based on distance (for example: euclidean distance) are negative similarity measures. CNNs are based on positive similarity: They perform a convolution, which applies a dot product across the data. These vector spaces are relatively high dimensional. Positive similarity performs empirically better on high dimensional spaces compared to negative similarity.	
 
 These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and GloVe embeddings. One problems of these embeddings are, that they mostly ignore the context of the word in the sentence. The word "bank" may have different meanings, depending on the context. In the sentences "I want to sit on a bank" and "I robbed a bank" the meaning is completely changed. The word embedding ELMo considers the context and returns different word vectors depending on the sentence.
 
@@ -976,7 +1051,7 @@ Seiten: 1
 \fi
 
 
-\section{AutoML}
+\section{AutoML} \label{automlbackground}
 
 AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human. Naive automated approaches such as grid search or random search have exponential runtime with increasing number of hyperparameters.
 
@@ -994,6 +1069,18 @@ A machine learning pipeline consists of different tasks, such as:
 
 AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations and pre-processing steps. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
 
+\subsection{Hyperopt-Sklearn \cite{hyperoptpaper}}
+
+This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem.
+
+Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters (also known as hyper hyperparameters):
+\begin{itemize}
+\item Objective function: Mapping of a configuration into a scalar value, which the algorithm tries to minimize
+\item Search domain: Random variables whose distribution should match the most likely best configuration 
+\item Optimization algorithm: An algorithm which finds the best configuration in the search domain given the objective function
+\end{itemize}
+
+
 \if false
 Seiten: 0.5
 
@@ -1006,15 +1093,13 @@ Seiten: 0.5
 
 \fi
 
-\section{Computational Humor}
+\section{Computational Humor} \label{comphumorbackground}
 
-According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}.
+According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}. Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
 
 Over the centuries, there have been many theories of humor been proposed. From the old Superiority Theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the Relief Theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. Finally the Incongruity Theory proposes, that humor is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
 
-A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play and the comparison has been made, that humor is a similar phenomena for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling can be considered as a signal to play. 
-
-Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
+A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play and the comparison has been made, that humor is a similar phenomena for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling enables these situations and therefore can be considered as a signal to play. 
 
 Computational humor combines the field of artificial intelligence and computational linguistics, with the goal of computers understanding humor. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application, as most people who have used such a system can confirm.
 
@@ -1046,7 +1131,9 @@ Seiten: 2
 
 % 20 Seiten
 
-\section{Related work}
+\section{Related work} \label{relatedworkbackground}
+
+In this chapter we outline several works of the field of computational humor related to our work. Beginning with traditional approaches, which do not use deep learning. Then we will continue with deep learning based works.
 
 
 \subsection{Computational Humor using Traditional Methods}
