@@ -249,69 +249,41 @@ Chapter 6 (Conclusion) finalizes this thesis with lessons learned during the cou
 As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis. First an overview of artificial intelligence and and machine learning is outlined. Section \ref{nlpbackground} lays out techniques of natural language processing. Section \ref{transferlearning} gives an overview of a technique called transfer learning. The next section \ref{automlbackground} outlines automated machine learning. Based on the previous sections the research area of computational humor is outlines in section \ref{comphumorbackground}. This section finalizes with related work of traditional computational humor and deep learning based computational humor \ref{relatedworkbackground}.
 
 \section{Machine Learning and Artificial Intelligence}
-\if false
-\subsubsection{What is AI?}
-Seiten: 1
-\begin{itemize}
-
-\item Erklärung was Artificial Intelligence ist.
-\item Benchmarks von Intelligenz (Zuerst Schach, dann Go, und jetzt?). Humor scheint noch immer sehr schwer zu sein
-\item Ansatz der KI: Unterteilung in verschiedene Subtasks (zB: Bildklassifizierung, Selbstfahrende Autos, Maschinenübersetzung, etc.)
-
-\end{itemize}
-
-\subsubsection{Machine Learning}
-Seiten: 1
-\begin{itemize}
-
-\item Relation zwischen AI und ML setzen.
-\item ML versucht ein Model zu finden, das ein gegebens Trainings Set generalisiert
-\item Parametric vs Non-Parametric model (kNN vs Neuronales Netzwerk) => Fokus auf parametric models setzen in dieser Arbeit
-\item Formalere Beschreibung was ein Model ist und was es bedeutet zu "lernen"
-\item Ziel von supervised ML beschreiben: Approximieren einer Funktion mit Generalisierung
-\item Kurz unsupervised ML und semisupervised ML erwähnen
-\item Klassifikation und Regression erklären und anhand eines Beispiels erläutern
-\item Unterschied zwischen Parameter und Hyperparameter erklären: Parameter messbare Eigenschaft des zu untersuchenden Phänomens. Hyperparameter parameter für den ML Algorithmus.
-
-\end{itemize}
-
-\subsubsection{Training of Machine Learning models}
-Seiten: 2
-\begin{itemize}
-
-\item Overfitting erläutern. Mit Beispiel untermalen ("Auswendig" lernen der Trainingsdaten)
-\item Illustration von Overfitting
-\item Underfitting auch erläutern
-\item Holdout Vorgehensweise erläutern: Anhand simplem "Pseudocode" und Erlaeuterung
-\item Illustration von Holdout
-\item Cross validation erläutern: Ebenfalls anhand Pseudocode
-\item Illustration von Cross Validation
-
-\end{itemize}
-
-\subsubsection{Evaluation of Machine Learning models}
-Seiten: 0.5 (+0.5 falls auch F1 / MSE)
-\begin{itemize}
-
-\item Bezug zu vorheriger sektion herstellen: Damit man weiß wie "gut" ein Model ist, braucht es eine Metrik
-\item Abhängigkeit zum zugrundeliegenden Task \& Datenset herstellen
-\item Mean absolute error erläutern mit Beispielrechnung
-\item Accuracy erläutern
-\item Eventuell auch andere Metriken erläutern (F1 Score, Mean squared error, etc.)
-
-\end{itemize}
-
-\fi
-
 %\subsection{What is Artificial Intelligence?}
-The field of Artificial Intelligence (AI) tries to reproduce (human) intelligence using computers. It is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain narrow subtasks of what is considered to require intelligence. Such a system is also known as weak AI. These tasks usually entail some utility for other application domains and range from image classification, self driving cars to machine translation. For example in the beginning of AI research playing chess was considered to be a very difficult task and was thought to require intelligence. Nowadays chess engines are able to beat every human player every time. The next frontier for many years was the game of Go. But eventually in 2016 AlphaGo showed that computers are able to beat the best human players in this game as well. The general assumption is that by solving each of these subtasks AI research gets closer to a strong AI. 
+The field of Artificial Intelligence (AI) tries to reproduce (human) intelligence using computers. It is yet impossible to develop a truly intelligent computer program, also known as strong AI. AI researchers typically pick certain narrow subtasks of what is considered to require intelligence. Such a system is also known as weak AI. These tasks usually entail some utility for other application domains and range from image classification, self driving cars to machine translation. The general assumption is that by solving each of these subtasks AI research gets closer to a strong AI.
+
+\subsection{History of Artificial Intelligence}
+
+In the year 1950 Alan Turing proposed the idea of a test which could determine if machines have human-level intelligence. In this test a human chats with a human and a computer. Both try to convince the human that they are a real human being. If the human is not reliably able to tell them apart, then the computer passes the Turing test. 
+
+In the 1960s and 70s AI researchers overestimated the possibilities of their systems greatly. For example Marvin Minsky (a key researcher back then) said in 1970 "In from three to eight years we will have a machine with the general intelligence of an average human being.". The goal of artificial intelligence initially seemed tractable:
+The computational power of computers increased exponentially and new algorithms and methods were developed. The first chatbot (ELIZA) by Joseph Weizenbaum which showed how communication between humans and machines could be implemented using relatively simple rules seemed promising.
+
+There were two schools of thoughts: The logics-based approach and the connectionism-based approach. Logics-based systems reached early success, by applying logic reasoning to AI. The idea of connectionism was to model AI systems using the human brain as a blueprint.
+
+In the end of the 60s connectionism many AI researchers lost interest, as the limitations of the perceptrons were revealed. This insight halted the research in this area for many years.
+
+The logics-based approach initially showed much success in several tasks (for example: theorem proving) but also reached a limit. The general approach was to model reasoning as a form of search: Proceed step-by-step towards the goal and backtrack if the steps lead to a dead end. The problem with this approach is the sheer size of the search space. The combinatorial explosion is intractable and can only be handled by heuristics, which limit the power of the system.
+
+All these factors combined and the lack of progress in key areas (especially computer vision) resulted in the first AI winter. Funding was cut to a minimum.
+
+Expert systems dominated the 1980s. These were systems which were crafted by human experts and entailed their knowledge of the specific domain it tried to model using logical rules. One important contribution of expert system was their usefulness. Even early experiments managed to diagnose infectious blood diseases. \cite{historyai}
+
+Research in the field of connectionism continued again as well. Backpropagation solved issues of previous attempts. Training larger neural networks was now tractable. Neural network proved their usefulness in the domain of optical character recognition and speech recognition.
+
+Still, the expectations were not met and the second AI winter happened during the early 1990s. This time it not only hit the scientific community, but also many AI companies.
+
+During the 1990s AI had a little negative connotation: AI-based systems were working in the background and many problems were largely solved (speech recognition, information retrieval). A big milestone of AI research was reached, when Deep Blue managed to win against the best chess player of the time, Garry Kasparov. This was largely due to the increased computational power and clever engineering, instead of some new paradigm.
+
+During this period the collaboration with other research fields began. For example, knowledge from mathematics and economics were applied in AI. Especially decision theory and probability theory brought in very important techniques, such as hidden markov models and bayesian networks. \cite{statisticsinml}
+
+The next boom in the field of AI is fueled by Deep Learning and the success it had in many problems of artificial intelligence. Beginning with the convolutional neural network AlexNet which was the first approach that reached a top-5 error of 15.3\% on the ImageNet Large Scale Visual Recognition Challenge in 2012. \cite{alexnet}
+
+And then continuing in 2016 with AlphaGo winning against the best human player of the board game Go. Compared to chess Go is a much more difficult game to play for computers, as the combinatorial explosion is much larger and the heuristics available are much weaker in Go compared to chess.
 
 The next frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure is a problem. For example this work shows that understanding humor is still very challenging.
 
-
-%\todo{Venn Diagramm das AI und ML in Relation zueinander setzt}
-
-% https://de.wikipedia.org/wiki/K%C3%BCnstliche_Intelligenz#Starke_und_schwache_KI
+The danger of a third AI winter is greater than never. Despite the recent advances, researchers must be wary to not overestimate the power of AI. For example, this work shows a limitation of deep learning. The question remains, whether current technology allows for strong AI, or if there is some limit we cannot advance using current approaches.
 
 \subsection{Machine Learning}
 
@@ -479,7 +451,7 @@ A confusion matrix usually reveals common mistakes of a model. For example if a 
 
 \section{Neural Networks}
 
-Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable. For example a simple XOR (\ref{XOR}) can not be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function. AN MLP consists of multiple perceptrons grouped in layers and each layer is connected with the previous layer.
+Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable. For example a simple XOR (\ref{XOR}) can not be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function. An MLP consists of multiple perceptrons grouped in layers and each layer is connected with the previous layer.
 
 \begin{table}[]
 \centering
@@ -702,7 +674,7 @@ The architecture of the neural network also influences how much it tends to over
 
 \subsection{Backpropagation}
 
-Backpropagation is an alternative way of determining the gradient of a function \cite{colahbackprop}. Backpropagation makes training big neural networks tractable for modern computers. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT} Backpropagation is also known as reverse-mode differentiation.
+Backpropagation is an alternative way of determining the gradient of a function \cite{colahbackprop}. Backpropagation makes training big neural networks tractable for modern computers. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT} Backpropagation is also known as reverse-mode differentiation. In this section we will use the term reverse-mode differentiation.
 
 \begin{figure}[ht]
 	\centering
@@ -855,17 +827,17 @@ Seiten: 1
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/rnn.png}
-	\caption{Unrollong of a simple RNN cell over time \cite{colahlstm}}
+	\caption{Unrolling of a simple RNN cell over time \cite{colahlstm}}
 	\label{fig:rnn}
 \end{figure}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops is performed.
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be performed. This process converts  recurrent neural networks into feed-forward networks when applied on a sequence with finite length.
 
 Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks. A newer approach to this problem are gated recurrent units (GRUs). \cite{gru}
 
 Among LSTM/GRU cells there are many variations. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general.
 
-The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell. For an overview of a more complicated LSTM view please refer to figure \ref{fig:lstm}.
+The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell. For an illustration of an LSTM, refer to figure \ref{fig:lstm}.
 
 \begin{figure}[ht]
 	\centering
@@ -906,7 +878,7 @@ An autoencoder is a deep neural network which learns a compact representation of
 \item Decoder: Tries to reconstruct the original data from the low dimensional representation
 \end{itemize}
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of transposed convolutions.
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions.
 
 \if false
 Seiten: 0.5
@@ -931,7 +903,7 @@ Deep learning currently achieves most state-of-the-art results in NLP. An advant
 
 For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from the dataset. High level features (sentence length) are usually not sufficient, therefore the sentences must be converted into useful features.
 
-A trivial approach would be to give each word a unique identification number. This works, but loses lots of important semantic information about the words. For example, the words king and queen are more similar than king and house. If the featureization assigns the ID=2 for king and the ID=42 for queen, than the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing.
+A trivial approach would be to give each word a unique identification number. This works, but loses lots of important semantic information about the words. For example, the words king and queen are more similar than king and house. If the featurization assigns the ID=2 for king and the ID=42 for queen, than the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing.
 
 Vector space model solve this problem. The idea is to represent each word in a high dimensional vector space, where a similarity measure holds.
 
@@ -1007,13 +979,13 @@ Seiten: 0.25
 \fi
 
 \subsection{ELMo \cite{elmo}}
-Previous models have very limited sense of context, especially had each word the same word vector associated regardless of the context. ELMo assigns word embeddings depending on context.
+Previous models have very limited sense of context, especially had each word the same word vector associated regardless of the context. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context.
 
 The basis for ELMo is training a language model. A language model enables to predict the next word given a sequence of prior words. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
 
 ELMo models this language model using a 2-layer bidirectional LSTM using residual connections, which allow deep models to train more efficiently. However the words still must be converted into a vector representation. This is achieved by first converting the words into a character embedding and then apply convolutional layer with max-pooling. The character embedding has the advantage that the model handles words which are not in the vocabulary better.
 
-The novel idea of ELMo is not how it is trained, but how the trained language model is being applied: Getting the final word embedding for a word is done by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation. The combination is done by applying a weight to each state.
+The novel idea of ELMo is not how it is trained, but how the trained language model is applied: ELMo calculates the final word embedding for a word by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation. The combination is done by multiplying a weight to each state, which is also learned.
 
 This is a short summary of a relatively complex architecture. For more details referring to \cite{elmo} is recommended.
 
@@ -1097,9 +1069,9 @@ Seiten: 0.5
 
 According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}. Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
 
-Over the centuries, there have been many theories of humor been proposed. From the old Superiority Theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the Relief Theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. Finally the Incongruity Theory proposes, that humor is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
+Over the centuries, there have been many theories of humor been proposed. From the old superiority theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the relief theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. The incongruity theory proposes, that humor is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
 
-A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play and the comparison has been made, that humor is a similar phenomena for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling enables these situations and therefore can be considered as a signal to play. 
+A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play. Humor seems to serve a similar purpose for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling enables these situations and therefore can be considered as a signal to play. 
 
 Computational humor combines the field of artificial intelligence and computational linguistics, with the goal of computers understanding humor. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application, as most people who have used such a system can confirm.
 
