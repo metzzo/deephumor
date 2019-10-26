@@ -1441,6 +1441,21 @@ Seiten: 0.25
 
 \subsection{Simple CNN}
 
+The goal of this approach was to establish a performance baseline. This models goal was to answer the question: How well does a relatively simple convolutional neural network on the Gary Larson cartoon dataset?
+
+Am important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to set: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A comparison would be to play the game "Where is Waldo" on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
+
+Otherwise, if the input size is too small, then crucial information may get lost as well. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is, that 90\% of the images are in lanscape, while the remaining are in portrait orientation. Therefore, predicting the image in lanscape well has priority.
+
+Different configurations for the input size was empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174.
+
+Modelling the output of a neural network is equally crucial as the input. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. for classification I used cross entropy loss. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
+
+Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers, while too less layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
+
+\todo {Illustration des CNN Netzwerks}
+
+\if false
 Seiten: 1
 
 \begin{itemize}
@@ -1449,6 +1464,8 @@ Seiten: 1
 \item Einmal als Regressionstask und einmal als Klassifikationstask modelliert => Klassifikation funktionierte besser
 \item Verschiedene Anzahl an Layer und Größe an Layer probiert
 \end{itemize}
+
+\fi
 
 \subsection{Transfer Learning CNN}
 
