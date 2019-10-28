@@ -1307,9 +1307,13 @@ Seiten: 0.25
 
 \section{Dataset}
 
+
+
+\if false
 Erläutern dass am Anfang das Datenset erstellt werden musste.
 
 Seiten: 0.25
+\fi
 
 \subsection{Dataset Acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
@@ -1469,17 +1473,76 @@ Seiten: 1
 
 \subsection{Transfer Learning CNN}
 
+As described in section \ref{transferlearning} transfer learning is a common approach to deal with a small dataset in deep learning. This experiment uses a pretrained ResNet18 model. \cite{resnet} ResNet consists of multiple residual blocks, which allows the network to be much deeper compared to a naive CNN and still improve performance. Earlier blocks perform simple feature extraction and later blocks perform high level feature extraction. 
+
+I probed several configurations of this transfer learning approach:
+
+\begin{enumerate}
+\item Reuse entire convolutional feature extractor and retrain final classifier
+\item Retrain last block of ResNet18 and the final classifier
+\item Reuse entire model and add a new final fully connected dense layer
+\end{enumerate}
+
+The second approach was the best performing on the validation set. Additionally applying data augmentation was crucial. The following transformations on the cartoon image were most successful:
+
+\begin{itemize}
+\item Random horizontal flip
+\item Random resize and crop
+\item Random rotation
+\end{itemize}
+
+\todo {Illustration vom transfer learning}
+
+\if false
 Seiten: 1
 
 \begin{itemize}
 \item Architektur (ResNet18) verwendet und auf Cartoons angewandt
 \item Welche Parameter wurden transferiert? Einmal wurde kompletter Convolutional Teil transferiert, einmal wurde letzter Block auch trainierbar geschaltet und einmal wurde der fully connected teil ebenfalls übernommen.
+\item Data Augmentation
 \item Visuelle Illustration des gewählten besten Netzwerks
 
 \end{itemize}
+\fi
 
 
 \subsection{Transfer Learned Object Detection}
+
+\begin{figure}[ht]
+	\centering
+  	\includegraphics[width=1.0\textwidth]{graphics/edge_edge_detection.jpg}
+	\caption{First row is a shark drawn by Gary Larson. Second row is a real world shark.}
+	\label{fig:dataugmentation}
+\end{figure}
+
+There were two suspected issues with the previous transfer learning approaches:
+
+\begin{enumerate}
+\item The source domain was too distinct from the target domain. The domain of real world images (which ResNet18 was trained on) and cartoons is too distinct for a naive transfer learning approach. I addressed this issue by implementing a novel data augmentation technique.
+\item The semantic level of humor may be too high for CNNs to understand. I planned to adress this issue by extracting high-level feature vector based on object detection using CNNs.
+\end{enumerate}
+
+The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the canny edge detection filter multiple times. The cartoon image is transformed by Canny (using default parameters) into a target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny with the same parameters should bring the real world images into the same target domain.
+
+\begin{table}[]
+\label{objectdetectionfeaturevector}
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+Has Human? & Has Dogs? & Has Cats? & Has Alien? & Has Shark? & ... \\ \hline
+1   & 1 & 1 & 0 & 0 & ... \\
+\hline
+\end{tabular}
+\caption{Hypothetical feature vector}
+\end{table}
+
+To improve the problem of high-level semantics (2) I wanted to train an object detection model based on the CIFAR-100 dataset augmented using the double edge detection data augmentation.\cite{cifar100}This would allow to compute a high-level description of a cartoon based on the objects detected by the object detection algorithm. To validate this approach I first trained a simpler image classification model based on ResNet18. If image classification does not sufficiently work, then object detection will most likely also fail. As an example the feature vector of the figure \ref{fig:fig1} could look similar to \ref{objectdetectionfeaturevector}.
+
+Unfortunately this approach did not achieve significant results, as there were no consistent classifications. Therefore I did not train the final object detection. If, for example, a person was consistently assigned the same class, then the feature vector could have entailed enough semantic information for cartoon theme-based predictions. The data analysis revealed that there are certain cartoon themes which have higher funniness scores compared to others. 
+
+Another approach I tried was to train an object detection model based on other datasets: The TU Berlin sketch dataset and Googles Quick, draw! dataset.\cite{tuberlin}\cite{quickdraw} Theses approaches did not need the edge detection preprocessing, as they were already in the sketch domain. Still the domains were too distinct, as the image classification performance never reached significant performance.
+
+\if false
 
 Seiten: 1.5
 
@@ -1492,7 +1555,10 @@ Seiten: 1.5
 \item Dadurch lassen sich die Cartoons nicht als featurevektor repräsentieren
 \item Ueber 100 Objekte von Gary Larsons Cartoons wurden dafür extra annotiert => Keine Muster erkennbar
 \item Graphische Darstellung wie Objekte in selber Domäne hätten sein können (Hai Bild)
+\item Evtl. verbesserungsmöglichkeiten erklaeren.
 \end{itemize}
+
+\fi
 
 \section{Text domain}
 
