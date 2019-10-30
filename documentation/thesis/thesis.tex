@@ -1297,17 +1297,11 @@ Seiten: 1.0
 
 \chapter{Design} \label{design}
 
-In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined.
+In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined. This process had four main phases: Dataset design, visual model design, text model design and combined model design.
 
-\section{Overview}
+\section{Dataset design}
 
-Hier wäre eine Übersicht über das Design aus einer Metaebene.
-
-Seiten: 0.25
-
-\section{Dataset}
-
-
+Due to the novel requirements of this approach I created a new dataset from Gary Larson's cartoons. Then I performed an extensive data analysis, which motivated the remaining design process.
 
 \if false
 Erläutern dass am Anfang das Datenset erstellt werden musste.
@@ -1437,11 +1431,9 @@ A word count analysis showed that there are significant difference in the freque
 
 \end{figure}
 
-\section{Visual domain}
+\section{Visual domain model design}
 
-Erläutern wie am Anfang die visuelle Domäne berücksichtigt wurde
-
-Seiten: 0.25
+To reduce the problem space I decided to first tackle the visual domain of Gary Larson's cartoons. This has the advantage that there are well defined neural network architectures (CNNs, ResNet) which knowingly perform well on various image related tasks.
 
 \subsection{Simple CNN}
 
@@ -1556,11 +1548,12 @@ Seiten: 1.5
 \item Ueber 100 Objekte von Gary Larsons Cartoons wurden dafür extra annotiert => Keine Muster erkennbar
 \item Graphische Darstellung wie Objekte in selber Domäne hätten sein können (Hai Bild)
 \item Evtl. verbesserungsmöglichkeiten erklaeren.
+\item Evtl. dass das image classification am data augmented cifar100 auch eher schlecht funktioneirte
 \end{itemize}
 
 \fi
 
-\section{Text domain}
+\section{Text domain model design}
 
 Erläutern wie danach nur die Text Domain berücksichtigt wurde.
 
@@ -1568,20 +1561,27 @@ Seiten: 0.25
 
 \subsection{ELMo}
 
+First I tried to model the punchlines using an LSTM neural network architecture. This approach quickly overfitted. GRU cells had the same problem. I probed several architectures with multiple LSTM cells, different hyperparameters and an additional embedding layer.
+
+Recurrent neural networks require big datasets, the idea then was to train simpler models. I achieved this by generating a sentence embedding from the sequence of word embeddings. A sentence embedding is a vector representation of a word embedding in a vector space. There are many different ways to obtain such embedding. I chose the simple approach to take the mean of all word embeddings of a punchline. This resulted in a fixed sized vector representation of a punchline, which allowed the use of a regular fully connected neural network.
+
+I chose ELMo as the main context-aware word embedding for this thesis. \cite{elmo} Mainly due to the state-of-the-art results it achieves while still being relatively easy to use in the chosen NLP framework. More about this in chapter \ref{implementationchapter} Implementation.
+
+\todo{Illustration des Netzwerks}
+
+\if false
+
 Seiten: 1.0
 
 \begin{itemize}
 \item Gewählte ELMo Ansätze erklären
 \item Zuerst wurde LSTM/GRU probiert. Problem: Overfitting
 \item Danach wurde simpler Classifier mit Sentence Embedding angewandt (Sentence Embedding ist ein Vektor für den gesamten Satz statt pro Wort)
-\item ELMo vs BERT: Warum wurde ELMo verwendet. Grund: Einfache Verwendung mit gewähltem Framework AllenNLP und performance war vergleichbar bei vielen NLP Tasks
 \item Visuelle Illustration des gewählten Netzwerks
+
+Das eher bei Design:
+\item ELMo vs BERT: Warum wurde ELMo verwendet. Grund: Einfache Verwendung mit gewähltem Framework AllenNLP und performance war vergleichbar bei vielen NLP Tasks
 \end{itemize}
-
-\if false
-The punchline of a cartoon will be converted into text strings. Humans are able to understand this representation of text quite well, but only after spending many years of learning to read. The neural network itself does not understand the semantic meaning, the encoding is arbitrary. The string "animal" has as much semantic meaning as the string "foobar". Hence training on this encoding is not expected to have good results. \\
-
-To solve this problem Word Embeddings can be computed. These place words into a feature space where similar words are near to each other, while dissimilar words are far from each other. Such an embedding can be calculated using a Skip-Gram model \cite{wordembedding} or pretrained models are available \cite{pennington2014glove}.
 \fi
 
 \subsection{AutoML}
@@ -1595,7 +1595,7 @@ Seiten: 1
 \item Wie wurde Feature Vektor erstellt? => TFIDF, GloVe, ELMo, TFIDF + GloVe, TFIDF + ELMo
 \end{itemize}
 
-\section{Visual and text domain combined}
+\section{Visual and text domain combined model design}
 
 Erläutern wie danach beide Domänen zusammen berücksichtgt wurden.
 
@@ -1635,7 +1635,7 @@ A list of experiments performed but did not make the cut for a more detailed ana
 Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. worden sind.
 \fi
 
-\chapter{Implementation}
+\chapter{Implementation} \label{implementationchapter}
 
 Erläuterung des Implementierungsvorgangs
 
