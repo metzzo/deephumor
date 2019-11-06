@@ -289,7 +289,7 @@ The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column
 
 Machine learning tries to approximate a function from the selected data set. Depending on the available information, different strategies must be applied. Typically, the most convenient and preferred mode is supervised machine learning \cite{aimodern}. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied \cite{aimodern}. For example clustering methods allow unsupervised ML. If a mixture of labelled and unlabelled data is available, machine learning practitioners apply semi-supervised machine learning \cite{semisupervised}.
 
-Additionally, there is a distinction between classification and regression tasks \cite{bishop}. If $\boldsymbol{t}$ is a continuous variable, machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take finite  values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an e-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task by converting the features using discretization and vice versa \cite{discretization}. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent.
+Additionally, there is a distinction between classification and regression tasks \cite{bishop}. If $\boldsymbol{t}$ is a continuous variable, machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take finite  values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an e-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task by converting the features using discretization and vice versa \cite{discretization}. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent \cite{aimodern}.
 
 \begin{table}[]
 \centering
@@ -306,12 +306,14 @@ Classification Class & CLASS 50      & CLASS 75 & CLASS 150 & CLASS 250 \\
 
 \subsection{Training of Machine Learning models}
 
-The most important property of a model $\boldsymbol{y}$ is the generalization power for unseen data \cite{bishop}. Training a model $\boldsymbol{y}$ which predicts the training data $\boldsymbol{X}$ perfectly is trivial: The machine learning algorithm could always build a lookup table which memorizes a mapping from the training samples to the target labels $\boldsymbol{t}$. If this happens, it is called \textit{overfitting}.
+The most important property of a model $\boldsymbol{y}$ is the generalization power for unseen data \cite{bishop}. Training a model $\boldsymbol{y}$ which predicts the training data $\boldsymbol{X}$ perfectly is trivial: The machine learning algorithm could always build a lookup table which memorizes a mapping from the training samples to the target labels $\boldsymbol{t}$ \cite{overfitting}. If this happens, it is called \textit{overfitting} \cite{overfitting}.
 
-The holdout method facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data. There is always some bias towards the original data set. The better the data set characterizes the underlying problem, the better the approximation. For example, if one trains a vehicle detection model, but the data set does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance possibly indicating otherwise.
+The \textit{holdout method} facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data \cite{holdoutcrossvalidation}. There is often some bias towards the original data set \cite{datasetbias}. The better the data set characterizes the underlying problem, the better the final model may perform practically \cite{datasetshift}. For example, if one trains a vehicle detection model, but the data set does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance metrics possibly indicating otherwise.
+
+The holdout method first splits the data into three distinct subsets: Training, validation and test set \cite{holdoutcrossvalidation}. Then the practitioner incrementally adjusts the hyperparameters and trains on the training set, based on the performance of the model on the validation set \cite{holdoutcrossvalidation}. Finally, to gather the true performance the practitioner has to evaluate on the test set \cite{holdoutcrossvalidation}. The following algorithm illustrates the holdout method using pseudo code:
 
 \begin{algorithm}
-\caption{Holdout method}\label{holdoutalgo}
+\caption{Holdout method \cite{holdoutcrossvalidation}}\label{holdoutalgo}
 Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set.
 
 \While {$\neg$some halting criterion} {
@@ -319,42 +321,45 @@ Train the model on the train split.
 
 Check performance of the trained model on the validation set.
 
-Manually adjust hyper parameters such that the model generalizes better
+Manually adjust hyperparameters such that the model generalizes better
 }
 
 Check final performance on the test set of the best trained model
 
 \end{algorithm}
 
-Note the validation/test split is only needed if there are hyperparameters which are being tweaked iteratively.
-Due to the lack of standardization, sometimes the validation set is actually called the test set and the test set is actually the validation set.
+This variant is also commonly referred to as the three-way holdout method \cite{holdoutcrossvalidation}. The validation/test split is only needed if there are hyperparameters which are being optimized iteratively \cite{holdoutcrossvalidation}.
+Due to the lack of standardization, sometimes the validation set is actually called the test set and the test set the validation set \cite{patternrecognitionandnn} \cite{anintroductiontoneuralnetworks}.
 
-Commonly used halting criterions include:
+Commonly used halting criteria include:
 \begin{itemize}
-\item maximum number of iterations
-\item plateauing performance: No improvement after a previously defined number of iterations
-\item Maximum performance: The model reaches a certain performance threshold
-\item Combination of multiple halting criterions
+\item Maximum number of iterations \cite{kerashalting}
+\item Plateauing performance: No improvement after a previously defined number of iterations \cite{haltingcriteria}
+\item Maximum performance: The model reaches a certain performance threshold \cite{kerashalting}
+\item Combination of multiple halting criteria \cite{kerashalting}
 \end{itemize}
 
-The default split ratio for the training/validation and test set is:
+\if false
+A common split ratio for the training/validation and test set is \cite{holdoutcrossvalidation}:
 \begin{enumerate}
 \item 60\%: Training Set
 \item 20\%: Validation Set
 \item 20\%: Test Set
 \end{enumerate}
+\fi
 
-If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
+If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage \cite{doingdatascience}. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
 
-Another method is called Cross-validation: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method. As many models are trained (depending on $n$) it can be computationally very expensive.
+Another method for evaluating the performance of a machine learning model is called \textit{cross-validation} \cite{holdoutcrossvalidation}: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method \cite{aimodern}. As many models are trained (depending on $n$) it can be computationally very expensive  \cite{bishop}.
 
+The following pseudo code illustrates cross-validation, which first splits the data in a $\boldsymbol{TRAIN}$ and a $\boldsymbol{TEST}$ set \cite{holdoutcrossvalidation}. Then incrementally the $\boldsymbol{TRAIN}$ set is split into $k$ partitions $\boldsymbol{P}$. For each $(\boldsymbol{TRAIN} \setminus \boldsymbol{P}, \boldsymbol{P})$ pair a model is trained and evaluated \cite{bishop}. Based on the overall performance the practitioner adjusts the hyperparameters accordingly. Finally the $\boldsymbol{TEST}$ set evaluation returns the performance on unseen data \cite{holdoutcrossvalidation}.
 
 \begin{algorithm}
-\caption{Cross-validation method}\label{holdoutalgo}
+\caption{Cross-validation method \cite{holdoutcrossvalidation}}\label{holdoutalgo}
 Take the data set $\boldsymbol{X}$ and split randomly into two distinct sub sets: Training ($\boldsymbol{TRAIN}$) and test set ($\boldsymbol{TEST}$).
 
 \While {$\neg$some halting criterion} {
-Take the train set $\boldsymbol{TRAIN}$ and split into $n$ partitions
+Take the train set $\boldsymbol{TRAIN}$ and split into $k$ partitions
 
 \ForEach{partition $\boldsymbol{P}$}{
 Train the model on $\boldsymbol{TRAIN} \setminus \boldsymbol{P}$
@@ -364,14 +369,14 @@ Calculate performance on $\boldsymbol{P}$
 
 Calculate average performance
 
-Manually adjust hyper parameters such that the model generalizes better.
+Manually adjust hyperparameters such that the model generalizes better.
 }
 
 Check final performance on the test set $\boldsymbol{TEST}$ of the best trained model
 
 \end{algorithm}
 
-Depending on the machine learning practitioner and task at hand, the test set is omitted during for final performance. Instead the average performance returned by cross validation is used. Figure \ref{fig:holdoutvscv} compares the splits of holdout method and cross validation.
+Depending on the machine learning task and applied methodology, there is no distinct test set \cite{holdoutcrossvalidation}. Figure \ref{fig:holdoutvscv} compares the splits of holdout method and cross validation.
 
 \begin{figure}[ht]
 	\centering
@@ -631,7 +636,7 @@ The naive implementation of gradient descent has problems, which can be mitigate
 
 Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets shallower. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum.
 
-Another technique is called minibatching: Here instead of taking the gradient of the entire data set $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch.
+Another technique is called minibatching: Here instead of taking the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch.
 
 Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. \cite{colahbackprop}
 
@@ -991,9 +996,9 @@ Seiten: 0.5
 
 \section{Transfer Learning} \label{transferlearning}
 
-Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big data set is also a big challenge and not always feasible.
+Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big dataset is also a big challenge and not always feasible.
 
-Transfer learning tackles this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model is trained on an already existing big dataset and the data set of the fine tuning can be orders of magnitudes smaller. This tuning in the context of deep neural networks is usually done by fixating the weights of neurons in certain higher layers during training. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily.
+Transfer learning tackles this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model is trained on an already existing big dataset and the dataset of the fine tuning can be orders of magnitudes smaller. This tuning in the context of deep neural networks is usually done by fixating the weights of neurons in certain higher layers during training. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily.
 
 For example there are already very big datasets for image classification tasks. Training a good performing classifier on these datasets has already been done numerous times. Especially CNNs have an architecture very suited for transfer learning: As mentioned in [\ref{mlcnn}], there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons.
 
@@ -1691,7 +1696,7 @@ Seiten: 2
 This chapter aims to evaluate the performance of the implemented architectures. In
 general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
 
-The cartoon data set is split into three sub sets:
+The cartoon dataset is split into three sub sets:
 
 \begin{itemize}
 \item Training Set: 1492 samples (70\%)
@@ -2037,7 +2042,7 @@ Discussion der Ergebnisse der Evaluation.
 
 In general no model really learns to generalize the humor of Gary Larson. There has been no significant improvement compared to the baselines. Further research could reveal significant insights on how human humor works.
 
-Potential causes can not be attributed to exactly one issue. One reason is most certainly, that the problem space is not sufficiently grasped by the data set. As most deep learning data sets are many order of magnitudes larger, while the task at hand is arguably easier (For example: CIFAR 10 data set \cite{dogsvscats}) than humor classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
+Potential causes can not be attributed to exactly one issue. One reason is most certainly, that the problem space is not sufficiently grasped by the dataset. As most deep learning datasets are many order of magnitudes larger, while the task at hand is arguably easier (For example: CIFAR 10 dataset \cite{dogsvscats}) than humor classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
 
 One could also argue that the problem itself is flawed. Letting a human rate a
 cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for performing the annotation. It could be that these factors outweigh the true humor, which makes it impossible to reproduce the original ratings. To answer this question an additional experiment could be performed: After some time after the initial ratings were performed, the same person rates the cartoons again. If the ratings are not reproducible by the same annotator, then it seems to be impossible for a deep learning based model.
