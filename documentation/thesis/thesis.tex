@@ -306,7 +306,7 @@ Classification Class & CLASS 50      & CLASS 75 & CLASS 150 & CLASS 250 \\
 \label{table:conversionregressclass}
 \end{table}
 
-\subsection{Training of Machine Learning models}
+\subsection{Training of Machine Learning models} \label{trainingofml}
 
 The most important property of a model $\boldsymbol{y}$ is the generalization power for unseen data \cite{bishop}. Training a model $\boldsymbol{y}$ which predicts the training data $\boldsymbol{X}$ perfectly is trivial: The machine learning algorithm could always build a lookup table which memorizes a mapping from the training samples to the target labels $\boldsymbol{t}$ \cite{overfitting}. If this happens, it is called \textit{overfitting} \cite{overfitting}.
 
@@ -557,40 +557,38 @@ Seiten: 1.5
 
 \subsection{Training of neural networks} \label{nntrain}
 
-For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights.
+For training a loss function $L(\boldsymbol{w})$ is defined, where $\boldsymbol{w}$ are the trained weights \cite{Goodfellow-et-al-2016}.
 
-The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks.
+The loss can have many different forms, but in the following we will discuss primarily the cross entropy loss, since it is commonly used for classification tasks \cite{dlvc}.
 
 \begin{equation}
 L(\boldsymbol{w}) = -\sum_{n=1}^N \left( t_n\,\text{ln}\, y_n + (1 - t_n)\,\text{ln}(1 - y_n)\right) \text{ where } 
 y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 \end{equation}
 
-Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes:
+Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes \cite{dlvc}:
 
 \begin{equation}
 L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
 \end{equation}
 
-For regression tasks the L1 loss can be used:
+For regression tasks the L1 loss can be used \cite{accuracy}:
 
 \begin{equation}
 L(\boldsymbol{w}) = \dfrac{1}{N} \sum_{n=1}^N |x_n - y_n| \text{ where } 
 y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 \end{equation}
 
-The goal of training neural network is to minimize the loss of the model:
+The goal of training neural network is to minimize the loss of the model \cite{dlvc}:
 
 \begin{equation}
 \text{arg min}\quad L(\boldsymbol{w})
 \end{equation}
 
-Training takes advantage of the fact that it is a function composition of differentiable functions. This allows the use of a technique called gradient descent. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function. A halting criterion could be number of iterations, diminishing or no improvements over time or reaching some predefined threshold.
-
-A pseudo code for gradient descent:
+Training takes advantage of the fact that it is a function composition of differentiable functions \cite{Goodfellow-et-al-2016}. This allows the use of a technique called gradient descent \cite{anintroductiontoneuralnetworks}. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met \cite{anintroductiontoneuralnetworks}. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function \cite{Goodfellow-et-al-2016}. A halting criterion could be one described in section \ref{trainingofml}. Algorithm \ref{gradientedescentalgo} illustrates the pseudo code of gradient descent.
 
 \begin{algorithm}
-\caption{Gradient descent pseudo code}\label{gradientedescentalgo}
+\caption{Gradient descent pseudo code \cite{anintroductiontoneuralnetworks}}\label{gradientedescentalgo}
 \While {$\neg$some halting criterion} {
 Compute gradient: $\boldsymbol{w}' = \bigtriangledown	L(\boldsymbol{w})$
 
@@ -599,12 +597,12 @@ Update weights: $\boldsymbol{w} := \boldsymbol{w} - \alpha \boldsymbol{w}'$
 
 \end{algorithm}
 
-$\alpha > 0$ is a hyperparameter and called the learning rate. $\alpha$ is usually set empirically and usually $0.000001 \leq \alpha < 1.0$. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could increase instead of decrease, since it might skip important extremes. In general, the higher $\alpha$, the faster the gradient descent converges. Reversely the lower $\alpha$ the more local optimas are considered. Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to apply learning rate decay during training. This means that the learning rate is gradually reduced during the learning. Figure \ref{fig:gradientdescent} illustrates the process of gradient descent.
+$\alpha > 0$ is a hyperparameter and called the learning rate \cite{Goodfellow-et-al-2016}. $\alpha$ is usually set empirically \cite{Goodfellow-et-al-2016}. A too high learning rate (for example $\alpha = 1$) means that the loss of the neural network could oscillate  violently, where the loss function often increases significantly \cite{Goodfellow-et-al-2016}. The lower $\alpha$ the more likely it is that the gradient descent converges in a local optima \cite{Goodfellow-et-al-2016}. Figure \ref{fig:gradientdescent} illustrates the process of gradient descent. % Usually in the beginning of training the learning rate should be higher and at the end the learning rate should be lower. This is the reason why it is common to apply learning rate decay during training. This means that the learning rate is gradually reduced during the learning
 
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=0.85\textwidth]{graphics/gradientdescent.png}
-	\caption{Visual representation of gradient descent with momentum. Longer arrows mean steeper gradient.}
+	\caption{Visual representation of gradient descent with momentum. Longer arrows mean steeper gradient. \cite{Goodfellow-et-al-2016}}
 	\label{fig:gradientdescent}
 \end{figure}
 
@@ -624,17 +622,15 @@ Seiten: 1.5
 
 \subsection{Applying neural networks}
 
-The naive implementation of gradient descent has problems, which can be mitigated by different measures:
+The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets shallower. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
 
-Usually a technique called momentum is applied. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets shallower. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum.
+Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of taking the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
 
-Another technique is called minibatching: Here instead of taking the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch.
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters \cite{colahbackprop}. Therefore a technique called backpropagation is commonly used \cite{colahbackprop}. For more information, refer to section \ref{backprop}.
 
-Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters. Therefore a technique called backpropagation is commonly used. \cite{colahbackprop}
+In general, overfitting is a problem of neural networks (and other machine learning algorithms) \cite{aimodern}. The following approaches can counteract overfitting: Regularization, Data augmentation and Dropout layers \cite{Goodfellow-et-al-2016}. 
 
-In general, overfitting is a problem of neural networks (and other machine learning algorithms). The main three approaches for counteracting overfitting are: Regularization, Data augmentation and Dropout layers. 
-
-The idea of data augmentation is to synthetically increase the size of the dataset by applying transformations on the original data. All transformations must not alter the original label of the sample. For examples, image data usually allows many different kind of filters and transformations to be applied. Common operations are random crop, random rotation and noise. In general, this technique allows for better generalization of the trained model. For example, a model which is trained on a cats versus dogs image dataset with a rotation transformation applied might distinguish rotated cats and dogs better, compared to a model trained on a dataset without this augmentation. On the other hand the transformations could be unnecessarily force a model to generalize: Applying a skew transformation on the cats versus dogs dataset might make the performance even worse of the trained model.
+The idea of data augmentation is to synthetically increase the size of the dataset by applying transformations on the original data. All transformations must not alter the original label of the sample. Image data usually allows many different kind of filters and transformations to be applied. Common operations are random crop, random rotation and noise. In general, this technique allows for better generalization of the trained model. For example, a model which is trained on a cats versus dogs image dataset with a rotation transformation applied might distinguish rotated cats and dogs better, compared to a model trained on a dataset without this augmentation. On the other hand the transformations could be unnecessarily force a model to generalize: Applying a skew transformation on the cats versus dogs dataset might make the performance even worse of the trained model.
 
 Regularization tries to avoid overfitting by penalizing	high weights of neurons. This avoids certain inputs from dominating the outputs and nudges the network to make use of all inputs. This can easily be achieved by adapting the loss function slightly:
 
@@ -659,7 +655,7 @@ Due to the sheer amount of hyperparameter and possible approaches, successfully 
 
 The architecture of the neural network also influences how much it tends to overfit. As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons.
 
-\subsection{Backpropagation}
+\subsection{Backpropagation} \label{backprop}
 
 Backpropagation is an alternative way of determining the gradient of a function \cite{colahbackprop}. Backpropagation makes training big neural networks tractable for modern computers. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT} Backpropagation is also known as reverse-mode differentiation. In this section we will use the term reverse-mode differentiation.
 
