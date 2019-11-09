@@ -487,46 +487,46 @@ Seiten: 1.5
 
 \subsection{Basics of neural networks}
 
-From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
+From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector \cite{colahbackprop}. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as \cite{bishop}:
 \begin{equation}
 a_j = \sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}
 \end{equation}
 
-where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$:
+where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$ \cite{bishop}:
 \begin{equation}
 z_j = h(a_j)
 \end{equation}
-Depending on the problem different activation functions are applied. Common functions are
+Depending on the problem different activation functions are applied. Common functions include:
 \begin{itemize}
-\item Tanh function: Commonly used activation function before ReLU showed mainly empirically to work better
+\item Tanh function \cite{activationfunctions}: zero-centered function between -1 and 1 \cite{activationfunctions}. Suffers from the vanishing gradient problem \cite{activationfunctions}.
 \begin{equation}
-h(x) = tanh(x)
+h(x) = \dfrac{e^x - e^{-x}}{e^x + e^{-x}}
 \end{equation}
-\item Sigmoid Function: "Squashes" the input value between 0 and 1
+\item Sigmoid Function \cite{anintroductiontoneuralnetworks}: "Squashes" the input value between 0 and 1 \cite{anintroductiontoneuralnetworks}.
 \begin{equation}
 h(x) = \dfrac {1} {1 + e^{-x}}
 \end{equation}
-\item ReLU: Very often used in deep learning
+\item ReLU (Rectified Linear Unit) \cite{Goodfellow-et-al-2016}: Very commonly used in deep learning, as it performs very well on a wide range of different tasks \cite{activationfunctions}. Can be calculated very quickly, as it does not contain any division or exponential \cite{activationfunctions}.
 \begin{equation}
 h(x) = max(0, x)
 \end{equation}
-\item SoftMax: Takes multiple inputs. Can be used to transform any inputs into a probability distribution. This is commonly used for the final layer of classification tasks with multiple classes (multi class classification)
+\item SoftMax \cite{Goodfellow-et-al-2016}: Used to transform any vector into a probability distribution \cite{activationfunctions}. This is commonly used for the final layer of classification tasks with multiple classes (multi class classification) \cite{activationfunctions}.
 \begin{equation}
 h(\boldsymbol{x}) = \dfrac{e^{x_i}}{\sum_{k=1}^{M} e^{x_k}}
 \end{equation}
-\item Logistic Sigmoid: Similar to SoftMax, but used for binary classification
+\item Logistic Sigmoid \cite{Goodfellow-et-al-2016}: Similar to SoftMax, but used for binary classification \cite{Goodfellow-et-al-2016}.
 \begin{equation}
 \sigma(x) = \dfrac{1}{1 + exp(-x)}
 \end{equation}
 \end{itemize}
 
 
-for the first hidden layer the following values are linearly combined:
+For the first hidden layer of a neural network the following values are linearly combined \cite{bishop}:
 \begin{equation}
 a_k = \sum_{i=1}^{M} w_{kj}^{(2)}z_j + w_{k0}^{(2)}
 \end{equation}
 
-where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for the remaining hidden layers. The final result for classification tasks is usually obtained by applying a softmax activation function of the last layer's output.
+where $k = 1, ..., K$ is the total number of outputs of the first hidden layer. The same procedure is repeated for the remaining hidden layers \cite{bishop}. The final result for classification tasks is usually obtained by applying a softmax activation function of the last layer's output \cite{bishop}.
 
 Combining these transformations together for a relatively simple two layer network results in the following equation:
 
@@ -534,13 +534,13 @@ Combining these transformations together for a relatively simple two layer netwo
 y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\left(\sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}\right) + w_{k0}^{(2)}\right)
 \end{equation}
 
-This term can be simplified, by assuming that the input vector $x$ has always a constant term with the value $1$. As this removes the additional addition for the bias for each layer.
+This term can be simplified, by assuming that the input vector $x$ has always a constant term with the value $1$ \cite{bishop}. As this removes the additional addition for the bias for each layer.
 
 \begin{equation} \label{forwardcalculation}
 y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\left(\sum_{i=1}^{D} w_{ji}^{(1)}x_i\right)\right)
 \end{equation}
 
-Evaluating \ref{forwardcalculation} is called forward propagation.
+Evaluating \ref{forwardcalculation} is called forward propagation \cite{colahbackprop}.
 
 \if false
 Seiten: 1.5
