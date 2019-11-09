@@ -258,7 +258,9 @@ In the year 1950 Alan Turing proposed the idea of a test which could determine i
 In the 1960s and 70s AI researchers overestimated the possibilities of their systems greatly. For example, Marvin Minsky (a key researcher back then) said in 1970: "In from three to eight years we will have a machine with the general intelligence of an average human being." The goal of artificial intelligence initially seemed tractable:
 The computational power of computers increased exponentially and new algorithms and methods were developed \cite{mooreslaw}\cite{questforai}. The first chatbot (ELIZA) by Joseph Weizenbaum which showed how communication between humans and machines could be implemented using relatively simple rules seemed promising \cite{weizenbaum1966eliza}.
 
-There were many schools of thoughts, among these were: The symbolic-based approach and the connectionism-based approach \cite{machineswhothink}. Symbolic-based systems reached early success, by applying logic reasoning to AI \cite{machineswhothink}. The idea of connectionism was to model AI systems using the human brain as a blueprint \cite{machineswhothink}. In the end of the 60s many AI researchers lost interest in connectionism, as the limitations of the perceptron were revealed \cite{Minsky1969PerceptronsA}. This insight halted the research in this area for many years \cite{questforai}.
+There were many schools of thoughts, among these were: The symbolic-based approach and the connectionism-based approach \cite{machineswhothink}. Symbolic-based systems reached early success, by applying logic reasoning to AI \cite{machineswhothink}. The idea of connectionism was to model AI systems using the human brain as a blueprint \cite{machineswhothink}. In the end of the 60s many AI researchers lost interest in connectionism, as the limitations of the perceptron were revealed \cite{Minsky1969PerceptronsA}. This insight halted the research in this area for many years \begin{flushleft}
+\cite{questforai}
+\end{flushleft}.
 
 The symbolic-based approach initially showed much success in several tasks (for example: theorem proving \cite{aimodern}) but also reached a limit. The general approach was to model reasoning as a form of search \cite{aimodern}
 : Proceed step-by-step towards the goal and backtrack if the steps lead to a dead end. The problem with this approach is the sheer size of the search space. The combinatorial explosion is intractable and can only be handled by heuristics, which limit the power of the system \cite{aimodern}. The limiting capabilities of perceptrons and the lack of progress in key areas resulted in the first AI winter \cite{crevier}. Funding was cut to a minimum \cite{crevier}.
@@ -417,7 +419,7 @@ MSE works similarly to MAE, but errors are penalized more \cite{accuracy}. The c
 |\text{False Positives}|&~\text{is the number of incorrectly classified samples of the positive class} \\
 \end{align*}
 
-Accuracy is easy to understand and is commonly applied in classification tasks \cite{accuracy}. The higher the accuracy the better \cite{Powers2008EvaluationFP]. But the accuracy metric might hide important weaknesses of a model \cite{accuracy}:
+Accuracy is easy to understand and is commonly applied in classification tasks \cite{accuracy}. The higher the accuracy the better \cite{Powers2008EvaluationFP}. But the accuracy metric might hide important weaknesses of a model \cite{accuracy}:
 
 Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
 
@@ -439,10 +441,9 @@ A confusion matrix usually reveals common mistakes of a model \cite{accuracy}. F
 
 \section{Neural Networks}
 
-Before neural networks, there was the perceptron. It is a binary classifier and uses a linear function to perform classification. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable. For example, a simple XOR (table \ref{xor}) can not be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function. An MLP consists of multiple perceptrons grouped in layers and each layer is connected with the previous layer.
+Before neural networks, there was the perceptron \cite{questforai}. It is a binary classifier and uses a linear function to perform classification \cite{Minsky1969PerceptronsA}. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized \cite{aimodern}. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable \cite{questforai}. For example, a simple XOR (table \ref{xor}) cannot be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function, given a nonlinear activation function \cite{universalfunction}. An MLP consists of multiple perceptrons grouped in layers and each layer connects with the previous layer \cite{bishop}. MLPs are feed forward neural network \cite{bishop}.
 
 \begin{table}[]
-\label{xor}
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
@@ -451,9 +452,9 @@ XOR & 0 & 1 \\ \hline
 1   & 1 & 0 \\ \hline
 \end{tabular}
 \caption{XOR function}
+\label{xor}zs
 \end{table}
 
-Historically Perceptrons are the basis for feed forward neural networks. They can also be seen as multiple layers of perceptrons connected. The main difference to MLPs is that neural networks are composed of only differentiable functions, which allows for a more efficient training process.
 
 \begin{figure}[ht]
 	\centering
@@ -462,11 +463,11 @@ Historically Perceptrons are the basis for feed forward neural networks. They ca
 	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
+Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility \cite{selfdriving}\cite{speech}\cite{nmt}. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
 
-A neural network generally consists of multiple neurons, layers and connections. The general inspiration for them is the human brain which also consists of similar building blocks.
+A neural network generally consists of multiple neurons, layers and connections \cite{aimodern}. The general inspiration for them is the human brain which also consists of similar building blocks \cite{anintroductiontoneuralnetworks}.
 
-In the human brain neurons receive their signals through dendrites (connections in neural networks) and are then sent through the axon to other neurons. The signal strength is adjusted (activation function) such that other neurons in the brain are more stimulated. Note that key parts of the human brain are not simulated in a neural network, such as the creation and destruction of neurons and their connections. In neural networks generally the neurons are set beforehand by the machine learning practitioner. During training the weights and biases are adjusted using gradient descent, for more information refer to section \ref{nntrain}. Nevertheless neural networks (especially convolutional neural networks \cite{cnnimg}) produce similar structures also observed in the human brain.
+In the human brain neurons receive their signals through dendrites (connections in neural networks) and are then sent through the axon to other neurons \cite{anintroductiontoneuralnetworks}. The signal strength is adjusted (analogous to activation functions in neural networks) such that other neurons in the brain are more stimulated \cite{anintroductiontoneuralnetworks}. Note that key parts of the human brain are not simulated in a neural network: During training the weights and biases are adjusted using gradient descent, for more information refer to section \ref{nntrain} \cite{recentexcitementabotuneuralnetworks}. Nevertheless neural networks (especially convolutional neural networks) produce similar structures also observed in the human brain \cite{Cichy2016}.
 
 
 \if false
