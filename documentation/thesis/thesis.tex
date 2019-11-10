@@ -810,13 +810,13 @@ Seiten: 1
 	\label{fig:rnn}
 \end{figure}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional neural networks. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network. In theory RNNs should be capable of understanding long-term dependencies. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be performed. This process converts  recurrent neural networks into feed-forward networks when applied on a sequence.
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be performed. This process converts  recurrent neural networks into feed-forward networks when applied on a sequence.
 
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks. A newer approach to this problem are gated recurrent units (GRUs). \cite{gru}
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}.
 
-Among LSTM/GRU cells there are many variations. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general.
+Among LSTM/GRU cells there are many variations \cite{Goodfellow-et-al-2016}. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general \cite{gru}.
 
-The simplest LSTM unit consists of a memory cell with input and output gates. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell. For an illustration of an LSTM, refer to figure \ref{fig:lstm}.
+The simplest LSTM unit consists of a memory cell with input and output gates \cite{hochreiter}. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell \cite{hochreiter}. For an illustration of an LSTM, refer to figure \ref{fig:lstm}.
 
 \begin{figure}[ht]
 	\centering
