@@ -850,14 +850,14 @@ Seiten: 1
 	\label{fig:autoencoder}
 \end{figure}
 
-An autoencoder is a deep neural network which learns a compact representation of data without supervision. This is similar to principal component analysis of traditional machine learning. An autoencoder consists of two parts: 
+An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. An autoencoder consists of two parts \cite{Goodfellow-et-al-2016}: 
 
 \begin{itemize}
-\item Encoder: Performs a dimensionality reduction from a high dimensional data to a low dimensional representation
-\item Decoder: Tries to reconstruct the original data from the low dimensional representation
+\item Encoder: Performs a dimensionality reduction from a high dimensional data to a low dimensional representation \cite{Goodfellow-et-al-2016}
+\item Decoder: Tries to reconstruct the original data from the low dimensional representation \cite{Goodfellow-et-al-2016}
 \end{itemize}
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions.
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{cnnimg}. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions \cite{dlvc}. 
 
 \if false
 Seiten: 0.5
