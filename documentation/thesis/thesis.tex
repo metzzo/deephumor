@@ -996,11 +996,11 @@ Seiten: 1
 
 \section{AutoML} \label{automlbackground}
 
-AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human. Naive automated approaches such as grid search or random search have exponential runtime with increasing number of hyperparameters.
+AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human \cite{automlsurvey}. Naive automated approaches such as grid search or random search may have exponential runtime with increasing number of hyperparameters \cite{automlsurvey}.
 
-Grid search is a simple approach, where a model for possible combinations of hyperparameters is trained. Similarly random search assigns random hyperparameters until some halting criterion is reached.
+Grid search is a simple approach, where a model for possible combinations of hyperparameters is trained \cite{automlsurvey}. Similarly random search assigns random hyperparameters until some halting criterion is reached \cite{automlsurvey}. Random search is performing very well for many hyperparameter optimization tasks, as it does not waste time on optimizing irrelevant hyperparameter \cite{automlsurvey}.
 
-Solving a problem using machine learning requires many non-trivial tasks, such as:
+Solving a problem using machine learning requires many non-trivial tasks, such as \cite{automlsurvey}:
 
 \begin{itemize}
 \item Data pre-processing
@@ -1010,17 +1010,17 @@ Solving a problem using machine learning requires many non-trivial tasks, such a
 \item Hyperparameter selection
 \end{itemize}
 
-AutoML tries to automate all or a subset of these tasks. A human can only try several different hyperparameter configurations and pre-processing steps. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models.
+AutoML tries to automate all or a subset of these tasks \cite{automlsurvey}. A human can only try several different hyperparameter configurations and pre-processing steps \cite{automlsurvey}. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models \cite{automlsurvey}.
 
-\subsection{Hyperopt-Sklearn \cite{hyperoptpaper}}
+\subsection{Hyperopt-Sklearn}
 
-This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem.
+This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem\cite{hyperoptpaper}.
 
-Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters (also known as hyper hyperparameters):
+Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters (also known as hyper hyperparameters) \cite{hyperoptpaper}:
 \begin{itemize}
-\item Objective function: Mapping of a configuration into a scalar value, which the algorithm tries to minimize
-\item Search domain: Random variables whose distribution should match the most likely best configuration 
-\item Optimization algorithm: An algorithm which finds the best configuration in the search domain given the objective function
+\item Objective function: Mapping of a configuration into a scalar value, which the algorithm tries to minimize \cite{hyperoptpaper}
+\item Search domain: Random variables whose distribution should match the most likely best configuration \cite{hyperoptpaper}
+\item Optimization algorithm: An algorithm which finds the best configuration in the search domain given the objective function \cite{hyperoptpaper}
 \end{itemize}
 
 
