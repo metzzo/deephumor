@@ -857,7 +857,7 @@ An autoencoder is a deep neural network which learns a compact representation of
 \item Decoder: Tries to reconstruct the original data from the low dimensional representation \cite{Goodfellow-et-al-2016}
 \end{itemize}
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{cnnimg}. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions \cite{dlvc}. 
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions \cite{dlvc}. 
 
 \if false
 Seiten: 0.5
@@ -884,7 +884,7 @@ For both traditional machine learning and deep learning based natural language p
 
 A trivial approach would be to give each word a unique identification number \cite{deeplearningnlpstanford}. This approach does not grasp important semantic information about the words \cite{deeplearningnlpstanford}. For example, the words king and queen are more similar than king and house. If the featurization assigns the ID=2 for king and the ID=42 for queen, then the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing \cite{nmt}\cite{elmo}. Vector space models avoid this problem by representing each word in a high dimensional vector space, where a certain similarity measure holds \cite{pennington2014glove}.
 
-There is the concept of positive and negative similarity \cite{TUW-233295}. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ operator \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures \cite{TUW-233295}. The cosine similarity is a commonly used positive similarity measure \cite{modernir}. While similarities based on distance (for example: euclidean distance) are negative similarity measures \cite{TUW-233295}. CNNs are based on positive similarity: They perform a convolution, which is also a positive similarity measure \cite{alexnet}. Vector spaces have usually several 100 dimensions \cite{bert}. Positive similarity measures perform empirically better on high dimensional spaces compared to negative similarity measures \cite{surprisinghighdimensional}. Vector space models can be seen as a form of word embeddings \cite{elmo}.
+There is the concept of positive and negative similarity \cite{TUW-233295}. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ operator \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures \cite{TUW-233295}. The cosine similarity is a commonly used positive similarity measure \cite{modernir}. While similarities based on distance (for example: euclidean distance) are negative similarity measures \cite{TUW-233295}. CNNs are based on positive similarity: They perform a convolution, which is also a positive similarity measure \cite{alexnet}. Vector spaces have usually several 100 dimensions \cite{bert}. Positive similarity measures perform empirically better on high dimensional spaces compared to negative similarity measures \cite{surprisinghighdimensional}. Vector space models can be seen as word embeddings \cite{elmo}.
 
 \if false
 Seiten: 1.5
@@ -903,11 +903,11 @@ Seiten: 1.5
 \subsection{TFIDF}
 
 
-TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model. The idea originated in information retrieval, where the goal was to weight words by their importance for a document and for a query. The TFIDF consists of two frequencies multiplies: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document. The idea being, that the more often a word occurs, the more important it is in describing the document.
+TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model \cite{tfidf}. The idea originated in information retrieval, where the goal is to weight words by their importance for a document and for a query \cite{historyinformationretrieval}. The TFIDF consists of two terms multiplied: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document  \cite{irsurvey}. The idea being, that the more often a word occurs, the more important it is in describing the document  \cite{irsurvey}.
 
-The problem with this is that certain words occur almost always very frequently (stop words). For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also considered. This weight describes the importance of a word compared to all other documents. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
+The problem with this is that certain words occur almost always very frequently (stop words) \cite{tfidf}. For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also considered \cite{tfidf}. This weight describes the importance of a word compared to all other documents \cite{historyinformationretrieval}. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
 
-There exist many different formulas which entail this idea. In this thesis the following TFIDF equations were used:
+There exist many different formulas which entail this idea \cite{tfidf}. In this thesis the following TFIDF equations were used \cite{tfidf}:
 
 \begin{equation}
 \text{idf}(t) = \text{log} \left(\dfrac{n}{\text{df}(t)} \right) + 1
@@ -919,7 +919,7 @@ There exist many different formulas which entail this idea. In this thesis the f
 
 where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occurrences of term $t$ in document $D$ and $\text{df}(t)$ the number of documents containing term $t$.
 
-The advantage of TFIDF is, that is very easy to understand and does not need any time consuming training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model. The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely.
+The advantage of TFIDF is, that is relatively easy to understand and does not need any time consuming training, as it only counts word occurrences \cite{irsurvey}. This makes it very feasible to be trained locally, without the need of any pretrained model. The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely \cite{irsurvey}.
 
 \if false
 Seiten: 0.75
@@ -933,12 +933,10 @@ Seiten: 0.75
 
 \fi
 
-\subsection{GloVe \cite{glovepage}}
-The basis for training GloVe is a word to word matrix which denotes the frequency of words occurring together in the training data. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurring with another word.
+\subsection{GloVe}
+The basis for training GloVe is a word to word matrix which denotes the frequency of words occurring together in the training data \cite{glovepage}. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words \cite{pennington2014glove}. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurring with another word \cite{pennington2014glove}.
 
-GloVe is also a bag-of-word approach, as it uses a word to word matrix without any information about sequence.
-
-For a more detailed explanation please refer to the introductory paper \cite{glovepage}.
+GloVe is a bag-of-word approach, as it uses a word to word matrix without any information about sequence \cite{pennington2014glove}. For a more detailed explanation please refer to the introductory paper \cite{pennington2014glove}.
 
 \if false
 Seiten: 0.25
@@ -952,15 +950,15 @@ Seiten: 0.25
 \fi
 
 \subsection{ELMo \cite{elmo}}
-Previous models have very limited sense of context, especially each word had the same word vector associated regardless of the context. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context.
+Previously mentioned models have very limited sense of context, especially each word had the same word vector associated regardless of the context \cite{pennington2014glove}\cite{tfidf}. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context \cite{elmo}.
 
-First a language model has to be trained for ELMo. A language model enables to predict the next word given a sequence of prior words. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
+The basis for ELMo is a language model trained on a large corpus of text \cite{elmo}. A language model predicts the next word given a sequence of prior words \cite{statisticalnlp}. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
 
-ELMo models language using a 2-layer bidirectional LSTM with residual connections, which allows training of deep models more efficiently. However the words still must be converted into a vector representation. This is achieved by first converting the words into a character embedding and then a convolutional layer with max-pooling is applied. The character embedding has the advantage that the model handles words which are not in the vocabulary better.
+ELMo models language using a 2-layer bidirectional LSTM with residual connections, which allows training of deep models more efficiently. However the words still must be converted into a vector representation \cite{elmo}. This is achieved by first converting the words into a character embedding and then a convolutional layer with max-pooling is applied \cite{elmo}. The character embedding has the advantage that the model handles words which are not in the vocabulary better \cite{elmo}.
 
-The novel idea of ELMo is not how it is trained, but how the trained language model is applied: ELMo calculates the final word embedding for a word by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation. The combination is done by multiplying a weight to each state, which is also learned.
+The novel idea of ELMo is not how it is trained, but how the trained language model is applied \cite{elmo}: ELMo calculates the final word embedding for a word by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation \cite{elmo}. The combination is done by multiplying a weight to each state, which is also learned \cite{elmo}.
 
-This is a short summary of a relatively complex architecture. For more details the work of Gardner et al is recommended. \cite{elmo}
+This is a short summary of a relatively complex architecture. For more details the work of Gardner et al is recommended \cite{elmo}.
 
 \if false
 Seiten: 0.5
@@ -976,13 +974,13 @@ Seiten: 0.5
 
 \section{Transfer Learning} \label{transferlearning}
 
-Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big dataset is also a big challenge and not always feasible.
+Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results \cite{Goodfellow-et-al-2016}. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big dataset is also a big challenge and not always feasible.
 
-Transfer learning tackles this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks. The original model is trained on an already existing big dataset and the dataset of the fine tuning can be orders of magnitudes smaller. This tuning in the context of deep neural networks is usually done by fixating the weights of neurons in certain higher layers during training. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily.
+Transfer learning tries to solve this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks \cite{Goodfellow-et-al-2016}. The original model is trained on an already existing big dataset and the dataset of the fine tuning can be orders of magnitudes smaller \cite{dlvc}. This tuning in the context of deep neural networks is usually done by freezing the weights of neurons in certain higher layers during training \cite{Goodfellow-et-al-2016}. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily \cite{dlvc}.
 
-For example there are already very big datasets for image classification tasks. Training a good performing classifier on these datasets has already been done numerous times. Especially CNNs have an architecture very suited for transfer learning: As mentioned in [\ref{mlcnn}], there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons.
+For example there are already very big datasets for image classification tasks \cite{alexnet}. Training a good performing classifier on these datasets has already been done numerous times \cite{resnet}\cite{alexnet}. Especially CNNs have an architecture very suited for transfer learning: As mentioned in section \ref{mlcnn}, there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons \cite{resnet}.
 
-Natural language processing works similarly by transferring word embeddings between different corpora. Importantly these word embeddings transfer well for a broad range of tasks and still achieving state-of-the-art performance. \cite{elmo}
+Natural language processing works similarly by transferring word embeddings between different corpora \cite{bert}. Importantly these word embeddings transfer well for a broad range of tasks and still achieving state-of-the-art performance. \cite{elmo}
 
 
 \if false
