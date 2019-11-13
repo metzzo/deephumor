@@ -872,23 +872,19 @@ Seiten: 0.5
 
 \section{Natural Language Processing} \label{nlpbackground}
 
-Natural Language Processing (NLP) is a subfield of artificial intelligence and linguistics where the goal is to build computer programs that are able to understand human language. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition.
+Natural Language Processing (NLP) combines the disciplines of artificial intelligence and linguistics \cite{statisticalnlp}\cite{speechandlanguageprocessing}. NLP researchers try to build computer programs capable of understanding human language \cite{speechandlanguageprocessing}. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition \cite{surveynlp}\cite{nmt}\cite{googlespeech}\cite{speech}\cite{paraphrase}.
 
-Early NLP tried to achieve its goal by building traditional parsers, similar to what compilers do for programming languages. Unfortunately, these techniques are inadequate for human languages, due to the ambiguity of human language. Traditional parsers cannot deal with ambiguous sentences sufficiently.
+Early NLP tried to achieve its goal by building traditional parsers, similar to what compilers do for programming languages \cite{speechandlanguageprocessing}. Unfortunately, these techniques are inadequate for human languages, due to the ambiguity of human language \cite{statisticalnlp}.
 
-Another common approach has been to apply traditional machine learning for NLP. The idea here is to extract certain features of a  text database. Then use these features to train a classical machine learning model. Emperically, the best performing machine learning algorithm for this context are support vector machines.
+Another common approach has been to apply traditional machine learning for NLP \cite{statisticalnlp}. The general approach is to extract certain features of a text corpus and use these features to train a classical machine learning model \cite{svmnlp}. Empirically, the best performing machine learning algorithm for this context are support vector machines \cite{svmnlp}.
 
-Deep learning currently achieves most state-of-the-art results in NLP. An advantage of many text problems, is the abundance of large corpora, partly due to the rise of the internet. This is an important advantage especially for unsupervised methods, since labelling of large corpora may be very expensive.
+Deep learning currently achieves many state-of-the-art results in NLP \cite{nmt}\cite{paraphrase}. An advantage of many text problems, is the abundance of large corpora, partly due to the rise of the internet \cite{bert}. This is an important advantage especially for unsupervised methods, since labelling of large corpora may be very expensive \cite{elmo}\cite{bert}.
 
-For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from the dataset. High level features (sentence length) are usually not sufficient, therefore the sentences must be converted into useful features.
+For both traditional machine learning and deep learning based natural language processing it is important to extract the right features from the dataset \cite{statisticalnlp}. High level features (sentence length) are usually not sufficient, therefore the sentences must be converted into more useful features \cite{Yang2015HumorRA}.
 
-A trivial approach would be to give each word a unique identification number. This works, but loses lots of important semantic information about the words. For example, the words king and queen are more similar than king and house. If the featurization assigns the ID=2 for king and the ID=42 for queen, than the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing.
+A trivial approach would be to give each word a unique identification number \cite{deeplearningnlpstanford}. This approach does not grasp important semantic information about the words \cite{deeplearningnlpstanford}. For example, the words king and queen are more similar than king and house. If the featurization assigns the ID=2 for king and the ID=42 for queen, then the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing \cite{nmt}\cite{elmo}. Vector space models avoid this problem by representing each word in a high dimensional vector space, where a certain similarity measure holds \cite{pennington2014glove}.
 
-Vector space models solve this problem. The idea is to represent each word in a high dimensional vector space, where a certain similarity measure holds.
-
-There is the concept of positive and negative similarity. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ operator. \cite{TUW-233295} Similarities based on the dot product are positive similarity measures. The cosine similarity is a commonly used positive similarity measure. While similarities based on distance (for example: euclidean distance) are negative similarity measures. CNNs are based on positive similarity: They perform a convolution, which is also a positive similarity measure. Vector spaces are usually relatively high dimensional. Positive similarity measures perform empirically better on high dimensional spaces compared to negative similarity measures.	
-
-These vector representations are also called word embeddings. There are many different techniques to obtain such embeddings. A very simple, but successful technique is called TFIDF, another common approaches are Word2Vec and GloVe embeddings. One problems of these embeddings are, that they mostly ignore the context of the word in the sentence. The word "bank" may have different meanings, depending on the context. In the sentences "I want to sit on a bank" and "I robbed a bank" the meaning is completely changed. The word embedding ELMo considers the context and returns different word vectors depending on the sentence.
+There is the concept of positive and negative similarity \cite{TUW-233295}. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ operator \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures \cite{TUW-233295}. The cosine similarity is a commonly used positive similarity measure \cite{modernir}. While similarities based on distance (for example: euclidean distance) are negative similarity measures \cite{TUW-233295}. CNNs are based on positive similarity: They perform a convolution, which is also a positive similarity measure \cite{alexnet}. Vector spaces have usually several 100 dimensions \cite{bert}. Positive similarity measures perform empirically better on high dimensional spaces compared to negative similarity measures \cite{surprisinghighdimensional}. Vector space models can be seen as a form of word embeddings \cite{elmo}.
 
 \if false
 Seiten: 1.5
@@ -923,9 +919,7 @@ There exist many different formulas which entail this idea. In this thesis the f
 
 where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occurrences of term $t$ in document $D$ and $\text{df}(t)$ the number of documents containing term $t$.
 
-The advantage of TFIDF is, that is very easy to understand and does not need any time consuming training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model.
-
-The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely.
+The advantage of TFIDF is, that is very easy to understand and does not need any time consuming training, as it only counts word occurrences. This makes it very feasible to be trained locally, without the need of any pretrained model. The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely.
 
 \if false
 Seiten: 0.75
