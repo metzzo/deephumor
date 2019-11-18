@@ -1038,23 +1038,19 @@ Seiten: 0.5
 
 \section{Computational Humor} \label{comphumorbackground}
 
-According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being. \cite{humorhealthy} Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others. \cite{sep-humor}
+According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}\cite{humorresearch}. Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others \cite{sep-humor}.	
 
-Over the centuries, there many theories of humor have been proposed. From the superiority theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self). This theory was popular until the 20th century. Another early theory popular in the 20th century is the relief theory, which proposes that humor can be seen as a valve which releases pressure. This pressure was proposed to be some kind of gas or energy. The incongruity theory proposes, that humor is the result of the perception of something incongruous. In particular if the mind observes something which violates our mental model and expectations. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. \cite{sep-humor}
+Over the centuries, there many theories of humor have been proposed: From the superiority theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self) \cite{humorresearch}. This theory was popular until the 20th century. Another early theory popular in the 20th century is the relief theory, which proposes that humor can be seen as a valve which releases pressure \cite{humorresearch}. This pressure was initially proposed to be some kind of gas or energy, but then it was thought of some form of "psychic energy" \cite{sep-humor}\cite{humorresearch}. The incongruity theory proposes, that humor is the result of the perception of something incongruous \cite{typologyofhumor}. In particular if the mind observes something which violates our mental model and expectations \cite{typologyofhumor}. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. 
 
-A more modern view of humor is seeing it as a form of play. It has been observed, that many animals learn important skills during play. Humor seems to serve a similar purpose for human social behaviour. Usually humor shows what should be avoided during communication or in other (social) situations. Laughing and smiling enables these situations and therefore can be considered as a signal to play. 
+A more modern view of humor is seeing it as a form of play \cite{sep-humor}. It has been observed, that many animals learn important skills during play \cite{sep-humor}. Humor seems to serve a similar purpose for human social behaviour \cite{humorplay}. Usually humor shows what should be avoided during communication or in other (social) situations \cite{sep-humor}. Laughing and smiling enables these situations and therefore can be considered as a signal to play \cite{humorplay}. 
 
-Computational humor combines the field of artificial intelligence and computational linguistics, with the goal of computers understanding humor. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor. The rise of chatbots and virtual assistants (for example Apples Siri or Amazons Alexa) shows that humor is still a very difficult task for these application, as most people who have used such a system can confirm.
+Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application \cite{HumoristBot}. An important challenge of computational humor is, that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This is possibly the reason why there is currently no unified computational model of humor, instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
 
-One problem of humor is, that it is very subjective. There is no general humor, as every person finds different things funny. There are topics or types of humor that more people find funny than others. This is possibly the reason why there is currently no unified computational model of humor, instead models for certain subtasks of computational humor were built.
+Common tasks of computational humor involve generative or discriminative tasks \cite{HumoristBot}\cite{Yang2015HumorRA}: An example for generative task would be joke generation or pun generation. In these kind of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not. Computational humor and language understanding go hand in hand \cite{Yang2015HumorRA}: To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic \cite{elmo}\cite{bert}.
 
-Common subtasks involve generative or discriminative tasks. An example for generative task would be joke generation or pun generation. In these kind of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not.
+Many early approaches of computational humor have focused on the incongruity theory, where humor is an unexpected difference between the expected and the unexpected \cite{comphumorsummary}. The general idea was to find or produce contradictions between what a human would expect and what has been communicated. These approaches had only limited success, most likely because the underlying language understanding was not sophisticated enough \cite{comphumorsummary}. The computer did not have a proper model of what the human would understand and therefore could not apply the incongruity theory successfully.
 
-Another challenge of computational humor is language understanding. To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic. Until then, it is questionable whether computational humor will reach pass the Turing test.
-
-Many early approaches of computational humor have focused on the incongruity theory, where humor is an unexpected difference between the expected and the unexpected. \cite{comphumorsummary} The general idea was to find or produce contradictions between what a human would expect and what has been communicated. These approaches had only limited success, since the underlying language understanding was not sophisticated enough. The computer did not have a proper model of what the human would understand and therefore could not apply the incongruity theory successfully.
-
-Another problem was their heavy reliance on ontologies, such as WordNet and VerbNet. These are human crafted databases with concepts and their relationship to each other. The problem with these are the ambiguity of many concepts and also their limited size. For example VerbNet had only around 4500 verbs, which made it so that the computer had only a very limited understanding of the sentences. \cite{comphumorsummary}	
+Another problem was their heavy reliance on ontologies, such as WordNet and VerbNet \cite{comphumorsummary}\cite{wordnet}. These are human crafted databases with concepts and their relationship to each other. The problem with these are the ambiguity of many concepts and also their limited size. For example VerbNet contains only around 4500 verbs, which results in a very limited understanding of the sentences \cite{verbnet}. 	
 
 
 \if false
@@ -1083,9 +1079,9 @@ In this chapter I outline several works of the field of computational humor rela
 
 In the following sections we will discuss several works in the field of computational humor with traditional machine learning methods.
 
-\subsubsection{Humor Recognition and Humor Anchor Extraction \cite{Yang2015HumorRA}}
+\subsubsection{Humor Recognition and Humor Anchor Extraction}
 
-This paper formalizes humor as a binary classification task between humorous and non-humorous. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
+Yang et al formalize humor as a binary classification task between humorous and non-humorous \cite{Yang2015HumorRA}. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
 
 The authors extract several features from the input sentences that describe some aspect of humor.
 
@@ -1139,9 +1135,9 @@ Sarkasmus Erkennung mit Machine Learning Techniken
 Seiten: 0.5
 \fi
 
-\subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System \cite{HumoristBot}}
+\subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System}
 
-This work implements humor detection and joke generation in the context of a chatbot. A chatbot is a software agent able to hold a conversation with a human. Humorist bot is able to generate humorous anecdotes and react to the users humorous messages by adjusting its avatar. A funny message not only affects the answer of the bot, but also changes its avatar to a laughing avatar.
+Augello et al implement humor detection and joke generation in the context of a chatbot \cite{HumoristBot}. A chatbot is a software agent able to hold a conversation with a human. Humorist bot is able to generate humorous anecdotes and react to the users humorous messages by adjusting its avatar. A funny message not only affects the answer of the bot, but also changes its avatar to a laughing avatar.
 
 Their chatbot uses a rather traditional AIML knowledge base with different answer sets:
 \begin{itemize}
@@ -1185,9 +1181,9 @@ Seiten: 0.5
 
 In the following we will discuss the application of deep learning in the domain of computational humor. 
 
-\subsubsection{Deep Learning of Audio and Language Features for Humor Prediction \cite{Bertero2016DeepLO}}
+\subsubsection{Deep Learning of Audio and Language Features for Humor Prediction}
 
-The work of Bertero et al compares several machine learning techniques for predicting and detecting humor in dialogues. They use a dialogue dataset of the series "Big Bang Theory", with annotations of canned laughter. Their goal is to predict these punchlines and where the canned laughter would appear. This work compares several techniques against each other: Convolutional neural networks, recurrent neural networks and conditional random fields. The convolutional neural network use low level representations of words and acoustic frames, while the other two methods use a set of acoustic and language features:
+The work of Bertero et al compares several machine learning techniques for predicting and detecting humor in dialogues \cite{Bertero2016DeepLO}. They use a dialogue dataset of the series "Big Bang Theory", with annotations of canned laughter. Their goal is to predict these punchlines and where the canned laughter would appear. This work compares several techniques against each other: Convolutional neural networks, recurrent neural networks and conditional random fields. The convolutional neural network use low level representations of words and acoustic frames, while the other two methods use a set of acoustic and language features:
 
 \begin{itemize}
 \item Acoustic features: Extraction of pitch, Line spectral frequencies, intensity, loudness, probability of voicing, $F_0$ envelope, zero-crossing rate, MFCC and speaking rate features
@@ -1210,9 +1206,9 @@ Seiten: 1.0
 \cite{Bertero2016DeepLO}
 \fi
 
-\subsubsection{A long short-term memory framework for predicting humor in dialogues \cite{bertero2016long}}
+\subsubsection{A long short-term memory framework for predicting humor in dialogues}
 
-Bertero et al apply LSTMs on the same Big Bang Theory dialogue dataset as in their previous work. \cite{Bertero2016DeepLO} Instead of a simple RNN they use a more sophisticated LSTM architecture. Additionally they combine the LSTM with a CNN.
+Bertero et al apply LSTMs on the same Big Bang Theory dialogue dataset as in their previous work \cite{Bertero2016DeepLO}. Instead of a simple RNN they use a more sophisticated LSTM architecture. Additionally they combine the LSTM with a CNN.
 
 Their feature vector is a combination of the following:
 \begin{itemize}
@@ -1235,9 +1231,9 @@ The LSTM in combination with high level features achieves the best performance. 
 Seiten: 1.0
 \fi
 
-\subsubsection{Convolutional neural network for humor recognition \cite{chen2017convolutional}}
+\subsubsection{Convolutional neural network for humor recognition}
 
-The work of Chen et al uses several corpora from various sources: Pun of the Day, Short Jokes dataset, 16000 One-Liners and PTT Jokes each with a binary annotation, where 1 means the sample is humorous and 0 means it is not humorous. The authors sample negative samples from news headlines.
+The work of Chen et al use several corpora from various sources \cite{chen2017convolutional}: Pun of the Day, Short Jokes dataset, 16000 One-Liners and PTT Jokes each with a binary annotation, where 1 means the sample is humorous and 0 means it is not humorous. The authors sample negative samples from news headlines.
 
 Basis for their architecture is a convolutional neural network. First they convert the words using pre-trained GloVe embeddings. The authors use GloVe trained on Wikipedia 2014 + Gigaword 5 with a vocabulary containing 400,000 words. Then they apply a convolutional layer and tried filters of size 3 to 20 for the convolution. A regular max-pooling is applied after the convolutional layer.
 
