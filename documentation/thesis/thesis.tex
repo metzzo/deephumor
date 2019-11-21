@@ -382,7 +382,7 @@ Depending on the machine learning task and applied methodology, there is no dist
 
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=0.75\textwidth]{graphics/holdoutvscv.png}
+  	\includegraphics[width=1.0\textwidth]{graphics/holdoutvscv.png}
 	\caption{Comparison of the splits between holdout and 5-fold cross validation}
 	\label{fig:holdoutvscv}
 \end{figure}
@@ -452,13 +452,20 @@ XOR & 0 & 1 \\ \hline
 1   & 1 & 0 \\ \hline
 \end{tabular}
 \caption{XOR function}
-\label{xor}zs
+\label{xor}
 \end{table}
 
 
 \begin{figure}[ht]
 	\centering
+	\begin{picture}(332,249)
+	\put(10,20){
   	\includegraphics[width=0.75\textwidth]{graphics/simple_neural_network.png}
+  	}
+  	\put(0,0){Input Layer}
+  	\put(140,0){Hidden Layer}
+  	\put(275,0){Output Layer}
+	\end{picture}
 	\caption{Fully Connected Feed Forward Neural Network}
 	\label{fig:feedforward}
 \end{figure}
@@ -996,7 +1003,7 @@ Seiten: 1
 
 \section{AutoML} \label{automlbackground}
 
-AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human \cite{automlsurvey}. Naive automated approaches such as grid search or random search may have exponential runtime with increasing number of hyperparameters \cite{automlsurvey}.
+AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human \cite{automlsurvey}. Naive automated approaches such as grid search may have exponential runtime with increasing number of hyperparameters \cite{automlsurvey}.
 
 Grid search is a simple approach, where a model for possible combinations of hyperparameters is trained \cite{automlsurvey}. Similarly random search assigns random hyperparameters until some halting criterion is reached \cite{automlsurvey}. Random search is performing very well for many hyperparameter optimization tasks, as it does not waste time on optimizing irrelevant hyperparameter \cite{automlsurvey}.
 
@@ -1014,7 +1021,7 @@ AutoML tries to automate all or a subset of these tasks \cite{automlsurvey}. A h
 
 \subsection{Hyperopt-Sklearn}
 
-This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem\cite{hyperoptpaper}.
+This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem \cite{hyperoptpaper}.
 
 Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters (also known as hyper hyperparameters) \cite{hyperoptpaper}:
 \begin{itemize}
@@ -1044,7 +1051,7 @@ Over the centuries, there many theories of humor have been proposed: From the su
 
 A more modern view of humor is seeing it as a form of play \cite{sep-humor}. It has been observed, that many animals learn important skills during play \cite{sep-humor}. Humor seems to serve a similar purpose for human social behaviour \cite{humorplay}. Usually humor shows what should be avoided during communication or in other (social) situations \cite{sep-humor}. Laughing and smiling enables these situations and therefore can be considered as a signal to play \cite{humorplay}. 
 
-Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application \cite{HumoristBot}. An important challenge of computational humor is, that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This is possibly the reason why there is currently no unified computational model of humor, instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
+Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application \cite{HumoristBot}. An important challenge of computational humor is, that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This may be the reason why there is currently no unified computational model of humor, instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
 
 Common tasks of computational humor involve generative or discriminative tasks \cite{HumoristBot}\cite{Yang2015HumorRA}: An example for generative task would be joke generation or pun generation. In these kind of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not. Computational humor and language understanding go hand in hand \cite{Yang2015HumorRA}: To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic \cite{elmo}\cite{bert}.
 
