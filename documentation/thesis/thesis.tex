@@ -846,7 +846,7 @@ Seiten: 1
 \fi
 
 
-\subsection{Autoencoder}
+\subsection{Autoencoder}\label{autoencodersection}
 
 \begin{figure}[ht]
 	\centering
@@ -1294,9 +1294,9 @@ The second step was to annotate the funniness of the cartoons. There was the pro
 
 \subsection{Dataset Analysis}
 
-The dataset analysis revealed several interesting facts about the dataset. Figure [\ref{fig:labeldistr}] shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
+The dataset analysis revealed several interesting facts about the dataset. Figure \ref{fig:labeldistr} shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
-To verify that the distribution of the annotations has not changed over the course of annotation refer to figure [\ref{fig:boxplottime}]. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
+To verify that the distribution of the annotations has not changed over the course of annotation refer to figure \ref{fig:boxplottime}. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
 
 \begin{figure}
 	\centering
@@ -1305,7 +1305,7 @@ To verify that the distribution of the annotations has not changed over the cour
 	\label{fig:boxplottime}
 \end{figure}
 
-A word count analysis showed that there are significant difference in the frequency of certain words. These words seem to contain certain connections to a cartoon theme. For example one of the most frequent words for funniness class 7 is "Thag" which is a common name for cartoons set in the stone age. A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure [\ref{fig:wordocc1}], [\ref{fig:wordocc2}], [\ref{fig:phraseocc1}] and [\ref{fig:phraseocc2}].
+A word count analysis showed that there are significant difference in the frequency of certain words. These words seem to contain certain connections to a cartoon theme. For example one of the most frequent words for funniness class 7 is "Thag" which is a common name for cartoons set in the stone age. A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure \ref{fig:wordocc1}, \ref{fig:wordocc2}, \ref{fig:phraseocc1} and \ref{fig:phraseocc2}.
 
 \begin{figure}
 \centering
@@ -1409,21 +1409,21 @@ A word count analysis showed that there are significant difference in the freque
 
 \section{Visual domain model design}
 
-To reduce the problem space I decided to first tackle the visual domain of Gary Larson's cartoons. This has the advantage that there are well defined neural network architectures (CNNs, ResNet) which knowingly perform well on various image related tasks.
+To reduce the problem space I decided to first try the visual domain of Gary Larson's cartoons. This has the advantage that there are well defined neural network architectures which knowingly perform well on various image related tasks \cite{resnet}\cite{alexnet}.
 
 \subsection{Simple CNN}
 
-The goal of this approach was to establish a performance baseline. This models goal was to answer the question: How well does a relatively simple convolutional neural network on the Gary Larson cartoon dataset?
+The goal of this approach was to establish a performance baseline. This models goal was to find out whether a relatively simple convolutional neural network performs well on the target task.
 
-Am important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to set: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A comparison would be to play the game "Where is Waldo" on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
+Am important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game "Where is Waldo" on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
 
 Otherwise, if the input size is too small, then crucial information may get lost as well. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is, that 90\% of the images are in lanscape, while the remaining are in portrait orientation. Therefore, predicting the image in lanscape well has priority.
 
-Different configurations for the input size was empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174.
+Different configurations for the input size were empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174 px$^2$.
 
-Modelling the output of a neural network is equally crucial as the input. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. for classification I used cross entropy loss. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
+Modelling the output of a neural network is equally crucial. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. for classification I used cross entropy loss. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
 
-Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers, while too less layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
+Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers. Conversely, too few layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
 
 \todo {Illustration des CNN Netzwerks}
 
@@ -1441,7 +1441,7 @@ Seiten: 1
 
 \subsection{Transfer Learning CNN}
 
-As described in section \ref{transferlearning} transfer learning is a common approach to deal with a small dataset in deep learning. This experiment uses a pretrained ResNet18 model. \cite{resnet} ResNet consists of multiple residual blocks, which allows the network to be much deeper compared to a naive CNN and still improve performance. Earlier blocks perform simple feature extraction and later blocks perform high level feature extraction. 
+As described in section \ref{transferlearning} transfer learning is a common approach to deal with a small dataset in deep learning. This experiment uses a pretrained ResNet18 model cite{resnet}. ResNet consists of multiple residual blocks, which allows the network to be much deeper compared to a naive CNN and still improve performance. Earlier blocks perform simple feature extraction and later blocks perform high level feature extraction. 
 
 I probed several configurations of this transfer learning approach:
 
@@ -1451,13 +1451,7 @@ I probed several configurations of this transfer learning approach:
 \item Reuse entire model and add a new final fully connected dense layer
 \end{enumerate}
 
-The second approach was the best performing on the validation set. Additionally applying data augmentation was crucial. The following transformations on the cartoon image were most successful:
-
-\begin{itemize}
-\item Random horizontal flip
-\item Random resize and crop
-\item Random rotation
-\end{itemize}
+The second approach was the best performing on the validation set. Additionally applying data augmentation was crucial. Applying random horizontal flip, random resize and crop and slight random rotations also improved performance on the validation set.
 
 \todo {Illustration vom transfer learning}
 
@@ -1493,8 +1487,8 @@ There were two suspected issues with the previous transfer learning approaches:
 The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the canny edge detection filter multiple times. The cartoon image is transformed by Canny (using default parameters) into a target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny with the same parameters should bring the real world images into the same target domain.
 
 \begin{table}[]
-\label{objectdetectionfeaturevector}
 \centering
+\includegraphics[width=0.25\textwidth]{graphics/example_cartoon.png}
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
 Has Human? & Has Dogs? & Has Cats? & Has Alien? & Has Shark? & ... \\ \hline
@@ -1502,9 +1496,10 @@ Has Human? & Has Dogs? & Has Cats? & Has Alien? & Has Shark? & ... \\ \hline
 \hline
 \end{tabular}
 \caption{Hypothetical feature vector}
+\label{objectdetectionfeaturevector}
 \end{table}
 
-To improve the problem of high-level semantics (2) I wanted to train an object detection model based on the CIFAR-100 dataset augmented using the double edge detection data augmentation.\cite{cifar100}This would allow to compute a high-level description of a cartoon based on the objects detected by the object detection algorithm. To validate this approach I first trained a simpler image classification model based on ResNet18. If image classification does not sufficiently work, then object detection will most likely also fail. As an example the feature vector of the figure \ref{fig:fig1} could look similar to \ref{objectdetectionfeaturevector}.
+To improve the problem of high-level semantics (2) I wanted to train an object detection model based on the CIFAR-100 dataset augmented using the double edge detection data augmentation \cite{cifar100}. This would allow to compute a high-level description of a cartoon based on the objects detected by the object detection algorithm. To validate this approach I first trained a simpler image classification model based on ResNet18. If image classification does not sufficiently work, then object detection will most likely also fail. Such a feature vector is outlined in figure \ref{objectdetectionfeaturevector}.
 
 Unfortunately this approach did not achieve significant results, as there were no consistent classifications. Therefore I did not train the final object detection. If, for example, a person was consistently assigned the same class, then the feature vector could have entailed enough semantic information for cartoon theme-based predictions. The data analysis revealed that there are certain cartoon themes which have higher funniness scores compared to others. 
 
@@ -1562,6 +1557,23 @@ Das eher bei Design:
 
 \subsection{AutoML}
 
+Using AutoML my goal was to validate whether an automated approach might find a good model. Because the computer can optimize many more hyperparameters than me, I hypothesized that it might perform better than my manually trained models. For example, it could be, that some other classifier (e.g. SVM) might be better suited for the task at hand.
+
+The selected AutoML library has only limited support for text input feature vectors. So I had to convert the words to fixed length numerical feature vectors. I used TFIDF, ELMo and GloVe. As well as combinations of different word embeddings. This was applied in order to fix the weaknesses of GloVe/ELMo. TFIDF does not have the same problem of GloVe/ELMo of missing words in the vocabulary, because TFIDF was entirely trained on the available dataset. I probed the following feature vectors:
+
+\begin{itemize}
+
+\item TFIDF
+\item Mean of ELMo word embeddings
+\item Mean of GloVe word embeddings
+\item TFIDF + GloVe mean
+\item TFIDF + ELMo mean
+
+\end{itemize}
+
+The best performing approach on the validation set was the model trained which only uses the mean of ELMo word embeddings.
+
+\if false
 Seiten: 1
 
 \begin{itemize}
@@ -1570,13 +1582,37 @@ Seiten: 1
 \item Vielleicht funktioniert zB eine SVM besser für gewählten Task
 \item Wie wurde Feature Vektor erstellt? => TFIDF, GloVe, ELMo, TFIDF + GloVe, TFIDF + ELMo
 \end{itemize}
+\fi
 
 \section{Visual and text domain combined model design}
 
-Erläutern wie danach beide Domänen zusammen berücksichtgt wurden.
+Finally I combined the findings of the previous approaches in the final two stage model, which combines the visual and the text domain into a unified neural network architecture.
 
 \subsection{Two Stage Model}
 
+With the two stage models I tried to solve two issues: The issue of class imbalance of the dataset and the small dataset size. Figure \ref{fig:labeldistr} illustrates this problem. Analysis revealed that previous models learn to predict the most frequent class.
+
+This approach tries to mitigate this problem by applying a cascade of multiple individually trained classifiers and finally combining them in an ensemble model. I trained for each funniness class a binary classifier which detects whether a given sample belongs to its class or not. This "first stage" results in seven independent classifiers. The "second stage" consists of a regressor which predicts the final funniness based on the last hidden layer of each binary classifier.
+
+I tested three different configurations of this approach:
+
+\begin{enumerate}
+
+\item Only punchlines: I trained the binary classifiers on the punchline data (average ELMo vector of the punchline).
+\item Punchlines and cartoons: This approach uses both the punchlines and the cartoon images.
+\item Punchlines and autoencoded cartoons: Same as the previously mentioned approach but before applying the encoder of a deep convolutional autoencoder.
+
+\end{enumerate}
+
+This modular two stage design has the advantage of needing less training data. This is due to the individual neural networks not being very deep. Therefore the gradient does not vanish and the signal propagates through the entire network. Also it allows to combine both the visual and the text domain quite easily, as only the first stage needs to be adjusted accordingly.
+
+To further reduce the impact of class imbalance I applied oversampling. This means that more infrequent classes are samples more frequently, such that for the binary classifier positive classes are sampled as frequent as the negative classes. Also I tried penalizing false positives in the neural network's loss function, but this did not improve the results.
+
+To further reduce the number of parameters of the neural network I needed to reduce the size of the cartoon images. Resizing loses crucial semantic information. To solve this problem I trained a deep convolutional autoencoder separately. The expectation was that the encoder results in more semantic meaningful representations of the cartoons. Unfortunately this was not the case. For more information about autoencoders please refer to section \ref{autoencodersection}.
+
+\todo {Illustration des neuronalen netzwerks}
+
+\if false
 Seiten: 2
 
 \begin{itemize}
@@ -1592,6 +1628,8 @@ Seiten: 2
 \item Klassengewichtung in 1 vs Rest Classifier
 
 \end{itemize}
+
+\fi
 
 \if false
 \section{Additional Experiments}
@@ -1722,7 +1760,7 @@ Sampling for each class a cartoon and examining the output layer of the trained 
 
 When examining the distribution across the different predictions over the different samples it seems that the general distribution does not change significantly. Some deviations are present, for example when comparing the probabilities for funniness 2.
 
-In general it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are very high. Compare figure [\ref{fig:figdistr1}] and figure [\ref{fig:figdistr2}] with figure [\ref{fig:labeldistr}].
+In general it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are very high. Compare figure \ref{fig:figdistr1} and figure \ref{fig:figdistr2} with figure \ref{fig:labeldistr}.
 
 \begin{figure}
 \centering
