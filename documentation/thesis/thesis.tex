@@ -28,6 +28,7 @@
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \usepackage[noend]{algpseudocode}
 \usepackage{listings}
+\usepackage{placeins}
 
 \newcommand{\cmark}{\ding{51}}%
 
@@ -246,7 +247,7 @@ Chapter 6 (Conclusion) finalizes this thesis with lessons learned during the cou
 
 \chapter{Background}
 
-As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis. First an overview of artificial intelligence and and machine learning is outlined. Section \ref{nlpbackground} lays out techniques of natural language processing. Section \ref{transferlearning} gives an overview over a technique called transfer learning. The next section (\ref{automlbackground}) outlines automated machine learning. Based on the previous sections I summarize the research area of computational humor in section \ref{comphumorbackground}. This chapter ends with related work of traditional computational humor and deep learning based computational humor in section \ref{relatedworkbackground}.
+As this work combines the field of computational humor with deep learning, an understanding of both fields is required. This chapter contains the required background for this thesis. First an overview over artificial intelligence and machine learning is outlined. Section \ref{nlpbackground} lays out techniques of natural language processing. Section \ref{transferlearning} gives an overview over a technique called transfer learning. The next section (\ref{automlbackground}) outlines automated machine learning. Based on the previous sections I summarize the research area of computational humor in section \ref{comphumorbackground}. This chapter ends with related work of traditional computational humor and deep learning based computational humor in section \ref{relatedworkbackground}.
 
 \section{Machine Learning and Artificial Intelligence}
 The field of Artificial Intelligence (AI) tries to reproduce (human) intelligence using computers \cite{questforai}. It is yet impossible to develop a truly intelligent computer program, also known as strong AI \cite{strongweakai}. AI researchers typically pick certain narrow subtasks of what is considered to require intelligence. Such a system is also known as weak AI \cite{strongweakai}. These tasks usually entail some utility for other application domains and range from image classification, self driving cars to machine translation.
@@ -258,24 +259,23 @@ In the year 1950 Alan Turing proposed the idea of a test which could determine i
 In the 1960s and 70s AI researchers overestimated the possibilities of their systems greatly. For example, Marvin Minsky (a key researcher back then) said in 1970: "In from three to eight years we will have a machine with the general intelligence of an average human being." The goal of artificial intelligence initially seemed tractable:
 The computational power of computers increased exponentially and new algorithms and methods were developed \cite{mooreslaw}\cite{questforai}. The first chatbot (ELIZA) by Joseph Weizenbaum which showed how communication between humans and machines could be implemented using relatively simple rules seemed promising \cite{weizenbaum1966eliza}.
 
-There were many schools of thoughts, among these were: The symbolic-based approach and the connectionism-based approach \cite{machineswhothink}. Symbolic-based systems reached early success, by applying logic reasoning to AI \cite{machineswhothink}. The idea of connectionism was to model AI systems using the human brain as a blueprint \cite{machineswhothink}. In the end of the 60s many AI researchers lost interest in connectionism, as the limitations of the perceptron were revealed \cite{Minsky1969PerceptronsA}. This insight halted the research in this area for many years \cite{questforai}.
+There were many schools of thoughts, among others: The symbolic-based approach and the connectionism-based approach \cite{machineswhothink}. Symbolic-based systems reached early success, by applying logic reasoning to AI \cite{machineswhothink}. The idea of connectionism was to model AI systems using the human brain as a blueprint \cite{machineswhothink}. In the end of the 60s many AI researchers lost interest in connectionism, as the limitations of the perceptron were revealed \cite{Minsky1969PerceptronsA}. This insight halted the research in this area for many years \cite{questforai}.
 
-The symbolic-based approach initially showed much success in several tasks (for example: theorem proving \cite{aimodern}) but also reached a limit. The general approach was to model reasoning as a form of search \cite{aimodern}
-: Proceed step-by-step towards the goal and backtrack if the steps lead to a dead end. The problem with this approach is the sheer size of the search space. The combinatorial explosion is intractable and can only be handled by heuristics, which limit the power of the system \cite{aimodern}. The limiting capabilities of perceptrons and the lack of progress in key areas resulted in the first AI winter \cite{crevier}. Funding was cut to a minimum \cite{crevier}.
+The symbolic-based approach initially showed much success in several tasks (for example: theorem proving \cite{aimodern}) but also reached a limit. The general approach was to model reasoning as a form of search \cite{aimodern}: Proceed step-by-step towards the goal and backtrack if the steps lead to a dead end. The problem with this approach is the sheer size of the search space. The combinatorial explosion is intractable and can only be handled by heuristics, which limit the power of the system \cite{aimodern}. The limiting capabilities of perceptrons and the lack of progress in key areas resulted in the first AI winter in which funding was cut to a minimum \cite{crevier}.
 
-Expert systems dominated the 1980s \cite{machineswhothink}. These were systems which were crafted by human experts and entailed their knowledge of the specific domain it tried to model using logical rules \cite{questforai}. One important contribution of expert system was their usefulness. Even early experiments managed to diagnose infectious blood diseases \cite{questforai}. 
+Expert systems dominated the 1980s \cite{machineswhothink}. These were systems which were crafted by human experts and entailed their knowledge of the specific domain it tried to model using logical rules \cite{questforai}. One important contribution of expert systems was their usefulness. Even early experiments managed to diagnose infectious blood diseases \cite{questforai}. 
 
 Research in the field of connectionism continued as well. Backpropagation solved issues of previous attempts \cite{questforai}\cite{aimodern}. Training larger neural networks was now tractable. One of the most popular architectures of the time is the Hopfield network which models an associative memory \cite{anintroductiontoneuralnetworks}. Still, the expectations were not met and the second AI winter emerged during the late 1980s \cite{machineswhothink}. This time it not only hit the scientific community, but also many AI companies \cite{questforai}.
 
 During the 1990s AI had a slightly negative connotation \cite{avoidai}: AI-based systems were working in the background and many problems were largely solved (for example speech recognition and information retrieval \cite{avoidai}\cite{historyinformationretrieval}). A big milestone of AI research was achieved, when Deep Blue managed to win against the best chess player of the time, Garry Kasparov \cite{questforai}. This was largely due to the increased computational power and clever engineering, instead of some new paradigm \cite{questforai}.
 
-During this period the collaboration with other research fields began\cite{aimodern}. For example, knowledge from mathematics and economics were applied in AI. Especially decision theory and probability theory brought in very important techniques, such as hidden Markov models and Bayesian networks \cite{statisticsinml}\cite{aimodern}.
+During this period the collaboration with other research fields began \cite{aimodern}. For example, knowledge from mathematics and economics was applied in AI. Especially decision theory and probability theory brought in very important techniques, such as hidden Markov models and Bayesian networks \cite{statisticsinml}\cite{aimodern}.
 
-The next boom in the field of AI was fueled by Deep Learning and the success it had in many problems of artificial intelligence \cite{selfdriving}\cite{nmt}\cite{speech}. Beginning with the convolutional neural network AlexNet which was the first approach that reached a top-5 error of 15.3\% on the ImageNet Large Scale Visual Recognition Challenge in 2012. \cite{alexnet}
+The next boom in the field of AI was fueled by Deep Learning and the success it had in many problems of artificial intelligence \cite{selfdriving}\cite{nmt}\cite{speech}, beginning with the convolutional neural network AlexNet which was the first approach that reached a top-5 error of 15.3\% on the ImageNet Large Scale Visual Recognition Challenge in 2012. \cite{alexnet}
 
-And then continuing in 2016 with AlphaGo winning against one of the best human player of the board game Go \cite{alphagopaper}. Compared to chess Go is a much more difficult game to play for computers, as the combinatorial explosion is much larger and the heuristics available are much weaker in Go compared to chess \cite{alphagopaper}.
+The boom continued in 2016 with AlphaGo winning against one of the best human player of the board game Go \cite{alphagopaper}. Compared to chess Go is a much more difficult game to play for computers, as the combinatorial explosion is much larger and the heuristics available are much weaker in Go compared to chess \cite{alphagopaper}.
 
-The next frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully \cite{arulkumaran2019alphastar}. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure is a problem \cite{atariplaying}. For example this work shows that understanding humor is still very challenging.
+The next frontier of artificial intelligence is not clearly established yet, as the progress of deep learning is very fast. For example the team behind AlphaGo applied similar techniques to real time strategy games successfully \cite{arulkumaran2019alphastar}. It seems that especially tasks requiring long time planning or deep understanding of the underlying structure are a problem \cite{atariplaying}. For example this thesis shows that understanding humor is still very challenging.
 
 %The danger of a third AI winter is greater than never. Despite the recent advances, researchers must be wary to not overestimate the power of AI. The question remains, whether current technology allows for strong AI, or if there is some limit we cannot advance using current approaches.
 
@@ -283,13 +283,13 @@ The next frontier of artificial intelligence is not clearly established yet, as 
 
 Machine Learning (ML) is a domain of AI \cite{aimodern}. Machine learning tries to build a model which generalizes as good as possible to previously unseen data by learning automatically from a training data set \cite{bishop}. Learning means extracting patterns from the data set by applying a machine learning algorithm \cite{bishop}. Models can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters \cite{aimodern}. For example neural networks are parametric, as gradient descent adjusts the weights and biases for each neuron during training, while the general structure of the neural network is not. In contrast, for a non-parametric model the machine learning algorithm learns the function itself \cite{aimodern}. An example for this type of model would be k-Nearest Neighbor.  Since the focus of this work are neural networks we will discuss parametric models in more detail.
 
-More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model \cite{bishop}. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure \cite{anintroductiontoneuralnetworks}. This model should make good predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters \cite{aimodern}. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human arbitrarily heuristically \cite{hyperparameter}. A parameter on the other hand, can be estimated from the data, given the previously set hyperparameters \cite{anintroductiontoneuralnetworks}.
+More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model \cite{bishop}. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure \cite{anintroductiontoneuralnetworks}. This model should make good predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters \cite{aimodern}. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human heuristically \cite{hyperparameter}. A parameter on the other hand, can be estimated from the data, given the previously set hyperparameters \cite{anintroductiontoneuralnetworks}.
 
-The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue channel values of each pixel as a feature. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
+The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue channel values of each pixel as features. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
 
 Machine learning tries to approximate a function from the selected data set. Depending on the available information, different strategies must be applied. Typically, the most convenient and preferred mode is supervised machine learning \cite{aimodern}. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied \cite{aimodern}. For example clustering methods allow unsupervised ML. If a mixture of labelled and unlabelled data is available, machine learning practitioners apply semi-supervised machine learning \cite{semisupervised}.
 
-Additionally, there is a distinction between classification and regression tasks \cite{bishop}. If $\boldsymbol{t}$ is a continuous variable, machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take finite  values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the stock price of some stock. An example for a classification task is spam detection. Such a model predicts whether an e-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task by converting the features using discretization and vice versa \cite{discretization}. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent \cite{aimodern}.
+Additionally, there is a distinction between classification and regression tasks \cite{bishop}. If $\boldsymbol{t}$ is a continuous variable, machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take finite  values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the price of some stock. An example for a classification task is spam detection. Such a model predicts whether an e-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task by converting the features using discretization and vice versa \cite{discretization}. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent \cite{aimodern}.
 
 \begin{table}[]
 \centering
@@ -310,7 +310,7 @@ The most important property of a model $\boldsymbol{y}$ is the generalization po
 
 The \textit{holdout method} facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data \cite{holdoutcrossvalidation}. There is often some bias towards the original data set \cite{datasetbias}. The better the data set characterizes the underlying problem, the better the final model may perform practically \cite{datasetshift}. For example, if one trains a vehicle detection model, but the data set does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance metrics possibly indicating otherwise.
 
-The holdout method first splits the data into three distinct subsets: Training, validation and test set \cite{holdoutcrossvalidation}. Then the practitioner incrementally adjusts the hyperparameters and trains on the training set, based on the performance of the model on the validation set \cite{holdoutcrossvalidation}. Finally, to gather the true performance the practitioner has to evaluate on the test set \cite{holdoutcrossvalidation}. The following algorithm illustrates the holdout method using pseudo code:
+The holdout method first splits the data into three distinct subsets: Training, validation and test set \cite{holdoutcrossvalidation}. The practitioner incrementally adjusts the hyperparameters and trains on the training set, based on the performance of the model on the validation set \cite{holdoutcrossvalidation}. Finally, to gather the true performance the practitioner has to evaluate on the test set \cite{holdoutcrossvalidation}. The following algorithm illustrates the holdout method using pseudo code:
 
 \begin{algorithm}
 \caption{Holdout method \cite{holdoutcrossvalidation}}\label{holdoutalgo}
@@ -336,7 +336,7 @@ Commonly used halting criteria include:
 \item Maximum number of iterations \cite{kerashalting}
 \item Plateauing performance: No improvement after a previously defined number of iterations \cite{haltingcriteria}
 \item Maximum performance: The model reaches a certain performance threshold \cite{kerashalting}
-\item Combination of multiple halting criteria \cite{kerashalting}
+\item A combination of multiple halting criteria \cite{kerashalting}
 \end{itemize}
 
 \if false
@@ -348,9 +348,9 @@ A common split ratio for the training/validation and test set is \cite{holdoutcr
 \end{enumerate}
 \fi
 
-If there is no clear separation between the test and training set, a machine learning practitioner calls it a data leakage \cite{doingdatascience}. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
+If there is no clear separation between the test and training set, we call it a data leakage \cite{doingdatascience}. The actual performance of the trained model $\boldsymbol{y}$ could be potentially much worse for unseen data than the metrics suggest. Selecting the best performing model, instead of the last model is called early stopping or the pocket algorithm.
 
-Another method for evaluating the performance of a machine learning model is called \textit{cross-validation} \cite{holdoutcrossvalidation}: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method \cite{aimodern}. As many models are trained (depending on $n$) it can be computationally very expensive  \cite{bishop}.
+Another method for evaluating the performance of a machine learning model is called \textit{cross-validation} \cite{holdoutcrossvalidation}: This method randomly splits the data into $n$ partitions. Then $n$ models are trained for each partition, where the partition is the test set and the remaining data is the training set. In general cross validation approximates the performance better than the holdout method \cite{aimodern}. However, as many models are trained (depending on $n$) it can be computationally very expensive  \cite{bishop}.
 
 The following pseudo code illustrates cross-validation, which first splits the data in a $\boldsymbol{TRAIN}$ and a $\boldsymbol{TEST}$ set \cite{holdoutcrossvalidation}. Then incrementally the $\boldsymbol{TRAIN}$ set is split into $k$ partitions $\boldsymbol{P}$. For each $(\boldsymbol{TRAIN} \setminus \boldsymbol{P}, \boldsymbol{P})$ pair a model is trained and evaluated \cite{bishop}. Based on the overall performance the practitioner adjusts the hyperparameters accordingly. Finally the $\boldsymbol{TEST}$ set evaluation returns the performance on unseen data \cite{holdoutcrossvalidation}.
 
@@ -387,7 +387,7 @@ Depending on the machine learning task and applied methodology, there is no dist
 
 \subsection{Evaluation of Machine Learning models}
 
-Measuring the performance of a model $\boldsymbol{y}$ is an important aspect of proper machine learning \cite{performanceevaluation}. Choosing the performance measure is highly task dependent \cite{performanceevaluation}. For this thesis the mean absolute error (MAE) and the accuracy were determined to be suited \cite{accuracy}. Other metrics considered were F1 and mean squared error (MSE) \cite{accuracy} \cite{Powers2008EvaluationFP}.
+Measuring the performance of a model $\boldsymbol{y}$ is an important aspect of proper machine learning \cite{performanceevaluation}. Choosing the performance measure is highly task dependent \cite{performanceevaluation}. For this thesis the mean absolute error (MAE) and the accuracy were selected \cite{accuracy}. Other metrics considered were F1 and mean squared error (MSE) \cite{accuracy} \cite{Powers2008EvaluationFP}.
 
 \subsubsection{Mean absolute error and mean squared error}
 \begin{equation}
@@ -403,23 +403,31 @@ X&~\text{is the ground truth}
 
 MAE is interesting because a near miss is less penalized \cite{accuracy}. For example, if a model predicts funniness of 5, while the real funniness is 6, the term $\mid 5 - 6 \mid = 1$. On the other hand if the predicted funniness were a 2, the term $\mid 2 - 6 \mid = 4$. The lower the MAE the better.
 
-MSE works similarly to MAE, but errors are penalized more \cite{accuracy}. The calculations for the above examples are $\left( 5 - 6 \right)^2 = 1$ and $\left( 2 - 6 \right)^2 = 16$, which is a significant difference. For a very noisy dataset MAE is usually better suited than MSE.
+MSE works similarly to MAE, but big errors are penalized more \cite{accuracy}. The calculations for the above examples are $\left( 5 - 6 \right)^2 = 1$ and $\left( 2 - 6 \right)^2 = 16$, which is a significant difference. For a very noisy dataset MAE is usually better suited than MSE.
 
 \subsubsection{Accuracy and F1}
-
 \begin{equation}
-\text{Accuracy}=\frac{|\text{True Positives}| + |\text{True Negatives}|} {|\text{True Positives}| + |\text{True Negatives}| + |\text{False Positives}| + |\text{False Negatives}|}\\
+\text{Accuracy}=\frac{|\text{True Positives}| + |\text{True Negatives}|} {|N|}\\
 \end{equation}
+\FloatBarrier
+\begin{table}[h]
+\begin{tabular}{lllll}
+where & |True Positives| & is the number of correctly classified samples of the positive class \\
+ & |True Negatives| & is the number of correctly classified samples of the negative class \\
+ & |N| & is the total number of samples
+\end{tabular}
+\end{table}
+\FloatBarrier
+\if false
 \begin{align*}
-\text{where}~|\text{True Positives}|&~\text{is the number of correctly classified samples of the positive class} \\
-|\text{True Negatives}|&~\text{is the number of correctly classified samples of the negative class} \\
-|\text{False Negatives}|&~\text{is the number of incorrectly classified samples of the negative class} \\
-|\text{False Positives}|&~\text{is the number of incorrectly classified samples of the positive class} \\
+\text{where}~&|\text{True Positives}|&~\text{is the number of correctly classified samples of the positive class} \\
+&|\text{True Negatives}|&~\text{is the number of correctly classified samples of the negative class} \\
+&|\text{False Negatives}|&~\text{is the number of incorrectly classified samples of the negative class} \\
+&|\text{False Positives}|&~\text{is the number of incorrectly classified samples of the positive class}
 \end{align*}
+\fi
 
-Accuracy is easy to understand and is commonly applied in classification tasks \cite{accuracy}. The higher the accuracy the better \cite{Powers2008EvaluationFP}. But the accuracy metric might hide important weaknesses of a model \cite{accuracy}:
-
-Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
+Accuracy is easy to understand and is commonly applied in classification tasks \cite{accuracy}. The higher the accuracy the better \cite{Powers2008EvaluationFP}. When applied on an imbalanced dataset, the accuracy metric might not sufficiently describe the performance of the model, as it is trivial to increase the accuracy by returning the most frequent class of the dataset \cite{accuracy}. Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
 
 F1 scores handles such cases better, by emphasizing false negatives and false positives more \cite{Powers2008EvaluationFP}. It is the harmonic mean of the precision and recall score \cite{Powers2008EvaluationFP}:
 
@@ -432,26 +440,23 @@ F1 scores handles such cases better, by emphasizing false negatives and false po
 \begin{equation}
 \text{F1} = 2 * \frac{\text{Precision} * \text{Recall}}{\text{Precision} + \text{Recall}}
 \end{equation}
-
+\FloatBarrier
+\begin{table}[h]
+\begin{tabular}{lllll}
+where & |True Positives| & is the number of correctly classified samples of the positive class \\
+ & |True Negatives| & is the number of correctly classified samples of the negative class \\
+ & |False Negatives| & is the number of incorrectly classified samples of the negative class \\
+ & |False Positives| & is the number of incorrectly classified samples of the positive class 
+\end{tabular}
+\end{table}
+\FloatBarrier
 For multi class classification (more than two possible classes) a confusion matrix helps to visualize the predictions of a model \cite{accuracy}. The rows of a confusion matrix are usually predicted classes and the columns the ground truth. A perfect model would show 100\% along the diagonal of the matrix, as there would be no wrong classifications.
 
 A confusion matrix usually reveals common mistakes of a model \cite{accuracy}. For example if a model never predicts a class, it can be easily detected using this visualization. For an example of a confusion matrix please refer to figure \ref{fig:confusionmatrixtransferlearningtest}.
 
-\section{Neural Networks}
+\section{Artificial Neural Networks}
 
-Before neural networks, there was the perceptron \cite{questforai}. It is a binary classifier and uses a linear function to perform classification \cite{Minsky1969PerceptronsA}. Binary refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized \cite{aimodern}. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable \cite{questforai}. For example, a simple XOR (table \ref{xor}) cannot be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function, given a nonlinear activation function \cite{universalfunction}. An MLP consists of multiple perceptrons grouped in layers and each layer connects with the previous layer \cite{bishop}. MLPs are feed forward neural network \cite{bishop}.
-
-\begin{table}[]
-\centering
-\begin{tabular}{|l|l|l|}
-\hline
-XOR & 0 & 1 \\ \hline
-0   & 0 & 1 \\ \hline
-1   & 1 & 0 \\ \hline
-\end{tabular}
-\caption{XOR function \cite{questforai}}
-\label{xor}
-\end{table}
+One of the first artificial neural network, was the perceptron \cite{questforai}. It is a binary classifier and uses a linear function to perform classification \cite{Minsky1969PerceptronsA}. \textit{Binary} refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized \cite{aimodern}. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable \cite{questforai}. For example, a simple XOR cannot be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function, given a nonlinear activation function \cite{universalfunction}. An MLP consists of multiple perceptrons grouped in layers and each layer connects with the previous layer \cite{bishop}. MLPs are feed forward neural network \cite{bishop}.
 
 
 \begin{figure}[ht]
@@ -461,18 +466,18 @@ XOR & 0 & 1 \\ \hline
   	\includegraphics[width=0.75\textwidth]{graphics/simple_neural_network.png}
   	}
   	\put(0,0){Input Layer}
-  	\put(140,0){Hidden Layer}
+  	\put(140,0){Hidden Layers}
   	\put(275,0){Output Layer}
 	\end{picture}
 	\caption{Fully Connected Feed Forward Neural Network}
 	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why neural networks are so powerful, especially deep neural networks, stems from their flexibility \cite{selfdriving}\cite{speech}\cite{nmt}. They can adapt to many different domains very easily. Illustrated at Figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
+Part of the reason why artificial neural networks are so powerful, especially deep neural networks, stems from their flexibility \cite{selfdriving}\cite{speech}\cite{nmt}. They can adapt to many different domains very easily. Illustrated at figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
 
 A neural network generally consists of multiple neurons, layers and connections \cite{aimodern}. The general inspiration for them is the human brain which also consists of similar building blocks \cite{anintroductiontoneuralnetworks}.
 
-In the human brain neurons receive their signals through dendrites (connections in neural networks) and are then sent through the axon to other neurons \cite{anintroductiontoneuralnetworks}. The signal strength is adjusted (analogous to activation functions in neural networks) such that other neurons in the brain are more stimulated \cite{anintroductiontoneuralnetworks}. Note that key parts of the human brain are not simulated in a neural network: During training the weights and biases are adjusted using gradient descent, for more information refer to section \ref{nntrain} \cite{recentexcitementabotuneuralnetworks}. Nevertheless neural networks (especially convolutional neural networks) produce similar structures also observed in the human brain \cite{Cichy2016}.
+In the human brain neurons receive their signals through dendrites (connections in neural networks) and are then sent through the axon to other neurons \cite{anintroductiontoneuralnetworks}. The signal strength is adjusted (analogous to activation functions in neural networks) such that other neurons in the brain are more stimulated \cite{anintroductiontoneuralnetworks}. Note that key parts of the human brain are not simulated in a neural network: During training the weights and biases are adjusted using gradient descent (for more information refer to section \ref{nntrain}) \cite{recentexcitementabotuneuralnetworks}. Nevertheless artificial neural networks (especially convolutional neural networks) produce similar structures also observed in the human brain \cite{Cichy2016}.
 
 
 \if false
@@ -490,14 +495,14 @@ Seiten: 1.5
 
 \fi
 
-\subsection{Basics of neural networks}
+\subsection{Basics of artificial neural networks}
 
-From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector \cite{colahbackprop}. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as \cite{bishop}:
+From a different perspective, neural networks can also be seen as a series of functional transformations of some input vector into an output vector \cite{colahbackprop}. Given the input $x_1, ..., x_D$ and $M$ connections the input layer can be described as:
 \begin{equation}
 a_j = \sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}
 \end{equation}
 
-where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases. $a_j$ is called an activation, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$ \cite{bishop}:
+where $j = 1, ..., M$. $w_{ji}^{(n)}$ is usually referred to as weights and $w_{j0}^{(n)}$ as biases \cite{bishop}. $a_j$ is called an activation or sometimes potential, which is then transformed using a nonlinear, differentiable activation function $h(\cdot)$ \cite{bishop}:
 \begin{equation}
 z_j = h(a_j)
 \end{equation}
@@ -521,7 +526,7 @@ h(\boldsymbol{x}) = \dfrac{e^{x_i}}{\sum_{k=1}^{M} e^{x_k}}
 \end{equation}
 \item Logistic Sigmoid \cite{Goodfellow-et-al-2016}: Similar to SoftMax, but used for binary classification \cite{Goodfellow-et-al-2016}.
 \begin{equation}
-\sigma(x) = \dfrac{1}{1 + exp(-x)}
+\sigma(x) = \dfrac{1}{1 + e^{-x}}
 \end{equation}
 \end{itemize}
 
@@ -539,7 +544,7 @@ Combining these transformations together for a relatively simple two layer netwo
 y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\left(\sum_{i=1}^{D} w_{ji}^{(1)}x_i + w_{j0}^{(1)}\right) + w_{k0}^{(2)}\right)
 \end{equation}
 
-This term can be simplified, by assuming that the input vector $x$ has always a constant term with the value $1$ \cite{bishop}. As this removes the additional addition for the bias for each layer.
+This term can be simplified by assuming that the input vector $x$ has always a constant term with the value $1$ \cite{bishop}, as this removes the additional addition for the bias for each layer.
 
 \begin{equation} \label{forwardcalculation}
 y_k(\boldsymbol{x}, \boldsymbol{w}) = \sigma\left(\sum_{i=1}^{M} w_{kj}^{(2)}h\left(\sum_{i=1}^{D} w_{ji}^{(1)}x_i\right)\right)
@@ -571,7 +576,7 @@ L(\boldsymbol{w}) = -\sum_{n=1}^N \left( t_n\,\text{ln}\, y_n + (1 - t_n)\,\text
 y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 \end{equation}
 
-Generalized for multiclass classification with $K$ mutually exclusive one hot encoded classes \cite{dlvc}:
+Often we want to calcualate the loss for multiclass classification problems. Here we encode the labels as $K$ mutually exclusive one hot-encoded-classes \cite{dlvc}. One-hot-encoded means that a classification $c \in \{1, ..., K\}$ is represented using a vector of size $K$ where the $c$-th component is set to $1$ and every other component is set to $0$. Suppose we have 3 classes and the classification for a sample is 2, then the one-hot-encoding of this class is $(0, 1, 0)$. We apply the following loss function for multiclass classification:
 
 \begin{equation}
 L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
@@ -590,7 +595,7 @@ The goal of training neural network is to minimize the loss of the model \cite{d
 \text{arg min}\quad L(\boldsymbol{w})
 \end{equation}
 
-Training takes advantage of the fact that it is a function composition of differentiable functions \cite{Goodfellow-et-al-2016}. This allows the use of a technique called gradient descent \cite{anintroductiontoneuralnetworks}. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met \cite{anintroductiontoneuralnetworks}. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function \cite{Goodfellow-et-al-2016}. A halting criterion could be one described in section \ref{trainingofml}. Algorithm \ref{gradientedescentalgo} illustrates the pseudo code of gradient descent.
+Training takes advantage of the fact that it is a function composition of differentiable functions \cite{Goodfellow-et-al-2016}. This allows the use of a technique called gradient descent \cite{anintroductiontoneuralnetworks}. The idea is intuitive: Walk along the path with the steepest descent until some halting criterion is met \cite{anintroductiontoneuralnetworks}. Because the neural network is differentiable the steepest descent is relatively easily obtained, by taking the negative of the first derivative of the loss function \cite{Goodfellow-et-al-2016}. A halting criterion could be one of those described in section \ref{trainingofml}. Algorithm \ref{gradientedescentalgo} illustrates the pseudo code of gradient descent.
 
 \begin{algorithm}
 \caption{Gradient descent pseudo code \cite{anintroductiontoneuralnetworks}}\label{gradientedescentalgo}
@@ -625,9 +630,9 @@ Seiten: 1.5
 \end{itemize}
 \fi
 
-\subsection{Applying neural networks}
+\subsection{Applying artificial neural networks}
 
-The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a hill: Over time it builds up velocity and slows down when the hill gets shallower. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
+The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, it also rolls faster towards local minima, the steeper the gradient. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
 
 Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of taking the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
 
