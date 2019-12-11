@@ -634,13 +634,13 @@ Seiten: 1.5
 
 The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, it also rolls faster towards local minima, the steeper the gradient. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
 
-Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of taking the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
+Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of calculating the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
 
-Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters \cite{colahbackprop}. Therefore a technique called backpropagation is commonly used \cite{colahbackprop}. For more information, refer to section \ref{backprop}.
+Obtaining the gradient is also a computationally complicated step. The usual forward derivation method commonly learned in high school does not scale well for many parameters \cite{colahbackprop}. Therefore a technique called backpropagation is commonly used \cite{colahbackprop}. For more information, refer to the next section.
 
-In general, overfitting is a problem of neural networks (and other machine learning algorithms) \cite{aimodern}. The following approaches can counteract overfitting: Regularization, Data augmentation and Dropout layers \cite{Goodfellow-et-al-2016}. Note that these techniques are not exclusive and are usually applied in combination \cite{Goodfellow-et-al-2016}.
+In general, overfitting is a problem of neural networks (and other machine learning algorithms) \cite{aimodern}. To counteract this phenomena we can apply a different loss function with \textit{regularization}, synthetically increase the dataset size using \textit{data augmentation} or randomly dropping certain neurons with \textit{dropout layers} \cite{Goodfellow-et-al-2016}. Note that these techniques are not exclusive and are usually applied in combination \cite{Goodfellow-et-al-2016}.
 
-The idea of data augmentation is to synthetically increase the size of the dataset by applying transformations on the original data \cite{dataaugmentation}. All transformations must not alter the original label of the sample. Image data usually allows many different kind of filters and transformations to be applied \cite{dataaugmentation}. Common operations are random crop, random rotation and noise \cite{dataaugmentation}. In general, this technique allows for better generalization of the trained model \cite{dataaugmentation}. For example, a model which is trained on a cats versus dogs image dataset with a rotation transformation applied might distinguish rotated cats and dogs better, compared to a model trained on a dataset without this augmentation. On the other hand the transformations could be unnecessarily force a model to generalize \cite{dataaugmentation}: Applying a skew transformation on the cats versus dogs dataset might make the performance even worse of the trained model.
+The idea of data augmentation is to synthetically increase the size of the dataset by applying transformations on the original data \cite{dataaugmentation}. No transformation must alter the original label of the sample. Image data usually allows for many different kind of filters and transformations to be applied \cite{dataaugmentation}. Common operations are random crop, random rotation and adding synthetic noise \cite{dataaugmentation}. In general, this technique allows for better generalization of the trained model \cite{dataaugmentation}. For example, a model which is trained on a cats versus dogs image dataset with a rotation transformation applied might distinguish rotated cats and dogs better, compared to a model trained on a dataset without this augmentation. On the other hand the transformations could unnecessarily force a model to generalize \cite{dataaugmentation}: Applying a skew transformation on the cats versus dogs dataset might make the performance even worse than the trained model.
 
 Regularization tries to avoid overfitting by penalizing	high weights of neurons \cite{aimodern}. This avoids certain inputs from dominating the outputs and nudges the network to make use of all inputs \cite{dlvc}. This can easily be achieved by adapting the loss function slightly \cite{bishop}\cite{dlvc}:
 
@@ -650,22 +650,16 @@ L_{reg}(\boldsymbol{w}) = \dfrac{\delta}{2}\norm{\boldsymbol{w}}^2 + L(\boldsymb
 
 where $\delta$ is called weight decay.
 
-A dropout layers can be used as well \cite{Goodfellow-et-al-2016}. The idea is similar to regularization: The network should not overly rely on certain inputs \cite{Goodfellow-et-al-2016}. A dropout layer turns off neurons with a certain probability \cite{dlvc}. This forces the network to generalize better \cite{Goodfellow-et-al-2016}. Often in CNNs dropout layers are placed at the end of the network before the last fully connected layer \cite{Goodfellow-et-al-2016}. Figure \ref{fig:dropout} shows how dropout sets certain neurons to 0.
+A dropout layers can be used as well \cite{Goodfellow-et-al-2016}. The idea is similar to regularization: The network should not overly rely on certain inputs \cite{Goodfellow-et-al-2016}. A dropout layer turns off neurons with a certain probability \cite{dlvc}. This forces the network to generalize better \cite{Goodfellow-et-al-2016}. Often in CNNs dropout layers are placed at the end of the network before the last fully connected layer \cite{Goodfellow-et-al-2016}.
 
-\begin{figure}[ht]
-	\centering
-  	\includegraphics[width=0.85\textwidth]{graphics/dropout.png}
-	\caption{Certain neurons are set to 0 (dropped out) in a dropout layer \cite{Goodfellow-et-al-2016}}
-	\label{fig:dropout}
-\end{figure}
+Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training of a neural network can be a challenging task \cite{anintroductiontoneuralnetworks}. There are many rules of thumb for many hyperparameters but in the end it is in the hand of the developer to use a good mixture of clever tricks, as well as trial and error to find a good neural network model \cite{Goodfellow-et-al-2016}. Automated machine learning is also a very promising research field, more information is available in the next section.
 
-Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training a neural network can be a challenging task \cite{anintroductiontoneuralnetworks}. There are many rules of thumbs for many hyperparameters but in the end it is in the hand of the developer to use a good mixture of clever tricks, as well as trial and error to find a good neural network model \cite{Goodfellow-et-al-2016}. Automated machine learning is also a very promising research field, more information is available at section \ref{transferlearning}.
+The architecture of the neural network also influences how much it tends to overfit: As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easier it overfits if the dataset is not sufficiently large \cite{Goodfellow-et-al-2016}. Empirically, deep networks (many layers) have shown to generalize better compared to less deep networks with a similar number of neurons \cite{Goodfellow-et-al-2016}.
 
-The architecture of the neural network also influences how much it tends to overfit: As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easy it overfits if the dataset is not sufficiently large \cite{Goodfellow-et-al-2016}. Empirically deep networks (many layers) have shown to generalize better compared to less deep networks but with similar number of neurons \cite{Goodfellow-et-al-2016}.
-
+\pagebreak
 \subsection{Backpropagation} \label{backprop}
 
-Backpropagation is an alternative way of determining the gradient of a function \cite{Goodfellow-et-al-2016}. Backpropagation makes training big neural networks tractable for modern computers \cite{bishop}. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT}. Backpropagation is also known as reverse-mode differentiation \cite{colahbackprop}.
+Backpropagation is an alternative way of determining the gradient of a function \cite{Goodfellow-et-al-2016}. Backpropagation makes training big neural networks tractable for modern computers \cite{bishop}. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT}. It is also known as reverse-mode differentiation \cite{colahbackprop}.
 
 \begin{figure}[ht]
 	\centering
@@ -677,7 +671,7 @@ Backpropagation is an alternative way of determining the gradient of a function 
 
 Another view of neural networks is the view of computational graphs \cite{Goodfellow-et-al-2016}. Neural networks essentially define a graph of simple computations consisting of differentiable operations \cite{Goodfellow-et-al-2016}. In a computational graph derivatives are placed on the edges between nodes. Figure \ref{fig:computationgraph} illustrates a computational graph.
 
-Calculating the derivative of $e$ with respect to $b$ in the graph illustrated in figure \ref{fig:computationgraph} can be calculated by summing over all paths in the computational graph \cite{colahbackprop}:
+Calculating the derivative of $e$ with respect to $b$ in the graph illustrated in figure \ref{fig:computationgraph} can be calculated by summing up over all paths in the computational graph \cite{colahbackprop}:
 
 \begin{equation}
 \frac{\partial e}{\partial b} = 1 * 2 + 1  * 3
@@ -685,24 +679,24 @@ Calculating the derivative of $e$ with respect to $b$ in the graph illustrated i
 
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=0.75\textwidth]{graphics/computationgraphsimple.png}
+  	\includegraphics[width=0.4\textwidth]{graphics/computationgraphsimple.png}
 	\caption{A simple computational graph \cite{colahbackprop}}
 	\label{fig:computationgraphsimple}
 \end{figure}
 
-Summing over all paths quickly explodes combinatorially, as the number of paths may increase exponentially with the size of the graph \cite{colahbackprop}. For example applying traditional forward-mode differentiation ($\frac{\partial}{\partial X}$) the computational graph illustrated in figure \ref{fig:computationgraphsimple} would result in the following derivative \cite{colahbackprop}:
+Summing up over all paths quickly explodes combinatorially, as the number of paths may increase exponentially with the size of the graph \cite{colahbackprop}. For example, applying traditional forward-mode differentiation ($\frac{\partial}{\partial X}$) the computational graph illustrated in figure \ref{fig:computationgraphsimple} would result in the following derivative \cite{colahbackprop}:
 
 \begin{equation}
 \frac{\partial Z}{\partial X} = \alpha \delta + \alpha \epsilon + \alpha \zeta + \beta \delta + \beta \epsilon + \beta \zeta + \gamma \delta + \gamma \epsilon + \gamma \zeta
 \end{equation}
 
-which could be greatly simplified instead by using backpropagation ($\frac{\partial Z}{\partial}$) instead:
+which could be greatly simplified instead by using backpropagation ($\frac{\partial Z}{\partial X}$) instead:
 
 \begin{equation}
 \frac{\partial Z}{\partial X} = (\alpha + \beta + \gamma)(\delta + \epsilon + \zeta)
 \end{equation}
 
-Backpropagation starts at the output node and works towards the root nodes by calculating the derivative of $\frac{\partial Z}{\partial}$ \cite{colahbackprop}. Figure \ref{fig:computationgraphreverse} outlines backpropagation on a computational graph. Additionally this process also returns a derivative with respect to the output for every node in the graph \cite{Goodfellow-et-al-2016}. This is a very useful property for training neural networks \cite{Goodfellow-et-al-2016}.
+Backpropagation starts at the output node and works towards the root nodes by calculating the derivative of $\frac{\partial Z}{\partial}$ \cite{colahbackprop}. Figure \ref{fig:computationgraphreverse} outlines backpropagation on a computational graph. Additionally this process also returns a derivative with respect to the output of every node in the graph \cite{Goodfellow-et-al-2016}. This is a very useful property for training neural networks \cite{Goodfellow-et-al-2016}.
 
 \begin{figure}[ht]
 	\centering
@@ -711,7 +705,7 @@ Backpropagation starts at the output node and works towards the root nodes by ca
 	\label{fig:computationgraphreverse}
 \end{figure}
 
-Backpropagation can be summarized using the following pseudo code described at algorithm \ref{backpropalgodesc}.
+Backpropagation can be summarized using the pseudo code described in algorithm \ref{backpropalgodesc}.
 
 \begin{algorithm}
 \caption{Backpropagation algorithm \cite{dlvc}}
@@ -723,7 +717,7 @@ Compute local gradient $l_c = \frac{\partial n}{\partial c}$ for each child $c$
 
 Compute $m_c = l_c  \frac{\partial e}{\partial n}$ for every child $c$
 
-Compute $\frac{\partial e}{\partial c}$ by summing over all $m_c$
+Compute $\frac{\partial e}{\partial c}$ by summing up over all $m_c$
 
 }
 \end{algorithm}
@@ -744,15 +738,13 @@ Seiten: 1
 
 \subsection{Deep Learning} \label{dlbackground}
 
-A neural network with multiple layers, where each layer applies increasingly higher level feature extraction is a deep neural network \cite{deeplearninginneuralnetworks}. The research field is called deep learning \cite{deeplearninginneuralnetworks}.
+A neural network with multiple layers, where each layer applies increasingly higher level feature extraction is a deep neural network \cite{deeplearninginneuralnetworks}. The research field is called deep learning \cite{deeplearninginneuralnetworks}. An advantage of deep neural networks is that they scale very well with the size of the dataset and with the amount of computation power available \cite{alexnet}. As the computational resources increase and the size of the datasets as well, the performance of deep learning models increases as well.
 
-An advantage of deep neural networks is that they scale very well with the size of the dataset and with the amount of computation power available \cite{alexnet}. As the computational resources increase and the size of the datasets as well, the performance of models deep learning enables also increases.
+The technique of using multiple layers in neural networks has been around for many years \cite{deeplearninginneuralnetworks}. Relatively recently (2012), the field of deep learning has gained a lot of attention, since the introduction of AlexNet \cite{alexnet} as this was one of the first practical deep neural network outperforming more traditional methods \cite{deeplearninginneuralnetworks}. As the basic techniques of deep learning have been around for many years, the exorbitant computational requirements were intractable for many years \cite{deeplearninginneuralnetworks}. Deep learning on a conventional central processing unit is infeasible for large models \cite{deeplearninginneuralnetworks}. Emerging general purpose programming of graphics cards solved this problem: The training of deep neural networks can be very effectively parallelized and graphics cards excel at such tasks compared to CPUs \cite{Goodfellow-et-al-2016}. Training neural networks requires to compute the gradient of a large function \cite{Goodfellow-et-al-2016}. The gradient can be efficiently calculated using backpropagation \cite{aimodern}. %Backpropagation uses the chain rule to reuse interim results, akin to dynamic programming.
 
-The technique of using multiple layers in neural networks has been around for many years \cite{deeplearninginneuralnetworks}. Relatively recently (2012), the field of deep learning has gained a lot of attention, since the introduction of AlexNet \cite{alexnet} as this was one of the first practical deep neural network outperforming more traditional methods \cite{deeplearninginneuralnetworks}. As the basic techniques of deep learning have been around for many years, the exorbitant computational requirements were still unsolved for many years \cite{deeplearninginneuralnetworks}. Deep learning on a conventional central processing unit is infeasible for large models \cite{deeplearninginneuralnetworks}. Emerging general purpose programming of graphics cards solved this problem: The training of deep neural networks can be very effectively parallelized and graphics cards excel at such tasks compared to CPUs \cite{Goodfellow-et-al-2016}. Training neural networks requires to compute the gradient of a large function \cite{Goodfellow-et-al-2016}. The gradient can be efficiently calculated using backpropagation \cite{aimodern}. %Backpropagation uses the chain rule to reuse interim results, akin to dynamic programming.
+Despite backpropagation and large datasets, controlling the number of weights and biases is still an important factor of successful deep learning models \cite{deeplearninginneuralnetworks}. There are many types of layers, which essentially all serve to reduce the number of parameters \cite{Goodfellow-et-al-2016}. For example, convolutional layers are especially suited for image related tasks, as they have a relatively small number of parameters, but perform significantly better than a comparable fully connected layer \cite{deeplearninginneuralnetworks}.
 
-Despite backpropagation and large datasets, controlling the number of weights and biases is still an important factor of successful deep learning models \cite{deeplearninginneuralnetworks}. There are many types of layers, which essentially all serve to reduce the number of parameters \cite{Goodfellow-et-al-2016}. For example, convolutional layers are especially suited for image related tasks, as they have a relatively small number of parameters, but work much better than a comparable fully connected layer \cite{deeplearninginneuralnetworks}. More about convolutional neural networks in section \ref{mlcnn}.
-
-A problem of neural networks and deep neural networks in particular is the lack of interpretability \cite{interpretabledl}. For humans it is very difficult to make founded assertions of what the neural network actually uses for its prediction \cite{interpretabledl2}. Neural networks are essentially black boxes with input on one side of the network and some prediction returned at the other side of the network \cite{interpretabledl}. This is especially a problem of safety critical systems, such as self-driving cars \cite{selfdriving}. In this domain it is critical for humans to know on which basis the system has decided and whether it is sensible. Natural language processing is also prone to such "clever hans" behaviour, where the neural network exploits statistical cues of the underlying data, instead of really understanding the task \cite{cleverhans}. Interpretable deep learning is an active field of research \cite{interpretabledl}.
+A general problem of neural networks and deep neural networks in particular is the lack of interpretability \cite{interpretabledl}. For humans it is very difficult to make founded assertions of what the neural network actually uses for its prediction \cite{interpretabledl2}. Neural networks are essentially black boxes with input on one side of the network and some prediction returned at the other side of the network \cite{interpretabledl}. This is especially a problem of safety critical systems, such as self-driving cars \cite{selfdriving}. In this domain it is critical for humans to know on which basis the system has decided and whether it is sensible. Natural language processing is also prone to such "clever hans" behaviour, where the neural network exploits statistical cues of the underlying data, instead of really understanding the task \cite{cleverhans}. Interpretable deep learning is an active field of research \cite{interpretabledl}.
 
 \if false
 Seiten: 1
@@ -772,7 +764,7 @@ Seiten: 1
 	\label{fig:cnn}
 \end{figure}
 
-Based on feedforward neural networks convolutional neural networks emerged \cite{bishop}. A convolutional neural network (CNN) is a deep neural network \cite{alexnet}. The basic layer types of CNNs are: fully connected hidden layers, convolutional layers and max-pooling layers \cite{Goodfellow-et-al-2016}. Figure \ref{fig:cnn} illustrates an overview of the architecture of a convolutional neural network.
+Convolutional neural networks were developed based on feedforward neural networks \cite{bishop}. A convolutional neural network (CNN) is a deep neural network \cite{alexnet}. The basic layer types of CNNs are fully connected hidden layers, convolutional layers and max-pooling layers \cite{Goodfellow-et-al-2016}. Figure \ref{fig:cnn} illustrates an overview over the architecture of a convolutional neural network.
 
 \begin{figure}[ht]
 	\centering
@@ -781,19 +773,19 @@ Based on feedforward neural networks convolutional neural networks emerged \cite
 	\label{fig:convolution}
 \end{figure}
 
-Convolutional layers apply a convolution on each pixel \cite{bishop}. A convolution is a weighted sum between two functions \cite{Goodfellow-et-al-2016}. The first function is the input signal and the second function a filter kernel \cite{bishop}. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows the layer to recognize certain local patterns (for example: edges) \cite{Goodfellow-et-al-2016}. The kernel is shared among the input neurons (parameter sharing) \cite{bishop}. This has two main advantages: It introduces translation invariance, which means that it does not matter if a feature occurs at the center or on near the edges of an images \cite{Goodfellow-et-al-2016}. Also it reduces the number of learned parameters significantly \cite{bishop}. Additionally to increase the capacity, multiple convolutions are applied per layer \cite{Goodfellow-et-al-2016}. This is called the depth of a convolutional layer \cite{Goodfellow-et-al-2016}. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes \cite{dlvc}. The kernel has a size, which is usually $n$x$n$ \cite{alexnet}. To avoid the size reduction of standard convolutions, one can set the padding parameter of a convolutional layer \cite{Goodfellow-et-al-2016}. This increases the input data synthetically (for example by introducing a border with constant value). There is also a stride, which defines how the filter moves along the input \cite{Goodfellow-et-al-2016}. If the stride is fractional ($1/s$), it is also called a deconvolution or transposed convolution \cite{dlvc}. This operation increases the output size \cite{Goodfellow-et-al-2016}.
+Convolutional layers apply a convolution on each pixel \cite{bishop}. A convolution is a weighted sum between two functions \cite{Goodfellow-et-al-2016}. The first function is the input signal and the second function a filter kernel \cite{bishop}. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows the layer to recognize certain local patterns (for example: edges) \cite{Goodfellow-et-al-2016}. The kernel is shared among the input neurons (parameter sharing) \cite{bishop}. This has two main advantages: It introduces translation invariance, which means that it does not matter if a feature occurs at the center or near the edges of an images \cite{Goodfellow-et-al-2016}. Also it reduces the number of learned parameters significantly \cite{bishop}. Additionally to increase the capacity, multiple convolutions are applied per layer \cite{Goodfellow-et-al-2016}. This is called the depth of a convolutional layer \cite{Goodfellow-et-al-2016}. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes \cite{dlvc}. The kernel is a quadratic matrix of size $n$ \cite{alexnet}. To avoid the size reduction of standard convolutions, one can set the padding parameter of a convolutional layer \cite{Goodfellow-et-al-2016}. This increases the input data synthetically (for example by introducing a border with constant value). There is also a stride, which defines how the filter moves along the input \cite{Goodfellow-et-al-2016}. If the stride is fractional ($1/s$), it is also called a deconvolution or transposed convolution \cite{dlvc}. This operation increases the output size \cite{Goodfellow-et-al-2016}.
 
 
 \begin{figure}[ht]
 	\centering
   	\includegraphics[width=0.5\textwidth]{graphics/maxpooling.png}
-	\caption{2x2 max pooling of a simple 4x4 input layer into a 2x2 output layer}
+	\caption{2x2 max-pooling of a simple 4x4 input layer into a 2x2 output layer}
 	\label{fig:maxpooling}
 \end{figure}
 
-Pooling layers are applied after convolutional layers \cite{alexnet}. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance) \cite{dlvc}. Local pooling layers are connected to a local subset of the neurons in the previous layer \cite{Goodfellow-et-al-2016}. The input is transformed by some function \cite{dlvc}. A typical pooling layer is max pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2) \cite{Goodfellow-et-al-2016}. Figure \ref{fig:maxpooling} illustrates a max-pooling operation. Another common type of pooling is average pooling \cite{Goodfellow-et-al-2016}. Another form of pooling is global pooling, where the entire data is pooled at once, this is usually applied at the end of the convolutional part of a CNN \cite{Goodfellow-et-al-2016}. Pooling does not involve learning weights, as the function applied is fixed before training \cite{Goodfellow-et-al-2016}. There are also problems associated with pooling, as it essentially makes the model forget information \cite{resnet}. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
+Pooling layers are applied after convolutional layers \cite{alexnet}. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance) \cite{dlvc}. Local pooling layers are connected to a local subset of the neurons in the previous layer \cite{Goodfellow-et-al-2016}. The input is transformed by some function \cite{dlvc}. A typical pooling layer is max-pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2) \cite{alexnet}. Figure \ref{fig:maxpooling} illustrates a max-pooling operation. Another common type of pooling is average pooling, which is often combined with global pooling \cite{globalaveragepooling}. Global pooling means, that the entire data is pooled at once. This operation is usually applied at the end of the convolutional part of a CNN \cite{globalaveragepooling}. Pooling does not involve learning weights, as the function applied is fixed before training \cite{Goodfellow-et-al-2016}. There are also problems associated with pooling, as it essentially makes the model forget information \cite{resnet}. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
 
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers \cite{alexnet}. Interestingly the convolutional part of a CNN can be used for another tasks with good performance, more about this at section \ref{transferlearning} \cite{deeplearninginneuralnetworks}.
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers \cite{alexnet}. Interestingly the convolutional part of a CNN can be used for feature extraction for different problem domains (see \ref{transferlearning}) \cite{deeplearninginneuralnetworks}.
 
 \if false
 Seiten: 1
@@ -820,9 +812,13 @@ Seiten: 1
 	\label{fig:rnn}
 \end{figure}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense, that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. But naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. More about this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be performed. This process converts  recurrent neural networks into feed-forward networks when applied on a sequence.
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be visualized. This process converts an RNN for a sequence of length $n$ into feed-forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely. More detailed information regarding this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. 
 
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}.
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio. There are many different variations of LSTMs, but all share common building blocks: Memory cell input \& output, output gate and a forget gate. 
+
+
+
+A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}.
 
 Among LSTM/GRU cells there are many variations \cite{Goodfellow-et-al-2016}. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general \cite{gru}.
 
@@ -830,8 +826,65 @@ The simplest LSTM unit consists of a memory cell with input and output gates \ci
 
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/lstm.png}
-	\caption{Overview of an LSTM \cite{colahlstm}}
+	
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+
+%Shape: Rectangle [id:dp17732646075690917] 
+\draw   (219.5,64) -- (440.5,64) -- (440.5,191) -- (219.5,191) -- cycle ;
+%Straight Lines [id:da27681364737495073] 
+\draw    (115.5,150) -- (257.5,150) ;
+\draw [shift={(259.5,150)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Shape: Rectangle [id:dp4058390061102468] 
+\draw  [fill={rgb, 255:red, 209; green, 209; blue, 209 }  ,fill opacity=1 ] (256.25,126) -- (409.25,126) -- (409.25,174) -- (256.25,174) -- cycle ;
+%Straight Lines [id:da18227207103534937] 
+\draw    (410,150) -- (543.5,150) ;
+\draw [shift={(545.5,150)}, rotate = 180] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Curve Lines [id:da2091323356256649] 
+\draw    (360.8,125.4) .. controls (344.22,68.47) and (321.12,66.44) .. (301.01,123.65) ;
+\draw [shift={(300.4,125.4)}, rotate = 288.94] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+
+%Shape: Circle [id:dp22223069197360545] 
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (229.5,150) .. controls (229.5,146.82) and (232.07,144.25) .. (235.25,144.25) .. controls (238.43,144.25) and (241,146.82) .. (241,150) .. controls (241,153.18) and (238.43,155.75) .. (235.25,155.75) .. controls (232.07,155.75) and (229.5,153.18) .. (229.5,150) -- cycle ;
+%Shape: Circle [id:dp4116294832649119] 
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (418.5,150) .. controls (418.5,146.82) and (421.07,144.25) .. (424.25,144.25) .. controls (427.43,144.25) and (430,146.82) .. (430,150) .. controls (430,153.18) and (427.43,155.75) .. (424.25,155.75) .. controls (421.07,155.75) and (418.5,153.18) .. (418.5,150) -- cycle ;
+%Shape: Circle [id:dp451223553900443] 
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (326.25,81) .. controls (326.25,77.82) and (328.82,75.25) .. (332,75.25) .. controls (335.18,75.25) and (337.75,77.82) .. (337.75,81) .. controls (337.75,84.18) and (335.18,86.75) .. (332,86.75) .. controls (328.82,86.75) and (326.25,84.18) .. (326.25,81) -- cycle ;
+%Straight Lines [id:da12886909220699616] 
+\draw    (332,48) -- (332,75.25) ;
+
+
+%Straight Lines [id:da5031916477625245] 
+\draw    (235.25,155.75) -- (235.25,211.38) ;
+
+
+%Straight Lines [id:da4547331014028435] 
+\draw    (424.25,155.75) -- (424.25,211.78) ;
+
+
+
+% Text Node
+\draw (164,127) node   [align=left] {Memory Cell \\Input};
+% Text Node
+\draw (495.67,127) node   [align=left] {Memory Cell \\Output};
+% Text Node
+\draw (235,223) node   [align=left] {Input Gate};
+% Text Node
+\draw (424.4,223.2) node   [align=left] {Output Gate};
+% Text Node
+\draw (333,35) node   [align=left] {Forget Gate};
+
+
+\end{tikzpicture}
+	
+	
+	\caption{A schematic overview of an LSTM \cite{hochreiter}}
 	\label{fig:lstm}
 \end{figure}
 
@@ -855,19 +908,19 @@ Seiten: 1
 
 \begin{figure}[ht]
 	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder.png}
+  	\includegraphics[width=0.5\textwidth]{graphics/autoencoder.png}
 	\caption{A fully connected autoencoder with 2 encoding and 2 decoding layers}
 	\label{fig:autoencoder}
 \end{figure}
 
-An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. An autoencoder consists of two parts \cite{Goodfellow-et-al-2016}: 
+An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. An autoencoder consists of two parts:
 
 \begin{itemize}
 \item Encoder: Performs a dimensionality reduction from a high dimensional data to a low dimensional representation \cite{Goodfellow-et-al-2016}
 \item Decoder: Tries to reconstruct the original data from the low dimensional representation \cite{Goodfellow-et-al-2016}
 \end{itemize}
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions \cite{dlvc}. 
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max-pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing a transposed convolutions \cite{dlvc}. 
 
 \if false
 Seiten: 0.5
@@ -1202,7 +1255,7 @@ The work of Bertero et al compares several machine learning techniques for predi
 
 Interestingly their work is not using an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradient. \cite{hochreiter} Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards they combine both vectors and use this as an input for the RNN cell.
 
-The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. They use one convolution layer, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer, the authors apply a standard max pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
+The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. They use one convolution layer, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer, the authors apply a standard max-pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
 
 Their corpus is split into a train/validation/test split, with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
 
