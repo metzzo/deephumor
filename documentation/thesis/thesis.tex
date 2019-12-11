@@ -814,8 +814,31 @@ Seiten: 1
 
 Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be visualized. This process converts an RNN for a sequence of length $n$ into feed-forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely. More detailed information regarding this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. 
 
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio. There are many different variations of LSTMs, but all share common building blocks: Memory cell input \& output, output gate and a forget gate. 
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed-forward network. 
 
+There are many different variations of LSTMs, but all share common building blocks: Memory cell input \& output, output gate and a forget gate. The memory of an LSTM cell enables the network to remember information over time. Because LSTMs manipulate the memory through carefully crafted gates, the state is not lost when the LSTM is unrolled. We will now examine a specific LSTM cell \cite{TODO}.
+
+The forget gate decides which information from the previous cell state is removed. The gate layer performs this decision by looking at the previous cells output $h_{t-1}$ and the current element of the sequence $x_t$. The $\sigma$ ensures, that the result is between $0$ and $1$, where $0$ means forget the state and $1$ means keep the state.
+\begin{equation}
+f_t = \sigma \left(W_f \cdot \left[ h_{t-1}, x_t \right] + b_f\right)
+\end{equation}
+
+The input gate has a similar function to the forget gate, but instead it decides which information of the cell state needs to be updated, this information is stored in $i_t$. Then the LSTM calculates a new state vector $\widetilde{C_t}$.  
+
+\begin{equation}
+i_t=\sigma\left(W_i \cdot \left[ h_{t-1}, x_t\right] + b_i \right)
+\end{equation}
+\begin{equation}
+\widetilde{C_t} = \text{tanh}\left( W_C \cdot \left[ h_{t-1}, x_t \right] + b_C \right)
+\end{equation}
+
+Next, the forget gate and input gate are combined to calculate the new cell state $C_t$.
+
+\begin{equation}
+C_t=f_t*C_{t-1} + i_t*\widetilde{C_t}
+\end{equation}
+
+TODO
 
 
 A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}.
