@@ -236,7 +236,7 @@ This section gives a short overview over the contents of this thesis.
 
 Chapter 2 (Background) contains the background necessary for this thesis. Topics covered are computational humor, machine learning, artificial intelligence, neural networks, natural language processing, automated machine learning and an overview over related work.
 
-Chapter 3 (Design) covers the iterative design process of this thesis. This process began with the visual component of Gary Larson's cartoons using convolutional neural networks. Next, design shifted towards the development of deep neural networks for punchlines using LSTMs, AutoML, feed-forward neural networks and word embeddings. And finally this chapter outlines the combination of both domains in a single architecture.
+Chapter 3 (Design) covers the iterative design process of this thesis. This process began with the visual component of Gary Larson's cartoons using convolutional neural networks. Next, design shifted towards the development of deep neural networks for punchlines using LSTMs, AutoML, feed forward neural networks and word embeddings. And finally this chapter outlines the combination of both domains in a single architecture.
 
 Chapter 4 (Implementation) focuses on the implementation aspects of the previously described neural network architectures. The reader gets an overview over the technology chosen and I implemented the the architectures.
 
@@ -812,18 +812,26 @@ Seiten: 1
 	\label{fig:rnn}
 \end{figure}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. Figure \ref{fig:rnn} shows how unrolling of recurrent connections into a network without loops can be visualized. This process converts an RNN for a sequence of length $n$ into feed-forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely. More detailed information regarding this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. 
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. To train a recurrent neural network it must be converted into an equivalent feed forward network. Figure \ref{fig:rnn} shows a visualization of such unrolling. This process converts an RNN for a sequence of length $n$ into a feed forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely. More detailed information regarding this problem is available in the original LSTM paper of Hochreiter et al \cite{hochreiter}. 
 
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed-forward network. 
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed forward network. 
 
-There are many different variations of LSTMs, but all share common building blocks: Memory cell input \& output, output gate and a forget gate. The memory of an LSTM cell enables the network to remember information over time. Because LSTMs manipulate the memory through carefully crafted gates, the state is not lost when the LSTM is unrolled. We will now examine a specific LSTM cell \cite{TODO}.
+There are many different variations of LSTMs, but all share common building blocks: Memory cell input \& output, output gate and a forget gate. The memory of an LSTM cell enables the network to remember information over time. Because LSTMs manipulate the memory through carefully crafted gates, the state is not lost when the LSTM is unrolled. We will now examine a specific implementation of an LSTM cell \cite{TODO}.
 
-The forget gate decides which information from the previous cell state is removed. The gate layer performs this decision by looking at the previous cells output $h_{t-1}$ and the current element of the sequence $x_t$. The $\sigma$ ensures, that the result is between $0$ and $1$, where $0$ means forget the state and $1$ means keep the state.
+The forget gate $f_t$ removes information from the memory:
 \begin{equation}
 f_t = \sigma \left(W_f \cdot \left[ h_{t-1}, x_t \right] + b_f\right)
 \end{equation}
+\begin{align*}
+\text{where}~W_f&~\text{are the trained weights for the forget gate} \\
+\left[. , . \right]&~\text{is a concatenation of two vectors} \\
+h_{t-1}&~\text{is the last LSTMs unit output} \\
+x_t&~\text{is the current input} \\
+b_f&~\text{is the learned bias for the forget gate}
+\end{align*}
+The $\sigma$ ensures, that the result is between $0$ and $1$, where $0$ means forget the state and $1$ means keep the state.
 
-The input gate has a similar function to the forget gate, but instead it decides which information of the cell state needs to be updated, this information is stored in $i_t$. Then the LSTM calculates a new state vector $\widetilde{C_t}$.  
+The input gate $i_t$ has a similar function to the forget gate, but instead it decides which information of the cell's memory needs to be updated. Then the LSTM calculates a new memory vector $\widetilde{C_t}$:  
 
 \begin{equation}
 i_t=\sigma\left(W_i \cdot \left[ h_{t-1}, x_t\right] + b_i \right)
@@ -831,21 +839,39 @@ i_t=\sigma\left(W_i \cdot \left[ h_{t-1}, x_t\right] + b_i \right)
 \begin{equation}
 \widetilde{C_t} = \text{tanh}\left( W_C \cdot \left[ h_{t-1}, x_t \right] + b_C \right)
 \end{equation}
+\begin{align*}
+\text{where}~W_i&~\text{are the trained weights for the input gate} \\
+W_C&~\text{are the trained weights for calculating the new memory} \\
+b_i&~\text{is the learned bias for the input gate} \\
+b_C&~\text{is the learned bias for calculating the new memory} \\
+\end{align*}
 
-Next, the forget gate and input gate are combined to calculate the new cell state $C_t$.
+Next, the forget gate and input gate are combined to calculate the new cell memory $C_t$.
 
 \begin{equation}
 C_t=f_t*C_{t-1} + i_t*\widetilde{C_t}
 \end{equation}
+\begin{align*}
+\text{where}~C_t~&\text{is the memory for the current LSTM unit} \\
+*&~\text{is element-wise multiplication}
+\end{align*}
 
-TODO
 
+For the output gate $o_t$, we want to calculate the LSTMs output $h_t$, by combining the input and memory :
+\begin{equation}
+o_t=\sigma\left(W_o \cdot \left[ h_{t-1}, x_t\right] + b_o \right)
+\end{equation}
+\begin{equation}
+h_t = o_t * \text{tanh}\left(C_t\right)
+\end{equation}
+\begin{align*}
+\text{where}~W_o&~\text{are the trained weights for the forget gate} \\
+b_o&~\text{is the learned bias for the output gate}
+\end{align*}
 
-A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}.
+To increase the learning capacity of LSTMs we can apply multiple LSTM cells sequentially, where the output from the first LSTM is the input for the second LSTM, similarly to how convolutional layers are stacked together. Alternatively we can increase the memory capacity by increasing the size of the LSTM's memory $C$. Empirically LSTMs have shown to have still tendency to overfit to the training data easily, which makes it even more important to find right hyperparameters.
 
-Among LSTM/GRU cells there are many variations \cite{Goodfellow-et-al-2016}. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general \cite{gru}.
-
-The simplest LSTM unit consists of a memory cell with input and output gates \cite{hochreiter}. Inside the LSTM is a self-recurrent connection, which keeps the vanishing/exploding gradients inside the cell \cite{hochreiter}. For an illustration of an LSTM, refer to figure \ref{fig:lstm}.
+A newer approach to this problem are gated recurrent units (GRUs) \cite{gru}. Among LSTM/GRU cells there are many variations \cite{Goodfellow-et-al-2016}. Empirically GRUs have shown to train faster, but no significant difference regarding performance has been observed in general \cite{gru}.
 
 \begin{figure}[ht]
 	\centering
