@@ -1116,7 +1116,7 @@ Seiten: 0.5
 \fi
 
 % SUM: 13.5-14
-
+\pagebreak
 \section{Natural Language Processing} \label{nlpbackground}
 
 Natural Language Processing (NLP) combines the disciplines of artificial intelligence and linguistics \cite{statisticalnlp}\cite{speechandlanguageprocessing}. NLP researchers try to build computer programs capable of understanding human language \cite{speechandlanguageprocessing}. Common tasks of NLP include part-of-speech tagging, paraphrase identification, machine translation and speech recognition \cite{surveynlp}\cite{nmt}\cite{googlespeech}\cite{speech}\cite{paraphrase}.
@@ -1219,15 +1219,13 @@ Seiten: 0.25
 \fi
 
 \subsection{ELMo \cite{elmo}}
-Previously mentioned models have very limited sense of context, especially each word had the same word vector associated regardless of the context \cite{pennington2014glove}\cite{tfidf}. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context \cite{elmo}.
+The previously mentioned models have very limited sense of context, especially each word had the same word vector associated regardless of the context \cite{pennington2014glove}\cite{tfidf}. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context \cite{elmo}.
 
-The basis for ELMo is a language model trained on a large corpus of text \cite{elmo}. A language model predicts the next word given a sequence of prior words \cite{statisticalnlp}. For example given the sequence of words "Yesterday I was in New York. I visited the statue of ...", a good language model could predict that the next word would be "Liberty".
+The basis for ELMo is a language model trained on a large corpus of text \cite{elmo}. A language model predicts the next word given a sequence of prior words \cite{statisticalnlp}. For example given the sequence of words \textit{Yesterday I was in New York. I visited the statue of ...}, a good language model could predict that the next word would be \textit{Liberty}.
 
-ELMo models language using a 2-layer bidirectional LSTM with residual connections, which allows training of deep models more efficiently. However the words still must be converted into a vector representation \cite{elmo}. This is achieved by first converting the words into a character embedding and then a convolutional layer with max-pooling is applied \cite{elmo}. The character embedding has the advantage that the model handles words which are not in the vocabulary better \cite{elmo}.
+ELMo models language using a 2-layer bidirectional LSTM with residual connections, which allows training of deep models more efficiently. However the words still must be converted into a vector representation \cite{elmo}. This is achieved by first converting the words into a character embedding and then a convolutional layer with max-pooling is applied \cite{elmo}. The character embedding has the advantage that the model handles words better which are not in the vocabulary \cite{elmo}.
 
 The novel idea of ELMo is not how it is trained, but how the trained language model is applied \cite{elmo}: ELMo calculates the final word embedding for a word by combining the different hidden states of the LSTMs and the output of the convolutional part into a unified vector representation \cite{elmo}. The combination is done by multiplying a weight to each state, which is also learned \cite{elmo}.
-
-This is a short summary of a relatively complex architecture. For more details the work of Gardner et al is recommended \cite{elmo}.
 
 \if false
 Seiten: 0.5
@@ -1240,16 +1238,15 @@ Seiten: 0.5
 
 \fi
 
-
 \section{Transfer Learning} \label{transferlearning}
 
 Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results \cite{Goodfellow-et-al-2016}. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big dataset is also a big challenge and not always feasible.
 
-Transfer learning tries to solve this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks \cite{Goodfellow-et-al-2016}. The original model is trained on an already existing big dataset and the dataset of the fine tuning can be orders of magnitudes smaller \cite{dlvc}. This tuning in the context of deep neural networks is usually done by freezing the weights of neurons in certain higher layers during training \cite{Goodfellow-et-al-2016}. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily \cite{dlvc}.
+Transfer learning tries to solve this problem: Instead of training a completely new model for each problem task, the idea is to reuse models and only slightly adapt them for new tasks \cite{Goodfellow-et-al-2016}. The original model is trained for an already existing big dataset and the dataset of the fine tuning can be orders of magnitudes smaller \cite{dlvc}. This tuning in the context of deep neural networks is usually done by freezing the weights of neurons in certain higher layers during training \cite{Goodfellow-et-al-2016}. Usually lower layers perform more general feature extraction, which can be transferred to other domains more easily \cite{dlvc}.
 
-For example there are already very big datasets for image classification tasks \cite{alexnet}. Training a good performing classifier on these datasets has already been done numerous times \cite{resnet}\cite{alexnet}. Especially CNNs have an architecture very suited for transfer learning: As mentioned in section \ref{mlcnn}, there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance for traditional image classification tasks and applied it on Gary Larson's cartoons \cite{resnet}.
+For example there are already very big datasets for image classification tasks \cite{alexnet}. Training a good performing classifier on these datasets has already been done numerous times \cite{resnet}\cite{alexnet}. Especially CNNs have an architecture well suited for transfer learning: As mentioned in section \ref{mlcnn}, there is the convolutional part and the fully connected part. Usually the convolutional part is acting as a feature extractor and the fully connected part makes the final prediction. Empirically it has been shown that the feature extractor generalizes often very well to new domains. Depending on the similarity of the domains, less training is needed for the new domain. For example, this thesis uses a pretrained ResNet8 model which has very good performance on traditional image classification tasks and applies it on Gary Larson's cartoons \cite{resnet}.
 
-Natural language processing works similarly by transferring word embeddings between different corpora \cite{bert}. Importantly these word embeddings transfer well for a broad range of tasks and still achieving state-of-the-art performance. \cite{elmo}
+Natural language processing works similarly by transferring word embeddings between different corpora \cite{bert}. Importantly, these word embeddings transfer well for a broad range of tasks and still achieving state-of-the-art performance \cite{elmo}.
 
 
 \if false
@@ -1265,11 +1262,9 @@ Seiten: 1
 
 \section{AutoML} \label{automlbackground}
 
-AutoML stands for automated machine learning and is the process of automated end-to-end training of machine learning models without the help of a human \cite{automlsurvey}. Naive automated approaches such as grid search may have exponential runtime with increasing number of hyperparameters \cite{automlsurvey}.
+In machine learning models have increasingly more hyperparameters \cite{alexnet}\cite{resnet}. Traditionally these have been manually set by the machine learning practitioner, which does not scale very well for many hyperparameters \cite{aimodern}. Trivially grid search or random search can be applied. Grid search samples all possible combinations of hyperparameters \cite{automlsurvey}. Consider the following example: If a machine learning algorithm has four hyperparameters and each hyperparameter has six possible values, then $6^4$ models have to be trained and evaluated. There are two significant problems with this approach: It scales exponentially with the number of hyperparameters and for continuous hyperparameters only a predefined subset of possible values can be tested \cite{randomsearch}. Random search assigns random hyperparameters until some halting criterion is reached \cite{randomsearch}. This technique performs very well for many hyperparameter optimization tasks, as it does not waste time on optimizing irrelevant hyperparameters \cite{randomsearch}. 
 
-Grid search is a simple approach, where a model for possible combinations of hyperparameters is trained \cite{automlsurvey}. Similarly random search assigns random hyperparameters until some halting criterion is reached \cite{automlsurvey}. Random search is performing very well for many hyperparameter optimization tasks, as it does not waste time on optimizing irrelevant hyperparameter \cite{automlsurvey}.
-
-Solving a problem using machine learning requires many non-trivial tasks, such as \cite{automlsurvey}:
+Automated machine learning (AutoML) is the process of finding hyperparameters or even the entire machine learning pipeline automatically, without (or with much less) human intervention using machine learning itself \cite{hyperoptpaper}. An ideal AutoML system could perform the following tasks automatically \cite{automlsurvey}:
 
 \begin{itemize}
 \item Data pre-processing
@@ -1279,19 +1274,18 @@ Solving a problem using machine learning requires many non-trivial tasks, such a
 \item Hyperparameter selection
 \end{itemize}
 
-AutoML tries to automate all or a subset of these tasks \cite{automlsurvey}. A human can only try several different hyperparameter configurations and pre-processing steps \cite{automlsurvey}. Applying machine learning techniques to automate this process therefore has the chance to save much time and even result in possibly much better models \cite{automlsurvey}.
+In practice completely autonomous AutoML it is not yet possible, as the possible search space is intractable by currently available computer hardware \cite{automlsurvey}. Nevertheless, AutoML still may save time and result in possibly better models, as we can focus on more important questions \cite{automlsurvey}.
 
-\subsection{Hyperopt-Sklearn}
+This thesis uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem \cite{hyperoptpaper}.
 
-This paper uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem \cite{hyperoptpaper}.
-
-Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters (also known as hyper hyperparameters) \cite{hyperoptpaper}:
+Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters, also known as \textit{hyper} hyperparameters (because they are parameters for training the hyperparameters) \cite{hyperoptpaper}:
 \begin{itemize}
 \item Objective function: Mapping of a configuration into a scalar value, which the algorithm tries to minimize \cite{hyperoptpaper}
 \item Search domain: Random variables whose distribution should match the most likely best configuration \cite{hyperoptpaper}
 \item Optimization algorithm: An algorithm which finds the best configuration in the search domain given the objective function \cite{hyperoptpaper}
 \end{itemize}
 
+Now that I covered the necessary foundations of machine learning, artificial neural networks, natural language processing, transfer learning and automated machine learning, I will outline the context in which I applied them.
 
 \if false
 Seiten: 0.5
@@ -1307,19 +1301,27 @@ Seiten: 0.5
 
 \section{Computational Humor} \label{comphumorbackground}
 
-According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor is still under debate. It seems, that humor contributes to physical and psychological well-being \cite{humorhealthy}\cite{humorresearch}. Evolutionary psychologists have proposed, that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others \cite{sep-humor}.	
+According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor are still under debate. It seems that humor contributes to physical and psychological well-being \cite{humorhealthy}\cite{humorresearch}. Evolutionary psychologists have proposed that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others \cite{sep-humor}.	
 
-Over the centuries, there many theories of humor have been proposed: From the superiority theory, where the idea is that laughter expresses feelings of superiority over other people (or a former self) \cite{humorresearch}. This theory was popular until the 20th century. Another early theory popular in the 20th century is the relief theory, which proposes that humor can be seen as a valve which releases pressure \cite{humorresearch}. This pressure was initially proposed to be some kind of gas or energy, but then it was thought of some form of "psychic energy" \cite{sep-humor}\cite{humorresearch}. The incongruity theory proposes, that humor is the result of the perception of something incongruous \cite{typologyofhumor}. In particular if the mind observes something which violates our mental model and expectations \cite{typologyofhumor}. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. 
+Over the centuries, there many theories of humor have been proposed: 
+\begin{itemize}
+\item Superiority theory: One of the first theories of humor, which proposes that l	aughter expresses feelings of superiority over other people (or a former self) \cite{humorresearch}. This theory was popular until the 20th century.
+\item Relief theory: Another early theory of humor, which proposes that humor can be seen as a valve which releases pressure \cite{humorresearch}. This pressure was initially thought to be some kind of gas or energy, but later it was considered to be some form of \textit{psychic energy} \cite{sep-humor}\cite{humorresearch}.
+\item Incongruity theory: This theory proposes that humor is the result of the perception of something incongruous \cite{typologyofhumor}. In particular if the mind observes something which violates its mental model and expectations \cite{typologyofhumor}. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. 
+
+\end{itemize}
+
+ 
 
 A more modern view of humor is seeing it as a form of play \cite{sep-humor}. It has been observed, that many animals learn important skills during play \cite{sep-humor}. Humor seems to serve a similar purpose for human social behaviour \cite{humorplay}. Usually humor shows what should be avoided during communication or in other (social) situations \cite{sep-humor}. Laughing and smiling enables these situations and therefore can be considered as a signal to play \cite{humorplay}. 
 
-Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computer becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these application \cite{HumoristBot}. An important challenge of computational humor is, that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This may be the reason why there is currently no unified computational model of humor, instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
+Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computers becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these applications \cite{HumoristBot}. An important challenge of computational humor is that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This may be the reason why there is currently no unified computational model of humor. Instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
 
-Common tasks of computational humor involve generative or discriminative tasks \cite{HumoristBot}\cite{Yang2015HumorRA}: An example for generative task would be joke generation or pun generation. In these kind of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not. Computational humor and language understanding go hand in hand \cite{Yang2015HumorRA}: To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic \cite{elmo}\cite{bert}.
+Common tasks of computational humor involve generative or discriminative tasks \cite{HumoristBot}\cite{Yang2015HumorRA}: An example for generative task would be joke generation or pun generation. In these types of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not. Computational humor and language understanding go hand in hand \cite{Yang2015HumorRA}: To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic \cite{elmo}\cite{bert}.
 
 Many early approaches of computational humor have focused on the incongruity theory, where humor is an unexpected difference between the expected and the unexpected \cite{comphumorsummary}. The general idea was to find or produce contradictions between what a human would expect and what has been communicated. These approaches had only limited success, most likely because the underlying language understanding was not sophisticated enough \cite{comphumorsummary}. The computer did not have a proper model of what the human would understand and therefore could not apply the incongruity theory successfully.
 
-Another problem was their heavy reliance on ontologies, such as WordNet and VerbNet \cite{comphumorsummary}\cite{wordnet}. These are human crafted databases with concepts and their relationship to each other. The problem with these are the ambiguity of many concepts and also their limited size. For example VerbNet contains only around 4500 verbs, which results in a very limited understanding of the sentences \cite{verbnet}. 	
+Another problem of early computational humor models, was their heavy reliance on ontologies, such as WordNet and VerbNet \cite{comphumorsummary}\cite{wordnet}. These are human crafted databases with concepts and their relationships among each other. A challenge for these databases are the ambiguity of many concepts and also their limited size. For example VerbNet contains only around 4500 verbs, which results in a very limited understanding of the sentences \cite{verbnet}. 	
 
 
 \if false
@@ -1341,16 +1343,16 @@ Seiten: 2
 
 \section{Related work} \label{relatedworkbackground}
 
-In this chapter I outline several works of the field of computational humor related to our work. Beginning with traditional approaches, which do not use deep learning. Then I will continue with deep learning based works.
+In this subsection I outline several works of the field of computational humor related to our work. I start discussing several traditional approaches, which do not use deep learning. Then I will continue with deep learning based works.
 
 
 \subsection{Computational Humor using Traditional Methods}
 
-In the following sections we will discuss several works in the field of computational humor with traditional machine learning methods.
+In the following sections we will discuss several works in the field of computational humor that rely on traditional machine learning methods.
 
 \subsubsection{Humor Recognition and Humor Anchor Extraction}
 
-Yang et al formalize humor as a binary classification task between humorous and non-humorous \cite{Yang2015HumorRA}. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
+Yang et al. formalize humor as a binary classification task between humorous and non-humorous \cite{Yang2015HumorRA}. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
 
 The authors extract several features from the input sentences that describe some aspect of humor.
 
