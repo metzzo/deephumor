@@ -938,67 +938,6 @@ Seiten: 1
 	\label{fig:rnn}
 \end{figure}
 
-Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. To train a recurrent neural network it must be converted into an equivalent feed forward network \cite{Goodfellow-et-al-2016}. Figure \ref{fig:rnn} shows a visualization of such unrolling. This process converts an RNN for a sequence of length $n$ into a feed forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function \cite{hochreiter}. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely  \cite{hochreiter}.
-
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio \cite{nmt}\cite{googlespeech}. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed forward network \cite{colahlstm}. 
-
-There are many different variations of LSTMs, but all share common building blocks  \cite{colahlstm}: Memory cell input \& output, output gate and a forget gate  \cite{colahlstm}. The memory of an LSTM cell enables the network to remember information over time \cite{hochreiter}. We will now examine a specific implementation of an LSTM cell \cite{colahlstm}.
-
-The forget gate $f_t$ removes information from the memory \cite{colahlstm}:
-\begin{equation}
-f_t = \sigma \left(W_f \cdot \left[ h_{t-1}, x_t \right] + b_f\right)
-\end{equation}
-\begin{align*}
-\text{where}~W_f&~\text{are the trained weights for the forget gate} \\
-\left[. , . \right]&~\text{is a concatenation of two vectors} \\
-h_{t-1}&~\text{is the last LSTMs unit output} \\
-x_t&~\text{is the current input} \\
-b_f&~\text{is the learned bias for the forget gate}
-\end{align*}
-The $\sigma$ ensures, that the result is between $0$ and $1$, where $0$ means forget the state and $1$ means keep the state.
-
-The input gate $i_t$ has a similar function to the forget gate, but instead it decides which information of the cell's memory needs to be updated \cite{hochreiter}. Then the LSTM calculates a new memory vector $\widetilde{C_t}$ \cite{colahlstm}:  
-
-\begin{equation}
-i_t=\sigma\left(W_i \cdot \left[ h_{t-1}, x_t\right] + b_i \right)
-\end{equation}
-\begin{equation}
-\widetilde{C_t} = \text{tanh}\left( W_C \cdot \left[ h_{t-1}, x_t \right] + b_C \right)
-\end{equation}
-\begin{align*}
-\text{where}~W_i&~\text{are the trained weights for the input gate} \\
-W_C&~\text{are the trained weights for calculating the new memory} \\
-b_i&~\text{is the learned bias for the input gate} \\
-b_C&~\text{is the learned bias for calculating the new memory} \\
-\end{align*}
-
-Next, the forget gate and input gate are combined to calculate the new cell memory $C_t$ \cite{Goodfellow-et-al-2016}.
-
-\begin{equation}
-C_t=f_t*C_{t-1} + i_t*\widetilde{C_t}
-\end{equation}
-\begin{align*}
-\text{where}~C_t~&\text{is the memory for the current LSTM unit} \\
-*&~\text{is element-wise multiplication}
-\end{align*}
-
-
-For the output gate $o_t$, we want to calculate the LSTMs output $h_t$, by combining the input and memory \cite{colahlstm}:
-\begin{equation}
-o_t=\sigma\left(W_o \cdot \left[ h_{t-1}, x_t\right] + b_o \right)
-\end{equation}
-\begin{equation}
-h_t = o_t * \text{tanh}\left(C_t\right)
-\end{equation}
-\begin{align*}
-\text{where}~W_o&~\text{are the trained weights for the forget gate} \\
-b_o&~\text{is the learned bias for the output gate}
-\end{align*}
-
-To increase the learning capacity of LSTMs we can apply multiple LSTM cells sequentially, where the output from the first LSTM is the input for the second LSTM, similar to how convolutional layers are stacked together \cite{Goodfellow-et-al-2016}. Alternatively we can increase the memory capacity by increasing the size of the LSTM's memory $C$ \cite{Goodfellow-et-al-2016}. Empirically LSTMs have shown to have still tendency to overfit to the training data easily, which makes it even more important to find right hyperparameters \cite{rnnregularization}.
-
-A newer alternative to LSTMs are gated recurrent units (GRUs) \cite{gru}. Empirically GRUs have shown to train faster and are faster during inference, but in general no significant difference regarding performance has been observed \cite{gru}. Even more recently transformer architectures have shown to be also very successful at learning long-term dependencies \cite{transformer}. Transformer architectures lack recurrent connections \cite{transformer}.
-
 \begin{figure}[ht]
 	\centering
 	
@@ -1065,7 +1004,66 @@ A newer alternative to LSTMs are gated recurrent units (GRUs) \cite{gru}. Empiri
 	\label{fig:lstm}
 \end{figure}
 
+Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. To train a recurrent neural network it must be converted into an equivalent feed forward network \cite{Goodfellow-et-al-2016}. Figure \ref{fig:rnn} shows a visualization of such unrolling. This process converts an RNN for a sequence of length $n$ into a feed forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function \cite{hochreiter}. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely  \cite{hochreiter}.
 
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio \cite{nmt}\cite{googlespeech}. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed forward network \cite{colahlstm}. 
+
+There are many different variations of LSTMs, but all share common building blocks  \cite{colahlstm}: Memory cell input \& output, output gate and a forget gate  \cite{colahlstm}. The memory of an LSTM cell enables the network to remember information over time \cite{hochreiter}. We will now examine a specific implementation of an LSTM cell \cite{colahlstm}.
+
+The forget gate $f_t$ removes information from the memory \cite{colahlstm}:
+\begin{equation}
+f_t = \sigma \left(W_f \cdot \left[ h_{t-1}, x_t \right] + b_f\right)
+\end{equation}
+\begin{align*}
+\text{where}~W_f&~\text{are the trained weights for the forget gate} \\
+\left[. , . \right]&~\text{is a concatenation of two vectors} \\
+h_{t-1}&~\text{is the last LSTMs unit output} \\
+x_t&~\text{is the current input} \\
+b_f&~\text{is the learned bias for the forget gate}
+\end{align*}
+The $\sigma$ ensures, that the result is between $0$ and $1$, where $0$ means forget the state and $1$ means keep the state.
+
+The input gate $i_t$ has a similar function to the forget gate, but instead it decides which information of the cell's memory needs to be updated \cite{hochreiter}. Then the LSTM calculates a new memory vector $\widetilde{C_t}$ \cite{colahlstm}:  
+
+\begin{equation}
+i_t=\sigma\left(W_i \cdot \left[ h_{t-1}, x_t\right] + b_i \right)
+\end{equation}
+\begin{equation}
+\widetilde{C_t} = \text{tanh}\left( W_C \cdot \left[ h_{t-1}, x_t \right] + b_C \right)
+\end{equation}
+\begin{align*}
+\text{where}~W_i&~\text{are the trained weights for the input gate} \\
+W_C&~\text{are the trained weights for calculating the new memory} \\
+b_i&~\text{is the learned bias for the input gate} \\
+b_C&~\text{is the learned bias for calculating the new memory} \\
+\end{align*}
+
+Next, the forget gate and input gate are combined to calculate the new cell memory $C_t$ \cite{Goodfellow-et-al-2016}.
+
+\begin{equation}
+C_t=f_t*C_{t-1} + i_t*\widetilde{C_t}
+\end{equation}
+\begin{align*}
+\text{where}~C_t~&\text{is the memory for the current LSTM unit} \\
+*&~\text{is element-wise multiplication}
+\end{align*}
+
+
+For the output gate $o_t$, we want to calculate the LSTMs output $h_t$, by combining the input and memory \cite{colahlstm}:
+\begin{equation}
+o_t=\sigma\left(W_o \cdot \left[ h_{t-1}, x_t\right] + b_o \right)
+\end{equation}
+\begin{equation}
+h_t = o_t * \text{tanh}\left(C_t\right)
+\end{equation}
+\begin{align*}
+\text{where}~W_o&~\text{are the trained weights for the forget gate} \\
+b_o&~\text{is the learned bias for the output gate}
+\end{align*}
+
+To increase the learning capacity of LSTMs we can apply multiple LSTM cells sequentially, where the output from the first LSTM is the input for the second LSTM, similar to how convolutional layers are stacked together \cite{Goodfellow-et-al-2016}. Alternatively we can increase the memory capacity by increasing the size of the LSTM's memory $C$ \cite{Goodfellow-et-al-2016}. Empirically LSTMs have shown to have still tendency to overfit to the training data easily, which makes it even more important to find right hyperparameters \cite{rnnregularization}.
+
+A newer alternative to LSTMs are gated recurrent units (GRUs) \cite{gru}. Empirically GRUs have shown to train faster and are faster during inference, but in general no significant difference regarding performance has been observed \cite{gru}. Even more recently transformer architectures have shown to be also very successful at learning long-term dependencies \cite{transformer}. Transformer architectures lack recurrent connections \cite{transformer}.
 
 \if false
 Seiten: 1
@@ -1080,8 +1078,18 @@ Seiten: 1
 \end{itemize}
 \fi
 
-
 \subsection{Autoencoder}\label{autoencodersection}
+
+An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. Application areas of autoencoders include feature extraction, image processing and anomaly detection \cite{semantichashing}\cite{anomalydetection}\cite{autoencoderimage}\cite{autoencoderfeatureextraction}. An autoencoder consists of two parts:
+
+\begin{itemize}
+\item Encoder: Performs a dimensionality reduction from high dimensional data to a low dimensional representation \cite{Goodfellow-et-al-2016}
+\item Decoder: Tries to reconstruct the original data from the low dimensional representation \cite{Goodfellow-et-al-2016}
+\end{itemize}
+
+The intermediate low dimensional representation is also called \textit{code} \cite{Goodfellow-et-al-2016}. The intuition being, that this forces the neural network to extract more general features, which the autoencoder uses to reconstruct the original signal. Still, a big problem of autoencoders is their tendency to overfit and learn a trivial identity mapping \cite{Goodfellow-et-al-2016}. There are several advanced autoencoder architectures, which try to mitigate this issue by applying some kind of regularization during training \cite{Goodfellow-et-al-2016}. Denoising autoencoders get corrupted input data and their loss is still measured by how well it reconstructs the uncorrupted data \cite{denoisingautoencoder}. The regularization of sparse autoencoders only activates a certain number of neurons per layer, which causes the network to especially react to unique statistical features of the dataset \cite{sparseautoencoder}.
+
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information \cite{convolutionalautoencoder}. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max-pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing transposed convolutions \cite{Goodfellow-et-al-2016}. Transposed convolutions are used for up-sampling from a low resolution input to a high resolution output (refer to subsection \ref{mlcnn}) \cite{dlvc}. 
 
 \begin{figure}[ht]
 	\centering
@@ -1097,17 +1105,6 @@ Seiten: 1
 	\caption{A fully connected autoencoder with 2 encoding and 2 decoding layers}
 	\label{fig:autoencoder}
 \end{figure}
-
-An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. Application areas of autoencoders include feature extraction, image processing and anomaly detection \cite{semantichashing}\cite{anomalydetection}\cite{autoencoderimage}\cite{autoencoderfeatureextraction}. An autoencoder consists of two parts:
-
-\begin{itemize}
-\item Encoder: Performs a dimensionality reduction from high dimensional data to a low dimensional representation \cite{Goodfellow-et-al-2016}
-\item Decoder: Tries to reconstruct the original data from the low dimensional representation \cite{Goodfellow-et-al-2016}
-\end{itemize}
-
-The intermediate low dimensional representation is also called \textit{code} \cite{Goodfellow-et-al-2016}. The intuition being, that this forces the neural network to extract more general features, which the autoencoder uses to reconstruct the original signal. Still, a big problem of autoencoders is their tendency to overfit and learn a trivial identity mapping \cite{Goodfellow-et-al-2016}. There are several advanced autoencoder architectures, which try to mitigate this issue by applying some kind of regularization during training \cite{Goodfellow-et-al-2016}. Denoising autoencoders get corrupted input data and their loss is still measured by how well it reconstructs the uncorrupted data \cite{denoisingautoencoder}. The regularization of sparse autoencoders only activates a certain number of neurons per layer, which causes the network to especially react to unique statistical features of the dataset \cite{sparseautoencoder}.
-
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information \cite{convolutionalautoencoder}. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max-pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing transposed convolutions \cite{Goodfellow-et-al-2016}. Transposed convolutions are used for up-sampling from a low resolution input to a high resolution output (refer to subsection \ref{mlcnn}) \cite{dlvc}. 
 
 \if false
 Seiten: 0.5
@@ -1134,11 +1131,11 @@ For both traditional machine learning and deep learning based natural language p
 
 A trivial approach would be to give each word a unique identification number \cite{deeplearningnlpstanford}. This approach does not grasp important semantic information about the words \cite{deeplearningnlpstanford}. For example, the words \textit{king} and \textit{queen} are more similar than \textit{king} and \textit{house}. If the featurization assigns the ID=2 for \textit{king} and the ID=42 for \textit{queen}, then the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing \cite{nmt}\cite{elmo}. Vector space models avoid this problem by representing each word in a high dimensional vector space, where a certain similarity measure holds \cite{pennington2014glove}.
 
-There are different methods for applying natural language processing successfully. A great challenge is to entail semantic context into the trained models. Because text is a sequence of words, we can apply recurrent neural networks in this context. Especially recurrent neural networks which handle long-term dependencies reach state-of-the-art results in NLP (for more information, refer to subsection \ref{lstmbackground}) \cite{hochreiter}. Alternatively, a weaker form of context, is achieved by using a technique called $n$-grams. Here we split the sentences into a set of tuples with size $n$, where each tuple contains the word itself and the next $n - 1$ words of the sentence. The intuition being, that the context of words can be represented by their surrounding words. For example the 2-grams (also known as bigrams), for the sentence \textit{I like machine learning} would be $\{(\textit{I}, \textit{like}), (\textit{like}, \textit{machine}), (\textit{machine}, \textit{learning})\}$. This method allows applying bag-of-words techniques to also entail context.
+There are different methods for applying natural language processing successfully. A great challenge is to entail semantic context into the trained models \cite{statisticalnlp}. Because text is a sequence of words, we can apply recurrent neural networks in this context \cite{reviewRNN}. Especially recurrent neural networks which handle long-term dependencies reach state-of-the-art results in NLP (for more information, refer to subsection \ref{lstmbackground}) \cite{hochreiter}. Alternatively, a weaker form of context, is achieved by using a technique called $n$-grams \cite{ngrams}. Here we split the sentences into a set of tuples with size $n$, where each tuple contains the word itself and the next $n - 1$ words of the sentence  \cite{ngrams}. The intuition being, that the context of words can be represented by their surrounding words  \cite{ngrams}. For example the 2-grams (also known as bigrams), for the sentence \textit{I like machine learning} would be $\{(\textit{I}, \textit{like}), (\textit{like}, \textit{machine}), (\textit{machine}, \textit{learning})\}$. This method allows applying bag-of-words techniques to also entail context \cite{bagofwordbigramexample}.
 
-Another way we can build a context-aware model is by applying hidden markov models (HMM). This is a statistical approach where we assume that sentences can be described by a markov process with latent (or hidden) variables. HMMs are much simpler, compared to RNNs, as HMMs rely on common statistical techniques. Given that the underlying process is actually a markov process, than they perform very well, otherwise other techniques may perform better.
+Another way we can build a context-aware model is by applying hidden markov models (HMM) \cite{bishop}. This is a statistical approach where we assume that sentences can be described by a markov process with latent (or hidden) variables \cite{bishop}. HMMs are much simpler, compared to RNNs, as HMMs rely on common statistical techniques \cite{statisticalnlp}. Given that the underlying process is actually a markov process, than they perform very well, otherwise other techniques may perform better  \cite{statisticalnlp}.
 
-Often the corpus available does not contain sufficient labelling. In such cases we can apply clustering methods, which search for patterns in the underlying data, without any additional labelling. Gaussian mixture models are a very powerful clustering method, which assumes that the data is a mixture of multiple gaussians. Through an algorithm called expectation-maximization we get a set of gaussian distributions, which allows us to get a probability for each sample that it originated from a specific gaussian, effectively a classification for this sample.
+Often the corpus available does not contain sufficient labelling. In such cases we can apply clustering methods, which search for patterns in the underlying data, without any additional labelling \cite{aimodern}. Gaussian mixture models are a very powerful clustering method, which assumes that the data is a mixture of multiple gaussians \cite{aimodern}. Through an algorithm called expectation-maximization we get a set of gaussian distributions, which allows us to get a probability for each sample that it originated from a specific gaussian, effectively a classification for this sample \cite{bishop}.
 
 In the following subsections I will outline several techniques for extracting word embeddings from a sentence. Beginning with TFIDF, a relatively simple but powerful technique which ranks words by the term frequency and inverse document frequency \cite{tfidf}. Then I continue with GloVe, an unsupervised statistical approach \cite{pennington2014glove}. And finally a deep learning based word embedding called ELMo \cite{elmo}.
 
