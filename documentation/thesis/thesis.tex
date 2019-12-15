@@ -1160,9 +1160,9 @@ Seiten: 1.5
 \subsection{TFIDF}
 
 
-TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model \cite{tfidf}. The idea originated in information retrieval, where the goal is to weight words by their importance for a document and for a query \cite{historyinformationretrieval}. The TFIDF consists of two terms multiplied: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document  \cite{irsurvey}. The idea being, that the more often a word occurs, the more important it is in describing the document  \cite{irsurvey}.
+TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model \cite{tfidf}. The idea originated in information retrieval, where the goal is to weight words by their importance for a document and for a query \cite{historyinformationretrieval}. The TFIDF consists of two terms multiplied: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document \cite{irsurvey}. The idea here, is that the more often a word occurs in a given document, the more important it is in describing that document \cite{irsurvey}.
 
-The problem with this is that certain words occur almost always very frequently (stop words) \cite{tfidf}. For example, the word "the" would have almost always a very high term frequency, but is rarely important for describing the document. This is the reason why the inverse document frequency (IDF) is also considered \cite{tfidf}. This weight describes the importance of a word compared to all other documents \cite{historyinformationretrieval}. For example, a document about the Engima machine would have frequent mentions of the word "Engima", therefore the IDF would be relatively high compared to other words. In contrast, the word "the" occurs usually in all documents, therefore the IDF would be very low.
+The problem with this is that certain words occur almost ever very frequently (stop words) \cite{tfidf}. For example, the word \textit{the} has in almost every text corpus a very high term frequency, but is rarely important in describing the document. This is the reason why the inverse document frequency (IDF) is also considered \cite{tfidf}. This weight describes the importance of a word compared to all other documents \cite{historyinformationretrieval}. For example, a document about the Engima machine would have frequent mentions of the word \textit{Engima}, therefore the IDF would be relatively high compared to other words. In contrast, the word \textit{the} occurs usually in all documents, therefore the IDF would be very low.
 
 There exist many different formulas which entail this idea \cite{tfidf}. In this thesis the following TFIDF equations were used \cite{tfidf}:
 
@@ -1176,7 +1176,7 @@ There exist many different formulas which entail this idea \cite{tfidf}. In this
 
 where $t$ is some term, $D$ some document, $\text{tf}(t, D)$ the number of occurrences of term $t$ in document $D$ and $\text{df}(t)$ the number of documents containing term $t$.
 
-The advantage of TFIDF is, that is relatively easy to understand and does not need any time consuming training, as it only counts word occurrences \cite{irsurvey}. This makes it very feasible to be trained locally, without the need of any pretrained model. The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely \cite{irsurvey}.
+The advantage of TFIDF is, that is relatively easy to understand and does not need any time consuming training, as it only counts word occurrences \cite{irsurvey}. This makes it feasible to be trained locally, without the need of any pretrained model. The main disadvantage is that TFIDF does not capture the context of the word well. It is a bag-of-word approach which ignores the word order completely \cite{irsurvey}.
 
 \if false
 Seiten: 0.75
@@ -1191,9 +1191,21 @@ Seiten: 0.75
 \fi
 
 \subsection{GloVe}
-The basis for training GloVe is a word to word matrix which denotes the frequency of words occurring together in the training data \cite{glovepage}. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words \cite{pennington2014glove}. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurring with another word \cite{pennington2014glove}.
+The basis for training Global Vectors for Word Representation (GloVe) is a word to word matrix which denotes the frequency of words occurring together in the training data \cite{glovepage}. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words \cite{pennington2014glove}. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurrence with another word \cite{pennington2014glove}. GloVe is a bag-of-word approach, as it uses a word to word matrix without any information about sequence \cite{pennington2014glove}.
 
-GloVe is a bag-of-word approach, as it uses a word to word matrix without any information about sequence \cite{pennington2014glove}. For a more detailed explanation please refer to the introductory paper \cite{pennington2014glove}.
+Table \ref{gloveprobability} shows the calculated conditional co-occurrence probabilities for the words \textit{ice} and \textit{steam} given the words \textit{solid}, \textit{gas}, \textit{water} and \textit{fashion}. Expectedly \textit{steam} co-occurs more frequently with \textit{gas}, while \textit{ice} co-occurs more frequently with \textit{solid}. The unrelated word \textit{fashion} co-occurs rarely with both \textit{steam} and \textit{ice}. The ratio of $P(k|ice) / P(k|steam)$ entails some basic semantic meaning: If the ratio is much greater than $1$ than it correlates well with properties specific to \textit{steam}. On the other hand, if it is much less than $1$ then the word has a high correlation with \textit{gas}.
+
+\begin{table}[]
+\centering
+\begin{tabular}{l|llll}
+Probability and Ratio & $k=solid$ & $k=gas$ & $k=water$ & $k=fashion$ \\ \hline
+$P(k|ice)$ & $1.9 \times 10^{-4}$ & $6.6 \times 10^{-5}$ & $3.0 \times 10^{-3}$ & $1.7 \times 10^{-5}$          \\
+$P(k|steam)$ & $2.2 \times 10^{-5}$ & $7.8 \times 10^{-4}$ & $2.2 \times 10^{-3}$ & $1.8 \times 10^{-5}$          \\
+$P(k|ice) / P(k|steam)$ & $8.9$ & $8.5 \times 10^{-2}$ & $1.36$ & $0.96$         
+\end{tabular}
+\caption{Example for co-occurrence probabilities for words \textit{ice} and \textit{steam} given \textit{solid}, \textit{gas}, \textit{water} and \textit{fashion} \cite{pennington2014glove}}
+\label{gloveprobability}
+\end{table}
 
 \if false
 Seiten: 0.25
