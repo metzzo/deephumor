@@ -1352,22 +1352,22 @@ In the following sections we will discuss several works in the field of computat
 
 \subsubsection{Humor Recognition and Humor Anchor Extraction}
 
-Yang et al. formalize humor as a binary classification task between humorous and non-humorous \cite{Yang2015HumorRA}. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples and while samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately the same length and contain the same words as the positive class.
+Yang et al. formalize humor as a binary classification task between humorous and non-humorous \cite{Yang2015HumorRA}. The authors perform their experiments on two datasets: Pun of the Day and One-liner dataset for positive examples. Samples for the negative class come from various other sources (Yahoo! Answers, New York Times, AP News and Proverb). The negative class samples are filtered, such that the sentences are approximately of the same length and contain the same words as the positive class.
+
+Additionally their work also performs humor anchor extraction. This technique extracts the key words that enable the humor of a sentence. Removing these words would make the sentence not humorous anymore. The paper lists the example of the sentence \textit{I used to be a watchmaker; it is a great job and I made my own hours} with a sensible selection of anchors \textit{watchmaker}, \textit{made} and \textit{hours}.
 
 The authors extract several features from the input sentences that describe some aspect of humor.
 
 \begin{itemize}
-\item Incongruity Structure: Disconnection (maximum meaning distance of word pairs) and Repetition (Minimum meaning distance of word pairs)
-\item Ambiguity Theory: Sense combination (the higher the more possible interpretations a sentence has), Sense Farmost (largest path similarity of any word senses) and Sense Closest (smallest path similarity of any word senses)
-\item Interpersonal Effect: Negative (Positive) polarity (number of occurrences of negative (positive) words) and Weak (Strong) Subjectivity (number of occurrences of all weak (strong) subjectivity oriented words.
-\item Phonetic Style: Alliteration (number and maximum length of alliteration chains) and Rhyme (number and maximum length of rhyme chains)
+\item Incongruity structure: disconnection (maximum meaning distance of word pairs) and repetition (minimum meaning distance of word pairs)
+\item Ambiguity theory: sense combination (the higher the more possible interpretations a sentence has), sense farmost (largest path similarity of any sense of a word) and sense closest (smallest path similarity of any sense of a word)
+\item Interpersonal effect: negative and positive polarity (number of occurrences of negative or positive words) and weak and strong Subjectivity (number of occurrences of all weak or strong subjectivity oriented words)
+\item Phonetic style: alliteration (number and maximum length of alliteration chains) and rhyme (number and maximum length of rhyme chains)
 \end{itemize}
 
-The work describes the training of a classifier based on above features. Important for the humor anchor extraction is the fact that all these features are word order independent and function also on partial sentences. Additionally to these human centric features the best performing model also uses Word2Vec features.
+The work describes the training of a classifier based on these features. Important for the humor anchor extraction is the fact that the features are word order independent and function also on partial sentences. Additionally to these human centric features the best performing model also uses Word2Vec features \cite{word2vec}.
 
-Humor anchor extraction is about extracting the key words that enable the humor of a sentence. Removing these words would make the sentence not humorous. The paper lists the example of the sentence "I used to be a watchmaker; it is a great job and I made my own hours" with a sensible selection of anchors "watchmaker", "made" and "hours".
-
-The procedure of determining humor anchors is surprisingly simple. As the feature can be computed on any (partial) sentence the algorithm can freely remove words and still get a reasonable prediction. Also, only certain word types are considered (verbs, nouns, adverbs and adjectives). Pseudo code at \ref{humoranchorextraction} describes this algorithm on a high level.
+The procedure of determining humor anchors is surprisingly simple. As the feature can be computed on any (partial) sentence the algorithm can freely remove words and still get a reasonable prediction. Also, only certain word types are considered (verbs, nouns, adverbs and adjectives). Algorithm  \ref{humoranchorextraction} describes this idea on a high level.
 
 \begin{algorithm}
 \caption{Humor anchor extraction}\label{humoranchorextraction}
@@ -1386,7 +1386,7 @@ Return subset with maximum decrement
 
 \end{algorithm}
 
-From a performance point of view both the humour recognition seem to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
+From a performance point of view the humor recognition seems to work well. On the Pun of the Day dataset the best model reaches an F1 score of 0.859. The One Liners dataset reaches an F1 score of 0.805.
 
 Humor anchor extraction also performs quite well. The authors perform a quantitative evaluation by comparing 200 random samples that were annotated by three annotators. The strict variant, where the anchors must be exact reached an F1 score of 0.438 and an F1 score of 0.756 for the relaxed version where at least one word had to match on the Pun of the Day dataset. For the One Liners dataset the performance was worse: The strict version reaches an F1 score of 0.288 and an F1 score of 0.616 for the relaxed version.
 
@@ -1408,22 +1408,22 @@ Seiten: 0.5
 
 \subsubsection{Humorist Bot: Bringing Computational Humour in a Chat-Bot System}
 
-Augello et al implement humor detection and joke generation in the context of a chatbot \cite{HumoristBot}. A chatbot is a software agent able to hold a conversation with a human. Humorist bot is able to generate humorous anecdotes and react to the users humorous messages by adjusting its avatar. A funny message not only affects the answer of the bot, but also changes its avatar to a laughing avatar.
+Augello et al. implement humor detection and joke generation in the context of a chatbot \cite{HumoristBot}. A chatbot is a software agent able to hold a conversation with a human. Humorist bot is able to generate humorous anecdotes and react to the users humorous messages by adjusting its avatar. A funny message not only affects the answer of the bot, but also changes its avatar to a laughing avatar.
 
-Their chatbot uses a rather traditional AIML knowledge base with different answer sets:
+This chatbot uses a rather traditional knowledge base with different answer sets:
 \begin{itemize}
-\item Set for general conversation
+\item Set for general conversations
 \item Set for humorous sentence generation
 \item Set for humorous sentence recognition
 \end{itemize}
 
-AIML is an XML format which describes a set of possible answers that are matched using pattern matching.
+AIML knowledge base is an XML format which describes a set of possible answers that are matched using pattern matching.
 
 \lstset{language=XML}
 \begin{lstlisting}
 <category>
     <pattern>How are you?</pattern>
-    <template>I am fine, and you?</template>
+    <template>I am fine. How about you?</template>
 </category>
 \end{lstlisting}
 
@@ -1437,7 +1437,7 @@ The authors implemented humor detection by focusing on the following aspects of 
 
 They do not apply any machine learning techniques, but instead implement handcrafted rules. The authors implemented joke generation by combining several AIML rules.
 
-Evaluation shows that recognition of humor achieves an accuracy of 66\% for 100 randomly sampled humorous samples, while a sample of 100 non-humorous sentences contained 19 false-positives. The authors did not perform an evaluation of the joke generation.
+Evaluation shows that recognition of humor achieves an accuracy of 66\% for 100 randomly selected humorous samples, while a sample of 100 non-humorous sentences contained 19 false-positives. The authors did not perform an evaluation of the joke generation.
 
 
 \if false
@@ -1450,24 +1450,27 @@ Seiten: 0.5
 
 \subsection{Computational Humor using Deep Learning}
 
-In the following we will discuss the application of deep learning in the domain of computational humor. 
+In the following subsections we will discuss the application of deep learning in the domain of computational humor. 
 
 \subsubsection{Deep Learning of Audio and Language Features for Humor Prediction}
 
-The work of Bertero et al compares several machine learning techniques for predicting and detecting humor in dialogues \cite{Bertero2016DeepLO}. They use a dialogue dataset of the series "Big Bang Theory", with annotations of canned laughter. Their goal is to predict these punchlines and where the canned laughter would appear. This work compares several techniques against each other: Convolutional neural networks, recurrent neural networks and conditional random fields. The convolutional neural network use low level representations of words and acoustic frames, while the other two methods use a set of acoustic and language features:
+The work of Bertero et al. compares several machine learning techniques for predicting and detecting humor in dialogues \cite{Bertero2016DeepLO}. They use a dialogue dataset from the series \textit{Big Bang Theory}, with annotations of canned laughter. Their goal is to predict these punchlines and where the canned laughter would appear. This work compares several techniques against each other: Convolutional neural networks, recurrent neural networks and conditional random fields. The convolutional neural network use low level representations of words and acoustic frames, while the other two methods use a set of acoustic and language features:
 
 \begin{itemize}
-\item Acoustic features: Extraction of pitch, Line spectral frequencies, intensity, loudness, probability of voicing, $F_0$ envelope, zero-crossing rate, MFCC and speaking rate features
-\item Language features: Extraction of Lexical (unigrams, bigrams and trigrams appearing at least five times), structural and syntactic (proportions of verbs, nouns, adjectives and adverbs, sentence length and average word length), sentiment (average of positive/negative sentiment scores of SentiWordNet), Antonyms (presence of verb, noun, adjective and adverbs antonyms from WordNet compared to the previous utterance), Speaker turns (speaker identity) and Word2Vec features
+\item Acoustic features: extraction of pitch, line spectral frequencies, intensity, loudness, probability of voicing, $F_0$ envelope, zero-crossing rate, MFCC and speaking rate features
+\item Language features: extraction of lexical features (unigrams, bigrams and trigrams appearing at least five times), structural and syntactic features (proportions of verbs, nouns, adjectives and adverbs, sentence length and average word length), sentiment (average of positive/negative sentiment scores of SentiWordNet), antonyms (presence of verb, noun, adjective and adverbs antonyms from WordNet compared to the previous utterance), speaker turns (speaker identity) and word2vec features
 \end{itemize}
 
-Interestingly their work is not using an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradient. \cite{hochreiter} Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards they combine both vectors and use this as an input for the RNN cell.
+Interestingly, their work does not use an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradients. \cite{hochreiter} Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards they combine both vectors and use this as an input for the RNN cell.
 
-The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. They use one convolution layer, with a sliding window of five tokens for the sentence input and sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer, the authors apply a standard max-pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
+The CNN architecture uses two separate CNN branches for the sentence inputs and for the audio inputs. They use one convolution layer, with a sliding window of five tokens for the sentence input and a sliding window of three frames for the audio input. Both branches have an embedding layer applied that reduces the dimensionality. After the convolutional layer, the authors apply a standard max-pooling layer. Finally their implementation combines both CNN branches and global features into a single feature vector using a softmax layer.
 
-Their corpus is split into a train/validation/test split, with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
+Their corpus is split into a train/validation/test split with 35865 utterances in the train set, 3904 utterances in the validation set and 3903 utterances in the test set. The corpus has in total 42.8\% punchlines.
 
-The CNN shows to be the best performing approach to this task, as it reaches an F1-score of 68.5\%. RNNs performance is relatively low, which may be contributed to overfitting. Applying a LSTM/GRU cell would be an interesting experiment for future work. The authors themselves remarked, that Long Short-Term Memory cells will be evaluated in future work.
+The CNN shows to be the best performing approach to this task, as it reaches an F1-score of 68.5\%. RNNs performance is relatively low, which may be due to overfitting. Applying an LSTM instead of a simple RNN could potentially learn much more long-term dependencies. Next, I will discuss the authors follow-up work, which uses LSTMs on the same Big Bang Theory dataset.
+
+
+%Applying a LSTM/GRU cell would be an interesting experiment for future work. The authors themselves remarked, that Long Short-Term Memory cells will be evaluated in future work.
 
 \if false
 Deep Learning von Humor in Audiovisueller Domäne
@@ -1479,7 +1482,7 @@ Seiten: 1.0
 
 \subsubsection{A long short-term memory framework for predicting humor in dialogues}
 
-Bertero et al apply LSTMs on the same Big Bang Theory dialogue dataset as in their previous work \cite{Bertero2016DeepLO}. Instead of a simple RNN they use a more sophisticated LSTM architecture. Additionally they combine the LSTM with a CNN.
+Bertero et al. apply LSTMs on the same Big Bang Theory dialogue dataset as in their previous work \cite{Bertero2016DeepLO}\cite{bertero2016long}. Instead of a simple RNN they use a more sophisticated LSTM architecture. Additionally they combine the LSTM with a CNN.
 
 Their feature vector is a combination of the following:
 \begin{itemize}
@@ -1490,11 +1493,9 @@ Their feature vector is a combination of the following:
 
 \end{itemize}
 
-First their architectures converts the high dimensional vectors into a lower dimensional representation using an embedding layer. Then they apply a convolutional layer and perform max-pooling afterwards on each feature. Further they combine these features into a single feature vector and perform a final sentence encoding layer. 
+First their architecture converts the high dimensional vectors into a lower dimensional representation using an embedding layer. Then they apply a convolutional layer and perform max-pooling afterwards on each feature. Furthermore they combine these features into a single feature vector and add a final sentence encoding layer, which combines the different features. Additionally, similarly to their previous work, the authors also extract high level features (structural features, POS proportions, etc.).
 
-Additionally, similarly to their previous work, the authors also extract high level features (structural features, POS proportions, etc.).
-
-The LSTM in combination with high level features achieves the best performance. The F-score of this approach is 62.9\%. This seems to be a worse result than best 68.5\% F-score of the previous work. But the key difference is, that the best result of the previous work relied on acoustic features and this LSTM approach is only text-based.
+The LSTM in combination with high level features achieves the best performance. The F1-score of this approach is 62.9\%. This seems to be a worse result than the best F1-score of the previous work, but the key difference is, that the best result of their previous work relied on acoustic features and this LSTM approach is only text-based.
 
 \if false
 \cite{bertero2016long}
@@ -1502,17 +1503,19 @@ The LSTM in combination with high level features achieves the best performance. 
 Seiten: 1.0
 \fi
 
-\subsubsection{Convolutional neural network for humor recognition}
+\subsubsection{Humor recognition using deep learning}
 
-The work of Chen et al use several corpora from various sources \cite{chen2017convolutional}: Pun of the Day, Short Jokes dataset, 16000 One-Liners and PTT Jokes each with a binary annotation, where 1 means the sample is humorous and 0 means it is not humorous. The authors sample negative samples from news headlines.
+The work of Chen et al use several corpora from various sources \cite{chen2018humor}: Pun of the Day, Short Jokes dataset, 16000 One-Liners and PTT Jokes each with a binary annotation, where "1" means the sample is humorous and "0" means it is not humorous. The authors take negative samples from news headlines.
 
-Basis for their architecture is a convolutional neural network. First they convert the words using pre-trained GloVe embeddings. The authors use GloVe trained on Wikipedia 2014 + Gigaword 5 with a vocabulary containing 400,000 words. Then they apply a convolutional layer and tried filters of size 3 to 20 for the convolution. A regular max-pooling is applied after the convolutional layer.
+The basis for their architecture is a convolutional neural network. First they convert the words using pre-trained GloVe embeddings. The authors use GloVe trained on Wikipedia 2014 + Gigaword 5 with a vocabulary containing 400,000 words \cite{pennington2014glove}. Then they apply a convolutional layer and try filters of size 3 to 20 for the convolution. Finally they apply a regular max-pooling after the convolutional layer.
 
 In order to improve performance, the authors apply Highway layers. Highway layers introduce shortcut connections with gate functions, which allows the information to flow more easily through the deeper parts of the network. Additionally they also apply dropout layers.
 
-Chen et al performs 10 fold cross validation. A CNN with highway layers and a large filter size of 100 performs the best on 16000 One Liners and Pun of the Day with an F-score of 90\% for both datasets. Short jokes even reaches 92\% and PTT Jokes 94\%. 
+The authors perform a 10 fold cross validation. A CNN with highway layers and a large filter size of 100 performs the best on 16000 One Liners and Pun of the Day with an F1-score of 90\% for both datasets. Short jokes even reaches 92\% and PTT Jokes 94\%. 
 
-Interesting about this approach is especially that the authors achieved these result without feature selection. The deep learning model can generalize humor in the given context. The chosen experiment could probably be even improved by using new state-of-the-art word embeddings such as ELMo or BERT \cite{elmo}\cite{bert}.
+Interesting about this approach is especially that the authors achieved these result without feature selection. The deep learning model can generalize humor in the given context. The chosen experiment could probably even be improved by using new state-of-the-art word embeddings such as ELMo or BERT \cite{elmo}\cite{bert}.
+
+Given the presented papers we have a broad overview over the state-of-the-art in computational humor using deep learning and traditional machine learning. We can see, that no work tried to model the humor of a single person, and instead opted for a generalized approach. Mostly using crowd annotated datasets or using humorous content which many people find funny (for example the series Big Bang Theory). This shows that the approach this thesis takes, where I try to model the humor of a single person, is novel and could reveal new insights into computational humor.
 
 \if false
 Humor recognition in visueller Domäne
