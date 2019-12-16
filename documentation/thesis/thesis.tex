@@ -175,7 +175,7 @@
 \section{Aim} \label{aim}
 This diploma thesis aims to research whether computers are capable of understanding humor by learning Gary Larson's cartoons. This was done by training several deep neural networks. Their task was to predict the funniness of a cartoon better than simple baselines. Even though humor is intrinsicly subjective, the available data allowed quantitative comparisons using the chosen metrics (accuracy and mean absolute error). The goal was to find the best neural network architecture for predicting the funniness of a cartoon.
 
-Furthermore, based on Gary Larson's cartoons a new data set for computational humor was created, which could help further research in this area.
+Furthermore, based on Gary Larson's cartoons a new dataset for computational humor was created, which could help further research in this area.
 
 The questions this work tries to answer, are the following:
 
@@ -204,9 +204,9 @@ Important to note is that preference is very subjective. The model must be train
 For example if such a model were possible, it could possibly allow a more formal comparison of humor between different authors or different people.
 The same model might be able to be transferred to the work of other authors. Depending on how well this transfer works, one could argue whether the humor of these authors are similar or not, given the annotator's sense of humor. Also the trained model themselves could contain interesting features. Possibly a functioning model could develop a cat-detecting neuron, which could reveal insights into human humor.
 
-Another key motivation was in the creation of the underlying data set: This thesis uses a novel data set, where each cartoon was paired with a funniness annotation of the same person. This allows to quantitatively evaluate the humor of a single person, as the data set is comparatively large. The scope of the data set is also unique, as there is no other data set with similar cartoons available. In future the same data set could be used for other tasks. A very hard, but very interesting task would be using a generative architecture, such as generative adversarial network (GAN) to generate a funny cartoon image from a punchline. Or vice versa: Generating a funny punchline from a cartoon image. And finally generating completely new funny cartoons with fitting punchlines.\cite{gan2}\cite{gan}
+Another key motivation was in the creation of the underlying dataset: This thesis uses a novel dataset, where each cartoon was paired with a funniness annotation of the same person. This allows to quantitatively evaluate the humor of a single person, as the dataset is comparatively large. The scope of the dataset is also unique, as there is no other dataset with similar cartoons available. In future the same dataset could be used for other tasks. A very hard, but very interesting task would be using a generative architecture, such as generative adversarial network (GAN) to generate a funny cartoon image from a punchline. Or vice versa: Generating a funny punchline from a cartoon image. And finally generating completely new funny cartoons with fitting punchlines.\cite{gan2}\cite{gan}
 
-In recent years more and more deep learning techniques have been applied in the field of computational humor. One problem of these approaches is that they do not take the subjectivity of this problem into account. Humor differs from person to person and also changes over time significantly. For example in Chiruzzo et al \cite{chiruzzo2019overview} the corpus was extracted from twitter where each tweet was classified as humorous or not humorous. The ground truth classification was annotated using crowd sourcing. The problem with such data sets is that the funniness is determined by some form of average. Some individuals might find the same text very humorous, while other individuals might find it not humorous at all. The crowd sourcing hides this fact by averaging. Therefore, these data sets and models usually do not learn the humor of a single person, but instead what most people generally find funny (or not funny). This is very important and also reveals interesting insights into humor, but this thesis' motivation is to focus more on the subjectivity of this topic.
+In recent years more and more deep learning techniques have been applied in the field of computational humor. One problem of these approaches is that they do not take the subjectivity of this problem into account. Humor differs from person to person and also changes over time significantly. For example in Chiruzzo et al \cite{chiruzzo2019overview} the corpus was extracted from twitter where each tweet was classified as humorous or not humorous. The ground truth classification was annotated using crowd sourcing. The problem with such datasets is that the funniness is determined by some form of average. Some individuals might find the same text very humorous, while other individuals might find it not humorous at all. The crowd sourcing hides this fact by averaging. Therefore, these datasets and models usually do not learn the humor of a single person, but instead what most people generally find funny (or not funny). This is very important and also reveals interesting insights into humor, but this thesis' motivation is to focus more on the subjectivity of this topic.
 
 This work finally shows that humor is still a hard problem and current deep learning architectures are not yet capable of generalizing humor in the chosen context of this thesis. Further research is still needed, especially since, if successful, it would enable many new research possibilities.
 
@@ -215,7 +215,7 @@ This work finally shows that humor is still a hard problem and current deep lear
 
 Firstly I performed a detailed literature survey. The goal was to get a grasp of the state-of-the-art of deep learning in the field of computational humor, image classification, natural language processing and humor in general.
 
-Next I did the data acquisition, in which the ground truth was created: A data set of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared such that they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
+Next I did the data acquisition, in which the ground truth was created: A dataset of Gary Larson's cartoons with funniness annotations was created. These cartoons were prepared such that they could be used for training the neural networks effectively. This included cropping, resizing and filtering the cartoons. Extracting the punchlines, as well as annotating the funniness.
 
 I performed the following steps iteratively. This allowed to adapt to the challenges which occured during the course of this research:
 
@@ -271,7 +271,7 @@ During the 1990s AI had a slightly negative connotation \cite{avoidai}: AI-based
 
 During this period the collaboration with other research fields began \cite{aimodern}. For example, knowledge from mathematics and economics was applied in AI. Especially decision theory and probability theory brought in very important techniques, such as hidden Markov models and Bayesian networks \cite{statisticsinml}\cite{aimodern}.
 
-The next boom in the field of AI was fueled by Deep Learning and the success it had in many problems of artificial intelligence \cite{selfdriving}\cite{nmt}\cite{speech}, beginning with the convolutional neural network AlexNet which was the first approach that reached a top-5 error of 15.3\% on the ImageNet Large Scale Visual Recognition Challenge in 2012. \cite{alexnet}
+The next boom in the field of AI was fueled by Deep Learning and the success it had in many problems of artificial intelligence \cite{selfdriving}\cite{nmt}\cite{speech}, beginning with the convolutional neural network AlexNet which was the first approach that reached a top-5 error of 15.3\% on the ImageNet Large Scale Visual Recognition Challenge in 2012  \cite{alexnet}.
 
 The boom continued in 2016 with AlphaGo winning against one of the best human player of the board game Go \cite{alphagopaper}. Compared to chess Go is a much more difficult game to play for computers, as the combinatorial explosion is much larger and the heuristics available are much weaker in Go compared to chess \cite{alphagopaper}.
 
@@ -281,13 +281,13 @@ The next frontier of artificial intelligence is not clearly established yet, as 
 
 \subsection{Machine Learning}
 
-Machine Learning (ML) is a domain of AI \cite{aimodern}. Machine learning tries to build a model which generalizes as good as possible to previously unseen data by learning automatically from a training data set \cite{bishop}. Learning means extracting patterns from the data set by applying a machine learning algorithm \cite{bishop}. Models can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters \cite{aimodern}. For example neural networks are parametric, as gradient descent adjusts the weights and biases for each neuron during training, while the general structure of the neural network is not. In contrast, for a non-parametric model the machine learning algorithm learns the function itself \cite{aimodern}. An example for this type of model would be k-Nearest Neighbor.  Since the focus of this work are neural networks we will discuss parametric models in more detail.
+Machine Learning (ML) is a domain of AI \cite{aimodern}. Machine learning tries to build a model which generalizes as good as possible to previously unseen data by learning automatically from a training dataset \cite{bishop}. Learning means extracting patterns from the dataset by applying a machine learning algorithm \cite{bishop}. Models can be parametric or non-parametric. A parametric model means that the general function is fixed and can only be adjusted by adapting the parameters \cite{aimodern}. For example neural networks are parametric, as gradient descent adjusts the weights and biases for each neuron during training, while the general structure of the neural network is not. In contrast, for a non-parametric model the machine learning algorithm learns the function itself \cite{aimodern}. An example for this type of model would be k-Nearest Neighbor.  Since the focus of this work are neural networks we will discuss parametric models in more detail.
 
 More formally, a model is a function $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta})$ where $\boldsymbol{X}$ is the training data and $\boldsymbol{\theta}$ are the parameters of the model \cite{bishop}. Through some optimization algorithm (for example gradient descent) the model is adjusted such that it generalizes ("learns") the underlying structure \cite{anintroductiontoneuralnetworks}. This model should make good predictions for previously unseen samples. Important is the distinction between model parameters ($\boldsymbol{\theta}$) and model hyperparameters \cite{aimodern}. Model hyperparameters are parameters which cannot be estimated from the available data and are typically set by a human heuristically \cite{hyperparameter}. A parameter on the other hand, can be estimated from the data, given the previously set hyperparameters \cite{anintroductiontoneuralnetworks}.
 
 The data $\boldsymbol{X}$ is a matrix where each row is a sample and each column a feature. A feature is an individual measurable property or characteristic of a phenomenon being observed \cite{bishop}. For example when trying to apply a machine learning task on an image one could use the red, green and blue channel values of each pixel as features. Choosing appropriate features is a difficult task and can make or break the performance of the trained model.
 
-Machine learning tries to approximate a function from the selected data set. Depending on the available information, different strategies must be applied. Typically, the most convenient and preferred mode is supervised machine learning \cite{aimodern}. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied \cite{aimodern}. For example clustering methods allow unsupervised ML. If a mixture of labelled and unlabelled data is available, machine learning practitioners apply semi-supervised machine learning \cite{semisupervised}.
+Machine learning tries to approximate a function from the selected dataset. Depending on the available information, different strategies must be applied. Typically, the most convenient and preferred mode is supervised machine learning \cite{aimodern}. Supervised means that not only the data $\boldsymbol{X}$ is available, but also the target values $\boldsymbol{t}$. This means that the problem can be relatively easily solved using an optimization algorithm. More formally we try to find a $\boldsymbol{\theta}$ such that $\boldsymbol{y}(\boldsymbol{X}, \boldsymbol{\theta}) = \boldsymbol{t}$. If the $\boldsymbol{t}$ labels are not available, then unsupervised machine learning is typically applied \cite{aimodern}. For example clustering methods allow unsupervised ML. If a mixture of labelled and unlabelled data is available, machine learning practitioners apply semi-supervised machine learning \cite{semisupervised}.
 
 Additionally, there is a distinction between classification and regression tasks \cite{bishop}. If $\boldsymbol{t}$ is a continuous variable, machine learning practitioners call it a regression task and the model is a regressor. Otherwise, if $\boldsymbol{t}$ is categorical and can only take finite  values, then machine learning practitioners call it a classification task and the model is a classifier. An example for a regression task is stockmarket prediction, where the model predicts the price of some stock. An example for a classification task is spam detection. Such a model predicts whether an e-mail is spam or not (binary classification). Often a regression task can be modelled as a classification task by converting the features using discretization and vice versa \cite{discretization}. Instead of predicting the stock market directly, one can instead predict classes and use the average value of each bucket as the predicted stock price. Refer to table \ref{table:conversionregressclass} for an example. The right approach is highly task dependent \cite{aimodern}.
 
@@ -308,13 +308,13 @@ Classification Class & CLASS 50      & CLASS 75 & CLASS 150 & CLASS 250 \\
 
 The most important property of a model $\boldsymbol{y}$ is the generalization power for unseen data \cite{bishop}. Training a model $\boldsymbol{y}$ which predicts the training data $\boldsymbol{X}$ perfectly is trivial: The machine learning algorithm could always build a lookup table which memorizes a mapping from the training samples to the target labels $\boldsymbol{t}$ \cite{overfitting}. If this happens, it is called \textit{overfitting} \cite{overfitting}.
 
-The \textit{holdout method} facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data \cite{holdoutcrossvalidation}. There is often some bias towards the original data set \cite{datasetbias}. The better the data set characterizes the underlying problem, the better the final model may perform practically \cite{datasetshift}. For example, if one trains a vehicle detection model, but the data set does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance metrics possibly indicating otherwise.
+The \textit{holdout method} facilitates the approximation of the performance of a model $\boldsymbol{y}$ for previously unseen data \cite{holdoutcrossvalidation}. There is often some bias towards the original dataset \cite{datasetbias}. The better the dataset characterizes the underlying problem, the better the final model may perform practically \cite{datasetshift}. For example, if one trains a vehicle detection model, but the dataset does not include any images of motorcycles, then the model will perform badly in the real world. Regardless of the method applied, the model would not be able to detect motorcycles - despite the performance metrics possibly indicating otherwise.
 
 The holdout method first splits the data into three distinct subsets: Training, validation and test set \cite{holdoutcrossvalidation}. The practitioner incrementally adjusts the hyperparameters and trains on the training set, based on the performance of the model on the validation set \cite{holdoutcrossvalidation}. Finally, to gather the true performance the practitioner has to evaluate on the test set \cite{holdoutcrossvalidation}. The following algorithm illustrates the holdout method using pseudo code:
 
 \begin{algorithm}
 \caption{Holdout method \cite{holdoutcrossvalidation}}\label{holdoutalgo}
-Take the data set $\boldsymbol{X}$ and split randomly into three distinct sub sets: Training, validation and test set.
+Take the dataset $\boldsymbol{X}$ and split randomly into three distinct subsets: Training, validation and test set.
 
 \While {$\neg$some halting criterion} {
 Train the model on the train split.
@@ -356,7 +356,7 @@ The following pseudo code illustrates cross-validation, which first splits the d
 
 \begin{algorithm}
 \caption{Cross-validation method \cite{holdoutcrossvalidation}}\label{holdoutalgo}
-Take the data set $\boldsymbol{X}$ and split randomly into two distinct sub sets: Training ($\boldsymbol{TRAIN}$) and test set ($\boldsymbol{TEST}$).
+Take the dataset $\boldsymbol{X}$ and split randomly into two distinct sub sets: Training ($\boldsymbol{TRAIN}$) and test set ($\boldsymbol{TEST}$).
 
 \While {$\neg$some halting criterion} {
 Take the train set $\boldsymbol{TRAIN}$ and split into $k$ partitions
@@ -456,7 +456,7 @@ A confusion matrix usually reveals common mistakes of a model \cite{accuracy}. F
 
 \section{Artificial Neural Networks}
 
-One of the first artificial neural network, was the perceptron \cite{questforai}. It is a binary classifier and uses a linear function to perform classification \cite{Minsky1969PerceptronsA}. \textit{Binary} refers to the fact, that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized \cite{aimodern}. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable \cite{questforai}. For example, a simple XOR cannot be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function, given a nonlinear activation function \cite{universalfunction}. An MLP consists of multiple perceptrons grouped in layers and each layer connects with the previous layer \cite{bishop}. MLPs are feed forward neural network \cite{bishop}.
+One of the first artificial neural network, was the perceptron \cite{questforai}. It is a binary classifier and uses a linear function to perform classification \cite{Minsky1969PerceptronsA}. \textit{Binary} refers to the fact that a simple perceptron can only distinguish between two states. The learning process starts with a random decision boundary, which is iteratively adapted such that the number of misclassifications is minimized \cite{aimodern}. Due to the linear decision boundary the perceptron is only able to learn decision boundaries that are linearly separable \cite{questforai}. For example, a simple XOR cannot be learned by a basic perceptron. This motivated the introduction of multi layer perceptrons (MLPs), since they are in theory able to approximate any function, given a nonlinear activation function \cite{universalfunction}. An MLP consists of multiple perceptrons grouped in layers and each layer connects with the previous layer \cite{bishop}. MLPs are feed forward neural network \cite{bishop}.
 
 
 \begin{figure}[ht]
@@ -473,7 +473,7 @@ One of the first artificial neural network, was the perceptron \cite{questforai}
 	\label{fig:feedforward}
 \end{figure}
 
-Part of the reason why artificial neural networks are so powerful, especially deep neural networks, stems from their flexibility \cite{selfdriving}\cite{speech}\cite{nmt}. They can adapt to many different domains very easily. Illustrated at figure \ref{fig:feedforward} is a fully connected feedforward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
+Part of the reason why artificial neural networks are so powerful, especially deep neural networks, stems from their flexibility \cite{selfdriving}\cite{speech}\cite{nmt}. They can adapt to many different domains very easily. Illustrated at figure \ref{fig:feedforward} is a fully connected feed forward neural network with 3 hidden layers. Neural networks can have many more layers (refer to section \ref{dlbackground}) or even contain loops (section \ref{lstmbackground}).
 
 A neural network generally consists of multiple neurons, layers and connections \cite{aimodern}. The general inspiration for them is the human brain which also consists of similar building blocks \cite{anintroductiontoneuralnetworks}.
 
@@ -518,7 +518,7 @@ h(x) = \dfrac {1} {1 + e^{-x}}
 \end{equation}
 \item ReLU (Rectified Linear Unit) \cite{Goodfellow-et-al-2016}: Very commonly used in deep learning, as it performs very well on a wide range of different tasks \cite{activationfunctions}. Can be calculated very quickly, as it does not contain any division or exponential \cite{activationfunctions}.
 \begin{equation}
-h(x) = max(0, x)
+h(x) = \text{max}(0, x)
 \end{equation}
 \item SoftMax \cite{Goodfellow-et-al-2016}: Used to transform any vector into a probability distribution \cite{activationfunctions}. This is commonly used for the final layer of classification tasks with multiple classes (multi class classification) \cite{activationfunctions}.
 \begin{equation}
@@ -576,7 +576,7 @@ L(\boldsymbol{w}) = -\sum_{n=1}^N \left( t_n\,\text{ln}\, y_n + (1 - t_n)\,\text
 y_n = y(\boldsymbol{x_n}, \boldsymbol{w})
 \end{equation}
 
-Often we want to calcualate the loss for multiclass classification problems. Here we encode the labels as $K$ mutually exclusive one hot-encoded-classes \cite{dlvc}. One-hot-encoded means that a classification $c \in \{1, ..., K\}$ is represented using a vector of size $K$ where the $c$-th component is set to $1$ and every other component is set to $0$. Suppose we have 3 classes and the classification for a sample is 2, then the one-hot-encoding of this class is $(0, 1, 0)$. We apply the following loss function for multiclass classification:
+Often we want to calculate the loss for multiclass classification problems. Here we encode the labels as $K$ mutually exclusive one hot-encoded-classes \cite{dlvc}. One-hot-encoded means that a classification $c \in \{1, ..., K\}$ is represented using a vector of size $K$ where the $c$-th component is set to $1$ and every other component is set to $0$. Suppose we have 3 classes and the classification for a sample is 2, then the one-hot-encoding of this class is $(0, 1, 0)$. We apply the following loss function for multiclass classification:
 
 \begin{equation}
 L(\boldsymbol{w}) = -\sum_{n=1}^N \left(\,\sum_{k=1}^K \left(t_{kn}\,\text{ln}\,y_k(\boldsymbol{x_n},\boldsymbol{w})\right)\right) \text{ where } y_k(\boldsymbol{x}, \boldsymbol{w}) = \text{SoftMax}(\boldsymbol{y}(\boldsymbol{x_k}, \boldsymbol{w}))
@@ -629,10 +629,10 @@ Seiten: 1.5
 
 \end{itemize}
 \fi
-
+\pagebreak
 \subsection{Applying artificial neural networks}
 
-The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, it also rolls faster towards local minima, the steeper the gradient. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
+The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, the steeper the gradient, the ball also rolls faster towards local minima. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
 
 Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of calculating the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
 
@@ -654,9 +654,8 @@ A dropout layers can be used as well \cite{Goodfellow-et-al-2016}. The idea is s
 
 Due to the sheer amount of hyperparameter and possible approaches, successfully designing and training of a neural network can be a challenging task \cite{anintroductiontoneuralnetworks}. There are many rules of thumb for many hyperparameters but in the end it is in the hand of the developer to use a good mixture of clever tricks, as well as trial and error to find a good neural network model \cite{Goodfellow-et-al-2016}. Automated machine learning is also a very promising research field, more information is available in the next section.
 
-The architecture of the neural network also influences how much it tends to overfit: As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and the more easier it overfits if the dataset is not sufficiently large \cite{Goodfellow-et-al-2016}. Empirically, deep networks (many layers) have shown to generalize better compared to less deep networks with a similar number of neurons \cite{Goodfellow-et-al-2016}.
+The architecture of the neural network also influences how much it tends to overfit: As a rule of thumb, the more neurons a neural network has, the bigger the learning capacity of the neural network and therefore it overfits easier if the dataset is not sufficiently large \cite{Goodfellow-et-al-2016}. Empirically, deep networks (many layers) have shown to generalize better compared to less deep networks with a similar number of neurons \cite{Goodfellow-et-al-2016}.
 
-\pagebreak
 \subsection{Backpropagation} \label{backprop}
 
 Backpropagation is an alternative way of determining the gradient of a function \cite{Goodfellow-et-al-2016}. Backpropagation makes training big neural networks tractable for modern computers \cite{bishop}. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT}. It is also known as reverse-mode differentiation \cite{colahbackprop}.
@@ -735,7 +734,7 @@ Seiten: 1
 
 \end{itemize}
 \fi
-
+\pagebreak
 \subsection{Deep Learning} \label{dlbackground}
 
 A neural network with multiple layers, where each layer applies increasingly higher level feature extraction is a deep neural network \cite{deeplearninginneuralnetworks}. The research field is called deep learning \cite{deeplearninginneuralnetworks}. An advantage of deep neural networks is that they scale very well with the size of the dataset and with the amount of computation power available \cite{alexnet}. As the computational resources increase and the size of the datasets as well, the performance of deep learning models increases as well.
@@ -764,7 +763,7 @@ Seiten: 1
 	\label{fig:cnn}
 \end{figure}
 
-Convolutional neural networks were developed based on feedforward neural networks \cite{bishop}. A convolutional neural network (CNN) is a deep neural network \cite{alexnet}. The basic layer types of CNNs are fully connected hidden layers, convolutional layers and max-pooling layers \cite{Goodfellow-et-al-2016}. Figure \ref{fig:cnn} illustrates an overview over the architecture of a convolutional neural network.
+Convolutional neural networks were developed based on feed forward neural networks \cite{bishop}. A convolutional neural network (CNN) is a deep neural network \cite{alexnet}. The basic layer types of CNNs are fully connected hidden layers, convolutional layers and max-pooling layers \cite{Goodfellow-et-al-2016}. Figure \ref{fig:cnn} illustrates an overview over the architecture of a convolutional neural network.
 
 \begin{figure}[ht]
 	\centering
@@ -773,7 +772,7 @@ Convolutional neural networks were developed based on feedforward neural network
 	\label{fig:convolution}
 \end{figure}
 
-Convolutional layers apply a convolution on each pixel \cite{bishop}. A convolution is a weighted sum between two functions \cite{Goodfellow-et-al-2016}. The first function is the input signal and the second function a filter kernel \cite{bishop}. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows the layer to recognize certain local patterns (for example: edges) \cite{Goodfellow-et-al-2016}. The kernel is shared among the input neurons (parameter sharing) \cite{bishop}. This has two main advantages: It introduces translation invariance, which means that it does not matter if a feature occurs at the center or near the edges of an images \cite{Goodfellow-et-al-2016}. Also it reduces the number of learned parameters significantly \cite{bishop}. Additionally to increase the capacity, multiple convolutions are applied per layer \cite{Goodfellow-et-al-2016}. This is called the depth of a convolutional layer \cite{Goodfellow-et-al-2016}. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes \cite{dlvc}. The kernel is a quadratic matrix of size $n$ \cite{alexnet}. To avoid the size reduction of standard convolutions, one can set the padding parameter of a convolutional layer \cite{Goodfellow-et-al-2016}. This increases the input data synthetically (for example by introducing a border with constant value). There is also a stride, which defines how the filter moves along the input \cite{Goodfellow-et-al-2016}. If the stride is fractional ($1/s$), it is also called a deconvolution or transposed convolution \cite{dlvc}. This operation increases the output size \cite{Goodfellow-et-al-2016}.
+Convolutional layers apply a convolution on each pixel \cite{bishop}. A convolution is a weighted sum between two functions \cite{Goodfellow-et-al-2016}. The first function is the input signal and the second function a filter kernel \cite{bishop}. Instead of each neuron being connected to all other neurons, they are connected to a relatively small local subset of the neurons in the previous layer, which allows the layer to recognize certain local patterns (for example: edges) \cite{Goodfellow-et-al-2016}. The kernel is shared among the input neurons (parameter sharing) \cite{bishop}. This has two main advantages: It introduces translation invariance, which means that it does not matter if a feature occurs at the center or near the edges of an image \cite{Goodfellow-et-al-2016}. Also it reduces the number of learned parameters significantly \cite{bishop}. Additionally to increase the capacity, multiple convolutions are applied per layer \cite{Goodfellow-et-al-2016}. This is called the depth of a convolutional layer \cite{Goodfellow-et-al-2016}. Due to their design, in contrast to fully connected layers, convolutional layers do not require a fixed input size, which means that they can be applied on images of different sizes \cite{dlvc}. The kernel is a quadratic matrix of size $n$ \cite{alexnet}. To avoid the size reduction of standard convolutions, one can set the padding parameter of a convolutional layer \cite{Goodfellow-et-al-2016}. This increases the input data synthetically (for example by introducing a border with constant value). There is also a stride, which defines how the filter moves along the input \cite{Goodfellow-et-al-2016}. If the stride is fractional ($1/s$), it is also called a deconvolution or transposed convolution \cite{dlvc}. This operation increases the output size \cite{Goodfellow-et-al-2016}.
 
 
 \begin{figure}[ht]
@@ -783,9 +782,9 @@ Convolutional layers apply a convolution on each pixel \cite{bishop}. A convolut
 	\label{fig:maxpooling}
 \end{figure}
 
-Pooling layers are applied after convolutional layers \cite{alexnet}. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance) \cite{dlvc}. Local pooling layers are connected to a local subset of the neurons in the previous layer \cite{Goodfellow-et-al-2016}. The input is transformed by some function \cite{dlvc}. A typical pooling layer is max-pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2) \cite{alexnet}. Figure \ref{fig:maxpooling} illustrates a max-pooling operation. Another common type of pooling is average pooling, which is often combined with global pooling \cite{globalaveragepooling}. Global pooling means, that the entire data is pooled at once. This operation is usually applied at the end of the convolutional part of a CNN \cite{globalaveragepooling}. Pooling does not involve learning weights, as the function applied is fixed before training \cite{Goodfellow-et-al-2016}. There are also problems associated with pooling, as it essentially makes the model forget information \cite{resnet}. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling. \cite{resnet}
+Pooling layers are applied after convolutional layers \cite{alexnet}. Their goal is to reduce the dimensionality of the data (as well as sometimes translational invariance) \cite{dlvc}. Local pooling layers are connected to a local subset of the neurons in the previous layer \cite{Goodfellow-et-al-2016}. The input is transformed by some function \cite{dlvc}. A typical pooling layer is max-pooling, where the result is the maximum value of all incoming connections of the current local subset (for example 2x2) \cite{alexnet}. Figure \ref{fig:maxpooling} illustrates a max-pooling operation. Another common type of pooling is average pooling, which is often combined with global pooling \cite{globalaveragepooling}. Global pooling means, that the entire data is pooled at once. This operation is usually applied at the end of the convolutional part of a CNN \cite{globalaveragepooling}. Pooling does not involve learning weights, as the function applied is fixed before training \cite{Goodfellow-et-al-2016}. There are also problems associated with pooling, as it essentially makes the model forget information \cite{resnet}. This is one reason, why many modern convolutional neural network architectures mostly avoid max-pooling \cite{resnet}.
 
-Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers \cite{alexnet}. Interestingly the convolutional part of a CNN can be used for feature extraction for different problem domains (see \ref{transferlearning}) \cite{deeplearninginneuralnetworks}.
+Fully connected layers are usually the last layers of a CNN, their task is to perform classification based on the extracted features of the previous layers \cite{alexnet}. Interestingly the convolutional part of a CNN can be used for feature extraction for different problem domains (see section \ref{transferlearning}) \cite{deeplearninginneuralnetworks}.
 
 \if false
 Seiten: 1
@@ -1006,7 +1005,7 @@ Seiten: 1
 
 Recurrent neural networks (RNNs) are suited for sequences of arbitrary length, in contrast to normal fixed length input vectors for conventional feed forward neural networks \cite{hochreiter}. Recurrent neural networks are recurrent in the sense that they contain cycles in the topology of the network  \cite{deeplearninginneuralnetworks}. In theory RNNs should be capable of understanding long-term dependencies \cite{hochreiter}. In practice naive RNNs with simple loops are not suited for longer sequences, because of the vanishing/exploding gradient problem \cite{hochreiter}. To train a recurrent neural network it must be converted into an equivalent feed forward network \cite{Goodfellow-et-al-2016}. Figure \ref{fig:rnn} shows a visualization of such unrolling. This process converts an RNN for a sequence of length $n$ into a feed forward networks with $n$ layers. During backpropagation we need to calculate the partial derivative of each weight $w$ with respect to the loss function \cite{hochreiter}. This partial derivative gets exponentially smaller with increasing number of layers, which causes the training to slow down significantly or even stop entirely  \cite{hochreiter}.
 
-Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio \cite{nmt}\cite{googlespeech}. An LSTM cell is similarly unrolled over time as an RNN cell, where for a sequence the cell is transformed into a multi layer feed forward network \cite{colahlstm}. 
+Replacing the naive approach with Long Short-Term Memory (LSTM) cells has shown to be successful for many tasks \cite{nmt}\cite{hochreiter}\cite{deeplearninginneuralnetworks}. As the architecture of LSTMs keep the vanishing gradient locked inside the cell, instead of propagating through the entire network \cite{hochreiter}. LSTM networks are capable of learning long-term dependencies, which makes them very suited for problems in the domain of text and audio \cite{nmt}\cite{googlespeech}. An LSTM cell is unrolled over time similar to an RNN cell, where for a sequence the LSTM cell is transformed into a multi layer feed forward network \cite{colahlstm}. 
 
 There are many different variations of LSTMs, but all share common building blocks  \cite{colahlstm}: Memory cell input \& output, output gate and a forget gate  \cite{colahlstm}. The memory of an LSTM cell enables the network to remember information over time \cite{hochreiter}. We will now examine a specific implementation of an LSTM cell \cite{colahlstm}.
 
@@ -1061,9 +1060,9 @@ h_t = o_t * \text{tanh}\left(C_t\right)
 b_o&~\text{is the learned bias for the output gate}
 \end{align*}
 
-To increase the learning capacity of LSTMs we can apply multiple LSTM cells sequentially, where the output from the first LSTM is the input for the second LSTM, similar to how convolutional layers are stacked together \cite{Goodfellow-et-al-2016}. Alternatively we can increase the memory capacity by increasing the size of the LSTM's memory $C$ \cite{Goodfellow-et-al-2016}. Empirically LSTMs have shown to have still tendency to overfit to the training data easily, which makes it even more important to find right hyperparameters \cite{rnnregularization}.
+To increase the learning capacity of LSTMs we can apply multiple LSTM cells sequentially, where the output from the first LSTM is the input for the second LSTM, similar to how convolutional layers are stacked together \cite{Goodfellow-et-al-2016}. Alternatively we can increase the learning capacity by increasing the size of the LSTM's memory $C$ \cite{Goodfellow-et-al-2016}. Empirically LSTMs have shown to have a tendency to overfit to the training data easily, which makes it even more important to find right hyperparameters \cite{rnnregularization}.
 
-A newer alternative to LSTMs are gated recurrent units (GRUs) \cite{gru}. Empirically GRUs have shown to train faster and are faster during inference, but in general no significant difference regarding performance has been observed \cite{gru}. Even more recently transformer architectures have shown to be also very successful at learning long-term dependencies \cite{transformer}. Transformer architectures lack recurrent connections \cite{transformer}.
+A newer alternative to LSTMs are gated recurrent units (GRUs) \cite{gru}. Empirically GRUs have shown to train faster and are faster during inference, but in general no significant difference regarding performance has been observed \cite{gru}. Even more recently transformer architectures have shown to be also very successful at learning long-term dependencies \cite{transformer}. Transformer architectures lack recurrent connections entirely \cite{transformer}.
 
 \if false
 Seiten: 1
@@ -1077,7 +1076,7 @@ Seiten: 1
 
 \end{itemize}
 \fi
-
+\pagebreak
 \subsection{Autoencoder}\label{autoencodersection}
 
 An autoencoder is a deep neural network which learns a compact representation of data without supervision \cite{Goodfellow-et-al-2016}. This is similar to principal component analysis of traditional machine learning \cite{bishop}. Application areas of autoencoders include feature extraction, image processing and anomaly detection \cite{semantichashing}\cite{anomalydetection}\cite{autoencoderimage}\cite{autoencoderfeatureextraction}. An autoencoder consists of two parts:
@@ -1089,7 +1088,7 @@ An autoencoder is a deep neural network which learns a compact representation of
 
 The intermediate low dimensional representation is also called \textit{code} \cite{Goodfellow-et-al-2016}. The intuition being, that this forces the neural network to extract more general features, which the autoencoder uses to reconstruct the original signal. Still, a big problem of autoencoders is their tendency to overfit and learn a trivial identity mapping \cite{Goodfellow-et-al-2016}. There are several advanced autoencoder architectures, which try to mitigate this issue by applying some kind of regularization during training \cite{Goodfellow-et-al-2016}. Denoising autoencoders get corrupted input data and their loss is still measured by how well it reconstructs the uncorrupted data \cite{denoisingautoencoder}. The regularization of sparse autoencoders only activates a certain number of neurons per layer, which causes the network to especially react to unique statistical features of the dataset \cite{sparseautoencoder}.
 
-For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information \cite{convolutionalautoencoder}. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max-pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing transposed convolutions \cite{Goodfellow-et-al-2016}. Transposed convolutions are used for up-sampling from a low resolution input to a high resolution output (refer to subsection \ref{mlcnn}) \cite{dlvc}. 
+For example, an autoencoder architecture can be used to reduce the dimensionality of images while still preserving important semantic information \cite{convolutionalautoencoder}. Figure \ref{fig:autoencoder} shows a simple fully connected autoencoder. As CNNs perform very well in the image domain, they are a natural fit for autoencoders for images \cite{alexnet}. The encoders consists of standard convolutional blocks (convolution + max-pooling). While the decoder has to restore the original image, therefore it usually consists of layers performing transposed convolutions \cite{Goodfellow-et-al-2016}. Transposed convolutions are used for up-sampling from a low resolution input to a high resolution output (refer to section \ref{mlcnn}) \cite{dlvc}. 
 
 \begin{figure}[ht]
 	\centering
@@ -1131,13 +1130,13 @@ For both traditional machine learning and deep learning based natural language p
 
 A trivial approach would be to give each word a unique identification number \cite{deeplearningnlpstanford}. This approach does not grasp important semantic information about the words \cite{deeplearningnlpstanford}. For example, the words \textit{king} and \textit{queen} are more similar than \textit{king} and \textit{house}. If the featurization assigns the ID=2 for \textit{king} and the ID=42 for \textit{queen}, then the machine learning model has no additional information, that these words are similar concepts. Keeping this information is crucial for successful natural language processing \cite{nmt}\cite{elmo}. Vector space models avoid this problem by representing each word in a high dimensional vector space, where a certain similarity measure holds \cite{pennington2014glove}.
 
-There are different methods for applying natural language processing successfully. A great challenge is to entail semantic context into the trained models \cite{statisticalnlp}. Because text is a sequence of words, we can apply recurrent neural networks in this context \cite{reviewRNN}. Especially recurrent neural networks which handle long-term dependencies reach state-of-the-art results in NLP (for more information, refer to subsection \ref{lstmbackground}) \cite{hochreiter}. Alternatively, a weaker form of context, is achieved by using a technique called $n$-grams \cite{ngrams}. Here we split the sentences into a set of tuples with size $n$, where each tuple contains the word itself and the next $n - 1$ words of the sentence  \cite{ngrams}. The intuition being, that the context of words can be represented by their surrounding words  \cite{ngrams}. For example the 2-grams (also known as bigrams), for the sentence \textit{I like machine learning} would be $\{(\textit{I}, \textit{like}), (\textit{like}, \textit{machine}), (\textit{machine}, \textit{learning})\}$. This method allows applying bag-of-words techniques to also entail context \cite{bagofwordbigramexample}.
+There are different methods for applying natural language processing successfully. A great challenge is to entail semantic context into the trained models \cite{statisticalnlp}. Because text is a sequence of words, we can apply recurrent neural networks in this context \cite{reviewRNN}. Especially recurrent neural networks which handle long-term dependencies reach state-of-the-art results in NLP (for more information, refer to section \ref{lstmbackground}) \cite{hochreiter}. Alternatively, a weaker form of context, is achieved by using a technique called $n$-grams \cite{ngrams}. Here we split the sentences into a set of tuples with size $n$, where each tuple contains the word itself and the next $n - 1$ words of the sentence  \cite{ngrams}. The intuition being, that the context of words can be represented by their surrounding words  \cite{ngrams}. For example the 2-grams (also known as bigrams), for the sentence \textit{I like machine learning} would be $\{(\textit{I}, \textit{like}), (\textit{like}, \textit{machine}), (\textit{machine}, \textit{learning})\}$. This method allows applying bag-of-words techniques to also entail context \cite{bagofwordbigramexample}.
 
-Another way we can build a context-aware model is by applying hidden markov models (HMM) \cite{bishop}. This is a statistical approach where we assume that sentences can be described by a markov process with latent (or hidden) variables \cite{bishop}. HMMs are much simpler, compared to RNNs, as HMMs rely on common statistical techniques \cite{statisticalnlp}. Given that the underlying process is actually a markov process, than they perform very well, otherwise other techniques may perform better  \cite{statisticalnlp}.
+Another way we can build a context-aware model is by applying hidden markov models (HMM) \cite{bishop}. This is a statistical approach where we assume that sentences can be described by a markov process with latent (or hidden) variables \cite{bishop}. HMMs are much simpler, compared to RNNs, as HMMs rely on common statistical techniques \cite{statisticalnlp}. Given that the underlying process is actually a markov process, then they perform very well, otherwise other techniques may perform better  \cite{statisticalnlp}.
 
-Often the corpus available does not contain sufficient labelling. In such cases we can apply clustering methods, which search for patterns in the underlying data, without any additional labelling \cite{aimodern}. Gaussian mixture models are a very powerful clustering method, which assumes that the data is a mixture of multiple gaussians \cite{aimodern}. Through an algorithm called expectation-maximization we get a set of gaussian distributions, which allows us to get a probability for each sample that it originated from a specific gaussian, effectively a classification for this sample \cite{bishop}.
+Often the corpus available does not contain sufficient labelling. In such cases we can apply clustering methods, which search for patterns in the underlying data, without any additional labelling \cite{aimodern}. Gaussian mixture models are a very powerful clustering method, which assumes that the data is a mixture of multiple gaussians \cite{aimodern}. Through an algorithm called \textit{expectation-maximization} we get a set of gaussian distributions, which allows us to get a probability for each sample that it originated from a specific gaussian, effectively a classification for this sample \cite{bishop}.
 
-In the following subsections I will outline several techniques for extracting word embeddings from a sentence. Beginning with TFIDF, a relatively simple but powerful technique which ranks words by the term frequency and inverse document frequency \cite{tfidf}. Then I continue with GloVe, an unsupervised statistical approach \cite{pennington2014glove}. And finally a deep learning based word embedding called ELMo \cite{elmo}.
+In the following subsections I will outline several techniques for extracting word embeddings from a sentence. Beginning with TFIDF, a technique which ranks words by the term frequency and inverse document frequency \cite{tfidf}. Then I continue with GloVe, an unsupervised statistical approach \cite{pennington2014glove}. And finally I conclude this section with a state-of-the-art deep learning based word embedding called ELMo \cite{elmo}.
 
 \if false
 There is the concept of positive and negative similarity \cite{TUW-233295}. Positive similarity is denoted using the $\otimes$ operator. Negative similarity is denoted using the $\overline{\otimes}$ operator \cite{TUW-233295}. Similarities based on the dot product are positive similarity measures \cite{TUW-233295}. The cosine similarity is a commonly used positive similarity measure \cite{modernir}. While similarities based on distance (for example: euclidean distance) are negative similarity measures \cite{TUW-233295}. CNNs are based on positive similarity: They perform a convolution, which is also a positive similarity measure \cite{alexnet}. Vector spaces have usually several 100 dimensions \cite{bert}. Positive similarity measures perform empirically better on high dimensional spaces compared to negative similarity measures \cite{surprisinghighdimensional}. Vector space models can be seen as word embeddings \cite{elmo}.
@@ -1162,7 +1161,7 @@ Seiten: 1.5
 
 TFIDF stands for term frequency inverse document frequency and is a simple, but powerful vector space model \cite{tfidf}. The idea originated in information retrieval, where the goal is to weight words by their importance for a document and for a query \cite{historyinformationretrieval}. The TFIDF consists of two terms multiplied: Term frequency and inverse document frequency. The term frequency (TF) describes the total number of times a word occurs in a document \cite{irsurvey}. The idea here, is that the more often a word occurs in a given document, the more important it is in describing that document \cite{irsurvey}.
 
-The problem with this is that certain words occur almost ever very frequently (stop words) \cite{tfidf}. For example, the word \textit{the} has in almost every text corpus a very high term frequency, but is rarely important in describing the document. This is the reason why the inverse document frequency (IDF) is also considered \cite{tfidf}. This weight describes the importance of a word compared to all other documents \cite{historyinformationretrieval}. For example, a document about the Engima machine would have frequent mentions of the word \textit{Engima}, therefore the IDF would be relatively high compared to other words. In contrast, the word \textit{the} occurs usually in all documents, therefore the IDF would be very low.
+The problem with this is that certain words occur almost ever very frequently (stop words) \cite{tfidf}. For example, the word \textit{the} has in almost every text corpus a very high term frequency, but is rarely important in describing the document. This is the reason why the inverse document frequency (IDF) is also considered \cite{tfidf}. This weight describes the importance of a word compared to all other documents \cite{historyinformationretrieval}. For example, a document about the \textit{Enigma machine} would have frequent mentions of the word \textit{Enigma}, therefore the IDF would be relatively high compared to other words. In contrast, the word \textit{the} occurs usually in all documents, therefore the IDF would be very low.
 
 There exist many different formulas which entail this idea \cite{tfidf}. In this thesis the following TFIDF equations were used \cite{tfidf}:
 
@@ -1218,7 +1217,7 @@ Seiten: 0.25
 
 \fi
 
-\subsection{ELMo \cite{elmo}}
+\subsection{ELMo}
 The previously mentioned models have very limited sense of context, especially each word had the same word vector associated regardless of the context \cite{pennington2014glove}\cite{tfidf}. ELMo (Embeddings from Languages Models) assigns word embeddings depending on context \cite{elmo}.
 
 The basis for ELMo is a language model trained on a large corpus of text \cite{elmo}. A language model predicts the next word given a sequence of prior words \cite{statisticalnlp}. For example given the sequence of words \textit{Yesterday I was in New York. I visited the statue of ...}, a good language model could predict that the next word would be \textit{Liberty}.
@@ -1237,7 +1236,7 @@ Seiten: 0.5
 \end{itemize}
 
 \fi
-
+\pagebreak
 \section{Transfer Learning} \label{transferlearning}
 
 Usually, the more complex a given task is, the more labelled data deep learning needs to achieve good results \cite{Goodfellow-et-al-2016}. This is not only expensive, but sometimes not possible. For example, Gary Larson has only drawn so many cartoons in his lifetime. Labelling a big dataset is also a big challenge and not always feasible.
@@ -1274,9 +1273,9 @@ Automated machine learning (AutoML) is the process of finding hyperparameters or
 \item Hyperparameter selection
 \end{itemize}
 
-In practice completely autonomous AutoML it is not yet possible, as the possible search space is intractable by currently available computer hardware \cite{automlsurvey}. Nevertheless, AutoML still may save time and result in possibly better models, as we can focus on more important questions \cite{automlsurvey}.
+In practice completely autonomous AutoML it is not yet possible, as the possible search space is intractable by currently available computer hardware \cite{automlsurvey}. Nevertheless, AutoML still may save time and result in possibly better models, as we can focus on more important questions than hyperparameter tuning \cite{automlsurvey}.
 
-This thesis uses the automated machine learning algorithm implemented in the works of Komer et al \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem \cite{hyperoptpaper}.
+This thesis uses the automated machine learning algorithm implemented in the works of Komer et al. \cite{hyperoptpaper}. Their philosophy is that the selection of the entire machine learning pipeline (including data pre-processing) can be seen as a single large hyperparameter optimization problem \cite{hyperoptpaper}.
 
 Using Hyperopt-sklearn requires the machine learning practitioner to define the following parameters, also known as \textit{hyper} hyperparameters (because they are parameters for training the hyperparameters) \cite{hyperoptpaper}:
 \begin{itemize}
@@ -1285,7 +1284,7 @@ Using Hyperopt-sklearn requires the machine learning practitioner to define the 
 \item Optimization algorithm: An algorithm which finds the best configuration in the search domain given the objective function \cite{hyperoptpaper}
 \end{itemize}
 
-Now that I covered the necessary foundations of machine learning, artificial neural networks, natural language processing, transfer learning and automated machine learning, I will outline the context in which I applied them.
+Now that I covered the necessary foundations of machine learning, artificial neural networks, natural language processing, transfer learning and automated machine learning, next I will outline the context in which I applied them.
 
 \if false
 Seiten: 0.5
@@ -1303,19 +1302,18 @@ Seiten: 0.5
 
 According to the Oxford dictionary humor is the "the quality in something that makes it funny or amusing; the ability to laugh at things that are amusing" \cite{humordef}. The exact reasons for why humans developed humor are still under debate. It seems that humor contributes to physical and psychological well-being \cite{humorhealthy}\cite{humorresearch}. Evolutionary psychologists have proposed that humor may have been a result of sexual selection: Women may have preferred men with humor, as it may have been a sign of intelligence, adaptability, and desire to please others \cite{sep-humor}.	
 
-Over the centuries, there many theories of humor have been proposed: 
+Over the centuries, many theories of humor have been proposed: 
 \begin{itemize}
-\item Superiority theory: One of the first theories of humor, which proposes that l	aughter expresses feelings of superiority over other people (or a former self) \cite{humorresearch}. This theory was popular until the 20th century.
+\item Superiority theory: One of the first theories of humor, which proposes that laughter expresses feelings of superiority over other people (or a former self) \cite{humorresearch}. This theory was popular until the 20th century.
 \item Relief theory: Another early theory of humor, which proposes that humor can be seen as a valve which releases pressure \cite{humorresearch}. This pressure was initially thought to be some kind of gas or energy, but later it was considered to be some form of \textit{psychic energy} \cite{sep-humor}\cite{humorresearch}.
 \item Incongruity theory: This theory proposes that humor is the result of the perception of something incongruous \cite{typologyofhumor}. In particular if the mind observes something which violates its mental model and expectations \cite{typologyofhumor}. This is in line with many of Gary Larson's cartoons: The cartoon sets up some expectation, which is usually in contrast to what the reader would have expected. For example scientists behaving like toddlers in usually serious situations. 
 
+\item A more modern view of humor is seeing it as a form of play \cite{sep-humor}. It has been observed, that many animals learn important skills during play \cite{sep-humor}. Humor seems to serve a similar purpose for human social behaviour \cite{humorplay}. Usually humor shows what should be avoided during communication or in other (social) situations \cite{sep-humor}. Laughing and smiling enables these situations and therefore can be considered as a signal to play \cite{humorplay}. 
+
 \end{itemize}
 
- 
 
-A more modern view of humor is seeing it as a form of play \cite{sep-humor}. It has been observed, that many animals learn important skills during play \cite{sep-humor}. Humor seems to serve a similar purpose for human social behaviour \cite{humorplay}. Usually humor shows what should be avoided during communication or in other (social) situations \cite{sep-humor}. Laughing and smiling enables these situations and therefore can be considered as a signal to play \cite{humorplay}. 
-
-Computational humor combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computers becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these applications \cite{HumoristBot}. An important challenge of computational humor is that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This may be the reason why there is currently no unified computational model of humor. Instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
+\textit{Computational humor} combines the field of artificial intelligence with the research of humor \cite{comphumordirections}. As the interface between humans and computers becomes more natural, it is also important that computers can also understand humor \cite{HumoristBot}. The rise of chatbots and virtual assistants shows that humor is still a very difficult task for these applications \cite{HumoristBot}. An important challenge of computational humor is that humor is very subjective: There is no general humor, as every person finds different things funny \cite{humorresearch}. This may be the reason why there is currently no unified computational model of humor. Instead models for certain subtasks of computational humor have been constructed \cite{Yang2015HumorRA}\cite{Bertero2016DeepLO}.
 
 Common tasks of computational humor involve generative or discriminative tasks \cite{HumoristBot}\cite{Yang2015HumorRA}: An example for generative task would be joke generation or pun generation. In these types of tasks the computer has to synthesize a joke or a pun. A discriminative task would be for example joke recognition. In this setting the computer should be able to detect whether some text is a joke or not. Computational humor and language understanding go hand in hand \cite{Yang2015HumorRA}: To really understand a joke, the interpreter (be it human or computer) has to understand the language. Proper language understanding is still an important research topic \cite{elmo}\cite{bert}.
 
@@ -1447,7 +1445,7 @@ Traditioneller Ansatz in einem generativem Setting
 
 Seiten: 0.5
 \fi
-
+\pagebreak
 \subsection{Computational Humor using Deep Learning}
 
 In the following subsections we will discuss the application of deep learning in the domain of computational humor. 
@@ -1458,7 +1456,7 @@ The work of Bertero et al. compares several machine learning techniques for pred
 
 \begin{itemize}
 \item Acoustic features: extraction of pitch, line spectral frequencies, intensity, loudness, probability of voicing, $F_0$ envelope, zero-crossing rate, MFCC and speaking rate features
-\item Language features: extraction of lexical features (unigrams, bigrams and trigrams appearing at least five times), structural and syntactic features (proportions of verbs, nouns, adjectives and adverbs, sentence length and average word length), sentiment (average of positive/negative sentiment scores of SentiWordNet), antonyms (presence of verb, noun, adjective and adverbs antonyms from WordNet compared to the previous utterance), speaker turns (speaker identity) and word2vec features
+\item Language features: extraction of lexical features (unigrams, bigrams and trigrams appearing at least five times), structural and syntactic features (proportions of verbs, nouns, adjectives and adverbs, sentence length and average word length), sentiment (average of positive/negative sentiment scores of SentiWordNet), antonyms (presence of verb, noun, adjective and adverbs antonyms from WordNet compared to the previous utterance), speaker turns (speaker identity) and word2vec features \cite{wordnet}\cite{word2vec}
 \end{itemize}
 
 Interestingly, their work does not use an LSTM/GRU cell, but instead a simple RNN cell, which often have the problem of vanishing/exploding gradients. \cite{hochreiter} Their RNN architecture applies an embedding layer on the n-gram data and a separate embedding layer on the acoustic and language data for dimensionality reduction. Afterwards they combine both vectors and use this as an input for the RNN cell.
@@ -1489,7 +1487,7 @@ Their feature vector is a combination of the following:
 
 \item One-hot encoded word tokens: Models the likeliness of a word of being humorous
 \item Character trigrams: Reduces impact of word stems
-\item Word2Vec: Models similarity of words and their semantic meaning
+\item Word2Vec: Models similarity of words and their semantic meaning \cite{word2vec}
 
 \end{itemize}
 
@@ -1509,13 +1507,13 @@ The work of Chen et al use several corpora from various sources \cite{chen2018hu
 
 The basis for their architecture is a convolutional neural network. First they convert the words using pre-trained GloVe embeddings. The authors use GloVe trained on Wikipedia 2014 + Gigaword 5 with a vocabulary containing 400,000 words \cite{pennington2014glove}. Then they apply a convolutional layer and try filters of size 3 to 20 for the convolution. Finally they apply a regular max-pooling after the convolutional layer.
 
-In order to improve performance, the authors apply Highway layers. Highway layers introduce shortcut connections with gate functions, which allows the information to flow more easily through the deeper parts of the network. Additionally they also apply dropout layers.
+In order to improve performance, the authors apply \textit{highway layers}. Highway layers introduce shortcut connections with gate functions, which allows the information to flow more easily through the deeper parts of the network. Additionally they also apply dropout layers.
 
 The authors perform a 10 fold cross validation. A CNN with highway layers and a large filter size of 100 performs the best on 16000 One Liners and Pun of the Day with an F1-score of 90\% for both datasets. Short jokes even reaches 92\% and PTT Jokes 94\%. 
 
 Interesting about this approach is especially that the authors achieved these result without feature selection. The deep learning model can generalize humor in the given context. The chosen experiment could probably even be improved by using new state-of-the-art word embeddings such as ELMo or BERT \cite{elmo}\cite{bert}.
 
-Given the presented papers we have a broad overview over the state-of-the-art in computational humor using deep learning and traditional machine learning. We can see, that no work tried to model the humor of a single person, and instead opted for a generalized approach. Mostly using crowd annotated datasets or using humorous content which many people find funny (for example the series Big Bang Theory). This shows that the approach this thesis takes, where I try to model the humor of a single person, is novel and could reveal new insights into computational humor.
+Given the presented papers we have a broad overview over the state-of-the-art in computational humor using deep learning and traditional machine learning. No work tried to model the humor of a single person, and instead opted for a generalized approach. Mostly using crowd annotated datasets or using humorous content which many people find funny (for example the series Big Bang Theory). This shows that the approach this thesis takes, where I try to model the humor of a single person, is novel and could reveal new insights into computational humor.
 
 \if false
 Humor recognition in visueller Domäne
@@ -1542,7 +1540,7 @@ Seiten: 1.0
 
 \chapter{Design} \label{design}
 
-In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined. This process had four main phases: Dataset design, visual model design, text model design and combined model design.
+In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined. This process had four main phases: dataset design, visual model design, text model design and combined model design.
 
 \section{Dataset design}
 
@@ -1554,14 +1552,14 @@ Erläutern dass am Anfang das Datenset erstellt werden musste.
 Seiten: 0.25
 \fi
 
-\subsection{Dataset Acquisition}
+\subsection{Dataset acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
 Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR, but many manual adjustments had to be applied as well. Additionally cartoons with bad quality, as well as duplicates were also removed.
 
 The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
-\subsection{Dataset Analysis}
+\subsection{Dataset analysis}
 
 The dataset analysis revealed several interesting facts about the dataset. Figure \ref{fig:labeldistr} shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
@@ -1602,6 +1600,8 @@ A word count analysis showed that there are significant difference in the freque
 \label{fig:wordocc1}
 
 \end{figure}
+
+\if false
 
 \begin{figure}
 \centering
@@ -1675,6 +1675,8 @@ A word count analysis showed that there are significant difference in the freque
 \label{fig:phraseocc2}
 
 \end{figure}
+
+\fi
 
 \section{Visual domain model design}
 
