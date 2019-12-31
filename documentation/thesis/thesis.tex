@@ -1928,6 +1928,19 @@ Seiten: 0.25
 
 \section{Technical Foundation}
 
+% TODO: Referenzen
+% TODO: Eventuell mehr auf die Frameworks eingehen
+
+For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow) are available in Python. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{sklearn} proved to be very useful. 
+
+For the punchline-based models \textit{AllenNLP} is the best suited framework, as it was based on PyTorch and features easy to use word embeddings (such as ELMo). It also has a very flexible JSON configuration system which makes it easy to try out different hyperparameters without changing the source code.
+
+An important aspect of deep learning is reproducibility. It is generally very difficult to make sure that experiments can be reproduced, due to the non-deterministic nature of minibatching and some optimizations performed by deep learning frameworks. Fortunately PyTorch has a deterministic mode, which disables these optimizations. Minibatching can be deterministic by setting the initial random seed explicitly. Additionally all relevant development milestones are recorded in a source control system, which contains all necessary files to redo this experiment.
+
+% TODO: Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen
+% TODO: Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe
+
+\if false
 Seiten: 2
 
 \begin{itemize}
@@ -1938,6 +1951,8 @@ Seiten: 2
 \item Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe
 
 \end{itemize}
+
+\fi
 
 \section{Annotation Tool}
 
