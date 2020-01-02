@@ -1928,8 +1928,10 @@ Seiten: 0.25
 
 \section{Technical Foundation}
 
-% TODO: Referenzen
-% TODO: Eventuell mehr auf die Frameworks eingehen
+\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
+\todo{Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe}
+\todo{Referenzen}
+\todo{Eventuell mehr auf die Frameworks eingehen}
 
 For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow) are available in Python. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{sklearn} proved to be very useful. 
 
@@ -1937,8 +1939,6 @@ For the punchline-based models \textit{AllenNLP} is the best suited framework, a
 
 An important aspect of deep learning is reproducibility. It is generally very difficult to make sure that experiments can be reproduced, due to the non-deterministic nature of minibatching and some optimizations performed by deep learning frameworks. Fortunately PyTorch has a deterministic mode, which disables these optimizations. Minibatching can be deterministic by setting the initial random seed explicitly. Additionally all relevant development milestones are recorded in a source control system, which contains all necessary files to redo this experiment.
 
-% TODO: Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen
-% TODO: Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe
 
 \if false
 Seiten: 2
@@ -1954,8 +1954,29 @@ Seiten: 2
 
 \fi
 
-\section{Annotation Tool}
+\section{Labelling Tool}
 
+Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save much time.
+
+The labelling tool was able to perform the following tasks:
+\begin{itemize}
+\item Filter out cartoons with low quality.
+\item Automated cartoon processing and punchline extraction.
+\item Manual cartoon processing allowed cropping the images and manual punchline correction, in cases where the automated system failed, which happened on almost all cartoons in some degree.
+\item  Labelling the funniness of a cartoon.
+\item Cartoon object bounding box annotation allowed to annotate the bounding boxes and classes of objects seen in cartoons.
+\item Annotating the theme of a cartoon (this feature was not used).
+\item Based on image and punchline data duplicated cartoons were filtered out.
+\item Extended search and ordering allowed finding cartoons by punchline and ID.
+\end{itemize}
+
+Whether the tool has actually saved time is difficult to say for sure, but considering how helpful the tool was during labelling, it is very likely that it saved considerable time. Assuming that using the tool annotating a single cartoon took 5 minutes on average, with an original 3634 number of cartoons (not filtered) meant that annotating took 302 hours of work. The time spent developing the labelling tool must also be considered. Development of the tool took around 40 hours, therefore the total time spent annotating was around 342 hours. Conversely, assuming that annotating without a special tool would double the amount of time needed on average to prepare a single cartoon, 604 hours of work were to be expected if no labelling tool was used. Additionally the potential for errors would be much greater, as the tasks are very repetitive and could have lead therefore to more errors. Such errors could be due to selecting a wrong cell in the spreadsheet application or losing all data due to the lack of a proper database.
+
+The tool was implemented using Python, the same programming language as the machine learning part uses. The interface was a mixture of command line interface and web interface. Tasks which were only done once (such as filtering duplicates or applying the automated cartoon pre-processing) were triggered using a command line interface. The more repetitive tasks, such as manual preparation of a cartoon or funniness labelling was done in a web interface. For the web interface I chose the Django framework with an SQLite database.
+
+\todo{Bild vom Annotierungstool}
+
+\if false
 Seiten: 1
 
 \begin{itemize}
@@ -1964,6 +1985,7 @@ Seiten: 1
 \item Technik vom Annotierungstool (Python, Django)
 \item Bild vom Annotierungstool
 \end{itemize}
+\fi
 
 
 \section{Debugging of models}
@@ -2002,9 +2024,9 @@ general the results show that this problem is very hard. Despite the progress in
 The cartoon dataset is split into three subsets:
 
 \begin{itemize}
-\item Training Set: 1492 samples (70\%)
-\item Validation Data: 746 samples (20\%)
-\item Test Data: 249 samples (10\%)
+\item Training Set: 1492 samples % (70\%)
+\item Validation Data: 746 samples % (20\%)
+\item Test Data: 249 samples % (10\%)
 \end{itemize}
 
 The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
