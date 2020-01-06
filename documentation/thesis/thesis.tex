@@ -1684,6 +1684,145 @@ To reduce the problem space I decided to first try the visual domain of Gary Lar
 
 \subsection{Simple CNN}
 
+\begin{figure}[ht]
+	\centering
+
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,204); %set diagram left start at 0, and has height of 204
+
+%Shape: Rectangle [id:dp04888786980176252] 
+\draw   (105.5,11) -- (264.75,11) -- (264.75,51) -- (105.5,51) -- cycle ;
+%Image [id:dp7785296507741921] 
+\draw (32.75,32.25) node  {\includegraphics[width=31.13pt,height=31.13pt]{graphics/example_cartoon.png}};
+%Straight Lines [id:da4908730280140521] 
+\draw    (55.5,30) -- (102.75,30) ;
+\draw [shift={(105.75,30)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp2476467940430045] 
+\draw   (315.5,11) -- (383.75,11) -- (383.75,51) -- (315.5,51) -- cycle ;
+%Straight Lines [id:da3882251345753296] 
+\draw    (265.5,30) -- (312.75,30) ;
+\draw [shift={(315.75,30)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp4832006753116884] 
+\draw   (435.5,11) -- (537.25,11) -- (537.25,51) -- (435.5,51) -- cycle ;
+%Straight Lines [id:da05948437692580022] 
+\draw    (385.5,30) -- (432.75,30) ;
+\draw [shift={(435.75,30)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp5844594977931348] 
+\draw   (45.5,151) -- (157.5,151) -- (157.5,191) -- (45.5,191) -- cycle ;
+%Straight Lines [id:da949240261888558] 
+\draw    (14.5,100) -- (42.5,100) ;
+\draw [shift={(45.5,100)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp9065460630465603] 
+\draw   (374.5,81) -- (442.75,81) -- (442.75,121) -- (374.5,121) -- cycle ;
+%Straight Lines [id:da9550999326519303] 
+\draw    (334.5,100) -- (371.75,100) ;
+\draw [shift={(374.75,100)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp2820046342156963] 
+\draw   (474.5,81) -- (576.25,81) -- (576.25,121) -- (474.5,121) -- cycle ;
+%Straight Lines [id:da13527257650547142] 
+\draw    (444.5,100) -- (471.75,100) ;
+\draw [shift={(474.75,100)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da4274988858478814] 
+\draw    (538.5,32) -- (605.5,32) ;
+
+
+%Straight Lines [id:da33550590398040825] 
+\draw    (605.5,32) -- (605.5,70) ;
+
+
+%Straight Lines [id:da46222283922827967] 
+\draw    (605.5,67) -- (14.5,67) ;
+
+
+%Straight Lines [id:da15974517915011233] 
+\draw    (14.5,100) -- (14.5,66.5) ;
+
+
+%Straight Lines [id:da10866957635056895] 
+\draw    (577.5,102) -- (605.5,102) ;
+
+
+%Straight Lines [id:da26281883419175034] 
+\draw    (605.5,102) -- (605.5,137) ;
+
+
+%Straight Lines [id:da8917289659469356] 
+\draw    (605.5,137) -- (14.5,137) ;
+
+
+%Straight Lines [id:da5605393860670063] 
+\draw    (14.5,170) -- (42,170) ;
+\draw [shift={(45,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da2941782422737056] 
+\draw    (14.5,170) -- (14.5,136.5) ;
+
+
+%Shape: Rectangle [id:dp21620550367962021] 
+\draw   (44.5,81) -- (203.75,81) -- (203.75,121) -- (44.5,121) -- cycle ;
+%Shape: Rectangle [id:dp042671769356561695] 
+\draw   (205.5,151) -- (298.5,151) -- (298.5,191) -- (205.5,191) -- cycle ;
+%Straight Lines [id:da29514113044601054] 
+\draw    (155.5,170) -- (202.75,170) ;
+\draw [shift={(205.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp3587203034712998] 
+\draw   (348.5,151) -- (477.5,151) -- (477.5,191) -- (348.5,191) -- cycle ;
+%Straight Lines [id:da1915190038523651] 
+\draw    (298.5,170) -- (345.75,170) ;
+\draw [shift={(348.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da2952512309916271] 
+\draw    (478.5,172) -- (516.5,172) ;
+\draw [shift={(519.5,172)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp9411474591912476] 
+\draw   (233.5,80) -- (333.5,80) -- (333.5,120) -- (233.5,120) -- cycle ;
+%Straight Lines [id:da13814754370307103] 
+\draw    (204.5,100) -- (230.75,100) ;
+\draw [shift={(233.75,100)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+
+% Text Node
+\draw (185.13,31) node   [align=left] {3x3 conv, depth 100};
+% Text Node
+\draw (349.63,31) node   [align=left] {ReLU};
+% Text Node
+\draw (486.38,31) node   [align=left] {2x2 maxpool};
+% Text Node
+\draw (101.5,171) node   [align=left] {dropout 50\%};
+% Text Node
+\draw (408.63,101) node   [align=left] {ReLU};
+% Text Node
+\draw (525.38,101) node   [align=left] {2x2 maxpool};
+% Text Node
+\draw (124.13,101) node   [align=left] {3x3 conv, depth 100};
+% Text Node
+\draw (252,171) node   [align=left] {Reshape};
+% Text Node
+\draw (413,171) node   [align=left] {Fully Connected 7};
+% Text Node
+\draw (283.5,100) node   [align=left] {BatchNorm};
+
+
+\end{tikzpicture}
+
+	
+	\caption{The simple CNN architecture}
+	\label{fig:simplecnn}
+\end{figure}
+
 The goal of this approach was to establish a performance baseline. This models goal was to find out whether a relatively simple convolutional neural network performs well on the target task.
 
 Am important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game "Where is Waldo" on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
@@ -1696,7 +1835,7 @@ Modelling the output of a neural network is equally crucial. I performed two exp
 
 Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers. Conversely, too few layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
 
-\todo {Illustration des CNN Netzwerks}
+Figure \ref{fig:simplecnn} illustrates the architecture of this approach. It consists of two main CNN blocks (with a 3x3 kernel and a depth of 100). The second CNN block also contains a batch normalization layer. The classification is performed by a single fully connected layer.
 
 \if false
 Seiten: 1
@@ -1723,8 +1862,6 @@ I probed several configurations of this transfer learning approach:
 \end{enumerate}
 
 The second approach was the best performing on the validation set. Additionally applying data augmentation was crucial. Applying random horizontal flip, random resize and crop and slight random rotations also improved performance on the validation set.
-
-\todo {Illustration vom transfer learning}
 
 \if false
 Seiten: 1
@@ -1797,19 +1934,333 @@ Seiten: 1.5
 
 \section{Text domain model design}
 
-Erläutern wie danach nur die Text Domain berücksichtigt wurde.
-
-Seiten: 0.25
+The following architectures concentrated on the text domain without any additional visual information.
 
 \subsection{ELMo}
 
-First I tried to model the punchlines using an LSTM neural network architecture. This approach quickly overfitted. GRU cells had the same problem. I probed several architectures with multiple LSTM cells, different hyperparameters and an additional embedding layer.
+\begin{figure}[ht]
+	\centering
+	
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,138); %set diagram left start at 0, and has height of 138
+
+%Straight Lines [id:da5561284433186475] 
+\draw    (108,42) -- (140.5,42) ;
+\draw [shift={(143.5,42)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp8632952936998419] 
+\draw   (462.5,21) -- (617,21) -- (617,61) -- (462.5,61) -- cycle ;
+%Straight Lines [id:da3262929984069267] 
+\draw    (436.5,40) -- (459.5,40) ;
+\draw [shift={(462.5,40)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp7759549907799321] 
+\draw   (141.5,21) -- (278.5,21) -- (278.5,61) -- (141.5,61) -- cycle ;
+%Shape: Rectangle [id:dp90915934231992] 
+\draw   (307.5,20) -- (435.5,20) -- (435.5,60) -- (307.5,60) -- cycle ;
+%Straight Lines [id:da36236518009121] 
+\draw    (278.5,40) -- (304.75,40) ;
+\draw [shift={(307.75,40)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp6309612585714086] 
+\draw   (142.5,81) -- (234.5,81) -- (234.5,121) -- (142.5,121) -- cycle ;
+%Straight Lines [id:da7452566709443371] 
+\draw    (235.5,101) -- (261.75,101) ;
+\draw [shift={(264.75,101)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp9849858324365817] 
+\draw   (263.5,81) -- (392.5,81) -- (392.5,121) -- (263.5,121) -- cycle ;
+%Straight Lines [id:da881818605350146] 
+\draw    (393.5,102) -- (431.5,102) ;
+\draw [shift={(434.5,102)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da36982578537292676] 
+\draw    (617,41) -- (632.75,41) ;
+
+
+%Straight Lines [id:da4489381660483782] 
+\draw    (632.75,41) -- (632.75,69.25) ;
+
+
+%Straight Lines [id:da39401296182658396] 
+\draw    (632.75,69.25) -- (118.75,69.25) ;
+
+
+%Straight Lines [id:da9077790967852122] 
+\draw    (118.75,69.25) -- (118.75,100) ;
+
+
+%Straight Lines [id:da914427805076313] 
+\draw    (118.75,100) -- (139.75,100) ;
+\draw [shift={(142.75,100)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+
+% Text Node
+\draw (68,40) node   [align=left] {punchline};
+% Text Node
+\draw (539.75,41) node   [align=left] {Fully Connected \ 200};
+% Text Node
+\draw (210,41) node   [align=left] {ELMo Embedding};
+% Text Node
+\draw (371.5,40) node   [align=left] {LSTM Encoding};
+% Text Node
+\draw (188.5,101) node   [align=left] {ReLU};
+% Text Node
+\draw (328,101) node   [align=left] {Fully Connected 7};
+
+
+\end{tikzpicture}
+
+	
+	\caption{The LSTM architecture with ELMo word embeddings}
+	\label{fig:elmolstm}
+\end{figure}
+
+
+First I tried to model the punchlines using an LSTM/GRU neural network architecture. This approach quickly overfitted. I probed several configurations with multiple LSTM/GRU cells sequentially (one or two), an additional trained embedding layer and different memory vector sizes. Figure \ref{fig:elmolstm} shows the final architecture in more detail.
 
 Recurrent neural networks require big datasets, the idea then was to train simpler models. I achieved this by generating a sentence embedding from the sequence of word embeddings. A sentence embedding is a vector representation of a word embedding in a vector space. There are many different ways to obtain such embedding. I chose the simple approach to take the mean of all word embeddings of a punchline. This resulted in a fixed sized vector representation of a punchline, which allowed the use of a regular fully connected neural network.
 
-I chose ELMo as the main context-aware word embedding for this thesis. \cite{elmo} Mainly due to the state-of-the-art results it achieves while still being relatively easy to use in the chosen NLP framework. More about this in chapter \ref{implementationchapter} Implementation.
+I chose ELMo as the main context-aware word embedding for this thesis. \cite{elmo} Mainly due to the state-of-the-art results it achieves while still being relatively easy to use in the chosen NLP framework.
 
-\todo{Illustration des Netzwerks}
+Figure \ref{fig:elmowithoutlstm} illustrates the architecture which uses sentence embeddings. It consists of three convolutional blocks with increasing depth and batch normalization. Followed by an average pooling and a dropout to counteract overfitting. Finally the prediction is performed by a fully connected layer. Because this approach performed better on the validation set I chose this approach for a more detailed evaluation in chapter \ref{evaluationchapter}.
+
+\begin{figure}[ht]
+	\centering
+	
+
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,361); %set diagram left start at 0, and has height of 361
+
+%Shape: Rectangle [id:dp9072311330352019] 
+\draw   (116,31) -- (274.5,31) -- (274.5,71) -- (116,71) -- cycle ;
+%Straight Lines [id:da5561284433186475] 
+\draw    (80,52) -- (112.5,52) ;
+\draw [shift={(115.5,52)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp8632952936998419] 
+\draw   (394.5,91) -- (462.75,91) -- (462.75,131) -- (394.5,131) -- cycle ;
+%Straight Lines [id:da3262929984069267] 
+\draw    (354.5,110) -- (391.75,110) ;
+\draw [shift={(394.75,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp5155154529485257] 
+\draw   (494.5,91) -- (596.25,91) -- (596.25,131) -- (494.5,131) -- cycle ;
+%Straight Lines [id:da480789145185023] 
+\draw    (464.5,110) -- (491.75,110) ;
+\draw [shift={(494.75,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp7759549907799321] 
+\draw   (64.5,91) -- (223.75,91) -- (223.75,131) -- (64.5,131) -- cycle ;
+%Shape: Rectangle [id:dp90915934231992] 
+\draw   (253.5,90) -- (353.5,90) -- (353.5,130) -- (253.5,130) -- cycle ;
+%Straight Lines [id:da36236518009121] 
+\draw    (224.5,110) -- (250.75,110) ;
+\draw [shift={(253.75,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp47194584308474097] 
+\draw   (394.5,151) -- (462.75,151) -- (462.75,191) -- (394.5,191) -- cycle ;
+%Straight Lines [id:da7394248128240779] 
+\draw    (354.5,170) -- (391.75,170) ;
+\draw [shift={(394.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp6355615142670865] 
+\draw   (494.5,151) -- (596.25,151) -- (596.25,191) -- (494.5,191) -- cycle ;
+%Straight Lines [id:da6660037885920909] 
+\draw    (464.5,170) -- (491.75,170) ;
+\draw [shift={(494.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp6309612585714086] 
+\draw   (64.5,151) -- (223.75,151) -- (223.75,191) -- (64.5,191) -- cycle ;
+%Shape: Rectangle [id:dp051355841970191385] 
+\draw   (253.5,150) -- (353.5,150) -- (353.5,190) -- (253.5,190) -- cycle ;
+%Straight Lines [id:da7452566709443371] 
+\draw    (224.5,170) -- (250.75,170) ;
+\draw [shift={(253.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp9718759974328657] 
+\draw   (394.5,211) -- (462.75,211) -- (462.75,251) -- (394.5,251) -- cycle ;
+%Straight Lines [id:da46497049621516995] 
+\draw    (354.5,230) -- (391.75,230) ;
+\draw [shift={(394.75,230)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp27629635180266776] 
+\draw   (494.5,211) -- (596.25,211) -- (596.25,251) -- (494.5,251) -- cycle ;
+%Straight Lines [id:da12358941792720257] 
+\draw    (464.5,230) -- (491.75,230) ;
+\draw [shift={(494.75,230)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp7762845305886434] 
+\draw   (64.5,211) -- (223.75,211) -- (223.75,251) -- (64.5,251) -- cycle ;
+%Shape: Rectangle [id:dp17515933038937836] 
+\draw   (253.5,210) -- (353.5,210) -- (353.5,250) -- (253.5,250) -- cycle ;
+%Straight Lines [id:da780428311627444] 
+\draw    (224.5,230) -- (250.75,230) ;
+\draw [shift={(253.75,230)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp7098517227596925] 
+\draw   (63.5,271) -- (165.25,271) -- (165.25,311) -- (63.5,311) -- cycle ;
+%Shape: Rectangle [id:dp3892296492545817] 
+\draw   (192.5,271) -- (304.5,271) -- (304.5,311) -- (192.5,311) -- cycle ;
+%Shape: Rectangle [id:dp363866994534104] 
+\draw   (352.5,271) -- (445.5,271) -- (445.5,311) -- (352.5,311) -- cycle ;
+%Straight Lines [id:da6626779544889323] 
+\draw    (305.25,290) -- (349.75,290) ;
+\draw [shift={(352.75,290)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Shape: Rectangle [id:dp9849858324365817] 
+\draw   (470.5,311) -- (599.5,311) -- (599.5,351) -- (470.5,351) -- cycle ;
+%Straight Lines [id:da5270262748932764] 
+\draw    (541.5,290.25) -- (541.5,308) ;
+\draw [shift={(541.5,311)}, rotate = 270] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da881818605350146] 
+\draw    (600.5,332) -- (638.5,332) ;
+\draw [shift={(641.5,332)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da7293164733354449] 
+\draw    (445.25,290.25) -- (541.75,290.25) ;
+
+
+%Straight Lines [id:da5501117886489131] 
+\draw    (166,293) -- (189.75,293) ;
+\draw [shift={(192.75,293)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da6864269789604116] 
+\draw    (275,51) -- (290.75,51) ;
+
+
+%Straight Lines [id:da7257951638038951] 
+\draw    (290.75,51) -- (290.75,79.25) ;
+
+
+%Straight Lines [id:da6536626072499985] 
+\draw    (290.75,79.25) -- (39.75,79.25) ;
+
+
+%Straight Lines [id:da04166641950254624] 
+\draw    (39.75,79.25) -- (39.75,110) ;
+
+
+%Straight Lines [id:da7413478738237282] 
+\draw    (39.75,110) -- (60.75,110) ;
+\draw [shift={(63.75,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da36982578537292676] 
+\draw    (597,111) -- (612.75,111) ;
+
+
+%Straight Lines [id:da4489381660483782] 
+\draw    (612.75,111) -- (612.75,139.25) ;
+
+
+%Straight Lines [id:da39401296182658396] 
+\draw    (612.75,139.25) -- (41.75,139.25) ;
+
+
+%Straight Lines [id:da9077790967852122] 
+\draw    (41.75,139.25) -- (41.75,170) ;
+
+
+%Straight Lines [id:da914427805076313] 
+\draw    (41.75,170) -- (62.75,170) ;
+\draw [shift={(65.75,170)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da6631790161696676] 
+\draw    (597,171) -- (612.75,171) ;
+
+
+%Straight Lines [id:da4382471030103863] 
+\draw    (612.75,171) -- (612.75,199.25) ;
+
+
+%Straight Lines [id:da15821968832385958] 
+\draw    (612.75,199.25) -- (41.75,199.25) ;
+
+
+%Straight Lines [id:da4622352341625886] 
+\draw    (41.75,199.25) -- (41.75,230) ;
+
+
+%Straight Lines [id:da32237911798306707] 
+\draw    (41.75,230) -- (62.75,230) ;
+\draw [shift={(65.75,230)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+%Straight Lines [id:da12216698439593077] 
+\draw    (597,231) -- (612.75,231) ;
+
+
+%Straight Lines [id:da04791272384086365] 
+\draw    (612.75,231) -- (612.75,259.25) ;
+
+
+%Straight Lines [id:da5079142530538927] 
+\draw    (612.75,259.25) -- (41.75,259.25) ;
+
+
+%Straight Lines [id:da5110011159305694] 
+\draw    (41.75,259.25) -- (41.75,290) ;
+
+
+%Straight Lines [id:da5749923679484277] 
+\draw    (41.75,290) -- (62.75,290) ;
+\draw [shift={(65.75,290)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+
+% Text Node
+\draw (41,50) node   [align=left] {punchline};
+% Text Node
+\draw (195.25,51) node   [align=left] {ELMo Embedding};
+% Text Node
+\draw (428.63,111) node   [align=left] {ReLU};
+% Text Node
+\draw (545.38,111) node   [align=left] {2x2 maxpool};
+% Text Node
+\draw (144.13,111) node   [align=left] {3x3 conv, depth 32};
+% Text Node
+\draw (303.5,110) node   [align=left] {BatchNorm};
+% Text Node
+\draw (428.63,171) node   [align=left] {ReLU};
+% Text Node
+\draw (545.38,171) node   [align=left] {2x2 maxpool};
+% Text Node
+\draw (144.13,171) node   [align=left] {3x3 conv, depth 64};
+% Text Node
+\draw (303.5,170) node   [align=left] {BatchNorm};
+% Text Node
+\draw (428.63,231) node   [align=left] {ReLU};
+% Text Node
+\draw (545.38,231) node   [align=left] {2x2 maxpool};
+% Text Node
+\draw (144.13,231) node   [align=left] {3x3 conv, depth 128};
+% Text Node
+\draw (303.5,230) node   [align=left] {BatchNorm};
+% Text Node
+\draw (114.38,291) node   [align=left] {4x4 avgpool};
+% Text Node
+\draw (248.5,291) node   [align=left] {dropout 50\%};
+% Text Node
+\draw (399,291) node   [align=left] {Reshape};
+% Text Node
+\draw (535,331) node   [align=left] {Fully Connected 7};
+
+
+\end{tikzpicture}
+
+	
+	\caption{The architecture of the ELMo based model without LSTM}
+	\label{fig:elmowithoutlstm}
+\end{figure}
+
 
 \if false
 
@@ -1860,6 +2311,15 @@ Seiten: 1
 Finally I combined the findings of the previous approaches in the final two stage model, which combines the visual and the text domain into a unified neural network architecture.
 
 \subsection{Two Stage Model}
+
+\begin{figure}[ht]
+	\centering
+	
+
+	
+	\caption{Caption}
+	\label{fig:}
+\end{figure}
 
 With the two stage models I tried to solve two issues: The issue of class imbalance of the dataset and the small dataset size. Figure \ref{fig:labeldistr} illustrates this problem. Analysis revealed that previous models learn to predict the most frequent class.
 
@@ -1932,6 +2392,7 @@ Seiten: 0.25
 \todo{Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe}
 \todo{Referenzen}
 \todo{Eventuell mehr auf die Frameworks eingehen}
+\todo{AutoML Technical Foundation erwähnen}
 
 For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow) are available in Python. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{sklearn} proved to be very useful. 
 
@@ -1990,6 +2451,15 @@ Seiten: 1
 
 \section{Debugging of models}
 
+Debugging of deep learning models is a particular difficult task, because interpreting neural networks is very difficult generally. Still it was necessary to detect whether the neural network did not train properly or if the problem itself was not tractable for the chosen methodology. It is not possible to fully detect this issue, but there are a few techniques a machine learning practitioner can apply to verify this problem.
+
+The first and easiest technique is to check the network for exploding/vanishing gradients. If either the gradients vanish very near to 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly it is also very important to check the output values of the network. If the network always returns the same prediction, then it might be an issue with the target labels. During development I had such an issue, which was caused by incorrectly loading the labels.
+
+One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model in this setting is not able to properly predict the target labels we know, that the implementation is faulty and not the task too difficult, as we already know that neural networks are capable of detecting digits in images with very high accuracy.
+
+Another problem occured during implementation where the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I saw that the train/validation/test split was not disjunct and the training data leaked into the validation set. 	
+
+\if false
 Seiten: 1.5
 
 \begin{itemize}
@@ -1998,6 +2468,7 @@ Seiten: 1.5
 \item Cartoon Bilder und Text wurde durch Bilder ersetzt die die entsprechende Klasse des ursprünglichen Cartoons enthielten => Sofort sehr gute Werte
 \item Problem war auch, dass einmal der Training/Test/Validation Split fehlerhaft war und deswegen anfangs die Werte viel zu gut waren => Sei immer skeptisch deinen Resultaten gegenüber.
 \end{itemize}
+\fi
 
 
 \section{Detailed Architecture}
@@ -2016,7 +2487,7 @@ Seiten: 2
 \end{itemize}
 
 
-\chapter{Evaluation}
+\chapter{Evaluation} \label{evaluationchapter}
 
 This chapter aims to evaluate the performance of the implemented architectures. In
 general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
