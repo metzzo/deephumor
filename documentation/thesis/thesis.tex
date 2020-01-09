@@ -429,6 +429,8 @@ where & |True Positives| & is the number of correctly classified samples of the 
 
 Accuracy is easy to understand and is commonly applied in classification tasks \cite{accuracy}. The higher the accuracy the better \cite{Powers2008EvaluationFP}. When applied on an imbalanced dataset, the accuracy metric might not sufficiently describe the performance of the model, as it is trivial to increase the accuracy by returning the most frequent class of the dataset \cite{accuracy}. Consider the following example: The task is evaluating a model which predicts whether a patient has cancer or not. The test dataset is highly imbalanced, and contains 99 samples of patients without cancer and 1 sample of a patient with cancer. If the model always predicts that a patient has no cancer, the resulting accuracy is 99\%. 
 
+\pagebreak
+
 F1 scores handles such cases better, by emphasizing false negatives and false positives more \cite{Powers2008EvaluationFP}. It is the harmonic mean of the precision and recall score \cite{Powers2008EvaluationFP}:
 
 \begin{equation}
@@ -632,7 +634,7 @@ Seiten: 1.5
 \pagebreak
 \subsection{Applying artificial neural networks}
 
-The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, the steeper the gradient, the ball also rolls faster towards local minima. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
+The naive implementation of gradient descent has problems, which can be mitigated by different measures. Usually a technique called momentum is applied \cite{Goodfellow-et-al-2016}. A real world analogy would be a ball rolling down a steep hill. Over time, the steeper the gradient, the faster the ball rolls towards the local minimum. This makes the gradient descent algorithm to be less prone for local minima and usually causes faster converging to the desired optimum \cite{Goodfellow-et-al-2016}.
 
 Another technique is called minibatching \cite{Goodfellow-et-al-2016}: Here instead of calculating the gradient of the entire dataset $\boldsymbol{X}$, a small subset of $\boldsymbol{X}$ is taken \cite{Goodfellow-et-al-2016}. This not only reduces the amount of computation needed, but also makes it such that local minima are less of a problem, as the gradient is slightly different depending on the minibatch \cite{Goodfellow-et-al-2016}.
 
@@ -658,7 +660,7 @@ The architecture of the neural network also influences how much it tends to over
 
 \subsection{Backpropagation} \label{backprop}
 
-Backpropagation is an alternative way of determining the gradient of a function \cite{Goodfellow-et-al-2016}. Backpropagation makes training big neural networks tractable for modern computers \cite{bishop}. Due to its useful properties backpropagation has been reinvented independently in several fields. \cite{Griewank2012WhoIT}. It is also known as reverse-mode differentiation \cite{colahbackprop}.
+Backpropagation is an alternative way of determining the gradient of a function \cite{Goodfellow-et-al-2016}. Backpropagation makes training big neural networks tractable for modern computers \cite{bishop}. Due to its useful properties backpropagation has been reinvented independently in several fields \cite{Griewank2012WhoIT}. It is also known as reverse-mode differentiation \cite{colahbackprop}.
 
 \begin{figure}[ht]
 	\centering
@@ -1192,7 +1194,7 @@ Seiten: 0.75
 \subsection{GloVe}
 The basis for training Global Vectors for Word Representation (GloVe) is a word to word matrix which denotes the frequency of words occurring together in the training data \cite{glovepage}. The intuition of this word embedding is that the ratios of word-word co-occurrence may encode the underlying meaning of the words \cite{pennington2014glove}. During training of the model the objective is to learn word vectors such that the dot product equals to the logarithm of the probability of co-occurrence with another word \cite{pennington2014glove}. GloVe is a bag-of-word approach, as it uses a word to word matrix without any information about sequence \cite{pennington2014glove}.
 
-Table \ref{gloveprobability} shows the calculated conditional co-occurrence probabilities for the words \textit{ice} and \textit{steam} given the words \textit{solid}, \textit{gas}, \textit{water} and \textit{fashion}. Expectedly \textit{steam} co-occurs more frequently with \textit{gas}, while \textit{ice} co-occurs more frequently with \textit{solid}. The unrelated word \textit{fashion} co-occurs rarely with both \textit{steam} and \textit{ice}. The ratio of $P(k|ice) / P(k|steam)$ entails some basic semantic meaning: If the ratio is much greater than $1$ than it correlates well with properties specific to \textit{steam}. On the other hand, if it is much less than $1$ then the word has a high correlation with \textit{gas}.
+Table \ref{gloveprobability} shows the calculated conditional co-occurrence probabilities for the words \textit{ice} and \textit{steam} given the words \textit{solid}, \textit{gas}, \textit{water} and \textit{fashion}. Expectedly \textit{steam} co-occurs more frequently with \textit{gas}, while \textit{ice} co-occurs more frequently with \textit{solid}. The unrelated word \textit{fashion} co-occurs rarely with both \textit{steam} and \textit{ice}. The ratio of $P(k|ice) / P(k|steam)$ entails some basic semantic meaning: If the ratio is much greater than $1$ than it correlates well with properties specific to \textit{steam}. On the other hand, if it is significantly below $1$ then the word has a high correlation with \textit{gas}.
 
 \begin{table}[]
 \centering
@@ -1339,7 +1341,7 @@ Seiten: 2
 
 % 20 Seiten
 
-\section{Related work} \label{relatedworkbackground}
+\section{Related Work} \label{relatedworkbackground}
 
 In this subsection I outline several works of the field of computational humor related to our work. I start discussing several traditional approaches, which do not use deep learning. Then I will continue with deep learning based works.
 
@@ -1493,7 +1495,7 @@ Their feature vector is a combination of the following:
 
 First their architecture converts the high dimensional vectors into a lower dimensional representation using an embedding layer. Then they apply a convolutional layer and perform max-pooling afterwards on each feature. Furthermore they combine these features into a single feature vector and add a final sentence encoding layer, which combines the different features. Additionally, similarly to their previous work, the authors also extract high level features (structural features, POS proportions, etc.).
 
-The LSTM in combination with high level features achieves the best performance. The F1-score of this approach is 62.9\%. This seems to be a worse result than the best F1-score of the previous work, but the key difference is, that the best result of their previous work relied on acoustic features and this LSTM approach is only text-based.
+The LSTM in combination with high level features achieves the best performance. The F1-score of this approach is 62.9\%. This seems to be a worse result than the best F1-score of 68.5\% in the previous work, but the key difference is, that the best result of their previous work relied on acoustic features and this LSTM approach is only text-based.
 
 \if false
 \cite{bertero2016long}
@@ -3095,8 +3097,13 @@ Seiten: 1.5
 \fi
 
 
-\section{Detailed Architecture}
+\section{Architecture}
 
+Originally I intended that the entire training and evaluation is controlled using a unified command line program. During implementation it became clear that this is not a feasible approach, as the interface for AllenNLP already provided a very powerful command line interface and fitting it to the custom written system would have been error prone and unnecessary.
+
+
+
+\if false
 Seiten: 2
 
 \begin{itemize}
@@ -3109,6 +3116,8 @@ Seiten: 2
 \item Conclusio: Overengineering vermeiden, da Code Wiederverwendung sehr schwer ist. Ursprünglich war geplant die Architektur für des Convolutional Teils für den TExt Teil wieder zu verwenden. Letztendlich war es einfacher stattdessen AllenNLP zu verwenden
 
 \end{itemize}
+
+\fi
 
 
 \chapter{Evaluation} \label{evaluationchapter}
