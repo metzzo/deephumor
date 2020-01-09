@@ -3045,7 +3045,7 @@ Seiten: 2
 
 \section{Labelling Tool}
 
-Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save much time.
+Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save much time. Figure \ref{fig:labellingtool} shows the interface of the application.
 
 The labelling tool was able to perform the following tasks:
 \begin{itemize}
@@ -3063,7 +3063,12 @@ Whether the tool has actually saved time is difficult to say for sure, but consi
 
 The tool was implemented using Python, the same programming language as the machine learning part uses. The interface was a mixture of command line interface and web interface. Tasks which were only done once (such as filtering duplicates or applying the automated cartoon pre-processing) were triggered using a command line interface. The more repetitive tasks, such as manual preparation of a cartoon or funniness labelling was done in a web interface. For the web interface I chose the Django framework with an SQLite database.
 
-\todo{Bild vom Annotierungstool}
+\begin{figure}
+	\centering
+  	\includegraphics[width=0.5\textwidth]{graphics/labeling_tool.png}
+	\caption{Labelling a funniness using the labelling tool.}
+	\label{fig:labellingtool}
+\end{figure}
 
 \if false
 Seiten: 1
