@@ -3016,10 +3016,6 @@ In the following sections I will describe the implementation part of this thesis
 
 \section{Technical Foundation}
 
-%\todo{Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe}
-\todo{Referenzen}
-%\todo{Eventuell mehr auf die Frameworks eingehen}
-
 For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow \cite{pytorch}\cite{tensorflow}) are available in Python \cite{python}. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework \cite{pytorch}. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python \cite{pandas}\cite{numpy}. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{scikit-learn} proved to be very useful \cite{sklearn}. I also trained automated machine learning models using hyperopt-sklearn \cite{hyperoptpaper}. Hyperopt-sklearn plays very well with scikit-learn and covers many different machine learning algorithms.
 
 
@@ -3066,7 +3062,7 @@ The tool was implemented using Python, the same programming language as the mach
 \begin{figure}
 	\centering
   	\includegraphics[width=0.5\textwidth]{graphics/labeling_tool.png}
-	\caption{Labelling a funniness using the labelling tool.}
+	\caption{Labelling the funniness of a cartoon using the labelling tool.}
 	\label{fig:labellingtool}
 \end{figure}
 
@@ -3086,7 +3082,7 @@ Seiten: 1
 
 Debugging of deep learning models is a particular difficult task, because interpreting neural networks is very difficult generally. Still it was necessary to detect whether the neural network did not train properly or if the problem itself was not tractable for the chosen methodology. It is not possible to fully detect this issue, but there are a few techniques a machine learning practitioner can apply to verify this problem.
 
-The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish very near to 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly it is also very important to check the output values of the network. If the network always returns the same prediction, then it might be an issue with the target labels. During development I had such an issue, which was caused by incorrectly loading the labels.
+The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish towards 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly it is also very important to check the output values of the network. If the network always returns the same prediction, then it might be an issue with the target labels. During development I had such an issue, which was caused by incorrectly loading the labels.
 
 One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model in this setting is not able to properly predict the target labels we know, that the implementation is faulty and not the task too difficult, as we already know that neural networks are capable of detecting digits in images with very high accuracy.
 
@@ -3105,7 +3101,7 @@ Seiten: 1.5
 
 
 \section{Architecture}
-
+%\todo{Eventuell mehr auf die Frameworks eingehen}
 \todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
 
 Originally I intended that the entire training and evaluation is controlled using a unified command line program. During implementation it became clear that this is not a feasible approach, as the interface for AllenNLP already provided a very powerful command line interface and fitting it to the custom written system would have been error prone and unnecessary.
