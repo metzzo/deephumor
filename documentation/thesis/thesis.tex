@@ -1680,6 +1680,8 @@ A word count analysis showed that there are significant difference in the freque
 
 \fi
 
+\pagebreak
+
 \section{Visual domain model design}
 
 To reduce the problem space I decided to first try the visual domain of Gary Larson's cartoons. This has the advantage that there are well defined neural network architectures which knowingly perform well on various image related tasks \cite{resnet}\cite{alexnet}.
@@ -3010,22 +3012,22 @@ Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. 
 
 \chapter{Implementation} \label{implementationchapter}
 
-In the following sections I will describe the implementation part of this thesis. Beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models.
+In the following sections I will describe the implementation part of this thesis. Beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
 
 \section{Technical Foundation}
 
-\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
-\todo{Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe}
+%\todo{Warum wurde gegen Jupyter Notebooks entschieden? Reproduzierbarkeit und weitere Gründe}
 \todo{Referenzen}
-\todo{Eventuell mehr auf die Frameworks eingehen}
-\todo{AutoML Technical Foundation erwähnen}
+%\todo{Eventuell mehr auf die Frameworks eingehen}
 
-For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow) are available in Python. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{sklearn} proved to be very useful. 
+For this thesis I applied several frameworks and libraries for deep learning, data handling and other machine learning tasks. Python is one of the most widely used programming languages for deep learning, as most major deep learning frameworks (PyTorch, Tensorflow) are available in Python. In this thesis I chose to use \textit{PyTorch}, which is a very common deep learning framework. For data handling I applied \textit{pandas} and \textit{NumPy} which both allow efficient handling of large datasets in Python. For more general machine learning tasks (e.g. oversampling and error calculation) \textit{scikit-learn} proved to be very useful. I also trained automated machine learning models using hyperopt-sklearn \cite{hyperoptpaper}. Hyperopt-sklearn plays very well with scikit-learn and covers many different machine learning algorithms.
+
 
 For the punchline-based models \textit{AllenNLP} is the best suited framework, as it was based on PyTorch and features easy to use word embeddings (such as ELMo). It also has a very flexible JSON configuration system which makes it easy to try out different hyperparameters without changing the source code.
 
 An important aspect of deep learning is reproducibility. It is generally very difficult to make sure that experiments can be reproduced, due to the non-deterministic nature of minibatching and some optimizations performed by deep learning frameworks. Fortunately PyTorch has a deterministic mode, which disables these optimizations. Minibatching can be deterministic by setting the initial random seed explicitly. Additionally all relevant development milestones are recorded in a source control system, which contains all necessary files to redo this experiment.
 
+Many machine learning practitioners use a notebook interface for machine learning. For Python Jupyter Notebook is currently widely used. Early on, I decided against using this methodology, because of issues with reproducibility and less powerful debugging functionality.
 
 \if false
 Seiten: 2
@@ -3099,9 +3101,11 @@ Seiten: 1.5
 
 \section{Architecture}
 
+\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
+
 Originally I intended that the entire training and evaluation is controlled using a unified command line program. During implementation it became clear that this is not a feasible approach, as the interface for AllenNLP already provided a very powerful command line interface and fitting it to the custom written system would have been error prone and unnecessary.
 
-
+% TODO mehr
 
 \if false
 Seiten: 2
