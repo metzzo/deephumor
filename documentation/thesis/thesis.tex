@@ -29,6 +29,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{listings}
 \usepackage{placeins}
+\usepackage{pgf-umlcd}
 
 \newcommand{\cmark}{\ding{51}}%
 
@@ -3062,7 +3063,7 @@ The tool was implemented using Python, the same programming language as the mach
 \begin{figure}
 	\centering
   	\includegraphics[width=0.5\textwidth]{graphics/labeling_tool.png}
-	\caption{Labelling the funniness of a cartoon using the labelling tool.}
+	\caption{Labelling the funniness o a cartoon using the labelling tool.}
 	\label{fig:labellingtool}
 \end{figure}
 
@@ -3102,11 +3103,87 @@ Seiten: 1.5
 
 \section{Architecture}
 %\todo{Eventuell mehr auf die Frameworks eingehen}
-\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
+%\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+  \begin{class}[text width=8cm]{BaseDataset}{0,0}
+    \attribute{filePath : Path}
+    
+    \attribute{dataFrame : DataFrame}
+    \attribute{model : BaseModel}
+	
+	\operation{BaseDataset(model: BaseModel, filePath: Path)}
+    \operation{length() : int}
+    \operation[0]{getItem(int index) : Item}
+  \end{class}
+  \begin{class}[text width=4cm]{CartoonDataset}{-5,-5}
+    \inherit{BaseDataset}
+  \end{class}
+  \begin{class}[text width=4cm]{TUBerlinDataset}{0,-5}
+    \inherit{BaseDataset}
+  \end{class}
+  \begin{class}[text width=4cm]{ObjectDataset}{5,-5}
+    \inherit{BaseDataset}
+  \end{class}
+\end{tikzpicture}
+	\caption{A UML class diagram illustrating a simplified structure of the dataset class hierarchy.}
+	\label{fig:datasetclassdiagram}
+\end{figure}
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+  \begin{class}[text width=8cm]{BaseExperiment}{0,0}
+    \attribute{network : NeuralNetwork}
+   
+    \operation[0]{getOptimizationParameters(int index) : Tensor}
+    \operation[0]{getPredictions(Tensor output) : Tensor}
+    \operation[0]{getDataset() : Class<BaseDataset>}
+    \operation[0]{getInputAndLabel(Tensor input) : Pair<Tensor, Tensor>}
+    \operation[0]{getEvaluations() : BaseEvaluation[]}
+  \end{class}
+  \begin{class}[text width=5cm]{SimpleCNNExperiment}{-5,-5}
+    \inherit{BaseDataset}
+  \end{class}
+  \begin{class}[text width=5cm]{ResNetExperiment}{5,-5}
+    \inherit{BaseDataset}
+  \end{class}
+  \begin{class}[text width=8cm]{ObjectClassifcationExperiment}{0,-7}
+    \inherit{BaseDataset}
+  \end{class}
+\end{tikzpicture}
+	\caption{A UML class diagram detailing the experiment class hiararchy.}
+	\label{fig:experimentclassdiagram}
+\end{figure}
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+  \begin{class}[text width=10cm]{BaseEvaluation}{0,0}
+    \operation[0]{reset()}
+    \operation[0]{addEntry(predictions: Tensor, trueLabels: Tensor)}
+  \end{class}
+  \begin{class}[text width=4cm]{AccuracyEvaluation}{-5,-3}
+    \inherit{BaseEvaluation}
+  \end{class}
+  \begin{class}[text width=4cm]{MAEEvaluation}{0,-3}
+    \inherit{BaseEvaluation}
+  \end{class}
+  \begin{class}[text width=4cm]{LossEvaluation}{5,-3}
+    \inherit{BaseEvaluation}
+  \end{class}
+\end{tikzpicture}
+	\caption{A UML class diagram illustrating the evaluation architecture}
+	\label{fig:evaluationclassdiagram}
+\end{figure}
 
-Originally I intended that the entire training and evaluation is controlled using a unified command line program. During implementation it became clear that this is not a feasible approach, as the interface for AllenNLP already provided a very powerful command line interface and fitting it to the custom written system would have been error prone and unnecessary.
+Figure \ref{fig:datasetclassdiagram} shows a simplified class diagram of the dataset system. The abstract \textit{getItem} method allows for a unified access to all datasets, which makes it possible to use the same training code for different kind of datasets. The \textit{model} reference allows the dataset to apply model specific transformations on the training data.
 
-% TODO mehr
+The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure of experiments. An experiment always has one network associated with it, which defines the structure of the neural network (in PyTorch this is called \textit{nn.Module}). Based on this network it defined all other required information: Which dataset to use (\textit{getDataset}, which parameters should be optimized (\textit{getOptimizationParameters}) and how to get the predictions of the network \textit{getPredictions}. Similarly the required evaluation is defined by \textit{getEvaluations}, which returns multiple evaluations. Figure \ref{fig:evaluationclassdiagram} shows such evaluation.
+
+By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different kinds of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant much more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant it was very easy to try different configurations and iterate quickly.
+
+Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already had a very similar functionality in the form of a JSON configuration, it would have been infeasible to fit AllenNLP into the structure previously defined.
+
 
 \if false
 Seiten: 2
