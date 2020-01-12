@@ -1543,7 +1543,7 @@ Seiten: 1.0
 
 \chapter{Design} \label{design}
 
-In this chapter the design process of designing of neural networks which try to understand Gary Larson's cartoons using deep learning is outlined. This process had four main phases: dataset design, visual model design, text model design and combined model design.
+In this chapter the design process of designing of neural networks which try to understand Gary Larson's cartoons using deep learning is outlined. This process had four main phases: Dataset design, visual model design, text model design and combined model design. The section dataset design describes how the dataset was created and provides a detailed look into the dataset itself. Visual model design focuses on the cartoons themselves, while text model design focuses on the punchlines. Finally, I discuss the design of a combination of both models.
 
 \section{Dataset design}
 
@@ -1556,11 +1556,11 @@ Seiten: 0.25
 \fi
 
 \subsection{Dataset acquisition}
-The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
+The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness from 1 to 7. The funniness is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
-Annotation was performed by me (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR system. Nearly every cartoon's punchline needed additional manual corrections. Furthermore, cartoons with bad quality, as well as duplicates were also removed.
+Annotation was performed by me (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons were cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR system. Nearly every cartoon's punchline needed additional manual corrections. Furthermore, cartoons with bad quality, as well as duplicates were removed.
 
-The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
+The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could potentially lead to wrong labels. This issue was mitigated by limiting the duration of the annotation sessions, where each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
 \subsection{Dataset analysis}
 
@@ -1831,17 +1831,13 @@ To reduce the problem space I decided to first try the visual domain of Gary Lar
 	\label{fig:simplecnn}
 \end{figure}
 
-The goal of this approach was to establish a performance baseline. This models goal was to find out whether a relatively simple convolutional neural network performs well on the chosen task.
+The goal of this approach was to establish a performance baseline, by training a relatively simple convolutional neural network. Figure \ref{fig:simplecnn} illustrates the best performing architecture of this approach. It consists of two main CNN blocks (with a 3x3 kernel and a depth of 100). The second CNN block also contains a batch normalization layer. The classification is performed by a single fully connected layer.
 
-An important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game \textit{Where is Waldo} on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
-
-Otherwise, if the input size is too small, then crucial information may get lost as well. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is the orientation of images (as this changes the size as well). Data analysis showed, that 90\% of the images are in landscape, while the remaining are in portrait. Therefore, predicting the images in landscape well has priority and the input orientation is in landscape. Different configurations for the input size were empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174 px$^2$.
+An important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game \textit{Where is Waldo} on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo). Otherwise, if the input size is too small, then crucial information may be unintentionally removed. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is the orientation of images. Data analysis showed, that 90\% of the images are in landscape, while the remaining are in portrait. Therefore, predicting the images in landscape well has priority and the input orientation is in landscape. Different configurations for the input size were empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174 px$^2$.
 
 Modelling the output of a neural network is equally crucial. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. For classification I used cross entropy loss \cite{crossentropyloss}. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression \cite{lossfunctions}. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
 
 Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers. Conversely, too few layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
-
-Figure \ref{fig:simplecnn} illustrates the best performing architecture of this approach. It consists of two main CNN blocks (with a 3x3 kernel and a depth of 100). The second CNN block also contains a batch normalization layer. The classification is performed by a single fully connected layer.
 
 \if false
 Seiten: 1
@@ -1895,10 +1891,10 @@ There were two suspected issues with the previous transfer learning approaches:
 
 \begin{enumerate}
 \item The domain of real world images (which ResNet18 was trained on) and cartoons may be too distinct for a naive transfer learning approach. I addressed this issue by implementing a novel data augmentation technique.
-\item The semantic level of humor may be too high for CNNs to understand. I planned to address this issue by extracting high-level feature vector based on object detection using CNNs.
+\item The semantic level of humor may be too high for CNNs to understand. I planned to address this issue by extracting a high-level feature vector based on object detection using CNNs.
 \end{enumerate}
 
-The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the canny edge detection filter multiple times \cite{opencv_library}. The cartoon image is transformed by Canny (using default parameters of OpenCV \cite{opencv_library}) into a target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny with the same parameters should bring the real world images into the same target domain.
+The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the Canny edge detection filter multiple times \cite{opencv_library}. The cartoon image is transformed by Canny (using default parameters of OpenCV \cite{opencv_library}) into the target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny, with the same parameters, should bring the real world images into the same target domain.
 
 \begin{table}[]
 \centering
@@ -1917,7 +1913,7 @@ To improve the problem of high-level semantics (2) I planned to train an object 
 
 Unfortunately, the image classification did not achieve significant results, as there were no consistent classifications. Therefore, I did not train the final object detection. If, for example, a person was consistently assigned the same class, then the feature vector could have entailed enough semantic information for cartoon theme-based predictions. The data analysis revealed that there are certain cartoon themes which have higher funniness scores compared to others. 
 
-Another approach I tried was training an object detection model based on other datasets: The TU Berlin sketch dataset and Googles Quick, draw! dataset \cite{tuberlin}\cite{quickdraw} seemed to be just similar enough for Gary Larson's drawing style for transfer learning to succeed. These approaches did not need the edge detection preprocessing, as they were already in the sketch domain. Still the domains were too distinct, as the image classification performance never reached significant performance.
+Another approach I tried was training an object detection model based on other datasets: The TU Berlin sketch dataset and Googles Quick, draw! dataset initially seemed to be just similar enough for Gary Larson's drawing style for transfer learning to succeed \cite{tuberlin}\cite{quickdraw}. These approaches did not need the edge detection preprocessing, as they were already in the sketch domain. Still, the images were too distinct, as the image classification performance never reached significant performance.
 
 \if false
 
@@ -1940,7 +1936,7 @@ Seiten: 1.5
 
 \section{Text domain model design}
 
-The following architectures concentrated on the text domain without any additional visual information. I began with an LSTM and a sentence embedding based approach. Finally I trained an AutoML based machine learning model.
+The following architectures concentrated on the text domain without any additional visual information. I began with an LSTM and a sentence embedding based approach and then continued with probing an AutoML based machine learning model.
 
 \subsection{ELMo}
 
@@ -2030,9 +2026,9 @@ The following architectures concentrated on the text domain without any addition
 
 First I tried to model the punchlines using an LSTM/GRU neural network architecture. This approach quickly overfitted. I probed several configurations with multiple LSTM or GRU cells sequentially (one or two), an additional trained embedding layer and different memory vector sizes. Figure \ref{fig:elmolstm} shows the final architecture in more detail.
 
-Recurrent neural networks require big datasets, the idea then was to train simpler models. I achieved this by generating a sentence embedding from the sequence of word embeddings. A sentence embedding is a vector representation of a word embedding in a vector space. There are many different ways to obtain such embedding. I chose the simple approach to take the mean of all word embeddings of a punchline. This resulted in a fixed sized vector representation of a punchline, which allowed the use of a regular fully connected neural network.
+Recurrent neural networks require big datasets, which could explain the bad performance of the LSTM based approach. Therefore removing the LSTM cell had the potential to improve performance. I achieved this by generating a \textit{sentence embedding}. A sentence embedding is a vector representation of a sentence in a vector space. There are many different ways to obtain such embedding. I chose the simple approach to take the mean of all noun word embeddings of a punchline. The intuition being that nouns entail most context and information in a sentence. This resulted in a fixed sized vector representation of a punchline, which allowed the use of a regular fully connected neural network.
 
-I chose ELMo as the main context-aware word embedding for this thesis. \cite{elmo} Mainly due to the state-of-the-art results it achieves while still being relatively easy to use in the chosen NLP framework.
+I chose ELMo as the main context-aware word embedding for this thesis \cite{elmo}. Mainly due to the state-of-the-art results it achieves while still being relatively easy to use in the chosen NLP framework AllenNLP. An issue of such pretrained word embeddings is their lack of domain specific words. For example, the name \textit{Thag} is not included in the vocabulary of ELMo, but seems to have an important contextual meaning, as the data analysis revealed.
 
 Figure \ref{fig:elmowithoutlstm} illustrates the architecture which uses sentence embeddings. It consists of three convolutional blocks with increasing depth and batch normalization. Followed by an average pooling and a dropout to counteract overfitting. Finally the prediction is performed by a fully connected layer. Because this approach performed better on the validation set I chose this approach for a more detailed evaluation in chapter \ref{evaluationchapter}.
 
@@ -2292,14 +2288,14 @@ The selected AutoML library has only limited support for text input feature vect
 \begin{itemize}
 
 \item TFIDF
-\item Mean of ELMo word embeddings
-\item Mean of GloVe word embeddings
+\item ELMo sentence embeddings
+\item GloVe sentence embeddings
 \item TFIDF + GloVe mean
 \item TFIDF + ELMo mean
 
 \end{itemize}
 
-The best performing approach on the validation set was the model trained which only uses the mean of ELMo word embeddings.
+The best performing approach on the validation set was the model trained which only uses the ELMo sentence embeddings.
 
 \if false
 Seiten: 1
@@ -2962,17 +2958,17 @@ I tested three different configurations of this approach:
 
 \begin{enumerate}
 
-\item Only punchlines: I trained the binary classifiers on the punchline sentence embedding (average ELMo and GloVe word embedding).
+\item Only punchlines: I trained the binary classifiers on the punchline sentence embedding (ELMo and GloVe sentence embeddings).
 \item Punchlines and cartoons: This approach uses both the punchlines and the cartoon images.
-\item Punchlines and autoencoded cartoons: Same as the previously mentioned approach but before applying the encoder of a deep convolutional autoencoder.
+\item Punchlines and autoencoded cartoons: Same as the previously mentioned approach, but before applying the encoder of a deep convolutional autoencoder.
 
 \end{enumerate}
 
-This modular two stage design has the advantage of needing less training data. This is due to the individual neural networks being quite shallow (relatively few number of layers). Therefore the gradient does not vanish and the signal propagates through the entire network \cite{vanishinggradient}. Also it allows to combine both the visual and the text domain quite easily, as only the first stage needs to be adjusted accordingly.
+This modular two stage design has the advantage of requiring less training data. This is due to the individual neural networks being quite shallow (relatively few number of layers). Therefore the gradient does not vanish and the signal propagates through the entire network easily \cite{vanishinggradient}. Also, it allows to combine both the visual and the text domain, as only the first stage needs to be adjusted accordingly.
 
-To further reduce the impact of class imbalance I applied oversampling. This means that more infrequent classes are samples more frequently, such that for the binary classifier positive classes are sampled as frequent as the negative classes. Additionally, I tried penalizing false positives in the neural network's loss function, but this did not improve the results.
+To further reduce the impact of class imbalance I applied oversampling. This means that more infrequent classes are sampled more frequently, such that for the binary classifier positive classes are as frequent as the negative classes. Additionally, I tried penalizing false positives in the neural network's loss function, but this did not improve the results.
 
-Another important aspect, due to the relatively small dataset size is reducing the number of parameters of the neural network. To achieve this I chose to reduce the size of the cartoon images. Resizing loses crucial semantic information. To solve this problem I trained a deep convolutional autoencoder separately. The expectation was that the encoder results in more semantic meaningful representations of the cartoons. Unfortunately this was not the case. For more information about autoencoders please refer to section \ref{autoencodersection}.
+To further reduce the number of parameters of the neural network, I chose to reduce the size of the cartoon images. Resizing loses crucial semantic information. To solve this problem I trained a deep convolutional autoencoder separately. The expectation was that the encoder results in more semantic meaningful representations of the cartoons. Unfortunately this was not the case, as validation revealed no significant increase in performance.
 
 
 \if false
@@ -3014,7 +3010,7 @@ Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. 
 
 \chapter{Implementation} \label{implementationchapter}
 
-In the following sections I will describe the implementation part of this thesis. Beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
+In the following sections I will describe the implementation procedure of this thesis. Beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
 
 \section{Technical Foundation}
 
@@ -3043,19 +3039,19 @@ Seiten: 2
 
 Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save much time. Figure \ref{fig:labellingtool} shows the interface of the application.
 
-The labelling tool was able to perform the following tasks:
+It was possible to perform the following tasks using the labelling tool:
 \begin{itemize}
 \item Filter out cartoons with low quality.
 \item Automated cartoon processing and punchline extraction.
-\item Manual cartoon processing allowed cropping the images and manual punchline correction, in cases where the automated system failed, which happened on almost all cartoons to some degree.
+\item Manual cartoon processing allowed cropping the images and manual punchline correction, in cases where the automated system failed (which happened with almost all cartoons to some degree).
 \item  Labelling the funniness of a cartoon.
 \item Cartoon object bounding box annotation allowed to annotate the bounding boxes and classes of objects seen in cartoons.
 \item Annotating the theme of a cartoon (this feature was not used).
-\item Based on image and punchline data duplicated cartoons were filtered out.
+\item Automated duplicate detection, based on image and punchline data
 \item Extended search and ordering allowed finding cartoons by punchline and ID.
 \end{itemize}
 
-Whether the tool has actually saved time is difficult to say for sure in hindsight, but considering how helpful the tool was during labelling, it is very likely that it saved considerable time. Assuming that using the tool annotating a single cartoon took 5 minutes on average, with initially not filtered 3634 number of cartoons, meant that annotation required roughly 302 hours of work. The time spent developing the labelling tool must also be considered. Development of the tool took around 40 hours, therefore the total time spent annotating was around 342 hours. Conversely, assuming that annotating without a special tool would double the amount of time needed on average to prepare a single cartoon, 604 hours of work were to be expected if no labelling tool was used. Additionally, the potential for errors would have been much greater, as the tasks performed were very repetitive and could have lead to more errors. Such errors could be due to selecting a wrong cell in the spreadsheet application or losing all data due to the lack of a proper database.
+Whether the tool has actually saved time is difficult to say for sure in hindsight, but considering how helpful the tool was during labelling, it is very likely that it saved a considerable amount of time. Assuming that using the tool annotating a single cartoon took 5 minutes on average, with initially not filtered 3634 number of cartoons, meant that annotation required roughly 302 hours of work. The time spent developing the labelling tool must also be considered. Development of the tool took about 40 hours, therefore the total time spent annotating was around 342 hours. Conversely, assuming that annotating without a special tool would double the amount of time needed on average to prepare a single cartoon, 604 hours of work were to be expected, if no labelling tool was used. Additionally, the potential for errors would have been much greater, as the tasks performed were very repetitive and could have lead to more human errors. Such errors could be due to selecting a wrong cell in the spreadsheet application or losing all data due to the lack of a proper database.
 
 The tool was implemented using Python, the same programming language as the machine learning part uses. The interface was a mixture of command line interface and web interface. Tasks which were only done once (such as filtering duplicates or applying the automated cartoon pre-processing) were triggered using a command line interface. The more repetitive tasks, such as manual preparation of a cartoon or funniness labelling was done in a web interface. For the web interface I chose the Django framework with an SQLite database \cite{django}\cite{sqlite}. 
 
@@ -3084,9 +3080,9 @@ Debugging of deep learning models is a particular difficult task, because interp
 
 The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish towards 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly, it is also very important to check the output values of the network. If the network always returns the same prediction, then it might be an issue with the target labels. During development I had such an issue, which was caused by incorrectly loading the labels.
 
-One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model in this setting is not able to properly predict the target labels we know, that the implementation is faulty and not the task too difficult, as we already know that neural networks are capable of detecting digits in images with very high accuracy.
+One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model is not able to properly predict the target labels, we know, that the implementation is faulty and not the task too difficult, as it is already established that neural networks are capable of detecting digits in images with very high accuracy.
 
-Another problem occured during implementation where the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I saw that the train/validation/test split was not disjunct and the training data leaked into the validation set. 	
+Another problem occured during implementation where the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I saw that the train/validation/test split was not disjunct and the training data leaked into the validation set. This is known as data leakage.
 
 \if false
 Seiten: 1.5
