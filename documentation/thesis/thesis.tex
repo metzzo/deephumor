@@ -1543,7 +1543,7 @@ Seiten: 1.0
 
 \chapter{Design} \label{design}
 
-In this chapter the design process of tackling of understanding Gary Larson's cartoons using deep learning is outlined. This process had four main phases: dataset design, visual model design, text model design and combined model design.
+In this chapter the design process of designing of neural networks which try to understand Gary Larson's cartoons using deep learning is outlined. This process had four main phases: dataset design, visual model design, text model design and combined model design.
 
 \section{Dataset design}
 
@@ -1558,7 +1558,7 @@ Seiten: 0.25
 \subsection{Dataset acquisition}
 The dataset consists of 2487 cartoons. Each sample consists of a cartoon image, punchline text and a funniness scale from 1 to 7. The funniness scale is ordinal, where 1 means not funny at all and 7 is very hilarious.
 
-Annotation was performed by one of the authors (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR, but many manual adjustments had to be applied as well. Additionally cartoons with bad quality, as well as duplicates were also removed.
+Annotation was performed by me (Robert Fischer) over the course of half a year. The annotation was split in two steps. The first step was preparing the cartoons. In this step the cartoons where cropped and rotated accordingly. The punchline was transcribed from the image into text format, using an OCR system. Nearly every cartoon's punchline needed additional manual corrections. Furthermore, cartoons with bad quality, as well as duplicates were also removed.
 
 The second step was to annotate the funniness of the cartoons. There was the problem of humor fatigue: After annotating cartoons for too long, the annotations would get unreliable and could possibly be wrongly classified. This was mitigated by limiting the duration of the annotation sessions. Each annotation session lasted 30 minutes at maximum, but shorter sessions were preferred. 
 
@@ -1566,7 +1566,7 @@ The second step was to annotate the funniness of the cartoons. There was the pro
 
 The dataset analysis revealed several interesting facts about the dataset. Figure \ref{fig:labeldistr} shows a bar plot of the label distribution. Unexpectedly the funniness is not uniformly distributed. Over 14\% of the cartoons were deemed to be not funny at all, while only 2\% of cartoons were deemed to be very hilarious.
 
-To verify that the distribution of the annotations has not changed over the course of annotation refer to figure \ref{fig:boxplottime}. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
+To verify that the distribution of the annotations has not changed significantly over the course of annotation refer to figure \ref{fig:boxplottime}. Each cartoon has an ascending identification number. Cartoons were  combined into buckets by this number. Finally, for each of this bucket a box plot is plotted. This shows no significant change of label distribution over the course of annotation.
 
 \begin{figure}
 	\centering
@@ -1575,7 +1575,11 @@ To verify that the distribution of the annotations has not changed over the cour
 	\label{fig:boxplottime}
 \end{figure}
 
-A word count analysis showed that there are significant difference in the frequency of certain words. These words seem to contain certain connections to a cartoon theme. For example one of the most frequent words for funniness class 7 is "Thag" which is a common name for cartoons set in the stone age. A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure \ref{fig:wordocc1}, \ref{fig:wordocc2}, \ref{fig:phraseocc1} and \ref{fig:phraseocc2}.
+A word count analysis showed that there are significant difference in the frequency of certain words. Figure \ref{fig:wordocc1} and \ref{fig:wordocc2} illustrate bar plots of the top 10 most occurring words per funniness class. These words seem to contain certain connections to a cartoon theme. For example, one of the most frequent words for funniness class 7 is \textit{Thag} which is a common name for cartoons set in the stone age. This could motivate a machine learning model which detects such words in a punchline or such themes in the cartoon and predict a potentially higher funniness.
+
+\if false 
+A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure \ref{fig:wordocc1}, \ref{fig:wordocc2}, \ref{fig:phraseocc1} and \ref{fig:phraseocc2}.
+\fi
 
 \begin{figure}
 \centering
@@ -1604,8 +1608,6 @@ A word count analysis showed that there are significant difference in the freque
 
 \end{figure}
 
-\if false
-
 \begin{figure}
 \centering
 
@@ -1629,6 +1631,7 @@ A word count analysis showed that there are significant difference in the freque
 
 \end{figure}
 
+\if false
 \begin{figure}
 \centering
 
@@ -1828,19 +1831,17 @@ To reduce the problem space I decided to first try the visual domain of Gary Lar
 	\label{fig:simplecnn}
 \end{figure}
 
-The goal of this approach was to establish a performance baseline. This models goal was to find out whether a relatively simple convolutional neural network performs well on the target task.
+The goal of this approach was to establish a performance baseline. This models goal was to find out whether a relatively simple convolutional neural network performs well on the chosen task.
 
-Am important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game "Where is Waldo" on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
+An important design decision a machine learning practitioner has to make is the input data format and layout. For images the number of input channels and the dimensions of the image is most relevant. Because the cartoons are grayscale the number of channels can be set to 1 without any loss of information. The input size is more difficult to define: If the input size is too large, the neural network has too much information to process and cannot find discriminative patterns. A fitting analogy would be to play the game \textit{Where is Waldo} on an image of the size of a football field. On such image, it would be for humans also very difficult to find the right pattern (in this case Waldo).
 
-Otherwise, if the input size is too small, then crucial information may get lost as well. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is, that 90\% of the images are in lanscape, while the remaining are in portrait orientation. Therefore, predicting the image in lanscape well has priority.
+Otherwise, if the input size is too small, then crucial information may get lost as well. Resizing an image can be seen as a crude form of dimensionality reduction, as the dimensionality of the data is reduced. Another important consideration is the orientation of images (as this changes the size as well). Data analysis showed, that 90\% of the images are in landscape, while the remaining are in portrait. Therefore, predicting the images in landscape well has priority and the input orientation is in landscape. Different configurations for the input size were empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174 px$^2$.
 
-Different configurations for the input size were empirically probed and validated using the validation set. This includes the average size of cartoons, average size of landscape cartoons, several downscaled image sizes. The final best input size was 141x174 px$^2$.
-
-Modelling the output of a neural network is equally crucial. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. for classification I used cross entropy loss. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
+Modelling the output of a neural network is equally crucial. I performed two experiments: One where the network was modelled in a classification setting where the final neurons returned a one hot encoding of the funniness. For classification I used cross entropy loss \cite{crossentropyloss}. Another experiment was modelled as a  regression task, where the final neuron returned the funniness directly. I tested both L1 loss (mean absolute error) and L2 loss (mean squared error) for regression \cite{lossfunctions}. The regression neural networks did not even approximate the baselines on the validation set, which is the reason why I did not pursue this approach any further.
 
 Another important hyperparameter of CNNs is the number of layers and number of neurons per layer. As the dataset is relatively small in deep learning terms, it was not possible to train too many layers. Conversely, too few layers would mean that the network does not have enough capacity to learn the necessary concepts of humor. The final network consists of two convolutional blocks and one fully connected dense layer at the end. Their depth is set to 100.
 
-Figure \ref{fig:simplecnn} illustrates the architecture of this approach. It consists of two main CNN blocks (with a 3x3 kernel and a depth of 100). The second CNN block also contains a batch normalization layer. The classification is performed by a single fully connected layer.
+Figure \ref{fig:simplecnn} illustrates the best performing architecture of this approach. It consists of two main CNN blocks (with a 3x3 kernel and a depth of 100). The second CNN block also contains a batch normalization layer. The classification is performed by a single fully connected layer.
 
 \if false
 Seiten: 1
@@ -1856,7 +1857,7 @@ Seiten: 1
 
 \subsection{Transfer Learning CNN}
 
-As described in section \ref{transferlearning} transfer learning is a common approach to deal with a small dataset in deep learning. This experiment uses a pretrained ResNet18 model cite{resnet}. ResNet consists of multiple residual blocks, which allows the network to be much deeper compared to a naive CNN and still improve performance. Earlier blocks perform simple feature extraction and later blocks perform high level feature extraction. 
+As described in section \ref{transferlearning} transfer learning is a common approach to deal with a small dataset in deep learning. This experiment uses a pretrained ResNet18 model \cite{resnet}. ResNet consists of multiple residual blocks, which allows the network to be much deeper compared to a naive CNN and still improve performance. Earlier blocks perform simple feature extraction and later blocks perform high level feature extraction \cite{resnet}. 
 
 I probed several configurations of this transfer learning approach:
 
@@ -1893,11 +1894,11 @@ Seiten: 1
 There were two suspected issues with the previous transfer learning approaches:
 
 \begin{enumerate}
-\item The source domain was too distinct from the target domain. The domain of real world images (which ResNet18 was trained on) and cartoons is too distinct for a naive transfer learning approach. I addressed this issue by implementing a novel data augmentation technique.
-\item The semantic level of humor may be too high for CNNs to understand. I planned to adress this issue by extracting high-level feature vector based on object detection using CNNs.
+\item The domain of real world images (which ResNet18 was trained on) and cartoons may be too distinct for a naive transfer learning approach. I addressed this issue by implementing a novel data augmentation technique.
+\item The semantic level of humor may be too high for CNNs to understand. I planned to address this issue by extracting high-level feature vector based on object detection using CNNs.
 \end{enumerate}
 
-The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the canny edge detection filter multiple times. The cartoon image is transformed by Canny (using default parameters) into a target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny with the same parameters should bring the real world images into the same target domain.
+The data augmentation (1) illustrated in figure \ref{fig:dataugmentation} works by applying the canny edge detection filter multiple times. The cartoon image is transformed by Canny (using default parameters of OpenCV) into a target domain. The real world image is transformed by applying Canny twice. The first application has a stroke size similar to the average size of Gary Larson strokes. The second application of Canny with the same parameters should bring the real world images into the same target domain.
 
 \begin{table}[]
 \centering
