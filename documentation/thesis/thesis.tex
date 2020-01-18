@@ -200,12 +200,12 @@ Based on the recent success of deep learning in fields such as self-driving cars
 
 Initially the idea of this thesis was, that the trained model might have been able to extract certain patterns of humor. Gary Larson's cartoons can be grouped into several themes. For example stone age, scientist or cats versus dog are common themes he uses. A competent model could distinguish these themes and might find patterns of humor among these subjects. Someone might find stone age themed cartoons funnier than cats versus dogs cartoons. 
 
-Important to note is that preference is very subjective. The model must be trained by data of the same person, because otherwise the personal preference might be lost. If trained successfully it would open a whole set of new research possibilities: The study of humor of people through the lense of deep neural networks. This is especially interesting, since it has been shown that there are key similarities between how deep neural networks work and how the human brain works. \cite{Cichy2016}
+Important to note is that preference is very subjective. The model must be trained by data of the same person, because otherwise the personal preference might be lost. If trained successfully it would open a whole set of new research possibilities: The study of humor of people through the lense of deep neural networks. This is especially interesting, since it has been shown that there are key similarities between how deep neural networks work and how the human brain works \cite{Cichy2016}.
 
 For example if such a model were possible, it could possibly allow a more formal comparison of humor between different authors or different people.
 The same model might be able to be transferred to the work of other authors. Depending on how well this transfer works, one could argue whether the humor of these authors are similar or not, given the annotator's sense of humor. Also the trained model themselves could contain interesting features. Possibly a functioning model could develop a cat-detecting neuron, which could reveal insights into human humor.
 
-Another key motivation was in the creation of the underlying dataset: This thesis uses a novel dataset, where each cartoon was paired with a funniness annotation of the same person. This allows to quantitatively evaluate the humor of a single person, as the dataset is comparatively large. The scope of the dataset is also unique, as there is no other dataset with similar cartoons available. In future the same dataset could be used for other tasks. A very hard, but very interesting task would be using a generative architecture, such as generative adversarial network (GAN) to generate a funny cartoon image from a punchline. Or vice versa: Generating a funny punchline from a cartoon image. And finally generating completely new funny cartoons with fitting punchlines.\cite{gan2}\cite{gan}
+Another key motivation was in the creation of the underlying dataset: This thesis uses a novel dataset, where each cartoon was paired with a funniness annotation of the same person. This allows to quantitatively evaluate the humor of a single person, as the dataset is comparatively large. The scope of the dataset is also unique, as there is no other dataset with similar cartoons available. In future the same dataset could be used for other tasks. A very hard, but very interesting task would be using a generative architecture, such as generative adversarial network (GAN) to generate a funny cartoon image from a punchline. Or vice versa: Generating a funny punchline from a cartoon image. And finally generating completely new funny cartoons with fitting punchlines \cite{gan2}\cite{gan}.
 
 In recent years more and more deep learning techniques have been applied in the field of computational humor. One problem of these approaches is that they do not take the subjectivity of this problem into account. Humor differs from person to person and also changes over time significantly. For example in Chiruzzo et al \cite{chiruzzo2019overview} the corpus was extracted from twitter where each tweet was classified as humorous or not humorous. The ground truth classification was annotated using crowd sourcing. The problem with such datasets is that the funniness is determined by some form of average. Some individuals might find the same text very humorous, while other individuals might find it not humorous at all. The crowd sourcing hides this fact by averaging. Therefore, these datasets and models usually do not learn the humor of a single person, but instead what most people generally find funny (or not funny). This is very important and also reveals interesting insights into humor, but this thesis' motivation is to focus more on the subjectivity of this topic.
 
@@ -3210,16 +3210,15 @@ The cartoon dataset is split into three subsets:
 \item Test Data: 249 samples % (10\%)
 \end{itemize}
 
-The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and
-Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. For more
-information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
+The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. The hyperparameters were chosen based on best practice and previous experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
 
-The hyperparameters were chosen based on best practice and previous
-experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
+
+%For more information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
+
+
 
 \section{Architectures}
-Several architectures have been implemented and are evaluated in the following sections.
-
+In the following I will describe the results of the evaluation for the architectures presented in chapter \ref{design}. For comparison I evaluate several simple baseline strategies. Then I continue with the visual-only architectures and the punchline-only architectures. Finally, I outline the two-stage model evaluation results.
 
 \subsection{Baseline}
 
@@ -3238,12 +3237,10 @@ training set.
 For the mean absolute error metric the average performed best, while for the accuracy score the most frequent class has the best score.
 
 \subsection{Simple CNN}
-The simple CNN architecture overfits very quickly. The accuracy and MAE scores are very similar to the most frequent baseline, which indicates that the model most likely learns to return the most frequent class.
+The simple CNN architecture overfits very quickly. The accuracy and MAE scores are very similar to the most frequent baseline, which indicates that the model most likely learns to predict the most frequent class.
 
 \subsection{Transfer Learning of Pretrained ResNet18}
-Noteworthy about this approach is that also enabling the data augmentation in the testing/validation phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model expects the cartoons to be augmented.
-
-The data augmented version of this experiment unexpectedly achieved the best results during testing phase.
+Noteworthy about this approach is that also enabling the data augmentation in the testing/validation phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model expects the cartoons to be augmented. The data augmented version of this experiment unexpectedly achieved the best results during testing phase.
 
 Sampling for each class a cartoon and examining the output layer of the trained neural network reveals some interesting insight about how the model works. In general the results show, that the classifier never assigns high confidence into the predictions. No classification assigns a probability higher than 40\%.
 
@@ -3338,27 +3335,17 @@ The result of the object detection approach are incomparable to the other result
 
 \subsection{ELMo Pretrained Model}
 
-Based on the pretrained ELMo model this model initially looked the most promising, as it
-achieved the highest validation accuracy. Unfortunately this was only due to overfitting,
-as during test phase the performance dropped.
+Based on the pretrained ELMo model this model initially looked the most promising, as it achieved the highest validation accuracy. Unfortunately this was only due to overfitting, as during test phase the performance dropped.
 
-Most likely a problem of this approach is that many insider jokes are lost, due to the fact
-that the pretrained vocabulary of the ELMo model does not contain many of them, so
-they can not be used by our model. For example the word "Thag" which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary and therefore ignored.
+Most likely a problem of this approach is that many insider jokes are lost, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by our model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary and therefore ignored.
 
 \subsection{AutoML Model}
-Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set
-revealed overfitting. The ELMo feature representation performed worse in both settings.
-Since the TFIDF feature representation would not have relied on a pre-trained vocabulary
-it would not have suffered by the problem of domain specific words.
-
-For this experiment the library hyperopt-sklearn \cite{hyperopt} was used, as it accomplishes state-of-the-art AutoML performance.
+Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set revealed overfitting. The ELMo feature representation performed worse in both settings. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of domain specific words. For this experiment the library hyperopt-sklearn \cite{hyperopt} was used, as it accomplishes state-of-the-art AutoML performance.
 
 \subsection{Two Stage Model}
 The Two Stage Models is not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness did not work as expected.
 
-Combining the visual and text information did improve the results, but not significantly. The MAE
-score is on par with the baseline, while still beating it at the accuracy score. This improvement is still very weak.
+Combining the visual and text information did improve the results, but not significantly. The MAE score is on par with the baseline, while still beating it at the accuracy score. This improvement is still very weak.
 understands humor.
 
 One problem identified was the fact, that the images contained much more data compared to the punchlines. To tackle this problem, the idea was to use a deep autoencoder. This reduces the feature size of the images significantly. But against our expectation it did not improve the results compared to previous attempts.
@@ -3509,7 +3496,7 @@ Two Stage Model with Cartoons                                                   
 
 \subsection{Training Duration}
 
-Figure [\ref{trainingruntime}] shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser compared to the representation of images.
+Figure \ref{trainingruntime} shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser compared to the representation of images.
 
 \begin{figure}
 \centering
@@ -3540,13 +3527,19 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 
 
 \section{Discussion}
-Seiten: 2
+%In general, no model really learns to generalize the humor of the annotated funniness. There has been no significant improvement compared to the baselines. The concept of humor seems to be intractable for the chosen architectures.
 
-Discussion der Ergebnisse der Evaluation.
+In computer science there is the concept of a \textit{semantic gap}: "A \textit{semantic gap} is the difference in meaning between constructs formed within different representation systems. A representation system can be e.g. a natural language, a formal language
+or a \textit{proper language} within an engineering domain" \cite{semanticgap}. It may be that the humor operates in a completely different representation system than I chose for this thesis. The main representation system for the punchlines were essentially statistical word and sentence embeddings (ELMo, GloVe \cite{glovepage}\cite{elmo}). And the main representation system for the cartoons were convolutional feature extractors. Both representation systems work for certain tasks of artificial intelligence very well (for example image classification) but fail for modelling humor in the context of this thesis.
+
+Before deep learning has achieved its success there was a similar issue of semantic gap for tasks like image classification \cite{dlvc}. It was not reliably possible to distinct a cat from a dog, before deep learning \cite{alexnet}. As the chosen representation for images, which were obtained by traditional computer vision techniques, were too distinct from the human representation to perform a proper classification. The semantic gap was closed once convolutional feature extractors performed a transformation which made it possible to easily separate cats from dogs. Interestingly, after further examination of these convolutional feature extractors researchers found striking similarities with the human vision system  \cite{Cichy2016}.
+
+The chosen machine learning algorithms were not able to extract useful patterns from the available data, which is supported by the fact that no model performed significantly better than the baselines. Sometimes a minor improvement was archived, but either they were just statistical outliers or a model actually learned something, it was most likely a \textit{clever hans} phenomena. Especially, natural language processing is prone to such \textit{clever hans} behaviour, where the neural network exploits statistical cues of the underlying data, instead of actually generalizing humor \cite{cleverhans}. For example, when examining the actual output distribution (figures \ref{fig:figdistr1} \ref{fig:figdistr2}) we see that the output probabilities have a striking similarity with the label distribution (figure \ref{fig:labeldistr}). This is an indication that the trained models do not extract useful features and instead learn a to mainly approximate the label distribution.
+
+
 
 \chapter {Conclusion}
-
-In general no model really learns to generalize the humor of Gary Larson. There has been no significant improvement compared to the baselines. Further research could reveal significant insights on how human humor works.
+Further research could reveal significant insights on how human humor works.  TODO
 
 Potential causes can not be attributed to exactly one issue. One reason is most certainly, that the problem space is not sufficiently grasped by the dataset. As most deep learning datasets are many order of magnitudes larger, while the task at hand is arguably easier (For example: CIFAR 10 dataset \cite{dogsvscats}) than humor classification. Current techniques of transfer learning are not sufficient to solve this issue. Most certainly once more sophisticated transfer learning techniques have been established, solving this problem could be more feasible. 
 
