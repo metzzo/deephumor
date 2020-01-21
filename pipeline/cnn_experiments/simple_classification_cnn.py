@@ -8,6 +8,7 @@ from torchvision import transforms
 from cnn_experiments.base_model import BaseCNNModel
 from datamanagement.cartoon_cnn_dataset import CartoonCNNDataset
 from evaluation.accuracy_evaluation import AccuracyEvaluation
+from evaluation.mae_evaluation import MAEEvaluation
 
 
 class SimpleClassificationCNNCartoonCNNModel(BaseCNNModel):
@@ -54,6 +55,7 @@ class SimpleClassificationCNNCartoonCNNModel(BaseCNNModel):
 
     def get_input_and_label(self, data):
         _, image, labels = data
+        labels -= 1
         return image, labels
 
     @property
@@ -62,4 +64,4 @@ class SimpleClassificationCNNCartoonCNNModel(BaseCNNModel):
 
     @property
     def validation_evaluations(self):
-        return super(SimpleClassificationCNNCartoonCNNModel, self).validation_evaluations + [AccuracyEvaluation]
+        return super(SimpleClassificationCNNCartoonCNNModel, self).validation_evaluations + [AccuracyEvaluation, MAEEvaluation]

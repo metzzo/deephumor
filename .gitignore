@@ -59,3 +59,13 @@ raw/
 !.idea/runConfigurations/
 
 documentation/thesis/build/
+
+PyTorch-EMDLoss/
+
+rnn/model_*.pth
+rnn/elmo_word_embedding.p
+rnn/full_word_embedding.p
+rnn/models.p
+rnn/word_embedding.p
+rnn/dc_img/
+

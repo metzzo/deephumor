@@ -1,6 +1,8 @@
 import argparse
 
+import numpy
 import torch
+from numpy import random
 
 from evaluation.memory_profile import print_memory
 from models.predict_cnn import setup_predict_cnn
@@ -17,23 +19,21 @@ def main():
     from processing.preprocess import setup_preprocess
     from train_cnn import setup_train_cnn
 
-    torch.manual_seed(42)
-
-    use_cuda = torch.cuda.is_available()
+    use_cuda = False #torch.cuda.is_available()
     print("Uses CUDA: {0}".format(use_cuda))
     device = torch.device("cuda:0" if use_cuda else "cpu")
     if use_cuda:
         torch.cuda.empty_cache()
 
     operations = [
-        setup_preprocess,
+        #setup_preprocess,
         setup_train_cnn,
-        setup_pickle_to_csv,
-        setup_create_debug_set,
-        setup_prepare_mnist,
-        setup_create_tuberlin,
-        setup_predict_cnn,
-        setup_train_lstm,
+        #setup_pickle_to_csv,
+        #setup_create_debug_set,
+        #setup_prepare_mnist,
+        #setup_create_tuberlin,
+        #setup_predict_cnn,
+        #setup_train_lstm,
     ]
 
     parser = argparse.ArgumentParser()

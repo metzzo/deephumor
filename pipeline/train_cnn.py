@@ -54,6 +54,11 @@ def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, 
         model=selected_model,
         trafo=selected_model.get_validation_transformation(),
     )
+    test_ds = selected_model.Dataset(
+        file_path=get_subset(dataset_path=source, subset=Subset.TEST),
+        model=selected_model,
+        trafo=selected_model.get_validation_transformation(),
+    )
 
     train_cnn_model(
         model=selected_model,
@@ -62,6 +67,7 @@ def pipeline(source, model, epochs, batch_size, learning_rate, loss, optimizer, 
         scheduler=partial(lr_scheduler.StepLR, step_size=10, gamma=0.1),
         training_dataset=training_ds,
         validation_dataset=validation_ds,
+        test_dataset=test_ds,
         batch_size=batch_size,
         device=device,
         num_epochs=epochs,

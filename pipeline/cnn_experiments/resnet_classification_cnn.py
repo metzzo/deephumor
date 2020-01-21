@@ -1,10 +1,12 @@
+from functools import partial
+
 import cv2
 
 import torch
 
 import torch.nn as nn
 import torchvision
-from imgaug.augmenters import Image, partial
+from PIL import Image
 from torchvision import transforms
 
 from cnn_experiments.base_model import BaseCNNModel
