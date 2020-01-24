@@ -4,4 +4,5 @@ redis>=2.10.6
 djangorestframework>=3.8.2
 django-filter>=2.0.0c
 gunicorn>=19.9.0
+psycopg2
 django-heroku
