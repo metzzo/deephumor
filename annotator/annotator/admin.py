@@ -7,6 +7,7 @@ from .models import Cartoon, FunninessAnnotation, ImageAnnotation, ImageAnnotati
 
 from django.utils.html import format_html
 
+from random import randint
 
 class ImageAnnotationAdmin(admin.StackedInline):
     class Media:
@@ -246,7 +247,7 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
     change_list_template = "funniness_annotation_changelist.html"
 
     def cartoon_image(self, obj):
-        return format_html('<img src="{}" />'.format(obj.cartoon.img.url))
+        return format_html('<img src="http://programming-with-design.at/deephumor/serveimg.php?password=sadf8e8e23&path={}" />'.format(obj.cartoon.img.url))
     cartoon_image.short_description = 'Cartoon'
 
 
@@ -295,9 +296,9 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = relevant_cartoon_queryset() \
-                .exclude(id__in=annotation_ids)
-            selected_cartoon = unannotated_cartoons.first()
+            unannotated_cartoons = list(relevant_cartoon_queryset() \
+                .exclude(id__in=annotation_ids))
+            selected_cartoon = unannotated_cartoons[randint(0, len(unannotated_cartoons) - 1)]
             if selected_cartoon is not None:
                 print("make funniness annotation")
                 annotation = FunninessAnnotation()
