@@ -251,7 +251,7 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
 
 
     def cartoon_image_small(self, obj):
-        return format_html('<img src="{}" style="width:100px; height:auto" />'.format(obj.cartoon.img.url))
+        return format_html('<img src="http://programming-with-design.at/deephumor/serveimg.php?password=sadf8e8e23&path={}" style="width:100px; height:auto" />'.format(obj.cartoon.img.url))
     cartoon_image_small.short_description = 'Cartoon'
 
     def funniness_buttons(selfs, obj):
