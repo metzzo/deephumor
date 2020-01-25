@@ -298,7 +298,9 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
             unannotated_cartoons = list(relevant_cartoon_queryset() \
                 .exclude(id__in=annotation_ids))
-            selected_cartoon = unannotated_cartoons[randint(0, len(unannotated_cartoons) - 1)]
+            idx = randint(0, len(unannotated_cartoons) - 1)
+            selected_cartoon = unannotated_cartoons[idx]
+            print("selected index", idx)
             if selected_cartoon is not None:
                 print("make funniness annotation")
                 annotation = FunninessAnnotation()
@@ -341,6 +343,14 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request, obj=None):
         return True
+
+    def get_queryset(self, request):
+        # For Django < 1.6, override queryset instead of get_queryset
+        qs = super(FunninessAnnotationAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        else:
+            return qs.filter(annotated_by=request.user)
 
 
 class ImageAnnotationClassAdmin(admin.ModelAdmin):
