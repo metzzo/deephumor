@@ -81,7 +81,7 @@ class Command(BaseCommand):
                         filename)
                     )
 
-            records += [fields]
+                records += [fields]
         shuffle(records)
 
         if DO_SPLIT:
