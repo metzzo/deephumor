@@ -15,7 +15,6 @@ def relevant_cartoon_queryset():
                 .exclude(is_multiple=True) \
                 .exclude(punchline='')
 
-
 class CartoonThemeClass(models.Model):
     name = models.CharField(default='', max_length=100)
 
