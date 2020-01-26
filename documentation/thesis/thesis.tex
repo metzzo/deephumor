@@ -2954,13 +2954,13 @@ Finally I combined the findings of the previous approaches in the final two stag
 	\label{fig:secondstage}
 \end{figure}
 
-With the two stage models I tried to solve two issues: The issue of class imbalance of the dataset and the small dataset size. Figure \ref{fig:labeldistr} illustrates this problem. Analysis revealed that previous models learn to predict the most frequent class.
+With the two stage models I tried to solve two issues: The issue of class imbalance in the dataset and the small dataset size. Figure \ref{fig:labeldistr} illustrates this problem. Analysis revealed that previous models (simple CNN, transfer learning CNN) learn to predict the most frequent class (figure \ref{fig:figdistr1} and \ref{fig:figdistr2}).
 
-This approach tries to mitigate this problem by applying a cascade of multiple individually trained classifiers and finally combining them in an ensemble model. I trained for each funniness class a binary classifier which detects whether a given sample belongs to its class or not. This \textit{first stage} results in seven independent classifiers. The \textit{second stage} consists of a regressor which predicts the final funniness based on the last hidden layer of each binary classifier. A similar second stage, but returning a classification (one hot encoding) was also probed, but did not perform well on any metric.
+The two-stage approach tries to mitigate these two problems by applying a cascade of multiple individually trained classifiers and finally combining them in an ensemble model. I trained a binary classifier for each funniness class  which detects whether a given sample belongs to its class or not. This \textit{first stage} results in seven independent classifiers. The \textit{second stage} consists of a regressor which predicts the final funniness based on the last hidden layer of each binary classifier. A similar second stage, but returning a classification (one hot encoding) was also probed, but did not perform well on any metric.
 
-Figure \ref{fig:firststage} shows an illustration of the first stage. It handles both the visual and text domain: For the cartoons, first the autoencoder is applied, then two convolutional blocks (5x5 and then 3x3 kernel size) with batch normalization and a depth of 8 and 16. Afterwards the input is flattened and reshaped into a vector and further processed using a simple fully connected layer. For the punchline, first two sentence embeddings are calculated (ELMo and GloVe) and combined into a single vector. And finally reduced using a fully connected layer, ReLU function and batch normalization. The resulting feature vectors of both the punchline and cartoon data are combined using again a fully connected layer, ReLU and batch normalization. Now next, since I am training seven independent classifiers for each funniness we need to make a prediction, which returns whether the given sample belongs to the class of the classifier or not. Therefore a final fully connected layer, ReLU and batch normalization returns the binary classification.
+Figure \ref{fig:firststage} shows an illustration of the first stage. It handles both the visual and text domain: For the cartoons, first the autoencoder is applied, then two convolutional blocks (5x5 and then 3x3 kernel size) with batch normalization and a depth of 8 and 16 respectively. Afterwards the input is flattened and reshaped into a vector and further processed using a simple fully connected layer. For the punchline, first two sentence embeddings are calculated (ELMo and GloVe), combined into a single vector, and finally reduced using a fully connected layer, ReLU function and batch normalization. The resulting feature vectors of both the punchline and cartoon data are combined using again a fully connected layer, ReLU and batch normalization. Eventually, since I am training an independent classifier for each level of funniness we need to make a prediction, which returns whether the given sample belongs to the class of the classifier or not. Therefore a final fully connected layer, ReLU and batch normalization returns the binary classification.
 
-For the second stage (see \ref{fig:secondstage}) we need to combine the predictions of each trained model. Additionally the network performs some additional transformations (dropout, fully connected, batch normalization and ReLU) per feature extractor. Afterwards the network combines the results into a single vector and applies again the same sequence of operations twice.
+For the second stage (see figure \ref{fig:secondstage}) we need to combine the predictions of each trained model. Additionally the network performs some additional transformations (dropout, fully connected, batch normalization and ReLU) per feature extractor. Afterwards the network combines the results into a single vector and applies the same sequence of operations two more times.
 
 I tested three different configurations of this approach:
 
@@ -2968,15 +2968,15 @@ I tested three different configurations of this approach:
 
 \item Only punchlines: I trained the binary classifiers on the punchline sentence embedding (ELMo and GloVe sentence embeddings).
 \item Punchlines and cartoons: This approach uses both the punchlines and the cartoon images.
-\item Punchlines and autoencoded cartoons: Same as the previously mentioned approach, but before applying the encoder of a deep convolutional autoencoder.
+\item Punchlines and autoencoded cartoons: Same as the previously mentioned approach, but preceded by applying the encoder of a deep convolutional autoencoder.
 
 \end{enumerate}
 
-This modular two stage design has the advantage of requiring less training data. This is due to the individual neural networks being quite shallow (relatively few number of layers). Therefore the gradient does not vanish and the signal propagates through the entire network easily \cite{vanishinggradient}. Also, it allows to combine both the visual and the text domain, as only the first stage needs to be adjusted accordingly.
+This modular two stage design has the advantage of requiring less training data. This is due to the individual neural networks being quite shallow (relatively small number of layers). Therefore the gradient does not vanish and the signal propagates through the entire network easily \cite{vanishinggradient}. Also, the approach allows to combine both the visual and the text domain, as only the first stage needs to be adjusted accordingly.
 
-To further reduce the impact of class imbalance I applied oversampling. This means that more infrequent classes are sampled more frequently, such that for the binary classifier positive classes are as frequent as the negative classes. Additionally, I tried penalizing false positives in the neural network's loss function, but this did not improve the results.
+To further reduce the impact of class imbalance I applied oversampling. This means that more infrequent classes are sampled more frequently, so that for the binary classifier positive classes are as frequent as the negative classes. Additionally, I tried penalizing false positives in the neural network's loss function, but this strategy did not improve the results.
 
-To further reduce the number of parameters of the neural network, I chose to reduce the size of the cartoon images. Resizing loses crucial semantic information. To solve this problem I trained a deep convolutional autoencoder separately. The expectation was that the encoder results in more semantic meaningful representations of the cartoons. Unfortunately this was not the case, as validation revealed no significant increase in performance.
+In order to further reduce the number of parameters of the neural network, I chose to reduce the size of the cartoon images. However, resizing loses crucial semantic information. To solve this problem I trained a deep convolutional autoencoder separately. The expectation was that the encoder results in more semantic meaningful representations of the cartoons. Unfortunately this was not the case, as validation revealed no significant increase in performance.
 
 
 \if false
@@ -3018,7 +3018,8 @@ Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. 
 
 \chapter{Implementation} \label{implementationchapter}
 
-In the following sections I will describe the implementation procedure of this thesis. Beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
+% TODO: ubs?!
+In the following sections I describe the implementation procedure of this thesis, beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
 
 \section{Technical Foundation}
 
@@ -3027,7 +3028,7 @@ For this thesis I applied several frameworks and libraries for deep learning, da
 
 For the punchline-based models \textit{AllenNLP} was the best suited framework, as it is based on PyTorch and features easy to use word embeddings (such as ELMo \cite{elmo}) \cite{allennlp}. It also has a very flexible JSON configuration system which makes it easy to try out different hyperparameters without changing the source code.
 
-An important aspect of deep learning is reproducibility. It is generally difficult to make sure that experiments can be reproduced, due to the non-deterministic nature of minibatching and some optimizations performed by deep learning frameworks. Fortunately, PyTorch has a deterministic mode, which disables these optimizations. Minibatching can be deterministic by setting the initial random seed explicitly. Additionally, all relevant development milestones are recorded in a source control system, which contains all necessary files to redo this experiment. Many machine learning practitioners use a notebook interface for machine learning. For example, Jupyter Notebook is currently widely used \cite{jupyter}. Early on, I decided against using this methodology, because of issues with reproducibility and less powerful debugging functionality.
+An important aspect of deep learning is reproducibility. It is generally difficult to make sure that experiments can be reproduced, due to the non-deterministic nature of minibatching and some optimizations performed by deep learning frameworks. Fortunately, PyTorch has a deterministic mode, which disables these optimizations. Minibatching can be deterministic by setting the initial random seed explicitly. Additionally, all relevant development milestones are recorded in a source code control system, which contains all necessary files to redo this experiment. Remark: Many machine learning practitioners use a notebook interface for machine learning. For example, Jupyter Notebook is currently widely used \cite{jupyter}. Early on, I decided against using this methodology, because of issues with reproducibility and less powerful debugging functionality.
 
 \if false
 Seiten: 2
@@ -3043,30 +3044,30 @@ Seiten: 2
 
 \fi
 
-\section{Labelling Tool}
+\section{Labelling tool}
 
-Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save much time. Figure \ref{fig:labellingtool} shows the interface of the application.
+Creating a good Gary Larson cartoon dataset with reliable funniness labels was very important to train the ML models successfully. A great challenge was the fact the the entire labelling had to be performed by a single person, as the goal was to model the humor of this person. These requirements meant that a dedicated labelling tool was the best way to ensure the quality of the dataset, and also save time. Figure \ref{fig:labellingtool} shows the interface of the application.
 
 It was possible to perform the following tasks using the labelling tool:
 \begin{itemize}
-\item Filter out cartoons with low quality.
+\item Filter out cartoons with low visual quality.
 \item Automated cartoon processing and punchline extraction.
-\item Manual cartoon processing allowed cropping the images and manual punchline correction, in cases where the automated system failed (which happened with almost all cartoons to some degree).
+\item Manual cartoon processing allowed cropping the images and manual punchline correction in cases where the automated system failed (which happened with almost all cartoons to some degree).
 \item  Labelling the funniness of a cartoon.
 \item Cartoon object bounding box annotation allowed to annotate the bounding boxes and classes of objects seen in cartoons.
 \item Annotating the theme of a cartoon (this feature was not used).
-\item Automated duplicate detection, based on image and punchline data
+\item Automated duplicate detection, based on image and punchline data.
 \item Extended search and ordering allowed finding cartoons by punchline and ID.
 \end{itemize}
 
-Whether the tool has actually saved time is difficult to say for sure in hindsight, but considering how helpful the tool was during labelling, it is very likely that it saved a considerable amount of time. Assuming that using the tool annotating a single cartoon took 5 minutes on average, with initially not filtered 3634 number of cartoons, meant that annotation required roughly 302 hours of work. The time spent developing the labelling tool must also be considered. Development of the tool took about 40 hours, therefore the total time spent annotating was around 342 hours. Conversely, assuming that annotating without a special tool would double the amount of time needed on average to prepare a single cartoon, 604 hours of work were to be expected, if no labelling tool was used. Additionally, the potential for errors would have been much greater, as the tasks performed were very repetitive and could have lead to more human errors. Such errors could be due to selecting a wrong cell in the spreadsheet application or losing all data due to the lack of a proper database.
+Whether the tool has actually saved time is difficult to say for sure in hindsight, but considering how helpful the tool was during labelling, it is very likely that it saved a considerable amount of time. Assuming that using the tool annotating a single cartoon took 5 minutes on average, with initially not filtered 3634 cartoons, meant that annotation required roughly 302 hours of work. The time spent developing the labelling tool must also be considered. Development of the tool took about 40 hours, therefore the total time spent annotating was around 342 hours. Conversely, assuming that annotating without a special tool would double the amount of time needed on average to prepare a single cartoon, 604 hours of work were to be expected, if no labelling tool was used. Additionally, the potential for errors would have been much greater, as the tasks performed were very repetitive and could have lead to more human errors. Such errors could be due to selecting a wrong cell in the spreadsheet application or losing all data due to the lack of a proper database.
 
 The tool was implemented using Python, the same programming language as the machine learning part uses. The interface was a mixture of command line interface and web interface. Tasks which were only done once (such as filtering duplicates or applying the automated cartoon pre-processing) were triggered using a command line interface. The more repetitive tasks, such as manual preparation of a cartoon or funniness labelling was done in a web interface. For the web interface I chose the Django framework with an SQLite database \cite{django}\cite{sqlite}. 
 
 \begin{figure}
 	\centering
   	\includegraphics[width=0.5\textwidth]{graphics/labeling_tool.png}
-	\caption{Labelling the funniness o a cartoon using the labelling tool.}
+	\caption{Labelling the funniness of a cartoon using the labelling tool}
 	\label{fig:labellingtool}
 \end{figure}
 
@@ -3084,13 +3085,13 @@ Seiten: 1
 
 \section{Debugging of models}
 
-Debugging of deep learning models is a particular difficult task, because interpreting neural networks is very difficult generally. It was necessary to detect whether the neural network did not train properly or if the problem itself was not tractable for the chosen methodology. It is not possible to fully detect this issue, but there are a few techniques a machine learning practitioner can apply to verify this problem.
+Debugging of deep learning models is a particularly difficult task, because interpreting neural networks is very difficult generally. It was necessary to detect whether the neural network did not train properly or if the problem itself was not tractable for the chosen methodology. It is not possible to fully detect this issue, but there are a few techniques a machine learning practitioner can apply to identify this problem.
 
-The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish towards 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly, it is also very important to check the output values of the network. If the network always returns the same prediction, then it might be an issue with the target labels. During development I had such an issue, which was caused by incorrectly loading the labels.
+The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish towards 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly, it is also very important to check the output values of the network. If the network always returns the same prediction, then there might be an issue with the target labels. During development I experienced such an issue, which was caused by incorrectly loaded labels.
 
-One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model is not able to properly predict the target labels, we know, that the implementation is faulty and not the task too difficult, as it is already established that neural networks are capable of detecting digits in images with very high accuracy.
+One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model is not able to  predict the target labels properly, we know that the implementation is faulty and not the task too difficult, as it is already established that neural networks are capable of detecting digits in images with very high accuracy.
 
-Another problem occured during implementation where the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I saw that the train/validation/test split was not disjunct and the training data leaked into the validation set. This is known as data leakage.
+Another problem that occured during implementation was when the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I recognized that the train/validation/test split was not disjunct and the training data leaked into the validation set. This problem is known as data leakage.
 
 \if false
 Seiten: 1.5
@@ -3130,7 +3131,7 @@ Seiten: 1.5
     \inherit{BaseDataset}
   \end{class}
 \end{tikzpicture}
-	\caption{A UML class diagram illustrating a simplified structure of the dataset class hierarchy.}
+	\caption{A UML class diagram illustrating a simplified structure of the dataset class hierarchy}
 	\label{fig:datasetclassdiagram}
 \end{figure}
 \begin{figure}
@@ -3155,7 +3156,7 @@ Seiten: 1.5
     \inherit{BaseDataset}
   \end{class}
 \end{tikzpicture}
-	\caption{A UML class diagram detailing the experiment class hiararchy.}
+	\caption{A UML class diagram detailing the experiment class hiararchy}
 	\label{fig:experimentclassdiagram}
 \end{figure}
 \begin{figure}
@@ -3179,13 +3180,13 @@ Seiten: 1.5
 	\label{fig:evaluationclassdiagram}
 \end{figure}
 
-Figure \ref{fig:datasetclassdiagram} shows a simplified class diagram of the dataset system. The abstract \textit{getItem} method allows for a unified access to all datasets, which makes it possible to use the same training code for different kind of datasets. The \textit{experiment} reference allows the dataset to apply experiment specific transformations on the training data. For example, some experiments required different type of data augmentation.
+Figure \ref{fig:datasetclassdiagram} shows a simplified class diagram of the dataset system. The abstract \textit{getItem} method allows for a unified access to all datasets, which makes it possible to use the same training code for different kinds of datasets. The \textit{experiment} reference allows the dataset to apply experiment-specific transformations on the training data. For example, some experiments required different types of data augmentation.
 
-The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure of experiments. An experiment always has one network associated with it, which defines the structure of the neural network (in PyTorch this is called \textit{nn.Module}). Based on this network it defined all other required information: Which dataset to use (\textit{getDataset}), which parameters should be optimized (\textit{getOptimizationParameters}) and how to get the predictions of the network (\textit{getPredictions}). Similarly the required evaluation is defined by \textit{getEvaluations}, which returns multiple evaluations. Figure \ref{fig:evaluationclassdiagram} shows the class diagram for the evaluation system.
+The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure of the experiments. An experiment always has one network associated with it, which defines the structure of the neural network (in PyTorch this is called \textit{nn.Module}). Based on this network it defines all other required information: Which dataset to use (\textit{getDataset}), which parameters should be optimized (\textit{getOptimizationParameters}) and how to get the predictions of the network (\textit{getPredictions}). Similarly the required evaluation is defined by \textit{getEvaluations}, which returns multiple evaluations. Figure \ref{fig:evaluationclassdiagram} shows the class diagram for the evaluation system.
 
-By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different kinds of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant much more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant it was very easy to try different configurations and iterate quickly.
+By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different types of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant significantly more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant that it was very easy to try different configurations and to iterate quickly.
 
-Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already had a very similar functionality in the form of a JSON configuration, it would have been infeasible to fit AllenNLP into the structure previously defined.
+Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already provides a very similar functionality in the form of a JSON configuration, it would have been unreasonable to fit AllenNLP into the structure previously defined.
 
 
 \if false
