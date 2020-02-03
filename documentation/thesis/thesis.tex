@@ -3090,8 +3090,6 @@ One very useful approach to verify the neural networks was by making the task mu
 
 Another problem that occured during implementation was when the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I recognized that the train/validation/test split was not disjunct and the training data leaked into the validation set. This problem is known as data leakage.
 
-Given  about the implementation aspect of this thesis, in combination with the design process I c
-
 \if false
 Seiten: 1.5
 
@@ -3186,7 +3184,7 @@ By decoupling the experiment from the actual training algorithm it was very easy
 
 Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already provides a very similar functionality in the form of a JSON configuration, it would have been unreasonable to fit AllenNLP into the structure previously defined.
 
-Based on the findings I gathered during the design and implementation process, I performed an evaluation of the trained models. TODO
+I conclude the chapters Design and Implementation with the following summary: After the dataset was created using the custom labelling tool, the dataset analysis revealed possible patterns a classifier could exploit to potentially achieve better performance than the baseline. Several different architectures have been designed and implemented. The architectures for the visual domain included relatively simple convolutional neural networks, to more complicated transfer learning approaches and an object detection based approach. The text domain architectures includes an LSTM based approach using ELMo word embeddings, an ELMo sentence embeddings architecture and models learned by automated machine learning. Finally, all these finding cumulated in a two stage model using a cascade of multiple classifiers. During the implementation phase I have used a Python machine learning stack using PyTorch and AllenNLP. Based on the findings I gathered during the design and implementation process, I performed an evaluation of the trained models, which is outlined in the next chapter \textit{Evaluation}.
 
 
 \if false
@@ -3208,8 +3206,7 @@ Seiten: 2
 
 \chapter{Evaluation} \label{evaluationchapter}
 
-This chapter aims to evaluate the performance of the implemented architectures. In
-general the results show that this problem is very hard. Despite the progress in the field of Deep Learning it was not possible to beat the baseline. \\
+This chapter aims to evaluate the performance of the implemented architectures. I will outline the strengths and weaknesses of each implemented architecture using confusion matrices, qualitative analysis and metrics (mean absolute error and accuracy). I will also perform a performance evaluation.
 
 The cartoon dataset is split into three subsets:
 
@@ -3219,7 +3216,7 @@ The cartoon dataset is split into three subsets:
 \item Test Data: 249 samples % (10\%)
 \end{itemize}
 
-The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H. The hyperparameters were chosen based on best practice and previous experience by the author with deep neural network training. Because there are many hyperparameters an automated search of the hyperparameter space is infeasible with the hardware available to the author.
+The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H.
 
 
 %For more information regarding the build set up and necessary environment please refer to the GitHub Repository \cite{deephumorrepo}.
@@ -3227,7 +3224,7 @@ The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and 
 
 
 \section{Architectures}
-In the following I will describe the results of the evaluation for the architectures presented in chapter \ref{design}. For comparison I evaluate several simple baseline strategies. Then I continue with the visual-only architectures and the punchline-only architectures. Finally, I outline the two-stage model evaluation results.
+In the following I will describe the results of the evaluation for the architectures presented in chapter \ref{design}. For comparison I evaluate several simple baseline strategies. Then I continue with the visual-only architectures and the punchline-only architectures. Finally, I outline the two stage model evaluation results.
 
 \subsection{Baseline}
 
@@ -3282,7 +3279,7 @@ In general it seems that the model often ignores the input data and instead lear
 \includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_4}
 \end{subfigure}
 
-\caption{For the classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned each category for the cartoon above.}
+\caption{For the funniness classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned each category for the cartoon above.}
 
 \label{fig:figdistr1}
 
@@ -3308,7 +3305,7 @@ In general it seems that the model often ignores the input data and instead lear
 \includegraphics[width=0.9\textwidth,height=0.3\textheight,keepaspectratio]{graphics/detail/Test_for_Image_7_cartoon} \\
 \includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_7}
 \end{subfigure}\quad
-\caption{Continued for the classes 5, 6 and 7.}
+\caption{Continued for the funniness classes 5, 6 and 7.}
 \label{fig:figdistr2}
 
 \end{figure}
@@ -3333,7 +3330,7 @@ One can clearly see that for both the validation and test split the model learne
 
 \subsection{Transfer Learned Object Detection}
 
-The result of the object detection approach are incomparable to the other results, as it was not implemented far enough to return any labels. It was not further developed, as the predicted objects for each object were essentially random.
+The result of the object detection approach are incomparable to the other results, as it was not implemented such that it predicted any funniness class. Due to inconsistent detections of objects there was no virtually no possibility that this approach could achieve significant results.
 
 \subsection{ELMo Pretrained Model}
 
@@ -3342,17 +3339,14 @@ Based on the pretrained ELMo model this model initially looked the most promisin
 Most likely a problem of this approach is that many insider jokes are lost, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by our model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary and therefore ignored.
 
 \subsection{AutoML Model}
-Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set revealed overfitting. The ELMo feature representation performed worse in both settings. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of domain specific words. For this experiment the library hyperopt-sklearn \cite{hyperopt} was used, as it accomplishes state-of-the-art AutoML performance.
+Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set revealed overfitting. The ELMo feature representation performed worse in both settings. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of domain specific words.
 
 \subsection{Two Stage Model}
-The Two Stage Models is not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness did not work as expected.
+The two stage models are not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness class did not work as expected.
 
-Combining the visual and text information did improve the results, but not significantly. The MAE score is on par with the baseline, while still beating it at the accuracy score. This improvement is still very weak.
-understands humor.
+Combining the visual and text information did improve the results, but not significantly. The MAE score is on par with the baseline, while still reaching a better accuracy. This improvement cannot be seen as a significant improvement.
 
-One problem identified was the fact, that the images contained much more data compared to the punchlines. To tackle this problem, the idea was to use a deep autoencoder. This reduces the feature size of the images significantly. But against our expectation it did not improve the results compared to previous attempts.
-
-When comparing the MAE of the Two stage model (figure [\ref{twostagemae}]) an interesting phenomena can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different. This means that the model does not simply return the average funniness, but does something else.
+When comparing the MAE of the two stage model (figure \ref{twostagemae}) an interesting phenomena can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different. This means that the model does not simply return the average funniness, but does something different.
 
 \begin{figure}
 \centering
@@ -3417,11 +3411,11 @@ It seems that the first stage is not effective in doing so. For funniness 3, 4, 
 
 \subsection{Autoencoder}
 
-The goal of the auto encoder using the deep convolutional architecture is to reduce the dimensionality of the images, while still maintaining the important characteristics of the original cartoons. 
+Against the expectation that the convolutional autoencoder would improve the results due to a significantly reduced input size, it did not improve the results compared to previous attempts.
 
-Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important semantic information which could be crucial for understanding humor. For example the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore. 
+Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important semantic information which could be crucial for understanding humor. Importantly, the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore in figure \ref{fig:autoencoderresults}. 
 
-These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs worse.
+These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs worse compared to the other two stage models.
 
 \begin{figure}
 	\centering
@@ -3445,7 +3439,7 @@ and test phase. Additionally the training runtime is also listed.
 
 \subsection{Validation Results}
 
-For a detailed table of validation performance of selected models, please refer to figure [\ref{fig:valperformance}]. The ELMo based model achieved on this subset the highest accuracy, while the Two Stage Model achieved the best mean Absolute Error. Both models only use the text data and discard the visual information entirely.
+For a detailed table of validation performance of selected models, please refer to figure \ref{fig:valperformance}. The ELMo based model achieved on this subset the highest accuracy, while the two stage model achieved the best mean Absolute Error. Both models only use the text data and discard the visual information entirely.
 
 \begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
@@ -3471,7 +3465,7 @@ Two Stage Model with Cartoons                                                   
 
 \subsection{Test Results}
 
-The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: The model which maximizes the accuracy measure is now using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model without cartoon data seems to generalize slightly better.
+The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: For the test set, the model which maximizes the accuracy measure is using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model without cartoon data seems to generalize slightly better.
 
 \begin{figure}
 \begin{tabular}{|l|l|l|l|l|}
