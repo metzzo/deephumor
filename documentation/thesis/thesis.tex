@@ -1588,9 +1588,6 @@ A word count analysis showed that there are significant differences in the frequ
 A similar phenomena could also be observed for word phrases. For example the phrase "thousand more year" is also primarily associated with cartoons set in the stone age. A model could learn this preferences and use it to predict the funniness of a cartoon. For detailed plots please refer to figure \ref{fig:wordocc1}, \ref{fig:wordocc2}, \ref{fig:phraseocc1} and \ref{fig:phraseocc2}.
 \fi
 
-\todo{Mache groesser fig:wordocc1 und fig:wordocc2}
-
-
 \begin{figure}
 \centering
 
@@ -3093,6 +3090,8 @@ One very useful approach to verify the neural networks was by making the task mu
 
 Another problem that occured during implementation was when the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I recognized that the train/validation/test split was not disjunct and the training data leaked into the validation set. This problem is known as data leakage.
 
+Given  about the implementation aspect of this thesis, in combination with the design process I c
+
 \if false
 Seiten: 1.5
 
@@ -3106,8 +3105,7 @@ Seiten: 1.5
 
 
 \section{Architecture}
-%\todo{Eventuell mehr auf die Frameworks eingehen}
-%\todo{Gewähltes Command Line Interface: Relevante Parameter via CLI steuerbar machen}
+
 \begin{figure}
 	\centering
 \begin{tikzpicture}
@@ -3187,6 +3185,8 @@ The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure
 By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different types of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant significantly more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant that it was very easy to try different configurations and to iterate quickly.
 
 Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already provides a very similar functionality in the form of a JSON configuration, it would have been unreasonable to fit AllenNLP into the structure previously defined.
+
+Based on the findings I gathered during the design and implementation process, I performed an evaluation of the trained models. TODO
 
 
 \if false
