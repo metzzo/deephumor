@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
 from django.db.models import Q
@@ -289,6 +290,14 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def annotate_next_funniness(self, request):
+        if request.user.username == 'rfischer':
+            eidenberger = User.objects.all().filter(username='eidenberger').first()
+            eidenberger_annotations = list(FunninessAnnotation.objects.all().filter(annotated_by=eidenberger))
+            eidenberger_annotations = list(map(lambda obj: obj.cartoon.id, eidenberger_annotations))
+        else:
+            eidenberger_annotations = None
+
+
         # check if there is some annotation without proper funniness
         all_annotations = FunninessAnnotation.objects.all().filter(annotated_by=request.user)
         annotation = all_annotations.filter(funniness=None).first()
@@ -296,8 +305,12 @@ class FunninessAnnotationAdmin(admin.ModelAdmin):
             # get cartoon which does not have annotation yet
             annotations = list(all_annotations)
             annotation_ids = list(map(lambda obj: obj.cartoon.id, annotations))
-            unannotated_cartoons = list(relevant_cartoon_queryset() \
-                .exclude(id__in=annotation_ids))
+            unannotated_cartoons = relevant_cartoon_queryset() \
+                .exclude(id__in=annotation_ids)
+            if eidenberger_annotations is not None:
+                unannotated_cartoons = unannotated_cartoons.filter(id__in=eidenberger_annotations)
+            unannotated_cartoons = list(unannotated_cartoons)
+            
             idx = randint(0, len(unannotated_cartoons) - 1)
             selected_cartoon = unannotated_cartoons[idx]
             print("selected index", idx)
