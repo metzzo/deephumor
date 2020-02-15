@@ -28,7 +28,8 @@ class Command(BaseCommand):
             'punchline',
             'funniness',
             'i_understand',
-            'id'
+            'id',
+            'cartoon_id'
         ))
 
         target = io.StringIO() if TO_PRINT else os.path.join(EXPORT_DIR, 'data.csv');
@@ -68,6 +69,7 @@ class Command(BaseCommand):
                     funniness_annotation.funniness,
                     funniness_annotation.i_understand,
                     funniness_annotation.id,
+                    cartoon.id
                 ]
                 if DO_COPY:
                     source_dir = os.path.join(
