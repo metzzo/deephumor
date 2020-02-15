@@ -147,7 +147,14 @@
 \end{kurzfassung}
 
 \begin{abstract}
-\todo{Enter your text here.}
+
+With deep learning improving the state-of-the-art for machine learning algorithms in most disciplines it now seems within the realms of possibilities to apply it in the field of computational humor. The aim of this thesis is to model humor using deep learning based on Gary Larson's cartoons. The training of deep learning models requires a dataset with many training samples. I created a novel dataset containing several thousands of Gary Larson's cartoons, punchlines and corresponding funniness annotations. The dataset was annotated using a custom labelling tool, which allowed  efficient annotation of the data.
+
+After an extensive dataset analysis, I designed and trained several deep neural architectures. First, focusing on the visual domain (cartoons) using convolutional neural networks, transfer learning and object detection techniques. Afterwards, I focused on the text domain (punchlines) using Long Short-Term Memory networks, several word embeddings (deep learning based and classical) and an automated machine learning approach. Finally, I tried to combine all the findings into a unified two stage architecture. 
+
+Unfortunately, the evaluation revealed that this task is not yet tractable by the deep learning techniques applied. I chose two performance metrics (Mean absolute error and accuracy) and several baseline models (most frequent class, mean class, etc.) and no model improved on them significantly. I performed the evaluation using a train/validation/test holdout methodology.
+
+
 \end{abstract}
 
 % Select the language of the thesis, e.g., english or naustrian.
