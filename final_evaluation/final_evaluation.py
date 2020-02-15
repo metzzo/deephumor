@@ -4,6 +4,7 @@ import sklearn
 
 import argparse
 
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.metrics import mean_absolute_error, accuracy_score
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -39,8 +40,28 @@ df = df.dropna()
 for p1, p2 in [
     ('funniness', 'funniness_rfischer'),
     ('funniness', 'funniness_eidenberger'),
-    ('funniness_rfischer', 'funniness_eidenberger')
+    ('funniness_rfischer', 'funniness_eidenberger'),
+    ('funniness_rfischer', 'dummy_classifier'),
+    ('funniness_eidenberger', 'dummy_classifier'),
+    ('funniness_rfischer', 'dummy_regressor'),
+    ('funniness_eidenberger', 'dummy_regressor')
 ]:
-    mae = mean_absolute_error(df[p1].values, df[p2].values)
-    accuracy = accuracy_score(df[p1].values, df[p2].values)
+    rounded_d2 = None
+    d1 = df[p1].values
+    if p2 == 'dummy_classifier':
+        clf = DummyClassifier(strategy='most_frequent')
+        clf.fit(df, d1)
+        d2 = clf.predict(df)
+    elif p2 == 'dummy_regressor':
+        clf = DummyRegressor(strategy='mean')
+        clf.fit(df, d1)
+        d2 = clf.predict(df)
+        rounded_d2 = (d2 + 0.5).astype(int)
+    else:
+        d2 = df[p2].values
+
+    mae = mean_absolute_error(d1, d2)
+    accuracy = accuracy_score(d1, d2 if rounded_d2 is None else rounded_d2)
+
+
     print(p1, p2, mae, accuracy)

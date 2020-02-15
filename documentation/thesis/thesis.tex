@@ -3206,7 +3206,7 @@ Seiten: 2
 
 \chapter{Evaluation} \label{evaluationchapter}
 
-This chapter aims to evaluate the performance of the implemented architectures. I will outline the strengths and weaknesses of each implemented architecture using confusion matrices, qualitative analysis and metrics (mean absolute error and accuracy). I will also perform a performance evaluation.
+This chapter aims to evaluate the performance of the implemented architectures. I will outline the strengths and weaknesses of each implemented architecture quantitatively and qualitatively using confusion matrices, qualitative analysis of selected cartoons and metrics (mean absolute error and accuracy). I will also perform a runtime  evaluation. Finally, I outline an analysis regarding the reproducibility of the funniness labels.
 
 The cartoon dataset is split into three subsets:
 
@@ -3252,7 +3252,7 @@ Sampling for each class a cartoon and examining the output layer of the trained 
 
 When examining the distribution across the different predictions over the different samples it seems that the general distribution does not change significantly. Some deviations are present, for example when comparing the probabilities for funniness 2.
 
-In general it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are very high. Compare figure \ref{fig:figdistr1} and figure \ref{fig:figdistr2} with figure \ref{fig:labeldistr}.
+In general it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are very high. For comparison, please refer to figures \ref{fig:figdistr1}, \ref{fig:figdistr2} and \ref{fig:labeldistr}.
 
 \begin{figure}
 \centering
@@ -3325,21 +3325,21 @@ In general it seems that the model often ignores the input data and instead lear
 	\label{fig:confusionmatrixtransferlearningval}
 \end{figure}
 
-One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted at all by the classifier. This motivated the design of the two stage model, where specific models are trained for each funniness class.
+One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted once by the classifier.
 
 
 \subsection{Transfer Learned Object Detection}
 
-The result of the object detection approach are incomparable to the other results, as it was not implemented such that it predicted any funniness class. Due to inconsistent detections of objects there was no virtually no possibility that this approach could achieve significant results.
+The result of the object detection approach are incomparable to the other results, as it was not implemented such that it predicted any funniness. Due to inconsistent detections of objects it seemed infeasible to continue with this approach.
 
 \subsection{ELMo Pretrained Model}
 
-Based on the pretrained ELMo model this model initially looked the most promising, as it achieved the highest validation accuracy. Unfortunately this was only due to overfitting, as during test phase the performance dropped.
+Based on the pretrained ELMo model this approach initially seemed the most promising, as it achieved the highest validation accuracy. Unfortunately this was only due to overfitting, as the performance on the test set dropped below the baseline results.
 
-Most likely a problem of this approach is that many insider jokes are lost, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by our model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary and therefore ignored.
+Most likely a problem of this approach is that many insider jokes are lost in the word embeddings, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by this model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary. ELMo's architecture considers the fact that not all words are in the vocabulary, but it seems that this is not sufficient enough for the Gary Larson dataset. 
 
 \subsection{AutoML Model}
-Initially, when testing on the validation set, the TFIDF configuration looked very promising, as it achieved top results with a very simple feature representation. The test set revealed overfitting. The ELMo feature representation performed worse in both settings. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of domain specific words.
+Initially, when performing the evaluation on the validation set, the TFIDF configuration looked very promising as well. Interestingly, it achieved top results with a very simple feature representation. Unfortunately, the test set evaluation revealed overfitting: The ELMo feature representation performed worse on the validation and on the test set. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of missing domain specific words.
 
 \subsection{Two Stage Model}
 The two stage models are not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness class did not work as expected.
@@ -3411,9 +3411,9 @@ It seems that the first stage is not effective in doing so. For funniness 3, 4, 
 
 \subsection{Autoencoder}
 
-Against the expectation that the convolutional autoencoder would improve the results due to a significantly reduced input size, it did not improve the results compared to previous attempts.
+Against the expectation that the convolutional autoencoder would improve the results due to a significantly reduced input size, it did worsen the performance both on the validation and on the test set.
 
-Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder looses important semantic information which could be crucial for understanding humor. Importantly, the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore in figure \ref{fig:autoencoderresults}. 
+Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder loses important semantic information which could be crucial for understanding humor. Importantly, the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore in figure \ref{fig:autoencoderresults}. 
 
 These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs worse compared to the other two stage models.
 
@@ -3434,7 +3434,7 @@ These details seem to be very important for the funniness classification task an
 \section{Results}
 
 The following sections show the achieved performance for each experiment of the validation
-and test phase. Additionally the training runtime is also listed.
+and test phase. Additionally the training runtime on the development machine is also outlined. 
 
 
 \subsection{Validation Results}
@@ -3518,6 +3518,37 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 \end{tabular}
 \caption{Training runtime of each experiment}
 \label{trainingruntime}
+\end{figure}
+
+\section{Label Reproducibility}
+
+An important question regarding the dataset is the question whether it is even possible for a human to reproduce the labels, as well as whether humor is actually subjective. Do different people find the same cartoons equally funny? To answer these questions, I randomly sampled a subset of the dataset (200 cartoons). This subset has been annotated using the same rules as the original annotation (rank each cartoon from 1 to 7). Then I applied the same performance metrics to the different annotation sets and evaluate them accordingly.
+
+The \textit{Future} annotation set is by the same annotator (Robert Fischer) as the \textit{Original} annotation. With the only difference that this annotation was performed approximately one year later. This meant that the original annotations most likely have already been forgotten and the annotator annotates as independently as realistically possible from the previous annotations. This dataset shows if it is even possible for the same person to reproduce his or her annotations. The \textit{Other} annotation set was created by the supervisor of this thesis (Dr. Horst Eidenberger). If the performance metrics are significantly improved compared to the baseline, one could argue that the humor is similar between those annotators. \textit{Most Frequent} is the comparison with the most frequent label of the annotation set it is compared to. \textit{Mean} is similarly the mean of all annotated labels, for the accuracy score the mean is rounded half away from zero.
+
+There is the problem of bias, as both annotators have some interest in the success of this thesis. This was mitigated as much as possible, by being aware of it. Other solutions would also have significant problems. For example, the alternative of a paid annotator would have made it impossible to actually validate the results. Distinguishing randomly selected annotations from true funniness annotations seems to be impossible. Additionally it would have been quite an expensive endeavour, as these annotations were labour intensive.
+
+Figure \ref{labelreproduc} shows the metrics gained from the annotation sets. The annotation sets \textit{Original} and \textit{Future} are the only annotations significantly better than the baselines of the original test set (both the MAE and accuracy). Contrary, the annotations of the \textit{Other} annotation set are not similar to the \textit{Original} set. This may lead to the conclusion, that humor is indeed subjective, as well as it is to a certain degree reproducible. Comparing the baselines for each annotation set reveals different distributions. The most frequent and mean baseline have relatively high accuracy and MAE, compared to the annotations of \textit{Original} and \textit{Future}.
+
+
+\begin{figure}
+\centering
+\begin{tabular}{|l|l|l|l|} 
+\hline
+\textbf{Annotation Set 1} & \textbf{Annotation Set 2} & \textbf{MAE} & \textbf{Accuracy}  \\ 
+\hline
+Original & Future & 1.08 & 35.86\% \\
+Original & Other & 1.67 & 18.70\% \\
+Future & Other & 1.53 & 21.21 \% \\
+Future & Most Frequent & 1.79 & 31.81\% \\
+Future & Mean & 1.47 & 12.12\%\\
+Other & Most Frequent & 0.61 & 57.57\%
+ \\
+Other & Mean & 0.76 &  57.57\%\\
+\hline
+\end{tabular}
+\caption{This table shows the performance measures compared to different annotation sets.. Original is the original annotation, future is the annotation from the same author a year later, Other is the annotation from a different person.}
+\label{labelreproduc}
 \end{figure}
 
 \pagebreak
