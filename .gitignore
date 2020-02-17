@@ -69,3 +69,9 @@ rnn/models.p
 rnn/word_embedding.p
 rnn/dc_img/
 
+annotator/.idea/vcs.xml
+annotator/.idea/annotator.iml
+annotator/.idea/workspace.xml
+annotator/.idea/misc.xml
+annotator/.idea/dataSources.xml
+annotator/.idea/modules.xml
