@@ -3020,8 +3020,7 @@ Hier muessen eventuell Sachen rausgenommen werden die doch erwaehnt wurden bzw. 
 
 \chapter{Implementation} \label{implementationchapter}
 
-% TODO: ubs?!
-In the following sections I describe the implementation procedure of this thesis, beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
+In the following subsections I describe the implementation procedure of this thesis, beginning with the technical foundation, which outlines the libraries and frameworks in use, then continuing with the special labelling tool implemented for annotating the dataset and then continuing with the debugging of deep learning models. This chapter finishes with important aspects of the architecture.
 
 \section{Technical Foundation}
 
@@ -3068,7 +3067,7 @@ The tool was implemented using Python, the same programming language as the mach
 
 \begin{figure}
 	\centering
-  	\includegraphics[width=0.5\textwidth]{graphics/labeling_tool.png}
+  	\includegraphics[width=0.75\textwidth]{graphics/labeling_tool.png}
 	\caption{Labelling the funniness of a cartoon using the labelling tool}
 	\label{fig:labellingtool}
 \end{figure}
@@ -3091,6 +3090,7 @@ Debugging of deep learning models is a particularly difficult task, because inte
 
 The first and easiest technique is to check the network for exploding/vanishing gradients \cite{vanishinggradient}. If either the gradients vanish towards 0 or explode towards infinity, then it is clear, that something is wrong with the network architecture. For example, the network may be too deep and the signal vanishes. Similarly, it is also very important to check the output values of the network. If the network always returns the same prediction, then there might be an issue with the target labels. During development I experienced such an issue, which was caused by incorrectly loaded labels.
 
+\pagebreak
 One very useful approach to verify the neural networks was by making the task much simpler. For this debugging technique I replaced the cartoons with images containing the target label. For example, a cartoon with funniness 1 was replaced by an image of the number 1. If the trained model is not able to  predict the target labels properly, we know that the implementation is faulty and not the task too difficult, as it is already established that neural networks are capable of detecting digits in images with very high accuracy.
 
 Another problem that occured during implementation was when the performance was way too good. The accuracy reached over 80\% after just a few epochs, which was very suspicious. After intense debugging I recognized that the train/validation/test split was not disjunct and the training data leaked into the validation set. This problem is known as data leakage.
@@ -3106,8 +3106,18 @@ Seiten: 1.5
 \end{itemize}
 \fi
 
-
 \section{Architecture}
+
+Figure \ref{fig:datasetclassdiagram} shows a simplified class diagram of the dataset system. The abstract \textit{getItem} method allows for a unified access to all datasets, which makes it possible to use the same training code for different kinds of datasets. The \textit{experiment} reference allows the dataset to apply experiment-specific transformations on the training data. For example, some experiments required different types of data augmentation.
+
+The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure of the experiments. An experiment always has one network associated with it, which defines the structure of the neural network (in PyTorch this is called \textit{nn.Module}). Based on this network it defines all other required information: Which dataset to use (\textit{getDataset}), which parameters should be optimized (\textit{getOptimizationParameters}) and how to get the predictions of the network (\textit{getPredictions}). Similarly the required evaluation is defined by \textit{getEvaluations}, which returns multiple evaluations. Figure \ref{fig:evaluationclassdiagram} shows the class diagram for the evaluation system.
+
+By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different types of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant significantly more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant that it was very easy to try different configurations and to iterate quickly.
+
+Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already provides a very similar functionality in the form of a JSON configuration, it would have been unreasonable to fit AllenNLP into the structure previously defined.
+
+I conclude the chapters Design and Implementation with the following summary: After the dataset was created using the custom labelling tool, the dataset analysis revealed possible patterns a classifier could exploit to potentially achieve better performance than the baseline. Several different architectures have been designed and implemented. The architectures for the visual domain included relatively simple convolutional neural networks, to more complicated transfer learning approaches and an object detection based approach. The text domain architectures includes an LSTM based approach using ELMo word embeddings, an ELMo sentence embeddings architecture and models learned by automated machine learning. Finally, all these finding cumulated in a two stage model using a cascade of multiple classifiers. During the implementation phase I have used a Python machine learning stack using PyTorch and AllenNLP. Based on the findings I gathered during the design and implementation process, I performed an evaluation of the trained models, which is outlined in the next chapter \textit{Evaluation}.
+
 
 \begin{figure}
 	\centering
@@ -3180,17 +3190,6 @@ Seiten: 1.5
 	\caption{A UML class diagram illustrating the evaluation architecture}
 	\label{fig:evaluationclassdiagram}
 \end{figure}
-
-Figure \ref{fig:datasetclassdiagram} shows a simplified class diagram of the dataset system. The abstract \textit{getItem} method allows for a unified access to all datasets, which makes it possible to use the same training code for different kinds of datasets. The \textit{experiment} reference allows the dataset to apply experiment-specific transformations on the training data. For example, some experiments required different types of data augmentation.
-
-The class diagram of figure \ref{fig:experimentclassdiagram} shows the structure of the experiments. An experiment always has one network associated with it, which defines the structure of the neural network (in PyTorch this is called \textit{nn.Module}). Based on this network it defines all other required information: Which dataset to use (\textit{getDataset}), which parameters should be optimized (\textit{getOptimizationParameters}) and how to get the predictions of the network (\textit{getPredictions}). Similarly the required evaluation is defined by \textit{getEvaluations}, which returns multiple evaluations. Figure \ref{fig:evaluationclassdiagram} shows the class diagram for the evaluation system.
-
-By decoupling the experiment from the actual training algorithm it was very easy to reuse it for different types of experiments. The alternative would have been writing a similar gradient descent and evaluation logic for each experiment, which would have meant significantly more duplicated code. Running an experiment was done in a command line interface, where the parameter \texttt{--model} defined the experiment, \texttt{--train\_cnn} trained a CNN-like architecture and the hyperparameters were also defined by such command line parameters. For example, by setting the parameter \texttt{--learning\_rate} the learning rate during training is defined. This meant that it was very easy to try different configurations and to iterate quickly.
-
-Originally I intended to use the same logic for the NLP part as well, but as the AllenNLP already provides a very similar functionality in the form of a JSON configuration, it would have been unreasonable to fit AllenNLP into the structure previously defined.
-
-I conclude the chapters Design and Implementation with the following summary: After the dataset was created using the custom labelling tool, the dataset analysis revealed possible patterns a classifier could exploit to potentially achieve better performance than the baseline. Several different architectures have been designed and implemented. The architectures for the visual domain included relatively simple convolutional neural networks, to more complicated transfer learning approaches and an object detection based approach. The text domain architectures includes an LSTM based approach using ELMo word embeddings, an ELMo sentence embeddings architecture and models learned by automated machine learning. Finally, all these finding cumulated in a two stage model using a cascade of multiple classifiers. During the implementation phase I have used a Python machine learning stack using PyTorch and AllenNLP. Based on the findings I gathered during the design and implementation process, I performed an evaluation of the trained models, which is outlined in the next chapter \textit{Evaluation}.
-
 
 \if false
 Seiten: 2
