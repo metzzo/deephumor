@@ -28,10 +28,17 @@
 \usepackage{listings}
 \usepackage{placeins}
 \usepackage{pgf-umlcd}
+\usepackage{makecell}
 
 \newcommand{\cmark}{\ding{51}}%
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
 
 \newenvironment{dedication}
   {%\clearpage           % we want a new page          %% I commented this
@@ -3490,24 +3497,24 @@ Figure \ref{trainingruntime} shows the training durations of each experiment. A 
 
 \begin{table}
 \centering
-\begin{tabular}{|l|l|} 
+\begin{tabular}{|l|l|l|l|l|l|} 
 \hline
-\textbf{Experiment}                                    & \textbf{Train Duration}  \\ 
+\textbf{Experiment} & \makecell[tl]{\textbf{Train} \\ \textbf{Duration}} & \makecell[tl]{\textbf{Validation} \\ \textbf{MAE}} & \makecell[tl]{\textbf{Validation} \\ \textbf{Accuracy}}  & \makecell[tl]{\textbf{Test} \\ \textbf{MAE}} & \makecell[tl]{\textbf{Test} \\ \textbf{Accuracy}}  \\ 
 \hline
-Baseline Most Frequent                        & \textless{}1s   \\
-Baseline Average                              & \textless{}1s   \\
-Baseline Random                               & \textless{}1s   \\
-Baseline Stratified                           & \textless{}1s   \\
-Simple CNN                                    & 7m 50s          \\
-Tranfer Learning CNN                          & 15m 45s         \\
-Tranfer Learning CNN (with data augmentation) & 9m 52s          \\
-ELMo                                          & 4m 39s          \\
-AutoML Model with ELMo Vectors                & 29m 7s          \\
-AutoML Model with TFIDF Vectors               & 24m 20s         \\
-Two Stage Model                               & 8m 42s          \\
-Two Stage Model with Cartoons                 & 39m 42s         \\
-Autoencoder                                   & 32m 34s         \\
-Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
+Baseline Most Frequent                        & \textless{}1s & 2.14 & 25.20\% & 2.26 & 24.50\%  \\
+Baseline Average                              & \textless{}1s & 1.53 & 13.94\% & \textbf{1.57} & 11.65\%  \\
+Baseline Random                               & \textless{}1s & 2.33 & 13.81\% & 2.17 & 13.65\%  \\
+Baseline Stratified                           & \textless{}1s & 2.03 & 16.62\% & 2.22 & 14.46\%  \\
+Simple CNN                                    & 7m 50s 	      & 2.14 & 25.20\% & 2.26 & 24.50\%  \\
+Tranfer Learning CNN                          & 15m 45s       & 1.88 & 25.53\% & 1.96 & 24.90\%  \\
+\makecell[tl]{Tranfer Learning CNN \\ (with data augmentation)} & 9m 52s        & 1.96 & 23.86\% & 2.01 & \textbf{26.10\%}  \\
+ELMo                                          & 4m 39s        & 1.81 & \textbf{26.81\%} & 1.84 & 25.70\%  \\
+\makecell[tl]{AutoML Model \\ with ELMo Vectors}                & 29m 7s        & 2    & 25.87\% & 2.12 & 24.50\%  \\
+\makecell[tl]{AutoML Model \\ with TFIDF Vectors}               & 24m 20s       & 2.05 & 26.76\% & 2.23 & 24.90\%  \\
+Two Stage Model                               & 8m 42s        & \textbf{1.52} & 18.10\% & 1.6  & 18.80\%  \\
+\makecell[tl]{Two Stage Model \\ with Cartoons}                 & 39m 42s       & 1.55 & 15.68\% & 1.57 & 16.06\%  \\
+\makecell[tl]{Two Stage Model \\ with Autoencoded Cartoons}     & 15m 23s       & 1.62 & 15.82\% & 1.58 & 14.46\%  \\
+Autoencoder                                   & 32m 34s       &      &         &      &          \\
 \hline
 \end{tabular}
 \caption{Training runtime of each experiment}
