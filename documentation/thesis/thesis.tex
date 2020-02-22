@@ -3210,14 +3210,14 @@ Seiten: 2
 
 \chapter{Evaluation} \label{evaluationchapter}
 
-This chapter aims to evaluate the performance of the implemented architectures. I will outline the strengths and weaknesses of each implemented architecture quantitatively and qualitatively using confusion matrices, qualitative analysis of selected cartoons and metrics (mean absolute error and accuracy). I will also perform a runtime  evaluation. Finally, I outline an analysis regarding the reproducibility of the funniness labels.
+This chapter evaluates the performance of the implemented architectures. I will outline the strengths and weaknesses of each implemented architecture quantitatively and qualitatively using confusion matrices, qualitative analysis of selected cartoons and metrics (mean absolute error and accuracy). I will also perform a runtime  evaluation. Finally, I outline an analysis regarding the reproducibility of the funniness labels.
 
 The cartoon dataset is split into three subsets:
 
 \begin{itemize}
-\item Training Set: 1492 samples % (70\%)
-\item Validation Data: 746 samples % (20\%)
-\item Test Data: 249 samples % (10\%)
+\item Training Set: 1492 samples (60\%)
+\item Validation Data: 746 samples (30\%)
+\item Test Data: 249 samples (10\%)
 \end{itemize}
 
 The experiments were run on a PC running Ubuntu 18.04 LTS using PyTorch 1.0 and Python 3.6. The hardware is a GTX 1070 Max-Q with an Intel Core i7-8750H.
@@ -3238,7 +3238,7 @@ Four baseline strategies have been selected:
 \begin{itemize}
 
 \item Most Frequent Baseline: Picks the most frequent label in the dataset.
-\item Average Baseline: Returns the average funniness of the dataset. For the accuracy metric the average is rounded using round to nearest integer.
+\item Average Baseline: Returns the average funniness of the dataset. For the accuracy metric the average is rounded to the nearest integer.
 \item Random Baseline: Returns a random funniness picked uniformly from one to seven.
 \item Stratified Baseline: Returns a funniness sampled from the distribution of the
 training set.
@@ -3251,11 +3251,11 @@ For the mean absolute error metric the average performed best, while for the acc
 The simple CNN architecture overfits very quickly. The accuracy and MAE scores are very similar to the most frequent baseline, which indicates that the model most likely learns to predict the most frequent class.
 
 \subsection{Transfer Learning of Pretrained ResNet18}
-Noteworthy about this approach is that also enabling the data augmentation in the testing/validation phase makes this approach better than the baseline. The exact reason is not obvious, but indicates that the model expects the cartoons to be augmented. The data augmented version of this experiment unexpectedly achieved the best results during testing phase.
+Noteworthy about this approach is that enabling the data augmentation in the testing/validation phase makes it better than the baseline. The exact reason is not obvious, but indicates that the model expects the cartoons to be augmented. The data augmented version of this experiment unexpectedly achieved the best results during testing phase.
 
-Sampling for each class a cartoon and examining the output layer of the trained neural network reveals some interesting insight about how the model works. In general the results show, that the classifier never assigns high confidence into the predictions. No classification assigns a probability higher than 40\%.
+Sampling for each class one cartoon and examining the output layer of the trained neural network reveals some interesting insight about how the model works. In general the results show that the classifier never assigns high confidence into the predictions. No classification assigns a probability higher than 40\%.
 
-When examining the distribution across the different predictions over the different samples it seems that the general distribution does not change significantly. Some deviations are present, for example when comparing the probabilities for funniness 2. Additionally, it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are high. For comparison, please refer to figures \ref{fig:figdistr1}, \ref{fig:figdistr2} and \ref{fig:labeldistr}.
+When examining the distribution across the different predictions over the different samples it seems that the general distribution does not change significantly. Some deviations are present, for example when comparing the probabilities for funniness level 2. Additionally, it seems that the model often ignores the input data and instead learns the label distribution. The similarities between the predictions and the histogram of funniness occurrences are high. For comparison, please refer to figures \ref{fig:figdistr1}, \ref{fig:figdistr2} and \ref{fig:labeldistr}.
 
 \begin{figure}
 \centering
@@ -3282,7 +3282,7 @@ When examining the distribution across the different predictions over the differ
 \includegraphics[width=1.0\textwidth]{graphics/detail/Test_for_Image_4}
 \end{subfigure}
 
-\caption{For the funniness classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned each category for the cartoon above.}
+\caption{For the funniness classes 1, 2, 3 and 4: The bar plots represent the probability the classifier assigned to each category for the cartoons above.}
 
 \label{fig:figdistr1}
 
@@ -3312,23 +3312,23 @@ When examining the distribution across the different predictions over the differ
 \label{fig:figdistr2}
 
 \end{figure}
-
-\subsubsection{Confusion Matrix}
+\pagebreak
+\subsubsection{Confusion Matrices}
 \begin{figure}
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_test.png}
-	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the test split}
+	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the test split.}
 	\label{fig:confusionmatrixtransferlearningtest}
 \end{figure}
 
 \begin{figure}
 	\centering
   	\includegraphics[width=1.0\textwidth]{graphics/transfer_confusion_val.png}
-	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the validation split}
+	\caption{Confusion Matrix of the transfer learning CNN (with data augmentation) on the validation split.}
 	\label{fig:confusionmatrixtransferlearningval}
 \end{figure}
 
-One can clearly see that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted once by the classifier.
+One can clearly see at figure \ref{fig:confusionmatrixtransferlearningtest} and figure \ref{fig:confusionmatrixtransferlearningval	} that for both the validation and test split the model learned to approximate the label distribution, instead of learning to generalize the underlying structure. The three most frequent funniness classes (1, 4 and 2) are the only ones the model predicts and are therefore by chance correct. Other classes are not predicted once by the classifier.
 
 
 \subsection{Transfer Learned Object Detection}
@@ -3339,18 +3339,18 @@ The result of the object detection approach are incomparable to the other result
 
 Based on the pretrained ELMo model this approach initially seemed the most promising, as it achieved the highest validation accuracy. Unfortunately this was only due to overfitting, as the performance on the test set dropped below the baseline results.
 
-Most likely a problem of this approach is that many insider jokes are lost in the word embeddings, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by this model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary. ELMo's architecture considers the fact that not all words are in the vocabulary, but it seems that this is not sufficient enough for the Gary Larson dataset. 
+Most likely a problem of this approach is that many insider jokes are lost in the word embeddings, due to the fact that the pretrained vocabulary of the ELMo model does not contain many of them, so they can not be used by this model. For example, the word \textit{Thag} which is one of the most frequent terms for cartoons with funniness 7 is not in the ELMo vocabulary. ELMo's architecture considers the fact that not all words are in the vocabulary, but it seems that this is not sufficient for modelling and understanding the Gary Larson dataset. 
 
 \subsection{AutoML Model}
-Initially, when performing the evaluation on the validation set, the TFIDF configuration looked very promising as well. Interestingly, it achieved top results with a very simple feature representation. Unfortunately, the test set evaluation revealed overfitting: The ELMo feature representation performed worse on the validation and on the test set. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered by the problem of missing domain specific words.
+Initially, when performing the evaluation on the validation set, the TFIDF configuration looked very promising as well. Interestingly, it achieved top results with a very simple feature representation. Unfortunately, the test set evaluation revealed overfitting: The ELMo feature representation performed worse on the validation set and on the test set. Since the TFIDF feature representation would not have relied on a pre-trained vocabulary it would not have suffered from the problem of missing domain-specific words.
 
 \subsection{Two Stage Model}
 The two stage models are not better than the average baseline. The idea of trying to avoid overfitting by using multiple classifiers for each funniness class did not work as expected. Combining the visual and text information did improve the results, but not significantly. The MAE score is on par with the baseline, while still reaching a better accuracy. This improvement cannot be seen as a significant improvement.
 
 \pagebreak
-When comparing the MAE of the two stage model (figure \ref{twostagemae}) an interesting phenomena can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different. This means that the model does not simply return the average funniness, but does something different. As neural networks are a black-box model, it is very difficult to assert the exact reasons for why this happens.
+When comparing the MAE of the two stage model to the baseline (table \ref{twostagemae}) an interesting phenomenon can be observed: Even though the performance is very similar to the average baseline, the actual MAEs per class are different. This means that the model does not simply return the average funniness, but does something different. As neural networks are black-box models, it is very difficult to assert the exact reasons for why this happens.
 
-\begin{figure}
+\begin{table}
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|} 
 \hline
@@ -3362,9 +3362,9 @@ Baseline Average    & 2.21			& 1.21			& 0.21			& 0.79			& 1.79			& 2.79			& 3.79
 \end{tabular}
 \caption{MAE per class}
 \label{twostagemae}
-\end{figure}
+\end{table}
 
-A confusion matrix of each classifier in the first stage reveals whether this approach could be effective. If all classifiers have a reasonable accuracy the second decision stage has a higher chance of predicting the correct class. If the first stage only returns noise the second stage would not be able to beat the average baseline. It seems that the first stage is not effective in doing so. For funniness 3, 4, 5, 6 and 7 there is no true negative, which means that the model for this class only learns to always return 1.
+The confusion matrices of all classifiers (figure \ref{fig:firststageconf}) in the first stage reveal whether this approach could be effective. If all classifiers have a reasonable accuracy the second decision stage has a higher chance of predicting the correct class. If the first stage only returns noise the second stage would not be able to beat the average baseline. It seems that the first stage is not effective in doing so. For funniness 3, 4, 5, 6 and 7 there is no true negative, which means that the model for this class only learns to always return score "1".
 
 \begin{figure}
 \centering
@@ -3411,36 +3411,31 @@ A confusion matrix of each classifier in the first stage reveals whether this ap
 
 \subsection{Autoencoder}
 
-Against the expectation that the convolutional autoencoder would improve the results due to a significantly reduced input size, it did worsen the performance both on the validation and on the test set. Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder loses important semantic information which could be crucial for understanding humor. Importantly, the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore in figure \ref{fig:autoencoderresults}. 
+Against the expectation that the convolutional autoencoder would improve the results due to a significantly reduced input size, it did performed worse both on the validation and on the test set. Comparing the reconstructed cartoon with the original cartoon reveals that the autoencoder loses important semantic information which could be crucial for understanding humor. Importantly, the facial expressions are lost, as well as many other high frequency details. For example the native American lying on the floor is not recognizable anymore in figure \ref{fig:autoencoderresults}. 
 
 These details seem to be very important for the funniness classification task and if missing cause the image data to be not more than additional noise, which is probably the reason why the two stage model with autoencoded cartoons performs worse compared to the other two stage models.
 
 \begin{figure}
 	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder_original.png}
-	\caption{Original Cartoons}
-	\label{fig:autoencoderimageoriginal}
-\end{figure}
-
-\begin{figure}
-	\centering
-  	\includegraphics[width=1.0\textwidth]{graphics/autoencoder_final.png}
-	\caption{Results after applying encoder and decoder}
+  	\includegraphics[width=0.85\textwidth]{graphics/autoencoder_original.png}
+  	
+  	\includegraphics[width=0.85\textwidth]{graphics/autoencoder_final.png}
+	\caption{First row shows the original cartoons and the second row the results after applying encoder and decoder.}
 	\label{fig:autoencoderresults}
 \end{figure}
 
 \pagebreak
 \section{Results}
 
-The following sections show the achieved performance for each experiment of the validation
-and test phase. Additionally the training runtime on the development machine is also outlined. 
+The following subsections show the performance achieved in each experiment on the validation
+and test sets. Additionally the training runtime on the development machine is also measured. 
 
 
 \subsection{Validation Results}
 
-For a detailed table of validation performance of selected models, please refer to figure \ref{fig:valperformance}. The ELMo based model achieved on this subset the highest accuracy, while the two stage model achieved the best mean Absolute Error. Both models only use the text data and discard the visual information entirely.
+For a detailed table of validation performance of selected models, please refer to figure \ref{fig:valperformance}. The ELMo based model achieved on this subset the highest accuracy, while the two stage model achieved the best Mean Absolute Error. Both models only use the text data and discard the visual information entirely.
 
-\begin{figure}
+\begin{table}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Experiment}                                                                       & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   MAE\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Validation\\   Accuracy\end{tabular}} & \textbf{Text} & \textbf{Visual} \\ \hline
@@ -3460,13 +3455,13 @@ Two Stage Model with Cartoons                                                   
 \end{tabular}
 \caption{Model performances on the validation set.}
 \label{fig:valperformance}
-\end{figure}
+\end{table}
 
 \subsection{Test Results}
 
-The results at figure [\ref{fig:testperformance}] show the performance of the models for the test set. Compared to the validation set the best performing models change: For the test set, the model which maximizes the accuracy measure is using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model without cartoon data seems to generalize slightly better.
+The results at figure \ref{fig:testperformance} show the performance of the models for the test set. Compared to the validation set the best performing models change: For the test set, the model which maximizes the accuracy measure is using the visual data, namely the transfer learning CNN on the data augmented test set. Also the two stage model without cartoon data seems to generalize slightly better.
 
-\begin{figure}
+\begin{table}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Experiment}                                                                       & \textbf{Test MAE} & \textbf{Test Accuracy} & \textbf{Text} & \textbf{Visual} \\ \hline
@@ -3487,13 +3482,13 @@ Two Stage Model with Cartoons                                                   
 \end{tabular}
 \caption{Model performances on the test set.}
 \label{fig:testperformance}
-\end{figure}
+\end{table}
 
 \subsection{Training Duration}
 
-Figure \ref{trainingruntime} shows the training durations of each experiment. A general trend, is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser compared to the representation of images.
+Figure \ref{trainingruntime} shows the training durations of each experiment. A general trend is that the text based models (ELMo, Two Stage Model) train significantly faster than the visual based models (Simple CNN, Transfer Learning CNN, Two Stage Model with Cartoons). This can be explained by the size of the input vector for the neural network. The data for the text representation is denser compared to the representation of images.
 
-\begin{figure}
+\begin{table}
 \centering
 \begin{tabular}{|l|l|} 
 \hline
@@ -3517,7 +3512,7 @@ Two Stage Model with Autoencoded Cartoons     & 15m 23s         \\
 \end{tabular}
 \caption{Training runtime of each experiment}
 \label{trainingruntime}
-\end{figure}
+\end{table}
 
 \section{Label Reproducibility}
 
@@ -3530,7 +3525,7 @@ There is the problem of bias, as both annotators have some interest in the succe
 Figure \ref{labelreproduc} shows the metrics gained from the annotation sets. The annotation sets \textit{Original} and \textit{Future} are the only annotations significantly better than the baselines of the original test set (both the MAE and accuracy). All things considered, the reproducibility is low. This may be due to different factors, such as humor changing over time and the annotators mood. Contrary, the annotations of the \textit{Other} annotation set are not similar to the \textit{Original} set. This may lead to the conclusion, that humor is indeed subjective, as well as it is to a certain degree reproducible. Comparing the baselines for each annotation set reveals different distributions. The most frequent and mean baseline have relatively high accuracy and MAE, compared to the annotations of \textit{Original} and \textit{Future}. This could mean, that there is a high variance among different annotators.
 
 
-\begin{figure}
+\begin{table}
 \centering
 \begin{tabular}{|l|l|l|l|} 
 \hline
@@ -3548,7 +3543,7 @@ Other & Mean & 0.76 &  57.57\%\\
 \end{tabular}
 \caption{This table shows the performance measures compared to different annotation sets.. Original is the original annotation, future is the annotation from the same author a year later, Other is the annotation from a different person.}
 \label{labelreproduc}
-\end{figure}
+\end{table}
 
 \pagebreak
 
