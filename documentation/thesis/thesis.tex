@@ -3522,8 +3522,31 @@ In table \ref{labelreproduc}, the \textit{Future} annotation set is by the same 
 
 There might be a problem of bias, as both annotators might have some interest in the success of this thesis. This was mitigated as much as possible by being aware of it. Other solutions would also have significant problems. For example, the alternative of a paid annotator would have made it impossible to actually validate the results. Distinguishing randomly selected annotations from true funniness annotations seems to be impossible. Additionally, it would have been costly, as doing these annotations is rather labour intensive.
 
-Figure \ref{labelreproduc} shows the metrics gained from the annotation sets. The annotation sets \textit{Original} and \textit{Future} are the only annotations significantly better than the baselines of the original test set (both the MAE and accuracy). All things considered, the reproducibility is low. This may be due to different factors, such as humor changing over time and with the annotators mood. Contrary, the annotations of the \textit{Other} annotation set are not similar to the \textit{Original} set. This may lead to the conclusion that humor is indeed subjective, as well as it is to a certain degree reproducible. Comparing the baselines for each annotation set reveals different distributions. The most frequent and mean baselines have relatively high accuracy and MAE, compared to the annotations of \textit{Original} and \textit{Future}. This could mean, that there is a high variance among different annotators.
+Figure \ref{labelreproduc} shows the metrics gained from the annotation sets. The annotation sets \textit{Original} and \textit{Future} are the only annotations significantly better than the baselines of the original test set (both the MAE and accuracy). All things considered, the reproducibility is low. This may be due to different factors, such as humor changing over time and with the annotators mood. Contrary, the annotations of the \textit{Other} annotation set are not similar to the \textit{Original} set. This may lead to the conclusion that humor is indeed subjective, as well as it is to a certain degree reproducible. Comparing the baselines for each annotation set reveals different distributions. The most frequent and mean baselines have relatively high accuracy and MAE, compared to the annotations of \textit{Original} and \textit{Future}. This could mean, that there is a high variance among different annotators. Figure \ref{fig:comparelabeldistribution} shows a significant difference in label distribution when comparing the \textit{Other} with the \textit{Original} and \textit{Future} annotation sets. Contrary, there is a high similarity when comparing the \textit{Original} and \textit{Future} label distribution, supporting the assumption that annotators are able to reproduce their own funniness score.
 
+\begin{figure}
+\centering
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=0.99\linewidth]{graphics/origina_distr_plot_200.png}
+  \caption{\textit{Original} annotation set (200 samples)}
+  \label{fig:sub1}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=0.99\linewidth]{graphics/future_distr_plot.png}
+  \caption{\textit{Future} annotation set}
+  \label{fig:sub1}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=0.99\linewidth]{graphics/other_distr_plot.png}
+  \caption{\textit{Other} annotation set}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{This figure shows a comparison of the label distribution of the annotation sets \textit{Original}, \textit{Future} and \textit{Other}. To improve comparability the \textit{Original} annotation set contains the same number of samples as the other two annotation sets by randomly sampling 200 cartoons.}
+\label{fig:comparelabeldistribution}
+\end{figure}
 
 \begin{table}
 \centering
