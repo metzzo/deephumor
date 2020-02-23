@@ -140,24 +140,52 @@
 \addstatementpage
 
 \begin{danksagung*}
-\todo{Ihr Text hier.}
+
+Ich wünsche meinem Betreuer Professor Horst Eidenberger ein aufrichtiges Dankeschön. Nach meiner Bachelorarbeit habe ich bereits gelernt, was für ein hilfreicher, konstruktiver und vorwärts-denkender Betreuer er ist. Dennoch wurde diese Erwartung übertroffen. Meine zweiwöchigen Statusreports wurden immer innerhalb von wenigen Tagen, manchmal sogar Stunden, mit genau den richtigen Worten um mich zur richtigen Lösung des Problems zu motivieren beantwortet. Ohne solch Hingabe wäre diese Diplomarbeit so wie sie ist nicht möglich gewesen.
+
+Mein Danke geht an die TU Wien und dem gesamten Lehrpersonal für die beste Informatikausbildung in ganz Österreich und noch weiter. Es war der perfekte Ort um nicht nur den technischen Aspekt, sondern auch um die sozialen Fähigkeiten und Mentalität die notwendig ist um erfolgreich zu sein zu erlernen. Die TU Wien hat mich außerdem durch Stipendien, sowie durch meine Tutorenanstellung für einige Lehrveranstaltungen sehr unterstützt.
+
+Ich hatte viel Glück, weil ich mit vielen Schulfreunden das Abenteuer auf die TU Wien mit mir fortgesetzt haben. Wir haben uns viel geholfen und uns gegenseitig motiviert wo es uns möglich war. Besonders möchte ich mich bei Simon Fraiss und Alfred Soare für die gemeinsame Zeit bedanken.
+
+Schlussendlich, möchte ich mich bei meiner Familie bedanken. Sie haben mich immer unterstützt und geholfen wo sie konnten. Ich möchte mich bei meiner Mutter Doina, meinem Vater Maximilian und meinen vier Geschwistern Verena, Kathrin, Maximilian und Alexander bedanken.
+
+\textit{Danke!}
+
 \end{danksagung*}
 
 \begin{acknowledgements*}
-\todo{Enter your text here.}
+I express my sincere thanks to my advisor Professor Horst Eidenberger. After my bachelor thesis I already learned that he is a helpful, constructive and forward-thinking supervisor. Nevertheless, this expectation was still exceeded. My bi-weekly status reports were always answered within several days, sometimes hours, with exactly the right words to motivate me to find the solution to my current problem. Without such dedication this thesis would not have been possible as it is.
+
+My thanks to TU Wien and the entire teaching staff for the best computer science education available in Austria and far beyond. The environment was perfect to learn not only the technical side of computer science, but also the social skills and mentality necessary to be successful. TU Wien also supported me with several scholarships, which helped a lot, as well as allowing me to be tutor for several courses.
+
+I was very lucky, because after high school many friends also continued their adventure with me to TU Wien. We helped and motivated each other where possible. I especially want to thank my two friends Simon Fraiss and Alfred Soare for the time together.
+
+Finally, I want to thank my family. They always supported me and helped where they could. I want to thank my mother Doina, my father Maximilian, my four siblings Verena, Kathrin, Maximilian and Alexander.
+
+
+
+\textit{Thank you!}
+
+
 \end{acknowledgements*}
 
 \begin{kurzfassung}
-\todo{Ihr Text hier.}
+
+Das Ziel dieser Diplomarbeit ist es Humor durch Deep Learning basierend auf Gary Larsons Cartoons zu modellieren. Der jüngste Erfolg von Deep Learning in Computer Vision und Natural Language Processing zeigt, dass ähnliche Techniken im Bereich Computational Humor eingesetzt werden können \cite{nmt}\cite{selfdriving}\cite{speech}. Das Training von Deep Learning Modellen benötigt Datensets mit vielen Trainingsbeispielen, weshalb ich ein neuartiges Datenset mit einigen tausend Cartoons mit Pointe und einer zugehörigen Lustigkeits Annotation erstellt habe. Das Datenset wurde mit einem eigenen Labelling Tool erstellt, durch ein einzelne Person. Dadurch enthält das Datenset den Humor dieser einen Person. Damit ist es möglich den Humor quantitativ mit den Ergebnissen der Deep Learning Modelle oder anderen Personen zu vergleichen.
+
+Nach einer extensiven Datensetanalyse, habe ich mehrere Deep Learning Architekturen entworfen und trainiert. Zuerst habe ich mich auf die visuelle Domäne (Cartoons) mit Convolutional Neural Networks, Transfer Learning und Objekterkennung konzentriert. Danach war der Fokus bei der Text Domäne /Pointe) mit Long Short-Term Memory Netzwerken, Word Embeddings (Deep Learning basierte und klassische) und automatischem Machine Learning. Abschließend, habe ich alle Erkenntnisse in einer Zwei-Phasen-Architektur vereint.
+
+Unglücklicherweise hat die Evaluation ergeben, dass die Aufgabe noch nicht mit den von mir angewandten Deep Learning Techniken fassbar ist. Ich habe zwei Performance Metriken ausgewählt (Durchschnittlicher Absoluter Fehler und Genauigkeit), sowie einige Baseline Modelle (Häufigste Klasse, Durchschnittliche Klasse, etc.) und kein Modell hatte signifikant bessere Ergebnisse als die Baselines.
+
 \end{kurzfassung}
 
 \begin{abstract}
 
-The aim of this thesis is to model humor using deep learning based on Gary Larson's cartoons. The recent success of deep learning in computer vision and natural language processing shows that similar techniques can be applied in the field of computational humor \cite{nmt}\cite{selfdriving}\cite{speech}. The training of deep learning models requires a dataset with many training samples, which is why I created a novel dataset containing several thousands of Gary Larson's cartoons, punchlines and corresponding funniness annotations. The dataset was annotated using a custom labelling tool, which allowed efficient annotation of the data by the same annotator. This implies the dataset entails the humor of a single person, which allows to quantitatively compare humor with the results of the deep learning models or with other people.
+The aim of this thesis is to model humor using deep learning based on Gary Larson's cartoons. The recent success of deep learning in computer vision and natural language processing shows that similar techniques can be applied in the field of computational humor \cite{nmt}\cite{selfdriving}\cite{speech}. The training of deep learning models requires a dataset with many training samples, which is why I created a novel dataset containing several thousands of Gary Larson's cartoons, punchlines and corresponding funniness annotations. The dataset was annotated using a custom labelling tool, by the single person. Therefore, the dataset entails the humor of a single person. With this dataset it is possible to quantitatively compare humor with the results of the deep learning models or with other people.
 
 After an extensive dataset analysis, I designed and trained several deep neural architectures. First, focusing on the visual domain (cartoons) using convolutional neural networks, transfer learning and object detection techniques. Afterwards, I focused on the text domain (punchlines) using Long Short-Term Memory networks, several word embeddings (deep learning based and classical) and an automated machine learning approach. Finally, I tried to combine all the findings into a unified two stage architecture. 
 
-Unfortunately, the evaluation revealed that this task is not yet tractable by the deep learning techniques applied. I chose two performance metrics (Mean absolute error and accuracy) and several baseline models (most frequent class, mean class, etc.) and no model improved on the baselines significantly. I performed the evaluation using a train/validation/test holdout methodology.
+Unfortunately, the evaluation revealed that this task is not yet tractable by the deep learning techniques applied. I chose two performance metrics (Mean absolute error and accuracy) and several baseline models (most frequent class, mean class, etc.) and no model improved on the baselines significantly.
 
 
 \end{abstract}
@@ -3607,7 +3635,15 @@ Potential causes can not be attributed to exactly one issue. One reason is most 
 One could also argue that the problem itself is flawed. Letting a human rate a
 cartoon is very subjective and likely depends on many factors. For example: Current mood, whether the person has already seen the cartoon, time of day and also the exact reason for performing the annotation. It could be that these factors outweigh the true humor, evaluation shows, that there is certainly a high degree of noise in the annotations and it is even for the same annotator difficult to reproduce the annotations. Finding a set up where this noise can be reduced could be an important step for modelling of humor. Another reason may be semantic gap between the funniness annotation and the actual experience of humor \cite{semanticgap}. Funniness is difficult to project onto a scale from 1 to 7, it may possibly be, that it is simply \textit{lost in translation} when performing such annotation.
 
-An important topic for humor is scene understanding. Understanding the cartoons on a higher semantic level than currently seems to be important for humor classification. The approaches applied in this thesis (transfer learned object detector) did not prove successful. Available datasets for this domain are not in the domain of cartoons and therefore are not applicable in this setting. An interesting task would be cartoon theme classification. If a model is able to predict the theme of a cartoon it could theoretically use this information also for humor classification.
+\section{Future Work}
+
+An important topic for humor is scene understanding. Understanding the cartoons on a higher semantic level than currently seems to be important for humor classification. The approaches applied in this thesis (for example transfer learned object detector) did not prove successful. Available datasets for this domain are not in the domain of cartoons and therefore are not applicable in this setting. An interesting task would be cartoon theme classification. If a model is able to predict the theme of a cartoon it could theoretically use this information also for humor classification. Such a classification could be achieved by annotating the cartoon themes.
+
+Additionally, training a successful model which performs robust object detection could be useful for both humor and cartoon classification. Solving this task could be achieved either by properly applying transfer learning from a similar enough domain or by annotating the objects occurring in the dataset itself.
+
+To close the semantic gap future work could measure brain activity per cartoon. Instead of predicting the funniness score one could instead build a model which predicts the brain activity observed when the annotator sees the respective cartoon. If such model can predict the brain activity better than the models based on the funniness score, then it might be an indication for the source of the semantic gap (namely the process of scoring). \textit{War eine wilde Idee meinerseits - falls zu wild, koennen wir das weglassen}
+
+The dataset could be expanded to other authors. Adding new authors could make it possible to quantitatively compare the funniness of the authors. Is one author more funny than the other? Is it possible to transfer a machine learning model from one author to the other? A successful model should in theory be able to be transferable.
 
 
 %\section{Future Work}
